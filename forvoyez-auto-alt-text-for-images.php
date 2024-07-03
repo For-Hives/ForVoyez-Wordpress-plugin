@@ -115,6 +115,7 @@ function forvoyez_display_incomplete_images(): void
                         <button class="forvoyez-analyze-button" title="Analyse with ForVoyez">
                             <span class="dashicons dashicons-upload"></span>
                         </button>
+                        <div class="forvoyez-loader"></div>
                         <div class="forvoyez-image-details">
                             <p><strong>Title:</strong> <?php echo esc_html($image->post_title); ?></p>
                             <p><strong>Alt Text:</strong> <?php echo esc_html($image_alt); ?></p>

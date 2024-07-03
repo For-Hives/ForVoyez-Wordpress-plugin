@@ -136,7 +136,10 @@
     }
 
     function analyzeImage(imageId) {
-        console.log('Analyzing image with ID:', imageId);
+        var $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
+        var $loader = $imageItem.find('.forvoyez-loader');
+
+        $loader.css('display', 'flex');
 
         // Simulate API call with setTimeout
         setTimeout(function() {
@@ -146,7 +149,8 @@
                 caption: 'New caption for image ' + imageId
             };
             updateImageMetadata(imageId, fakeApiResponse);
-        }, 1000); // Simulate 1 second delay
+            $loader.hide();
+        }, 2000); // Simulate 2 second delay
 
         // TODO: Replace this with actual API call later
         /*
@@ -159,16 +163,16 @@
                 nonce: forvoyezData.nonce
             },
             success: function(response) {
+                $loader.hide();
                 if (response.success) {
                     updateImageMetadata(imageId, response.data);
                 } else {
-                    console.error('Analysis failed:', response.data);
-                    // TODO: Show error message to user
+                    showNotification('Analysis failed: ' + response.data, 'error');
                 }
             },
             error: function() {
-                console.error('AJAX request failed');
-                // TODO: Show error message to user
+                $loader.hide();
+                showNotification('AJAX request failed', 'error');
             }
         });
         */
@@ -199,17 +203,30 @@
             },
             success: function(response) {
                 if (response.success) {
-                    console.log('Metadata updated successfully');
-                    // TODO: Show success message to user
+                    showNotification('Metadata updated successfully', 'success');
                 } else {
-                    console.error('Metadata update failed:', response.data);
-                    // TODO: Show error message to user
+                    showNotification('Metadata update failed: ' + response.data, 'error');
                 }
             },
             error: function() {
-                console.error('AJAX request failed');
-                // TODO: Show error message to user
+                showNotification('AJAX request failed', 'error');
             }
         });
+    }
+
+    function showNotification(message, type) {
+        var $notification = $('<div class="forvoyez-notification ' + type + '">' + message + '</div>');
+        $('body').append($notification);
+
+        setTimeout(function() {
+            $notification.css('opacity', '1');
+        }, 10);
+
+        setTimeout(function() {
+            $notification.css('opacity', '0');
+            setTimeout(function() {
+                $notification.remove();
+            }, 300);
+        }, 3000);
     }
 })(jQuery);
