@@ -100,7 +100,9 @@ function forvoyez_display_incomplete_images() {
                             <?php endif; ?>
                         </div>
                         <div class="forvoyez-see-more">
-                            <span class="dashicons dashicons-visibility"></span> See More
+                            <span class="dashicons dashicons-visibility"></span>
+                            <span class="see-more-text">See More</span>
+                            <span class="hide-details-text" style="display: none;">Hide Details</span>
                         </div>
                         <div class="forvoyez-image-details">
                             <p><strong>Title:</strong> <?php echo esc_html($image->post_title ?: 'Not set'); ?></p>

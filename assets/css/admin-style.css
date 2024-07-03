@@ -63,27 +63,8 @@
 }
 
 
-.forvoyez-see-more {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
 .forvoyez-image-item:hover .forvoyez-see-more {
     opacity: 1;
-}
-
-.forvoyez-see-more .dashicons {
-    margin-right: 5px;
 }
 
 .forvoyez-image-details {
@@ -96,9 +77,42 @@
     padding: 10px;
     overflow-y: auto;
     display: none;
+    z-index: 2;
 }
 
 .forvoyez-image-details p {
     margin: 5px 0;
     font-size: 12px;
+}
+
+.forvoyez-see-more {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    transition: opacity 0.3s ease, z-index 0s 0.3s;
+    opacity: 0;
+    z-index: 1;
+}
+
+.forvoyez-image-item:hover .forvoyez-see-more,
+.forvoyez-image-item.details-visible .forvoyez-see-more {
+    opacity: 1;
+    z-index: 3;
+    transition: opacity 0.3s ease, z-index 0s;
+}
+
+.forvoyez-see-more .dashicons {
+    margin-right: 5px;
+    transition: transform 0.3s ease;
+}
+
+.forvoyez-image-item.details-visible .forvoyez-image-details {
+    display: block;
 }
