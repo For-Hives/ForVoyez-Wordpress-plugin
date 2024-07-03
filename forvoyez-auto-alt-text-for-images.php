@@ -15,15 +15,28 @@ if (!defined('ABSPATH')) {
 
 // Add menu item to the WordPress admin
 function forvoyez_add_menu_item() {
-    add_options_page(
+    $page_hook_suffix = add_options_page(
         'Auto Alt Text Settings',  // Page title
         'Auto Alt Text',           // Menu title
         'manage_options',          // Capability required to see this option
         'forvoyez-auto-alt-text',  // Menu slug
-        'forvoyez_settings_page',   // Function to output the content for this page
+        'forvoyez_settings_page'   // Function to output the content for this page
     );
+    add_action('admin_print_styles-' . $page_hook_suffix, 'forvoyez_enqueue_admin_styles');
+    add_action('admin_print_scripts-' . $page_hook_suffix, 'forvoyez_enqueue_admin_scripts');
 }
 add_action('admin_menu', 'forvoyez_add_menu_item');
+
+// Enqueue admin styles
+function forvoyez_enqueue_admin_styles() {
+    wp_enqueue_style('forvoyez-admin-styles', plugins_url('assets/css/admin-style.css', __FILE__), array(), '1.0.0');
+}
+
+// Enqueue admin scripts
+function forvoyez_enqueue_admin_scripts() {
+    wp_enqueue_script('forvoyez-admin-scripts', plugins_url('assets/js/admin-script.js', __FILE__), array('jquery'), '1.0.0', true);
+    wp_localize_script('forvoyez-admin-scripts', 'forvoyezAjax', array('ajaxurl' => admin_url('admin-ajax.php')));
+}
 
 // Create the settings page
 function forvoyez_settings_page() {
@@ -31,7 +44,6 @@ function forvoyez_settings_page() {
     <div class="wrap">
         <h1>Welcome to Auto Alt Text for Images</h1>
         <p>This plugin will help you automatically generate alt text for your images using the ForVoyez API.</p>
-<!--        call the forvoyez display incomplete images function-->
         <?php forvoyez_display_incomplete_images(); ?>
     </div>
     <?php
@@ -39,6 +51,20 @@ function forvoyez_settings_page() {
 
 // Function to display images with incomplete metadata
 function forvoyez_display_incomplete_images() {
+    $paged = isset($_GET['paged']) ? abs((int)$_GET['paged']) : 1;
+    $per_page = 12; // Number of images per page
+
+    $args = array(
+        'post_type' => 'attachment',
+        'post_mime_type' => 'image',
+        'post_status' => 'inherit',
+        'posts_per_page' => $per_page,
+        'paged' => $paged,
+    );
+    $query_images = new WP_Query($args);
+    $total_images = $query_images->found_posts;
+    $total_pages = ceil($total_images / $per_page);
+
     ?>
     <div class="wrap">
         <h2>Images Needing SEO Metadata</h2>
@@ -51,13 +77,6 @@ function forvoyez_display_incomplete_images() {
 
         <div class="forvoyez-image-grid">
             <?php
-            $args = array(
-                'post_type' => 'attachment',
-                'post_mime_type' => 'image',
-                'post_status' => 'inherit',
-                'posts_per_page' => -1,
-            );
-            $query_images = new WP_Query($args);
             $incomplete_count = 0;
             foreach ($query_images->posts as $image) :
                 $image_url = wp_get_attachment_url($image->ID);
@@ -67,7 +86,7 @@ function forvoyez_display_incomplete_images() {
                 if (empty($image->post_title) || empty($image_alt) || empty($image->post_excerpt)) :
                     $incomplete_count++;
                     ?>
-                    <div class="forvoyez-image-item">
+                    <div class="forvoyez-image-item" data-image-id="<?php echo esc_attr($image->ID); ?>">
                         <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>">
                         <div class="forvoyez-metadata-icons">
                             <?php if (empty($image_alt)) : ?>
@@ -80,6 +99,14 @@ function forvoyez_display_incomplete_images() {
                                 <span class="dashicons dashicons-editor-quote" title="Missing Caption"></span>
                             <?php endif; ?>
                         </div>
+                        <div class="forvoyez-see-more">
+                            <span class="dashicons dashicons-visibility"></span> See More
+                        </div>
+                        <div class="forvoyez-image-details">
+                            <p><strong>Title:</strong> <?php echo esc_html($image->post_title ?: 'Not set'); ?></p>
+                            <p><strong>Alt Text:</strong> <?php echo esc_html($image_alt ?: 'Not set'); ?></p>
+                            <p><strong>Caption:</strong> <?php echo esc_html($image->post_excerpt ?: 'Not set'); ?></p>
+                        </div>
                     </div>
                 <?php
                 endif;
@@ -90,44 +117,26 @@ function forvoyez_display_incomplete_images() {
                 <p>All images have complete metadata. Great job!</p>
             <?php endif; ?>
         </div>
+        <div class="forvoyez-pagination">
+            <?php
+            echo paginate_links(array(
+                'base' => add_query_arg('paged', '%#%'),
+                'format' => '',
+                'prev_text' => __('&laquo;'),
+                'next_text' => __('&raquo;'),
+                'total' => $total_pages,
+                'current' => $paged
+            ));
+            ?>
+        </div>
         <p>Total images needing attention: <?php echo $incomplete_count; ?></p>
     </div>
-
-    <style>
-        .forvoyez-legend {
-            margin-bottom: 20px;
-        }
-        .forvoyez-legend span {
-            margin-right: 20px;
-        }
-        .forvoyez-image-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-        }
-        .forvoyez-image-item {
-            position: relative;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .forvoyez-image-item img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .forvoyez-metadata-icons {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background: rgba(255,255,255,0.8);
-            border-radius: 5px;
-            padding: 5px;
-        }
-        .forvoyez-metadata-icons .dashicons {
-            color: red;
-            margin-right: 5px;
-        }
-    </style>
     <?php
+}
+
+// AJAX handler for image click
+add_action('wp_ajax_forvoyez_image_click', 'forvoyez_handle_image_click');
+function forvoyez_handle_image_click() {
+    // For now, we'll just send back a success message
+    wp_send_json_success(array('message' => 'Image clicked successfully'));
 }
