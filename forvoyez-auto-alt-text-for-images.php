@@ -143,7 +143,7 @@ function forvoyez_display_incomplete_images(): void
             ));
             ?>
         </div>
-        <p>Total images needing attention: <?php echo $incomplete_count; ?></p>
+        <p>Total images needing attention: <span class="forvoyez-image-count"><?php echo $incomplete_count; ?></span></p>
     </div>
     <?php
 }

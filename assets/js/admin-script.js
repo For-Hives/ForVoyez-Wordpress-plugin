@@ -181,16 +181,6 @@
     function updateImageMetadata(imageId, metadata) {
         var $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
 
-        // Update alt text
-        $imageItem.find('img').attr('alt', metadata.alt_text);
-        $imageItem.find('.forvoyez-image-details p:contains("Alt Text:")').html('<strong>Alt Text:</strong> ' + metadata.alt_text);
-
-        // Update title
-        $imageItem.find('.forvoyez-image-details p:contains("Title:")').html('<strong>Title:</strong> ' + metadata.title);
-
-        // Update caption
-        $imageItem.find('.forvoyez-image-details p:contains("Caption:")').html('<strong>Caption:</strong> ' + metadata.caption);
-
         // Update WordPress database
         $.ajax({
             url: ajaxurl,
@@ -204,6 +194,7 @@
             success: function(response) {
                 if (response.success) {
                     showNotification('Metadata updated successfully', 'success');
+                    removeImageFromList($imageItem);
                 } else {
                     showNotification('Metadata update failed: ' + response.data, 'error');
                 }
@@ -212,6 +203,24 @@
                 showNotification('AJAX request failed', 'error');
             }
         });
+    }
+
+    function removeImageFromList($imageItem) {
+        $imageItem.fadeOut(400, function() {
+            $(this).remove();
+            updateImageCount();
+        });
+    }
+
+    function updateImageCount() {
+        var remainingImages = $('.forvoyez-image-item').length;
+        $('.forvoyez-image-count').text(remainingImages);
+
+        if (remainingImages === 0) {
+            showNotification('All images have been processed!', 'success');
+            // Optionally, you can hide the entire grid or show a message
+            $('.forvoyez-image-grid').html('<p>All images have been processed. Great job!</p>');
+        }
     }
 
     function showNotification(message, type) {
