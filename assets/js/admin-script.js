@@ -45,35 +45,6 @@
         });
     });
 
-    function analyzeImage(imageId) {
-        // TODO: Implement the actual analysis logic here
-        console.log('Analyzing image with ID:', imageId);
-
-        // Example of how you might call an AJAX function to your WordPress backend
-        $.ajax({
-            url: ajaxurl, // This is a global variable in WordPress admin
-            type: 'POST',
-            data: {
-                action: 'forvoyez_analyze_image',
-                image_id: imageId,
-                nonce: forvoyezData.nonce // Assume you've localized this data
-            },
-            success: function(response) {
-                if (response.success) {
-                    console.log('Analysis complete:', response.data);
-                    // TODO: Update the UI with the analysis results
-                } else {
-                    console.error('Analysis failed:', response.data);
-                    // TODO: Show error message to user
-                }
-            },
-            error: function() {
-                console.error('AJAX request failed');
-                // TODO: Show error message to user
-            }
-        });
-    }
-
     function toggleAllImageDetails(show) {
         $('.forvoyez-image-item').each(function() {
             let $item = $(this);
@@ -162,5 +133,34 @@
             default:
                 return '';
         }
+    }
+
+    function analyzeImage(imageId) {
+        // TODO: Implement the actual analysis logic here
+        console.log('Analyzing image with ID:', imageId);
+
+        // Example of how you might call an AJAX function to your WordPress backend
+        $.ajax({
+            url: ajaxurl, // This is a global variable in WordPress admin
+            type: 'POST',
+            data: {
+                action: 'forvoyez_analyze_image',
+                image_id: imageId,
+                nonce: forvoyezData.nonce // Assume you've localized this data
+            },
+            success: function(response) {
+                if (response.success) {
+                    console.log('Analysis complete:', response.data);
+                    // TODO: Update the UI with the analysis results
+                } else {
+                    console.error('Analysis failed:', response.data);
+                    // TODO: Show error message to user
+                }
+            },
+            error: function() {
+                console.error('AJAX request failed');
+                // TODO: Show error message to user
+            }
+        });
     }
 })(jQuery);

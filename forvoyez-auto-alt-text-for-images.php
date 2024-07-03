@@ -36,6 +36,10 @@ function forvoyez_enqueue_admin_styles() {
 function forvoyez_enqueue_admin_scripts() {
     wp_enqueue_script('forvoyez-admin-scripts', plugins_url('assets/js/admin-script.js', __FILE__), array('jquery'), '1.0.0', true);
     wp_localize_script('forvoyez-admin-scripts', 'forvoyezAjax', array('ajaxurl' => admin_url('admin-ajax.php')));
+
+    wp_localize_script('forvoyez-admin-scripts', 'forvoyezData', array(
+        'nonce' => wp_create_nonce('forvoyez_nonce')
+    ));
 }
 
 // Create the settings page
@@ -148,4 +152,27 @@ add_action('wp_ajax_forvoyez_image_click', 'forvoyez_handle_image_click');
 function forvoyez_handle_image_click() {
     // For now, we'll just send back a success message
     wp_send_json_success(array('message' => 'Image clicked successfully'));
+}
+
+add_action('wp_ajax_forvoyez_analyze_image', 'forvoyez_handle_analyze_image');
+
+function forvoyez_handle_analyze_image() {
+    check_ajax_referer('forvoyez_nonce', 'nonce');
+
+    if (!current_user_can('upload_files')) {
+        wp_send_json_error('Permission denied');
+    }
+
+    $image_id = intval($_POST['image_id']);
+
+    // TODO: Implement the actual analysis logic here
+    // This might involve calling the ForVoyez API
+
+    $analysis_result = array(
+        'alt_text' => 'Suggested alt text',
+        'title' => 'Suggested title',
+        'caption' => 'Suggested caption'
+    );
+
+    wp_send_json_success($analysis_result);
 }
