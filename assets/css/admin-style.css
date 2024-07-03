@@ -118,3 +118,24 @@
 .forvoyez-image-item.details-visible .forvoyez-image-details {
     display: block;
 }
+
+.forvoyez-global-controls {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+#forvoyez-visibility-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+#forvoyez-visibility-menu label {
+    display: block;
+    margin-bottom: 5px;
+}

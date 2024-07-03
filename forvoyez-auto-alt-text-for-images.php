@@ -50,7 +50,8 @@ function forvoyez_settings_page() {
 }
 
 // Function to display images with incomplete metadata
-function forvoyez_display_incomplete_images() {
+function forvoyez_display_incomplete_images(): void
+{
     $paged = isset($_GET['paged']) ? abs((int)$_GET['paged']) : 1;
     $per_page = 21; // Number of images per page
 
@@ -68,6 +69,14 @@ function forvoyez_display_incomplete_images() {
     ?>
     <div class="wrap">
         <h2>Images Needing SEO Metadata</h2>
+        <div class="forvoyez-global-controls">
+            <button id="forvoyez-toggle-menu" class="button">Toggle Visibility</button>
+            <div id="forvoyez-visibility-menu" style="display: none;">
+                <label><input type="checkbox" id="toggle-alt" checked> Alt Text</label>
+                <label><input type="checkbox" id="toggle-title" checked> Title</label>
+                <label><input type="checkbox" id="toggle-caption" checked> Caption</label>
+            </div>
+        </div>
 
         <div class="forvoyez-legend">
             <span><span class="dashicons dashicons-editor-textcolor"></span> Alt Text</span>
