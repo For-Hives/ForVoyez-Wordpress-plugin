@@ -70,12 +70,7 @@ function forvoyez_display_incomplete_images(): void
     <div class="wrap">
         <h2>Images Needing SEO Metadata</h2>
         <div class="forvoyez-global-controls">
-            <button id="forvoyez-toggle-menu" class="button">Toggle Visibility</button>
-            <div id="forvoyez-visibility-menu" style="display: none;">
-                <label><input type="checkbox" id="toggle-alt" checked> Alt Text</label>
-                <label><input type="checkbox" id="toggle-title" checked> Title</label>
-                <label><input type="checkbox" id="toggle-caption" checked> Caption</label>
-            </div>
+            <button id="forvoyez-toggle-menu" class="button">Show All Details</button>
         </div>
 
         <div class="forvoyez-legend">

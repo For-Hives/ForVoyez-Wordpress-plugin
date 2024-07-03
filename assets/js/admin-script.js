@@ -1,6 +1,8 @@
 (function ($) {
     'use strict';
 
+    var allDetailsVisible = false;
+
     $(document).ready(function () {
         // Image item click handling
         $('.forvoyez-image-item').on('click', function (e) {
@@ -16,30 +18,49 @@
 
         // Close details when clicking outside
         $(document).on('click', function (e) {
-            if (!$(e.target).closest('.forvoyez-image-item').length) {
+            if (!$(e.target).closest('.forvoyez-image-item').length && !$(e.target).closest('#forvoyez-toggle-menu').length) {
                 closeAllImageDetails();
             }
         });
 
-        // Toggle menu visibility
+        // Toggle all details visibility
         $('#forvoyez-toggle-menu').on('click', function () {
-            $('#forvoyez-visibility-menu').toggle();
+            allDetailsVisible = !allDetailsVisible;
+            toggleAllImageDetails(allDetailsVisible);
+            $(this).text(allDetailsVisible ? 'Hide All Details' : 'Show All Details');
         });
 
-        // Handle global visibility toggles
+        // Handle global visibility toggles for specific metadata
         $('#toggle-alt, #toggle-title, #toggle-caption').on('change', function () {
             var type = this.id.replace('toggle-', '');
             var isChecked = $(this).prop('checked');
             toggleVisibility(type, isChecked);
         });
+    });
 
-        // Close menu when clicking outside
-        $(document).on('click', function (e) {
-            if (!$(e.target).closest('.forvoyez-global-controls').length) {
-                $('#forvoyez-visibility-menu').hide();
+    function toggleAllImageDetails(show) {
+        $('.forvoyez-image-item').each(function() {
+            var $item = $(this);
+            var $details = $item.find('.forvoyez-image-details');
+            var $seeMore = $item.find('.forvoyez-see-more');
+            var $seeMoreText = $seeMore.find('.see-more-text');
+            var $hideDetailsText = $seeMore.find('.hide-details-text');
+
+            if (show) {
+                $details.slideDown();
+                $item.addClass('details-visible');
+                $seeMore.find('.dashicons').removeClass('dashicons-visibility').addClass('dashicons-hidden');
+                $seeMoreText.hide();
+                $hideDetailsText.show();
+            } else {
+                $details.slideUp();
+                $item.removeClass('details-visible');
+                $seeMore.find('.dashicons').removeClass('dashicons-hidden').addClass('dashicons-visibility');
+                $seeMoreText.show();
+                $hideDetailsText.hide();
             }
         });
-    });
+    }
 
     function toggleImageDetails($item) {
         var $details = $item.find('.forvoyez-image-details');
@@ -54,7 +75,6 @@
             $seeMoreText.show();
             $hideDetailsText.hide();
         } else {
-            closeAllImageDetails();
             $details.slideDown();
             $item.addClass('details-visible');
             $seeMore.find('.dashicons').removeClass('dashicons-visibility').addClass('dashicons-hidden');
@@ -64,11 +84,9 @@
     }
 
     function closeAllImageDetails() {
-        $('.forvoyez-image-item').removeClass('details-visible');
-        $('.forvoyez-image-details').slideUp();
-        $('.forvoyez-see-more .dashicons').removeClass('dashicons-hidden').addClass('dashicons-visibility');
-        $('.forvoyez-see-more .see-more-text').show();
-        $('.forvoyez-see-more .hide-details-text').hide();
+        allDetailsVisible = false;
+        toggleAllImageDetails(false);
+        $('#forvoyez-toggle-menu').text('Show All Details');
     }
 
     function toggleVisibility(type, show) {
