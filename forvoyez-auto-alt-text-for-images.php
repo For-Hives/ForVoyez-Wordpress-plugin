@@ -108,6 +108,9 @@ function forvoyez_display_incomplete_images(): void
                             <span class="see-more-text">See More</span>
                             <span class="hide-details-text" style="display: none;">Hide Details</span>
                         </div>
+                        <button class="forvoyez-analyze-button" title="Analyse with ForVoyez">
+                            <span class="dashicons dashicons-upload"></span>
+                        </button>
                         <div class="forvoyez-image-details">
                             <p><strong>Title:</strong> <?php echo esc_html($image->post_title ?: 'Not set'); ?></p>
                             <p><strong>Alt Text:</strong> <?php echo esc_html($image_alt ?: 'Not set'); ?></p>
