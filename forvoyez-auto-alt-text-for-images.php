@@ -52,7 +52,7 @@ function forvoyez_settings_page() {
 // Function to display images with incomplete metadata
 function forvoyez_display_incomplete_images() {
     $paged = isset($_GET['paged']) ? abs((int)$_GET['paged']) : 1;
-    $per_page = 12; // Number of images per page
+    $per_page = 21; // Number of images per page
 
     $args = array(
         'post_type' => 'attachment',
