@@ -136,24 +136,73 @@
     }
 
     function analyzeImage(imageId) {
-        // TODO: Implement the actual analysis logic here
         console.log('Analyzing image with ID:', imageId);
 
-        // Example of how you might call an AJAX function to your WordPress backend
+        // Simulate API call with setTimeout
+        setTimeout(function() {
+            var fakeApiResponse = {
+                alt_text: 'New alt text for image ' + imageId,
+                title: 'New title for image ' + imageId,
+                caption: 'New caption for image ' + imageId
+            };
+            updateImageMetadata(imageId, fakeApiResponse);
+        }, 1000); // Simulate 1 second delay
+
+        // TODO: Replace this with actual API call later
+        /*
         $.ajax({
-            url: ajaxurl, // This is a global variable in WordPress admin
+            url: ajaxurl,
             type: 'POST',
             data: {
                 action: 'forvoyez_analyze_image',
                 image_id: imageId,
-                nonce: forvoyezData.nonce // Assume you've localized this data
+                nonce: forvoyezData.nonce
             },
             success: function(response) {
                 if (response.success) {
-                    console.log('Analysis complete:', response.data);
-                    // TODO: Update the UI with the analysis results
+                    updateImageMetadata(imageId, response.data);
                 } else {
                     console.error('Analysis failed:', response.data);
+                    // TODO: Show error message to user
+                }
+            },
+            error: function() {
+                console.error('AJAX request failed');
+                // TODO: Show error message to user
+            }
+        });
+        */
+    }
+
+    function updateImageMetadata(imageId, metadata) {
+        var $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
+
+        // Update alt text
+        $imageItem.find('img').attr('alt', metadata.alt_text);
+        $imageItem.find('.forvoyez-image-details p:contains("Alt Text:")').html('<strong>Alt Text:</strong> ' + metadata.alt_text);
+
+        // Update title
+        $imageItem.find('.forvoyez-image-details p:contains("Title:")').html('<strong>Title:</strong> ' + metadata.title);
+
+        // Update caption
+        $imageItem.find('.forvoyez-image-details p:contains("Caption:")').html('<strong>Caption:</strong> ' + metadata.caption);
+
+        // Update WordPress database
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'forvoyez_update_image_metadata',
+                image_id: imageId,
+                metadata: metadata,
+                nonce: forvoyezData.nonce
+            },
+            success: function(response) {
+                if (response.success) {
+                    console.log('Metadata updated successfully');
+                    // TODO: Show success message to user
+                } else {
+                    console.error('Metadata update failed:', response.data);
                     // TODO: Show error message to user
                 }
             },

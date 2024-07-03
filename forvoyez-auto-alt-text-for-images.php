@@ -116,9 +116,9 @@ function forvoyez_display_incomplete_images(): void
                             <span class="dashicons dashicons-upload"></span>
                         </button>
                         <div class="forvoyez-image-details">
-                            <p><strong>Title:</strong> <?php echo esc_html($image->post_title ?: 'Not set'); ?></p>
-                            <p><strong>Alt Text:</strong> <?php echo esc_html($image_alt ?: 'Not set'); ?></p>
-                            <p><strong>Caption:</strong> <?php echo esc_html($image->post_excerpt ?: 'Not set'); ?></p>
+                            <p><strong>Title:</strong> <?php echo esc_html($image->post_title); ?></p>
+                            <p><strong>Alt Text:</strong> <?php echo esc_html($image_alt); ?></p>
+                            <p><strong>Caption:</strong> <?php echo esc_html($image->post_excerpt); ?></p>
                         </div>
                     </div>
                 <?php
@@ -154,9 +154,9 @@ function forvoyez_handle_image_click() {
     wp_send_json_success(array('message' => 'Image clicked successfully'));
 }
 
-add_action('wp_ajax_forvoyez_analyze_image', 'forvoyez_handle_analyze_image');
+add_action('wp_ajax_forvoyez_update_image_metadata', 'forvoyez_handle_update_image_metadata');
 
-function forvoyez_handle_analyze_image() {
+function forvoyez_handle_update_image_metadata() {
     check_ajax_referer('forvoyez_nonce', 'nonce');
 
     if (!current_user_can('upload_files')) {
@@ -164,15 +164,24 @@ function forvoyez_handle_analyze_image() {
     }
 
     $image_id = intval($_POST['image_id']);
+    $metadata = $_POST['metadata'];
 
-    // TODO: Implement the actual analysis logic here
-    // This might involve calling the ForVoyez API
+    // Update alt text
+    update_post_meta($image_id, '_wp_attachment_image_alt', sanitize_text_field($metadata['alt_text']));
 
-    $analysis_result = array(
-        'alt_text' => 'Suggested alt text',
-        'title' => 'Suggested title',
-        'caption' => 'Suggested caption'
+    // Update title
+    $post = array(
+        'ID' => $image_id,
+        'post_title' => sanitize_text_field($metadata['title']),
     );
+    wp_update_post($post);
 
-    wp_send_json_success($analysis_result);
+    // Update caption
+    $post = array(
+        'ID' => $image_id,
+        'post_excerpt' => wp_kses_post($metadata['caption']),
+    );
+    wp_update_post($post);
+
+    wp_send_json_success('Metadata updated successfully');
 }
