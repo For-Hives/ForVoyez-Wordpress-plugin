@@ -59,10 +59,9 @@ function forvoyez_settings_page()
 }
 
 // Function to display images with incomplete metadata
-function forvoyez_display_incomplete_images()
-{
+function forvoyez_display_incomplete_images() {
     $paged = isset($_GET['paged']) ? abs((int)$_GET['paged']) : 1;
-    $per_page = 21;
+    $per_page = isset($_GET['per_page']) ? abs((int)$_GET['per_page']) : 25; // Default to 25 items per page
 
     $args = array(
         'post_type' => 'attachment',
@@ -71,11 +70,34 @@ function forvoyez_display_incomplete_images()
         'posts_per_page' => $per_page,
         'paged' => $paged,
     );
+
+    // Apply filters
+    if (isset($_GET['filter'])) {
+        $meta_query = array('relation' => 'OR');
+        if (in_array('alt', $_GET['filter'])) {
+            $meta_query[] = array(
+                'key' => '_wp_attachment_image_alt',
+                'value' => '',
+                'compare' => '='
+            );
+        }
+        if (in_array('title', $_GET['filter'])) {
+            $args['title'] = '';
+        }
+        if (in_array('caption', $_GET['filter'])) {
+            $args['caption'] = '';
+        }
+        $args['meta_query'] = $meta_query;
+    }
+
     $query_images = new WP_Query($args);
+    $total_images = $query_images->found_posts;
+    $total_pages = ceil($total_images / $per_page);
 
     ?>
     <div class="wrap">
         <h2>Images for SEO Metadata Analysis</h2>
+        <?php forvoyez_display_filters(); ?>
         <div class="forvoyez-legend">
             <span><span class="dashicons dashicons-editor-textcolor"></span> Alt Text</span>
             <span><span class="dashicons dashicons-heading"></span> Title</span>
@@ -88,6 +110,40 @@ function forvoyez_display_incomplete_images()
             endforeach;
             ?>
         </div>
+        <?php
+        echo paginate_links(array(
+            'base' => add_query_arg('paged', '%#%'),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $total_pages,
+            'current' => $paged
+        ));
+        ?>
+    </div>
+    <?php
+}
+
+function forvoyez_display_filters() {
+    $per_page = isset($_GET['per_page']) ? abs((int)$_GET['per_page']) : 25;
+    $filter = isset($_GET['filter']) ? $_GET['filter'] : array();
+    ?>
+    <div class="forvoyez-filters">
+        <form method="get" action="">
+            <input type="hidden" name="page" value="forvoyez-auto-alt-text">
+            <label>Items per page:
+                <select name="per_page">
+                    <option value="25" <?php selected($per_page, 25); ?>>25</option>
+                    <option value="50" <?php selected($per_page, 50); ?>>50</option>
+                    <option value="100" <?php selected($per_page, 100); ?>>100</option>
+                    <option value="-1" <?php selected($per_page, -1); ?>>All</option>
+                </select>
+            </label>
+            <label><input type="checkbox" name="filter[]" value="alt" <?php checked(in_array('alt', $filter)); ?>> Missing Alt</label>
+            <label><input type="checkbox" name="filter[]" value="title" <?php checked(in_array('title', $filter)); ?>> Missing Title</label>
+            <label><input type="checkbox" name="filter[]" value="caption" <?php checked(in_array('caption', $filter)); ?>> Missing Caption</label>
+            <input type="submit" value="Apply Filters" class="button">
+        </form>
     </div>
     <?php
 }

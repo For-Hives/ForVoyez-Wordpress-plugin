@@ -231,3 +231,19 @@
     color: white;
     font-size: 20px;
 }
+
+.forvoyez-filters {
+    background: #fff;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.forvoyez-filters label {
+    margin-right: 15px;
+}
+
+.forvoyez-filters select {
+    margin-right: 15px;
+}

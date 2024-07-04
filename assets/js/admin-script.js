@@ -47,6 +47,35 @@
 
         attachEventHandlers();
         updateImageCount();
+
+        // Handle pagination clicks
+        $(document).on('click', '.page-numbers', function(e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+            loadImages(url);
+        });
+
+        // Handle filter form submission
+        $('.forvoyez-filters form').on('submit', function(e) {
+            e.preventDefault();
+            var url = $(this).attr('action') + '?' + $(this).serialize();
+            loadImages(url);
+        });
+
+        function loadImages(url) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(response) {
+                    $('.forvoyez-image-grid').html($(response).find('.forvoyez-image-grid').html());
+                    $('.forvoyez-filters').html($(response).find('.forvoyez-filters').html());
+                    history.pushState(null, '', url);
+                },
+                error: function() {
+                    showNotification('Failed to load images', 'error');
+                }
+            });
+        }
     });
 
     function toggleAllImageDetails(show) {
