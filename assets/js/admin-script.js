@@ -2,6 +2,7 @@
     'use strict';
 
     let allDetailsVisible = false;
+    let isLoading = false;
 
     $(document).ready(function () {
         // Image item click handling
@@ -43,10 +44,13 @@
             var imageId = $(this).closest('.forvoyez-image-item').data('image-id');
             analyzeImage(imageId);
         });
+
+        attachEventHandlers();
+        updateImageCount();
     });
 
     function toggleAllImageDetails(show) {
-        $('.forvoyez-image-item').each(function() {
+        $('.forvoyez-image-item').each(function () {
             let $item = $(this);
             let $details = $item.find('.forvoyez-image-details');
             let $seeMore = $item.find('.forvoyez-see-more');
@@ -66,6 +70,51 @@
                 $seeMoreText.show();
                 $hideDetailsText.hide();
             }
+        });
+    }
+
+    function loadMoreImages(count) {
+        var $grid = $('.forvoyez-image-grid');
+        var offset = parseInt($grid.data('offset')) + $('.forvoyez-image-item').length;
+        var limit = count || 1;
+
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'forvoyez_load_more_images',
+                offset: offset,
+                limit: limit,
+                nonce: forvoyezData.nonce
+            },
+            success: function (response) {
+                if (response.success && response.data.html) {
+                    $grid.append(response.data.html);
+                    $grid.data('offset', offset + response.data.count);
+                    attachEventHandlers();
+                }
+            },
+            error: function () {
+                showNotification('Failed to load more images', 'error');
+            }
+        });
+    }
+
+    function attachEventHandlers() {
+        $('.forvoyez-image-item').off('click').on('click', function (e) {
+            e.preventDefault();
+            toggleImageDetails($(this));
+        });
+
+        $('.forvoyez-see-more').off('click').on('click', function (e) {
+            e.stopPropagation();
+            toggleImageDetails($(this).closest('.forvoyez-image-item'));
+        });
+
+        $('.forvoyez-analyze-button').off('click').on('click', function (e) {
+            e.stopPropagation();
+            var imageId = $(this).closest('.forvoyez-image-item').data('image-id');
+            analyzeImage(imageId);
         });
     }
 
@@ -142,7 +191,7 @@
         $loader.css('display', 'flex');
 
         // Simulate API call with setTimeout
-        setTimeout(function() {
+        setTimeout(function () {
             var fakeApiResponse = {
                 alt_text: 'New alt text for image ' + imageId,
                 title: 'New title for image ' + imageId,
@@ -191,7 +240,7 @@
                 metadata: metadata,
                 nonce: forvoyezData.nonce
             },
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
                     showNotification('Metadata updated successfully', 'success');
                     removeImageFromList($imageItem);
@@ -199,16 +248,17 @@
                     showNotification('Metadata update failed: ' + response.data, 'error');
                 }
             },
-            error: function() {
+            error: function () {
                 showNotification('AJAX request failed', 'error');
             }
         });
     }
 
     function removeImageFromList($imageItem) {
-        $imageItem.fadeOut(400, function() {
+        $imageItem.fadeOut(400, function () {
             $(this).remove();
             updateImageCount();
+            loadMoreImages(1);
         });
     }
 
@@ -218,8 +268,9 @@
 
         if (remainingImages === 0) {
             showNotification('All images have been processed!', 'success');
-            // Optionally, you can hide the entire grid or show a message
             $('.forvoyez-image-grid').html('<p>All images have been processed. Great job!</p>');
+        } else if (remainingImages < 21) {
+            loadMoreImages(21 - remainingImages);
         }
     }
 
@@ -227,15 +278,17 @@
         var $notification = $('<div class="forvoyez-notification ' + type + '">' + message + '</div>');
         $('body').append($notification);
 
-        setTimeout(function() {
+        setTimeout(function () {
             $notification.css('opacity', '1');
         }, 10);
 
-        setTimeout(function() {
+        setTimeout(function () {
             $notification.css('opacity', '0');
-            setTimeout(function() {
+            setTimeout(function () {
                 $notification.remove();
             }, 300);
         }, 3000);
     }
+
+
 })(jQuery);
