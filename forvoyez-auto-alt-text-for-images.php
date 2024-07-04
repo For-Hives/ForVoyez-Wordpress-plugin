@@ -92,24 +92,28 @@ function forvoyez_display_incomplete_images()
     <?php
 }
 
-function forvoyez_render_image_item($image)
-{
+function forvoyez_render_image_item($image) {
     $image_url = wp_get_attachment_url($image->ID);
     $image_alt = get_post_meta($image->ID, '_wp_attachment_image_alt', true);
     $is_analyzed = get_post_meta($image->ID, '_forvoyez_analyzed', true);
     $disabled_class = $is_analyzed ? 'forvoyez-analyzed' : '';
+    $all_complete = !empty($image_alt) && !empty($image->post_title) && !empty($image->post_excerpt);
     ?>
     <div class="forvoyez-image-item <?php echo $disabled_class; ?>" data-image-id="<?php echo esc_attr($image->ID); ?>">
         <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>">
         <div class="forvoyez-metadata-icons">
-            <?php if (empty($image_alt)) : ?>
-                <span class="dashicons dashicons-editor-textcolor" title="Missing Alt Text"></span>
-            <?php endif; ?>
-            <?php if (empty($image->post_title)) : ?>
-                <span class="dashicons dashicons-heading" title="Missing Title"></span>
-            <?php endif; ?>
-            <?php if (empty($image->post_excerpt)) : ?>
-                <span class="dashicons dashicons-editor-quote" title="Missing Caption"></span>
+            <?php if ($all_complete) : ?>
+                <span class="dashicons dashicons-yes-alt" title="All metadata complete" style="color: green;"></span>
+            <?php else : ?>
+                <?php if (empty($image_alt)) : ?>
+                    <span class="dashicons dashicons-editor-textcolor" title="Missing Alt Text"></span>
+                <?php endif; ?>
+                <?php if (empty($image->post_title)) : ?>
+                    <span class="dashicons dashicons-heading" title="Missing Title"></span>
+                <?php endif; ?>
+                <?php if (empty($image->post_excerpt)) : ?>
+                    <span class="dashicons dashicons-editor-quote" title="Missing Caption"></span>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
         <?php if ($is_analyzed): ?>

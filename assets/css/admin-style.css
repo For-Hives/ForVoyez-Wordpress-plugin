@@ -44,7 +44,6 @@
 
 .forvoyez-metadata-icons .dashicons {
     color: red;
-    margin-right: 5px;
 }
 
 .forvoyez-pagination {
@@ -190,11 +189,6 @@
     animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
 .forvoyez-notification {
     position: fixed;
     bottom: 20px;
@@ -236,17 +230,4 @@
 .forvoyez-checkmark .dashicons {
     color: white;
     font-size: 20px;
-}
-
-.forvoyez-metadata-icons .dashicons {
-    color: red;
-    margin-right: 5px;
-}
-
-.forvoyez-legend {
-    margin-bottom: 20px;
-}
-
-.forvoyez-legend span {
-    margin-right: 20px;
 }
