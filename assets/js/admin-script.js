@@ -74,8 +74,11 @@
     }
 
     function loadMoreImages(count) {
+        if (isLoading) return;
+        isLoading = true;
+
         var $grid = $('.forvoyez-image-grid');
-        var offset = parseInt($grid.data('offset')) + $('.forvoyez-image-item').length;
+        var offset = parseInt($grid.data('offset'), 10);
         var limit = count || 1;
 
         $.ajax({
@@ -88,13 +91,18 @@
                 nonce: forvoyezData.nonce
             },
             success: function (response) {
+                isLoading = false;
                 if (response.success && response.data.html) {
                     $grid.append(response.data.html);
                     $grid.data('offset', offset + response.data.count);
                     attachEventHandlers();
+                    updateImageCount();
+                } else if (response.success && response.data.count === 0) {
+                    showNotification('No more images to load', 'info');
                 }
             },
             error: function () {
+                isLoading = false;
                 showNotification('Failed to load more images', 'error');
             }
         });
@@ -228,9 +236,6 @@
     }
 
     function updateImageMetadata(imageId, metadata) {
-        var $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
-
-        // Update WordPress database
         $.ajax({
             url: ajaxurl,
             type: 'POST',
@@ -243,7 +248,7 @@
             success: function (response) {
                 if (response.success) {
                     showNotification('Metadata updated successfully', 'success');
-                    removeImageFromList($imageItem);
+                    removeImageFromList(imageId);
                 } else {
                     showNotification('Metadata update failed: ' + response.data, 'error');
                 }
@@ -254,11 +259,11 @@
         });
     }
 
-    function removeImageFromList($imageItem) {
+    function removeImageFromList(imageId) {
+        var $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
         $imageItem.fadeOut(400, function () {
             $(this).remove();
             updateImageCount();
-            loadMoreImages(1);
         });
     }
 
