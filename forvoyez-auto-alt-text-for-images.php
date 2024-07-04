@@ -59,7 +59,8 @@ function forvoyez_settings_page()
 }
 
 // Function to display images with incomplete metadata
-function forvoyez_display_incomplete_images() {
+function forvoyez_display_incomplete_images()
+{
     $paged = isset($_GET['paged']) ? abs((int)$_GET['paged']) : 1;
     $per_page = 21;
 
@@ -69,60 +70,19 @@ function forvoyez_display_incomplete_images() {
         'post_status' => 'inherit',
         'posts_per_page' => $per_page,
         'paged' => $paged,
-        'meta_query' => array(
-            'relation' => 'OR',
-            array(
-                'key' => '_wp_attachment_image_alt',
-                'value' => '',
-                'compare' => '='
-            ),
-            array(
-                'key' => '_wp_attachment_image_alt',
-                'compare' => 'NOT EXISTS'
-            )
-        )
     );
     $query_images = new WP_Query($args);
 
-    // Get total count of incomplete images
-    $total_incomplete_images = forvoyez_count_incomplete_images();
-    $total_pages = ceil($total_incomplete_images / $per_page);
-
     ?>
     <div class="wrap">
-        <h2>Images Needing SEO Metadata</h2>
-        <div class="forvoyez-global-controls">
-            <button id="forvoyez-toggle-menu" class="button">Show All Details</button>
-        </div>
-
-        <div class="forvoyez-legend">
-            <span><span class="dashicons dashicons-editor-textcolor"></span> Alt Text</span>
-            <span><span class="dashicons dashicons-heading"></span> Title</span>
-            <span><span class="dashicons dashicons-editor-quote"></span> Caption</span>
-        </div>
-
-        <div class="forvoyez-image-grid" data-offset="<?php echo ($paged - 1) * $per_page; ?>" data-limit="<?php echo $per_page; ?>">
+        <h2>Images for SEO Metadata Analysis</h2>
+        <div class="forvoyez-image-grid">
             <?php
             foreach ($query_images->posts as $image) :
-                if (empty($image->post_title) || empty(get_post_meta($image->ID, '_wp_attachment_image_alt', true)) || empty($image->post_excerpt)) :
-                    forvoyez_render_image_item($image);
-                endif;
+                forvoyez_render_image_item($image);
             endforeach;
             ?>
         </div>
-        <div class="forvoyez-pagination">
-            <?php
-            echo paginate_links(array(
-                'base' => add_query_arg('paged', '%#%'),
-                'format' => '',
-                'prev_text' => __('&laquo;'),
-                'next_text' => __('&raquo;'),
-                'total' => $total_pages,
-                'current' => $paged
-            ));
-            ?>
-        </div>
-        <p>Total images needing attention: <span class="forvoyez-image-count"><?php echo $total_incomplete_images; ?></span></p>
     </div>
     <?php
 }
@@ -131,28 +91,18 @@ function forvoyez_render_image_item($image)
 {
     $image_url = wp_get_attachment_url($image->ID);
     $image_alt = get_post_meta($image->ID, '_wp_attachment_image_alt', true);
+    $is_analyzed = get_post_meta($image->ID, '_forvoyez_analyzed', true);
+    $disabled_class = $is_analyzed ? 'forvoyez-analyzed' : '';
     ?>
-    <div class="forvoyez-image-item" data-image-id="<?php echo esc_attr($image->ID); ?>">
+    <div class="forvoyez-image-item <?php echo $disabled_class; ?>" data-image-id="<?php echo esc_attr($image->ID); ?>">
         <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>">
-        <div class="forvoyez-metadata-icons">
-            <?php if (empty($image_alt)) : ?>
-                <span class="dashicons dashicons-editor-textcolor" title="Missing Alt Text"></span>
-            <?php endif; ?>
-            <?php if (empty($image->post_title)) : ?>
-                <span class="dashicons dashicons-heading" title="Missing Title"></span>
-            <?php endif; ?>
-            <?php if (empty($image->post_excerpt)) : ?>
-                <span class="dashicons dashicons-editor-quote" title="Missing Caption"></span>
-            <?php endif; ?>
-        </div>
-        <div class="forvoyez-see-more">
-            <span class="dashicons dashicons-visibility"></span>
-            <span class="see-more-text">See More</span>
-            <span class="hide-details-text" style="display: none;">Hide Details</span>
-        </div>
-        <button class="forvoyez-analyze-button" title="Analyse with ForVoyez">
-            <span class="dashicons dashicons-upload"></span>
-        </button>
+        <?php if ($is_analyzed): ?>
+            <div class="forvoyez-checkmark"><span class="dashicons dashicons-yes-alt"></span></div>
+        <?php else: ?>
+            <button class="forvoyez-analyze-button" title="Analyze with ForVoyez">
+                <span class="dashicons dashicons-upload"></span>
+            </button>
+        <?php endif; ?>
         <div class="forvoyez-loader"></div>
         <div class="forvoyez-image-details">
             <p><strong>Title:</strong> <?php echo esc_html($image->post_title ?: 'Not set'); ?></p>
@@ -201,12 +151,16 @@ function forvoyez_handle_update_image_metadata()
     );
     wp_update_post($post);
 
+    // Mark as analyzed
+    update_post_meta($image_id, '_forvoyez_analyzed', true);
+
     wp_send_json_success('Metadata updated successfully');
 }
 
 add_action('wp_ajax_forvoyez_load_more_images', 'forvoyez_load_more_images');
 
-function forvoyez_load_more_images() {
+function forvoyez_load_more_images()
+{
     check_ajax_referer('forvoyez_nonce', 'nonce');
 
     $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;
@@ -254,7 +208,8 @@ function forvoyez_load_more_images() {
     ));
 }
 
-function forvoyez_count_incomplete_images() {
+function forvoyez_count_incomplete_images()
+{
     $args = array(
         'post_type' => 'attachment',
         'post_mime_type' => 'image',

@@ -208,31 +208,6 @@
             updateImageMetadata(imageId, fakeApiResponse);
             $loader.hide();
         }, 2000); // Simulate 2 second delay
-
-        // TODO: Replace this with actual API call later
-        /*
-        $.ajax({
-            url: ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'forvoyez_analyze_image',
-                image_id: imageId,
-                nonce: forvoyezData.nonce
-            },
-            success: function(response) {
-                $loader.hide();
-                if (response.success) {
-                    updateImageMetadata(imageId, response.data);
-                } else {
-                    showNotification('Analysis failed: ' + response.data, 'error');
-                }
-            },
-            error: function() {
-                $loader.hide();
-                showNotification('AJAX request failed', 'error');
-            }
-        });
-        */
     }
 
     function updateImageMetadata(imageId, metadata) {
@@ -248,7 +223,7 @@
             success: function (response) {
                 if (response.success) {
                     showNotification('Metadata updated successfully', 'success');
-                    removeImageFromList(imageId);
+                    markImageAsAnalyzed(imageId);
                 } else {
                     showNotification('Metadata update failed: ' + response.data, 'error');
                 }
@@ -257,6 +232,13 @@
                 showNotification('AJAX request failed', 'error');
             }
         });
+    }
+
+    function markImageAsAnalyzed(imageId) {
+        var $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
+        $imageItem.addClass('forvoyez-analyzed');
+        $imageItem.find('.forvoyez-analyze-button').remove();
+        $imageItem.append('<div class="forvoyez-checkmark"><span class="dashicons dashicons-yes-alt"></span></div>');
     }
 
     function removeImageFromList(imageId) {
