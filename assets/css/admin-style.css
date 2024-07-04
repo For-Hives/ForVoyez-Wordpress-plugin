@@ -234,16 +234,32 @@
 
 .forvoyez-filters {
     background: #fff;
-    padding: 10px;
+    padding: 15px;
     margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-.forvoyez-filters label {
+.forvoyez-filter-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.forvoyez-filter-group {
+    display: flex;
+    align-items: center;
+}
+
+.forvoyez-filter-group label {
     margin-right: 15px;
 }
 
-.forvoyez-filters select {
+.forvoyez-filter-group select {
     margin-right: 15px;
+}
+
+.forvoyez-total-items {
+    font-size: 14px;
 }

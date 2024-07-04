@@ -58,10 +58,10 @@ function forvoyez_settings_page()
     <?php
 }
 
-// Function to display images with incomplete metadata
 function forvoyez_display_incomplete_images() {
     $paged = isset($_GET['paged']) ? abs((int)$_GET['paged']) : 1;
-    $per_page = isset($_GET['per_page']) ? abs((int)$_GET['per_page']) : 25; // Default to 25 items per page
+    $per_page = isset($_GET['per_page']) ? abs((int)$_GET['per_page']) : 25;
+    $filters = isset($_GET['filter']) ? $_GET['filter'] : array();
 
     $args = array(
         'post_type' => 'attachment',
@@ -72,21 +72,24 @@ function forvoyez_display_incomplete_images() {
     );
 
     // Apply filters
-    if (isset($_GET['filter'])) {
+    if (!empty($filters)) {
         $meta_query = array('relation' => 'OR');
-        if (in_array('alt', $_GET['filter'])) {
+
+        if (in_array('alt', $filters)) {
             $meta_query[] = array(
                 'key' => '_wp_attachment_image_alt',
-                'value' => '',
-                'compare' => '='
+                'compare' => 'NOT EXISTS'
             );
         }
-        if (in_array('title', $_GET['filter'])) {
+
+        if (in_array('title', $filters)) {
             $args['title'] = '';
         }
-        if (in_array('caption', $_GET['filter'])) {
-            $args['caption'] = '';
+
+        if (in_array('caption', $filters)) {
+            $args['post_excerpt'] = '';
         }
+
         $args['meta_query'] = $meta_query;
     }
 
@@ -97,7 +100,7 @@ function forvoyez_display_incomplete_images() {
     ?>
     <div class="wrap">
         <h2>Images for SEO Metadata Analysis</h2>
-        <?php forvoyez_display_filters(); ?>
+        <?php forvoyez_display_filters($total_images); ?>
         <div class="forvoyez-legend">
             <span><span class="dashicons dashicons-editor-textcolor"></span> Alt Text</span>
             <span><span class="dashicons dashicons-heading"></span> Title</span>
@@ -105,9 +108,14 @@ function forvoyez_display_incomplete_images() {
         </div>
         <div class="forvoyez-image-grid">
             <?php
-            foreach ($query_images->posts as $image) :
-                forvoyez_render_image_item($image);
-            endforeach;
+            if ($query_images->have_posts()) {
+                while ($query_images->have_posts()) {
+                    $query_images->the_post();
+                    forvoyez_render_image_item($query_images->post);
+                }
+            } else {
+                echo '<p>No images found matching the selected criteria.</p>';
+            }
             ?>
         </div>
         <?php
@@ -122,27 +130,41 @@ function forvoyez_display_incomplete_images() {
         ?>
     </div>
     <?php
+    wp_reset_postdata();
 }
 
-function forvoyez_display_filters() {
+function forvoyez_display_filters($total_images) {
     $per_page = isset($_GET['per_page']) ? abs((int)$_GET['per_page']) : 25;
     $filter = isset($_GET['filter']) ? $_GET['filter'] : array();
     ?>
     <div class="forvoyez-filters">
         <form method="get" action="">
             <input type="hidden" name="page" value="forvoyez-auto-alt-text">
-            <label>Items per page:
-                <select name="per_page">
-                    <option value="25" <?php selected($per_page, 25); ?>>25</option>
-                    <option value="50" <?php selected($per_page, 50); ?>>50</option>
-                    <option value="100" <?php selected($per_page, 100); ?>>100</option>
-                    <option value="-1" <?php selected($per_page, -1); ?>>All</option>
-                </select>
-            </label>
-            <label><input type="checkbox" name="filter[]" value="alt" <?php checked(in_array('alt', $filter)); ?>> Missing Alt</label>
-            <label><input type="checkbox" name="filter[]" value="title" <?php checked(in_array('title', $filter)); ?>> Missing Title</label>
-            <label><input type="checkbox" name="filter[]" value="caption" <?php checked(in_array('caption', $filter)); ?>> Missing Caption</label>
-            <input type="submit" value="Apply Filters" class="button">
+            <div class="forvoyez-filter-row">
+                <div class="forvoyez-filter-group">
+                    <label>Items per page:
+                        <select name="per_page">
+                            <option value="25" <?php selected($per_page, 25); ?>>25</option>
+                            <option value="50" <?php selected($per_page, 50); ?>>50</option>
+                            <option value="100" <?php selected($per_page, 100); ?>>100</option>
+                            <option value="-1" <?php selected($per_page, -1); ?>>All</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="forvoyez-filter-group">
+                    <label><input type="checkbox" name="filter[]" value="alt" <?php checked(in_array('alt', $filter)); ?>> Missing Alt</label>
+                    <label><input type="checkbox" name="filter[]" value="title" <?php checked(in_array('title', $filter)); ?>> Missing Title</label>
+                    <label><input type="checkbox" name="filter[]" value="caption" <?php checked(in_array('caption', $filter)); ?>> Missing Caption</label>
+                </div>
+                <div class="forvoyez-filter-group">
+                    <input type="submit" value="Apply Filters" class="button">
+                </div>
+            </div>
+            <div class="forvoyez-filter-row">
+                <div class="forvoyez-total-items">
+                    Total Images: <strong><?php echo $total_images; ?></strong>
+                </div>
+            </div>
         </form>
     </div>
     <?php

@@ -49,34 +49,39 @@
         updateImageCount();
 
         // Handle pagination clicks
-        $(document).on('click', '.page-numbers', function(e) {
+        $(document).on('click', '.page-numbers', function (e) {
             e.preventDefault();
             var url = $(this).attr('href');
             loadImages(url);
         });
 
         // Handle filter form submission
-        $('.forvoyez-filters form').on('submit', function(e) {
+        $('.forvoyez-filters form').on('submit', function (e) {
             e.preventDefault();
             var url = $(this).attr('action') + '?' + $(this).serialize();
             loadImages(url);
         });
-
-        function loadImages(url) {
-            $.ajax({
-                url: url,
-                type: 'GET',
-                success: function(response) {
-                    $('.forvoyez-image-grid').html($(response).find('.forvoyez-image-grid').html());
-                    $('.forvoyez-filters').html($(response).find('.forvoyez-filters').html());
-                    history.pushState(null, '', url);
-                },
-                error: function() {
-                    showNotification('Failed to load images', 'error');
-                }
-            });
-        }
     });
+
+    function loadImages(url) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (response) {
+                var $response = $(response);
+                $('.forvoyez-image-grid').html($response.find('.forvoyez-image-grid').html());
+                $('.forvoyez-filters').html($response.find('.forvoyez-filters').html());
+                $('.pagination').html($response.find('.pagination').html());
+                history.pushState(null, '', url);
+
+                // Reattach event handlers
+                attachEventHandlers();
+            },
+            error: function () {
+                showNotification('Failed to load images', 'error');
+            }
+        });
+    }
 
     function toggleAllImageDetails(show) {
         $('.forvoyez-image-item').each(function () {
@@ -138,6 +143,20 @@
     }
 
     function attachEventHandlers() {
+        // Pagination clicks
+        $('.pagination .page-numbers').on('click', function (e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+            loadImages(url);
+        });
+
+        // Filter form submission
+        $('.forvoyez-filters form').on('submit', function (e) {
+            e.preventDefault();
+            var url = $(this).attr('action') + '?' + $(this).serialize();
+            loadImages(url);
+        });
+
         $('.forvoyez-image-item').off('click').on('click', function (e) {
             e.preventDefault();
             toggleImageDetails($(this));
