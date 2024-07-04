@@ -223,7 +223,7 @@
             success: function (response) {
                 if (response.success) {
                     showNotification('Metadata updated successfully', 'success');
-                    markImageAsAnalyzed(imageId);
+                    markImageAsAnalyzed(imageId, metadata);
                 } else {
                     showNotification('Metadata update failed: ' + response.data, 'error');
                 }
@@ -234,19 +234,30 @@
         });
     }
 
-    function markImageAsAnalyzed(imageId) {
+    function markImageAsAnalyzed(imageId, metadata) {
         var $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
         $imageItem.addClass('forvoyez-analyzed');
         $imageItem.find('.forvoyez-analyze-button').remove();
         $imageItem.append('<div class="forvoyez-checkmark"><span class="dashicons dashicons-yes-alt"></span></div>');
-    }
 
-    function removeImageFromList(imageId) {
-        var $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
-        $imageItem.fadeOut(400, function () {
-            $(this).remove();
-            updateImageCount();
-        });
+        // Update metadata icons
+        var $metadataIcons = $imageItem.find('.forvoyez-metadata-icons');
+        $metadataIcons.empty();
+        if (!metadata.alt_text) {
+            $metadataIcons.append('<span class="dashicons dashicons-editor-textcolor" title="Missing Alt Text"></span>');
+        }
+        if (!metadata.title) {
+            $metadataIcons.append('<span class="dashicons dashicons-heading" title="Missing Title"></span>');
+        }
+        if (!metadata.caption) {
+            $metadataIcons.append('<span class="dashicons dashicons-editor-quote" title="Missing Caption"></span>');
+        }
+
+        // Update image details
+        var $details = $imageItem.find('.forvoyez-image-details');
+        $details.find('p:contains("Title:")').html('<strong>Title:</strong> ' + (metadata.title || 'Not set'));
+        $details.find('p:contains("Alt Text:")').html('<strong>Alt Text:</strong> ' + (metadata.alt_text || 'Not set'));
+        $details.find('p:contains("Caption:")').html('<strong>Caption:</strong> ' + (metadata.caption || 'Not set'));
     }
 
     function updateImageCount() {

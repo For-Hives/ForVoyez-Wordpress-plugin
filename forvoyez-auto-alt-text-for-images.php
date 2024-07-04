@@ -76,6 +76,11 @@ function forvoyez_display_incomplete_images()
     ?>
     <div class="wrap">
         <h2>Images for SEO Metadata Analysis</h2>
+        <div class="forvoyez-legend">
+            <span><span class="dashicons dashicons-editor-textcolor"></span> Alt Text</span>
+            <span><span class="dashicons dashicons-heading"></span> Title</span>
+            <span><span class="dashicons dashicons-editor-quote"></span> Caption</span>
+        </div>
         <div class="forvoyez-image-grid">
             <?php
             foreach ($query_images->posts as $image) :
@@ -96,6 +101,17 @@ function forvoyez_render_image_item($image)
     ?>
     <div class="forvoyez-image-item <?php echo $disabled_class; ?>" data-image-id="<?php echo esc_attr($image->ID); ?>">
         <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>">
+        <div class="forvoyez-metadata-icons">
+            <?php if (empty($image_alt)) : ?>
+                <span class="dashicons dashicons-editor-textcolor" title="Missing Alt Text"></span>
+            <?php endif; ?>
+            <?php if (empty($image->post_title)) : ?>
+                <span class="dashicons dashicons-heading" title="Missing Title"></span>
+            <?php endif; ?>
+            <?php if (empty($image->post_excerpt)) : ?>
+                <span class="dashicons dashicons-editor-quote" title="Missing Caption"></span>
+            <?php endif; ?>
+        </div>
         <?php if ($is_analyzed): ?>
             <div class="forvoyez-checkmark"><span class="dashicons dashicons-yes-alt"></span></div>
         <?php else: ?>

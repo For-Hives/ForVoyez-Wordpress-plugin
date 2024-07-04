@@ -218,7 +218,6 @@
 
 .forvoyez-image-item.forvoyez-analyzed {
     opacity: 0.7;
-    pointer-events: none;
 }
 
 .forvoyez-checkmark {
@@ -237,4 +236,17 @@
 .forvoyez-checkmark .dashicons {
     color: white;
     font-size: 20px;
+}
+
+.forvoyez-metadata-icons .dashicons {
+    color: red;
+    margin-right: 5px;
+}
+
+.forvoyez-legend {
+    margin-bottom: 20px;
+}
+
+.forvoyez-legend span {
+    margin-right: 20px;
 }
