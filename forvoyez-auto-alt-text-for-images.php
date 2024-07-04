@@ -59,10 +59,9 @@ function forvoyez_settings_page()
 }
 
 // Function to display images with incomplete metadata
-function forvoyez_display_incomplete_images()
-{
+function forvoyez_display_incomplete_images() {
     $paged = isset($_GET['paged']) ? abs((int)$_GET['paged']) : 1;
-    $per_page = 21; // Changé à 21 pour une grille de 3x7
+    $per_page = 21;
 
     $args = array(
         'post_type' => 'attachment',
@@ -84,8 +83,10 @@ function forvoyez_display_incomplete_images()
         )
     );
     $query_images = new WP_Query($args);
-    $total_images = $query_images->found_posts;
-    $total_pages = ceil($total_images / $per_page);
+
+    // Get total count of incomplete images
+    $total_incomplete_images = forvoyez_count_incomplete_images();
+    $total_pages = ceil($total_incomplete_images / $per_page);
 
     ?>
     <div class="wrap">
@@ -102,10 +103,8 @@ function forvoyez_display_incomplete_images()
 
         <div class="forvoyez-image-grid" data-offset="<?php echo ($paged - 1) * $per_page; ?>" data-limit="<?php echo $per_page; ?>">
             <?php
-            $incomplete_count = 0;
             foreach ($query_images->posts as $image) :
                 if (empty($image->post_title) || empty(get_post_meta($image->ID, '_wp_attachment_image_alt', true)) || empty($image->post_excerpt)) :
-                    $incomplete_count++;
                     forvoyez_render_image_item($image);
                 endif;
             endforeach;
@@ -123,7 +122,7 @@ function forvoyez_display_incomplete_images()
             ));
             ?>
         </div>
-        <p>Total images needing attention: <span class="forvoyez-image-count"><?php echo $incomplete_count; ?></span></p>
+        <p>Total images needing attention: <span class="forvoyez-image-count"><?php echo $total_incomplete_images; ?></span></p>
     </div>
     <?php
 }
@@ -207,8 +206,7 @@ function forvoyez_handle_update_image_metadata()
 
 add_action('wp_ajax_forvoyez_load_more_images', 'forvoyez_load_more_images');
 
-function forvoyez_load_more_images()
-{
+function forvoyez_load_more_images() {
     check_ajax_referer('forvoyez_nonce', 'nonce');
 
     $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;
@@ -247,9 +245,12 @@ function forvoyez_load_more_images()
         }
     }
 
+    $total_incomplete_images = forvoyez_count_incomplete_images();
+
     wp_send_json_success(array(
         'html' => $html,
-        'count' => $count
+        'count' => $count,
+        'total' => $total_incomplete_images
     ));
 }
 
