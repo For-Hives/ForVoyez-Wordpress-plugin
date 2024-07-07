@@ -12,5 +12,3 @@ class Forvoyez_API
         // Implement API key verification logic here
     }
 }
-
-?>
