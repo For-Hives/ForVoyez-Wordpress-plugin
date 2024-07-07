@@ -1,8 +1,7 @@
-// API Settings Modal
-$(document).ready(function() {
+jQuery(document).ready(function ($) {
     var $modal = $('#forvoyez-api-settings-modal');
 
-    $('#forvoyez-open-settings').on('click', function() {
+    $('#forvoyez-open-api-settings, #forvoyez-open-settings').on('click', function () {
         $modal.show();
     });
 
@@ -10,7 +9,7 @@ $(document).ready(function() {
         $modal.hide();
     });
 
-    $('#forvoyez-save-api-key').on('click', function() {
+    $('#forvoyez-save-api-key').on('click', function () {
         var apiKey = $('#forvoyez_api_key').val();
 
         $.ajax({
@@ -34,4 +33,8 @@ $(document).ready(function() {
             }
         });
     });
+
+    function showNotification(message, type) {
+        // Implement this function to show notifications to the user
+    }
 });
