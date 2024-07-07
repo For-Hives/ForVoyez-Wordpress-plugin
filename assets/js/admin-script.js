@@ -67,17 +67,22 @@
         $.ajax({
             url: url,
             type: 'GET',
-            success: function (response) {
+            success: function(response) {
                 var $response = $(response);
                 $('.forvoyez-image-grid').html($response.find('.forvoyez-image-grid').html());
                 $('.forvoyez-filters').html($response.find('.forvoyez-filters').html());
                 $('.pagination').html($response.find('.pagination').html());
+
+                // Update displayed images count
+                var displayedImages = $response.find('.forvoyez-image-grid .forvoyez-image-item').length;
+                $('.forvoyez-displayed-images strong').text(displayedImages);
+
                 history.pushState(null, '', url);
 
                 // Reattach event handlers
                 attachEventHandlers();
             },
-            error: function () {
+            error: function() {
                 showNotification('Failed to load images', 'error');
             }
         });

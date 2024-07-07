@@ -130,7 +130,7 @@
     background: white;
     border: 1px solid #ccc;
     padding: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     z-index: 1000;
 }
 
@@ -260,6 +260,17 @@
     margin-right: 15px;
 }
 
-.forvoyez-total-items {
+
+.forvoyez-displayed-images {
+    width: 100%;
+    text-align: right;
     font-size: 14px;
+    margin-top: 14px;
+    padding: 5px 10px;
+}
+
+.forvoyez-displayed-images > span {
+    color: #0c0c0c;
+    opacity: 0.75;
+    font-style: italic;
 }

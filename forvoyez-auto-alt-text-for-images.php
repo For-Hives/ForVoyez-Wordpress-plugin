@@ -95,12 +95,13 @@ function forvoyez_display_incomplete_images() {
 
     $query_images = new WP_Query($args);
     $total_images = $query_images->found_posts;
+    $displayed_images = $query_images->post_count;
     $total_pages = ceil($total_images / $per_page);
 
     ?>
     <div class="wrap">
         <h2>Images for SEO Metadata Analysis</h2>
-        <?php forvoyez_display_filters($total_images); ?>
+        <?php forvoyez_display_filters($total_images, $displayed_images); ?>
         <div class="forvoyez-legend">
             <span><span class="dashicons dashicons-editor-textcolor"></span> Alt Text</span>
             <span><span class="dashicons dashicons-heading"></span> Title</span>
@@ -133,7 +134,7 @@ function forvoyez_display_incomplete_images() {
     wp_reset_postdata();
 }
 
-function forvoyez_display_filters($total_images) {
+function forvoyez_display_filters($total_images, $displayed_images) {
     $per_page = isset($_GET['per_page']) ? abs((int)$_GET['per_page']) : 25;
     $filter = isset($_GET['filter']) ? $_GET['filter'] : array();
     ?>
@@ -161,8 +162,9 @@ function forvoyez_display_filters($total_images) {
                 </div>
             </div>
             <div class="forvoyez-filter-row">
-                <div class="forvoyez-total-items">
-                    Total Images: <strong><?php echo $total_images; ?></strong>
+                <div class="forvoyez-displayed-images">
+                    Images Displayed: <strong><?php echo $displayed_images; ?></strong>
+                    /<?= "<span>$total_images</span>" ?>
                 </div>
             </div>
         </form>
