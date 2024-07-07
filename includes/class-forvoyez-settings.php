@@ -23,10 +23,6 @@ class Forvoyez_Settings
 
         $api_key = isset($_POST['api_key']) ? sanitize_text_field($_POST['api_key']) : '';
 
-        if (empty($api_key)) {
-            wp_send_json_error('API key cannot be empty');
-        }
-
         update_option('forvoyez_api_key', $api_key);
         wp_send_json_success('API key saved successfully');
     }
