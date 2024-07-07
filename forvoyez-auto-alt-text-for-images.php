@@ -20,7 +20,8 @@ require_once FORVOYEZ_PLUGIN_DIR . 'includes/class-forvoyez-api.php';
 require_once FORVOYEZ_PLUGIN_DIR . 'includes/class-forvoyez-image-processor.php';
 require_once FORVOYEZ_PLUGIN_DIR . 'includes/class-forvoyez-settings.php';
 
-function forvoyez_init() {
+function forvoyez_init()
+{
     $admin = new Forvoyez_Admin();
     $admin->init();
 
@@ -32,6 +33,39 @@ function forvoyez_init() {
 
     $settings = new Forvoyez_Settings();
     $settings->init();
+}
+
+function forvoyez_count_incomplete_images()
+{
+    $args = array(
+        'post_type' => 'attachment',
+        'post_mime_type' => 'image',
+        'post_status' => 'inherit',
+        'posts_per_page' => -1,
+        'meta_query' => array(
+            'relation' => 'OR',
+            array(
+                'key' => '_wp_attachment_image_alt',
+                'value' => '',
+                'compare' => '='
+            ),
+            array(
+                'key' => '_wp_attachment_image_alt',
+                'compare' => 'NOT EXISTS'
+            )
+        )
+    );
+
+    $query_images = new WP_Query($args);
+    $incomplete_count = 0;
+
+    foreach ($query_images->posts as $image) {
+        if (empty($image->post_title) || empty(get_post_meta($image->ID, '_wp_attachment_image_alt', true)) || empty($image->post_excerpt)) {
+            $incomplete_count++;
+        }
+    }
+
+    return $incomplete_count;
 }
 
 add_action('plugins_loaded', 'forvoyez_init');
