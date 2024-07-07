@@ -67,7 +67,7 @@
         $.ajax({
             url: url,
             type: 'GET',
-            success: function(response) {
+            success: function (response) {
                 var $response = $(response);
                 $('.forvoyez-image-grid').html($response.find('.forvoyez-image-grid').html());
                 $('.forvoyez-filters').html($response.find('.forvoyez-filters').html());
@@ -82,7 +82,7 @@
                 // Reattach event handlers
                 attachEventHandlers();
             },
-            error: function() {
+            error: function () {
                 showNotification('Failed to load images', 'error');
             }
         });
@@ -251,16 +251,39 @@
 
         $loader.css('display', 'flex');
 
-        // Simulate API call with setTimeout
+        // Simulation de l'appel API (à remplacer par un vrai appel API plus tard)
         setTimeout(function () {
             var fakeApiResponse = {
-                alt_text: 'New alt text for image ' + imageId,
-                title: 'New title for image ' + imageId,
-                caption: 'New caption for image ' + imageId
+                alt_text: 'Generated alt text for image ' + imageId,
+                title: 'Generated title for image ' + imageId,
+                caption: 'Generated caption for image ' + imageId
             };
-            updateImageMetadata(imageId, fakeApiResponse);
-            $loader.hide();
-        }, 2000); // Simulate 2 second delay
+
+            // Appel AJAX pour mettre à jour les métadonnées
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'forvoyez_update_image_metadata',
+                    image_id: imageId,
+                    metadata: fakeApiResponse,
+                    nonce: forvoyezData.nonce
+                },
+                success: function (response) {
+                    if (response.success) {
+                        showNotification('Metadata updated successfully', 'success');
+                        markImageAsAnalyzed(imageId, fakeApiResponse);
+                    } else {
+                        showNotification('Metadata update failed: ' + response.data, 'error');
+                    }
+                    $loader.hide();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    showNotification('AJAX request failed: ' + textStatus, 'error');
+                    $loader.hide();
+                }
+            });
+        }, 2000); // Simulation d'un délai de 2 secondes
     }
 
     function updateImageMetadata(imageId, metadata) {

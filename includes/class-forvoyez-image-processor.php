@@ -16,7 +16,44 @@ class Forvoyez_Image_Processor
 
     public function update_image_metadata()
     {
-        // Implement metadata update logic here
+        check_ajax_referer('forvoyez_nonce', 'nonce');
+
+        if (!current_user_can('upload_files')) {
+            wp_send_json_error('Permission denied');
+        }
+
+        $image_id = isset($_POST['image_id']) ? intval($_POST['image_id']) : 0;
+        $metadata = isset($_POST['metadata']) ? $_POST['metadata'] : array();
+
+        if (!$image_id || empty($metadata)) {
+            wp_send_json_error('Invalid data');
+        }
+
+        // Update alt text
+        if (isset($metadata['alt_text'])) {
+            update_post_meta($image_id, '_wp_attachment_image_alt', sanitize_text_field($metadata['alt_text']));
+        }
+
+        // Update title
+        if (isset($metadata['title'])) {
+            wp_update_post(array(
+                'ID' => $image_id,
+                'post_title' => sanitize_text_field($metadata['title']),
+            ));
+        }
+
+        // Update caption
+        if (isset($metadata['caption'])) {
+            wp_update_post(array(
+                'ID' => $image_id,
+                'post_excerpt' => wp_kses_post($metadata['caption']),
+            ));
+        }
+
+        // Mark as analyzed
+        update_post_meta($image_id, '_forvoyez_analyzed', true);
+
+        wp_send_json_success('Metadata updated successfully');
     }
 
     public function load_more_images()
