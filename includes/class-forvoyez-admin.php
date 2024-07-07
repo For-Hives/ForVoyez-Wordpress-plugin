@@ -39,9 +39,13 @@ class Forvoyez_Admin
         include FORVOYEZ_PLUGIN_DIR . 'templates/admin-page.php';
     }
 
-    public static function display_api_status()
-    {
-        // Implement API status display
+    public static function display_api_status() {
+        $api_key = get_option('forvoyez_api_key');
+        if (!empty($api_key)) {
+            echo '<p class="forvoyez-api-status">ForVoyez API Status: <span class="forvoyez-status-connected">Connected</span></p>';
+        } else {
+            echo '<p class="forvoyez-api-status">ForVoyez API Status: <span class="forvoyez-status-disconnected">Not Connected</span></p>';
+        }
     }
 
     public static function display_incomplete_images()
