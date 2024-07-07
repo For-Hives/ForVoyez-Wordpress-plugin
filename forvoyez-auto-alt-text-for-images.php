@@ -20,16 +20,17 @@ require_once FORVOYEZ_PLUGIN_DIR . 'includes/class-forvoyez-api.php';
 require_once FORVOYEZ_PLUGIN_DIR . 'includes/class-forvoyez-image-processor.php';
 require_once FORVOYEZ_PLUGIN_DIR . 'includes/class-forvoyez-settings.php';
 
-function forvoyez_init()
-{
+function forvoyez_init() {
     $admin = new Forvoyez_Admin();
-    $api = new Forvoyez_API();
-    $image_processor = new Forvoyez_Image_Processor();
-    $settings = new Forvoyez_Settings();
-
     $admin->init();
+
+    $api = new Forvoyez_API();
     $api->init();
+
+    $image_processor = new Forvoyez_Image_Processor();
     $image_processor->init();
+
+    $settings = new Forvoyez_Settings();
     $settings->init();
 }
 

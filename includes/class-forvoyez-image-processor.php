@@ -1,24 +1,21 @@
 <?php
 
-class Forvoyez_Settings
+class Forvoyez_Image_Processor
 {
     public function init()
     {
-        add_action('admin_init', array($this, 'register_settings'));
+        add_action('wp_ajax_forvoyez_analyze_image', array($this, 'analyze_image'));
+        add_action('wp_ajax_forvoyez_update_image_metadata', array($this, 'update_image_metadata'));
     }
 
-    public function register_settings()
+    public function analyze_image()
     {
-        register_setting('forvoyez_settings', 'forvoyez_api_key', array(
-            'type' => 'string',
-            'sanitize_callback' => array($this, 'sanitize_api_key'),
-            'default' => ''
-        ));
+        // Implement image analysis logic here
     }
 
-    public function sanitize_api_key($key)
+    public function update_image_metadata()
     {
-        return preg_replace('/[^a-zA-Z0-9]/', '', $key);
+        // Implement metadata update logic here
     }
 }
 
