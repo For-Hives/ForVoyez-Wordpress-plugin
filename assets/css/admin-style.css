@@ -314,7 +314,43 @@
 
 .forvoyez-image-checkbox {
     position: absolute;
-    top: 5px;
-    left: 5px;
+    top: 15px;
+    left: 15px;
     z-index: 50;
+}
+
+.forvoyez-image-item {
+    position: relative;
+}
+
+/*.forvoyez-action-buttons {*/
+/*    position: absolute;*/
+/*    bottom: 5px;*/
+/*    right: 5px;*/
+/*    display: flex;*/
+/*    gap: 5px;*/
+/*}*/
+
+.forvoyez-analyze-button,
+.forvoyez-see-more {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.forvoyez-analyze-button .dashicons,
+.forvoyez-see-more .dashicons {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.forvoyez-image-details {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 25px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }

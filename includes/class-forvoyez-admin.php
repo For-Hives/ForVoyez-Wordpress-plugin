@@ -181,15 +181,18 @@ class Forvoyez_Admin
                     <?php endif; ?>
                 <?php endif; ?>
             </div>
-            <?php if ($is_analyzed): ?>
-                <div class="forvoyez-checkmark"><span class="dashicons dashicons-yes-alt"></span></div>
-            <?php else: ?>
-                <button class="forvoyez-analyze-button" title="Analyze with ForVoyez">
-                    <span class="dashicons dashicons-upload"></span>
+            <div class="forvoyez-action-buttons">
+                <?php if (!$is_analyzed): ?>
+                    <button class="forvoyez-analyze-button" title="Analyze with ForVoyez">
+                        <span class="dashicons dashicons-upload"></span>
+                    </button>
+                <?php endif; ?>
+                <button class="forvoyez-see-more" title="See Details">
+                    <span class="dashicons dashicons-visibility"></span>
                 </button>
-            <?php endif; ?>
+            </div>
             <div class="forvoyez-loader"></div>
-            <div class="forvoyez-image-details">
+            <div class="forvoyez-image-details" style="display: none;">
                 <p><strong>Title:</strong> <?php echo esc_html($image->post_title ?: 'Not set'); ?></p>
                 <p><strong>Alt Text:</strong> <?php echo esc_html($image_alt ?: 'Not set'); ?></p>
                 <p><strong>Caption:</strong> <?php echo esc_html($image->post_excerpt ?: 'Not set'); ?></p>

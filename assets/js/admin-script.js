@@ -5,12 +5,6 @@
     let isLoading = false;
 
     $(document).ready(function () {
-        // // Image item click handling
-        // $('.forvoyez-image-item').on('click', function (e) {
-        //     e.preventDefault();
-        //     toggleImageDetails($(this));
-        // });
-
         // See More click handling
         $('.forvoyez-see-more').on('click', function (e) {
             e.stopPropagation();
@@ -22,6 +16,20 @@
             if (!$(e.target).closest('.forvoyez-image-item').length && !$(e.target).closest('#forvoyez-toggle-menu').length) {
                 closeAllImageDetails();
             }
+        });
+
+        // Handle "See More" button click
+        $('.forvoyez-image-grid').on('click', '.forvoyez-see-more', function(e) {
+            e.preventDefault();
+            var $item = $(this).closest('.forvoyez-image-item');
+            toggleImageDetails($item);
+        });
+
+        // Handle analyze button click
+        $('.forvoyez-image-grid').on('click', '.forvoyez-analyze-button', function(e) {
+            e.preventDefault();
+            var imageId = $(this).closest('.forvoyez-image-item').data('image-id');
+            analyzeImage(imageId);
         });
 
         // Toggle all details visibility
@@ -181,11 +189,6 @@
             loadImages(url);
         });
 
-        // $('.forvoyez-image-item').off('click').on('click', function (e) {
-        //     e.preventDefault();
-        //     toggleImageDetails($(this));
-        // });
-
         $('.forvoyez-see-more').off('click').on('click', function (e) {
             e.stopPropagation();
             toggleImageDetails($(this).closest('.forvoyez-image-item'));
@@ -199,23 +202,15 @@
     }
 
     function toggleImageDetails($item) {
-        let $details = $item.find('.forvoyez-image-details');
-        let $seeMore = $item.find('.forvoyez-see-more');
-        let $seeMoreText = $seeMore.find('.see-more-text');
-        let $hideDetailsText = $seeMore.find('.hide-details-text');
+        var $details = $item.find('.forvoyez-image-details');
+        var $seeMoreButton = $item.find('.forvoyez-see-more');
 
-        if ($item.hasClass('details-visible')) {
+        if ($details.is(':visible')) {
             $details.slideUp();
-            $item.removeClass('details-visible');
-            $seeMore.find('.dashicons').removeClass('dashicons-hidden').addClass('dashicons-visibility');
-            $seeMoreText.show();
-            $hideDetailsText.hide();
+            $seeMoreButton.find('.dashicons').removeClass('dashicons-hidden').addClass('dashicons-visibility');
         } else {
             $details.slideDown();
-            $item.addClass('details-visible');
-            $seeMore.find('.dashicons').removeClass('dashicons-visibility').addClass('dashicons-hidden');
-            $seeMoreText.hide();
-            $hideDetailsText.show();
+            $seeMoreButton.find('.dashicons').removeClass('dashicons-visibility').addClass('dashicons-hidden');
         }
     }
 
