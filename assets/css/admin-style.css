@@ -331,6 +331,11 @@
     padding: 0;
 }
 
+.forvoyez-analyze-button:focus,
+.forvoyez-see-more:focus {
+    outline: none;
+}
+
 .forvoyez-analyze-button .dashicons,
 .forvoyez-see-more .dashicons {
     background: rgba(0, 0, 0, 0.7);
