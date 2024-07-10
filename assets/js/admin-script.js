@@ -314,31 +314,6 @@
         });                            showNotification('AJAX request failed for image ' + imageId + ': ' + textStatus, 'error');
 
     }
-
-    function updateImageMetadata(imageId, metadata) {
-        $.ajax({
-            url: ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'forvoyez_update_image_metadata',
-                image_id: imageId,
-                metadata: metadata,
-                nonce: forvoyezData.nonce
-            },
-            success: function (response) {
-                if (response.success) {
-                    showNotification('Metadata updated successfully', 'success');
-                    markImageAsAnalyzed(imageId, metadata);
-                } else {
-                    showNotification('Metadata update failed: ' + response.data, 'error');
-                }
-            },
-            error: function () {
-                showNotification('AJAX request failed', 'error');
-            }
-        });
-    }
-
     function markImageAsAnalyzed(imageId, metadata) {
         var $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
         $imageItem.addClass('forvoyez-analyzed');
