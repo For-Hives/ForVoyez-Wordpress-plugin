@@ -5,11 +5,11 @@
     let isLoading = false;
 
     $(document).ready(function () {
-        // Image item click handling
-        $('.forvoyez-image-item').on('click', function (e) {
-            e.preventDefault();
-            toggleImageDetails($(this));
-        });
+        // // Image item click handling
+        // $('.forvoyez-image-item').on('click', function (e) {
+        //     e.preventDefault();
+        //     toggleImageDetails($(this));
+        // });
 
         // See More click handling
         $('.forvoyez-see-more').on('click', function (e) {
@@ -63,13 +63,13 @@
         });
 
         // Select all functionality
-        $('#forvoyez-select-all').on('change', function () {
+        $('#forvoyez-select-all').on('change', function() {
             $('.forvoyez-image-checkbox').prop('checked', $(this).is(':checked'));
         });
 
         // Bulk analyze functionality
-        $('#forvoyez-bulk-analyze').on('click', function () {
-            var selectedImages = $('.forvoyez-image-checkbox:checked').map(function () {
+        $('#forvoyez-bulk-analyze').on('click', function() {
+            var selectedImages = $('.forvoyez-image-checkbox:checked').map(function() {
                 return $(this).val();
             }).get();
 
@@ -181,10 +181,10 @@
             loadImages(url);
         });
 
-        $('.forvoyez-image-item').off('click').on('click', function (e) {
-            e.preventDefault();
-            toggleImageDetails($(this));
-        });
+        // $('.forvoyez-image-item').off('click').on('click', function (e) {
+        //     e.preventDefault();
+        //     toggleImageDetails($(this));
+        // });
 
         $('.forvoyez-see-more').off('click').on('click', function (e) {
             e.stopPropagation();
@@ -394,7 +394,7 @@
                 image_ids: imageIds,
                 nonce: forvoyezData.nonce
             },
-            success: function (response) {
+            success: function(response) {
                 if (response.success) {
                     showNotification('Successfully analyzed ' + response.data.processed + ' images', 'success');
                     updateAnalyzedImages(response.data.processed_ids);
@@ -402,14 +402,14 @@
                     showNotification('Failed to analyze images: ' + response.data, 'error');
                 }
             },
-            error: function () {
+            error: function() {
                 showNotification('Failed to analyze images', 'error');
             }
         });
     }
 
     function updateAnalyzedImages(processedIds) {
-        processedIds.forEach(function (imageId) {
+        processedIds.forEach(function(imageId) {
             var $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
             $imageItem.addClass('forvoyez-analyzed');
             $imageItem.find('.forvoyez-analyze-button').remove();
