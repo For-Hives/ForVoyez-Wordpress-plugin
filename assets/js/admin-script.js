@@ -402,8 +402,7 @@
                     failedCount++;
                 }
 
-                var progress = Math.round(((processedCount + failedCount) / totalImages) * 100);
-                showNotification('Processing: ' + progress + '% complete', 'info');
+                // var progress = Math.round(((processedCount + failedCount) / totalImages) * 100);
 
                 processNextImage();
             });
