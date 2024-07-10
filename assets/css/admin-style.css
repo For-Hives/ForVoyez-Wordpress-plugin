@@ -323,14 +323,6 @@
     position: relative;
 }
 
-/*.forvoyez-action-buttons {*/
-/*    position: absolute;*/
-/*    bottom: 5px;*/
-/*    right: 5px;*/
-/*    display: flex;*/
-/*    gap: 5px;*/
-/*}*/
-
 .forvoyez-analyze-button,
 .forvoyez-see-more {
     background: none;
@@ -348,7 +340,7 @@
 
 .forvoyez-image-details {
     background: rgba(255, 255, 255, 0.9);
-    padding: 25px;
+    padding: 30px;
     position: absolute;
     bottom: 0;
     left: 0;
