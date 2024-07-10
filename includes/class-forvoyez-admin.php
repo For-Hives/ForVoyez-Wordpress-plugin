@@ -164,6 +164,7 @@ class Forvoyez_Admin
         $all_complete = !empty($image_alt) && !empty($image->post_title) && !empty($image->post_excerpt);
         ?>
         <div class="forvoyez-image-item <?php echo $disabled_class; ?>" data-image-id="<?php echo esc_attr($image->ID); ?>">
+            <input type="checkbox" class="forvoyez-image-checkbox" value="<?php echo esc_attr($image->ID); ?>">
             <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>">
             <div class="forvoyez-metadata-icons">
                 <?php if ($all_complete) : ?>

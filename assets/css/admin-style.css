@@ -302,3 +302,19 @@
 #forvoyez-close-modal {
     margin-top: 10px;
 }
+
+
+.forvoyez-bulk-actions {
+    margin-bottom: 15px;
+}
+
+.forvoyez-bulk-actions label {
+    margin-right: 10px;
+}
+
+.forvoyez-image-checkbox {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 50;
+}

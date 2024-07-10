@@ -102,4 +102,49 @@ class Forvoyez_Image_Processor
             'total' => forvoyez_count_incomplete_images()
         ));
     }
+
+    public function bulk_analyze_images()
+    {
+        check_ajax_referer('forvoyez_nonce', 'nonce');
+
+        if (!current_user_can('upload_files')) {
+            wp_send_json_error('Permission denied');
+        }
+
+        $image_ids = isset($_POST['image_ids']) ? array_map('intval', $_POST['image_ids']) : array();
+
+        if (empty($image_ids)) {
+            wp_send_json_error('No images selected');
+        }
+
+        $processed = 0;
+        $processed_ids = array();
+
+        foreach ($image_ids as $image_id) {
+            // Here, implement your actual image analysis logic
+            // This is a placeholder for the actual API call and metadata update
+            $result = $this->analyze_single_image($image_id);
+
+            if ($result) {
+                $processed++;
+                $processed_ids[] = $image_id;
+            }
+        }
+
+        wp_send_json_success(array(
+            'processed' => $processed,
+            'processed_ids' => $processed_ids
+        ));
+    }
+
+    private function analyze_single_image($image_id)
+    {
+        // Placeholder for actual image analysis logic
+        // Replace this with your actual API call and metadata update
+
+        // Simulate successful analysis
+        update_post_meta($image_id, '_forvoyez_analyzed', true);
+
+        return true;
+    }
 }

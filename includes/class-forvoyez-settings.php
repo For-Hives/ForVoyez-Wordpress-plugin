@@ -13,6 +13,7 @@ class Forvoyez_Settings
     {
         add_action('admin_init', array($this, 'register_settings'));
         add_action('wp_ajax_forvoyez_save_api_key', array($this, 'ajax_save_api_key'));
+        add_action('wp_ajax_forvoyez_bulk_analyze_images', array($this, 'bulk_analyze_images'));
     }
 
     public function register_settings()

@@ -61,6 +61,25 @@
             var url = $(this).attr('action') + '?' + $(this).serialize();
             loadImages(url);
         });
+
+        // Select all functionality
+        $('#forvoyez-select-all').on('change', function () {
+            $('.forvoyez-image-checkbox').prop('checked', $(this).is(':checked'));
+        });
+
+        // Bulk analyze functionality
+        $('#forvoyez-bulk-analyze').on('click', function () {
+            var selectedImages = $('.forvoyez-image-checkbox:checked').map(function () {
+                return $(this).val();
+            }).get();
+
+            if (selectedImages.length === 0) {
+                showNotification('Please select at least one image to analyze', 'info');
+                return;
+            }
+
+            analyzeBulkImages(selectedImages);
+        });
     });
 
     function loadImages(url) {
@@ -362,5 +381,39 @@
                 $notification.remove();
             }, 300);
         }, 3000);
+    }
+
+    function analyzeBulkImages(imageIds) {
+        showNotification('Analyzing ' + imageIds.length + ' images...', 'info');
+
+        $.ajax({
+            url: forvoyezData.ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'forvoyez_bulk_analyze_images',
+                image_ids: imageIds,
+                nonce: forvoyezData.nonce
+            },
+            success: function (response) {
+                if (response.success) {
+                    showNotification('Successfully analyzed ' + response.data.processed + ' images', 'success');
+                    updateAnalyzedImages(response.data.processed_ids);
+                } else {
+                    showNotification('Failed to analyze images: ' + response.data, 'error');
+                }
+            },
+            error: function () {
+                showNotification('Failed to analyze images', 'error');
+            }
+        });
+    }
+
+    function updateAnalyzedImages(processedIds) {
+        processedIds.forEach(function (imageId) {
+            var $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
+            $imageItem.addClass('forvoyez-analyzed');
+            $imageItem.find('.forvoyez-analyze-button').remove();
+            $imageItem.append('<div class="forvoyez-checkmark"><span class="dashicons dashicons-yes-alt"></span></div>');
+        });
     }
 })(jQuery);
