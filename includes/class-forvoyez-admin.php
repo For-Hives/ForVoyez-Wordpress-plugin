@@ -1,4 +1,5 @@
 <?php
+defined('ABSPATH') || exit;
 
 class Forvoyez_Admin
 {
@@ -91,14 +92,14 @@ class Forvoyez_Admin
         $displayed_images = $query_images->post_count;
         $total_pages = ceil($total_images / $per_page);
 
-        self::display_filters($total_images, $displayed_images);
+        Forvoyez_Image_Renderer::display_filters($total_images, $displayed_images);
         ?>
         <div class="forvoyez-image-grid">
             <?php
             if ($query_images->have_posts()) {
                 while ($query_images->have_posts()) {
                     $query_images->the_post();
-                    self::render_image_item($query_images->post);
+                    Forvoyez_Image_Renderer::render_image_item($query_images->post);
                 }
             } else {
                 echo '<p>No images found matching the selected criteria.</p>';
@@ -117,8 +118,4 @@ class Forvoyez_Admin
 
         wp_reset_postdata();
     }
-
-
-
-
 }

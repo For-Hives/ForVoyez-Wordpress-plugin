@@ -1,4 +1,5 @@
 <?php
+defined('ABSPATH') || exit;
 
 class Forvoyez_Image_Processor
 {
@@ -90,7 +91,7 @@ class Forvoyez_Image_Processor
         ob_start();
         foreach ($query_images->posts as $image) {
             if (empty($image->post_title) || empty(get_post_meta($image->ID, '_wp_attachment_image_alt', true)) || empty($image->post_excerpt)) {
-                Forvoyez_Admin::render_image_item($image);
+                Forvoyez_Image_Renderer::render_image_item($image);
                 $count++;
             }
         }
