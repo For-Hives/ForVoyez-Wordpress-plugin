@@ -1,5 +1,17 @@
 jQuery(document).ready(function ($) {
     var $modal = $('#forvoyez-api-settings-modal');
+    var $apiKeyInput = $('#forvoyez_api_key');
+    var $toggleVisibility = $('<span class="dashicons dashicons-visibility"></span>').insertAfter($apiKeyInput);
+
+    $toggleVisibility.on('click', function() {
+        if ($apiKeyInput.attr('type') === 'password') {
+            $apiKeyInput.attr('type', 'text');
+            $toggleVisibility.removeClass('dashicons-visibility').addClass('dashicons-hidden');
+        } else {
+            $apiKeyInput.attr('type', 'password');
+            $toggleVisibility.removeClass('dashicons-hidden').addClass('dashicons-visibility');
+        }
+    });
 
     $('#forvoyez-open-api-settings, #forvoyez-open-settings').on('click', function () {
         $modal.show();
@@ -22,14 +34,16 @@ jQuery(document).ready(function ($) {
             },
             success: function(response) {
                 if (response.success) {
-                    showNotification('API key saved successfully', 'success');
+                    window.showNotification('API key saved successfully', 'success');
                     $modal.hide();
+                    // Update the input field with the new value
+                    $('#forvoyez_api_key').val(apiKey);
                 } else {
-                    showNotification('Failed to save API key: ' + response.data, 'error');
+                    window.showNotification('Failed to save API key: ' + response.data, 'error');
                 }
             },
             error: function() {
-                showNotification('Failed to save API key', 'error');
+                window.showNotification('Failed to save API key', 'error');
             }
         });
     });
