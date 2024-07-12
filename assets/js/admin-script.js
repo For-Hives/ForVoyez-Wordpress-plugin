@@ -21,14 +21,14 @@
         // Handle "See More" button click
         $('.forvoyez-image-grid').on('click', '.forvoyez-see-more', function (e) {
             e.preventDefault();
-            var $item = $(this).closest('.forvoyez-image-item');
+            let $item = $(this).closest('.forvoyez-image-item');
             toggleImageDetails($item);
         });
 
         // Handle analyze button click
         $('.forvoyez-image-grid').on('click', '.forvoyez-analyze-button', function (e) {
             e.preventDefault();
-            var imageId = $(this).closest('.forvoyez-image-item').data('image-id');
+            let imageId = $(this).closest('.forvoyez-image-item').data('image-id');
             analyzeImage(imageId);
         });
 
@@ -49,7 +49,7 @@
         // Handle analyze button click
         $('.forvoyez-analyze-button').on('click', function (e) {
             e.stopPropagation(); // Prevent triggering the image item click
-            var imageId = $(this).closest('.forvoyez-image-item').data('image-id');
+            let imageId = $(this).closest('.forvoyez-image-item').data('image-id');
             analyzeImage(imageId);
         });
 
@@ -59,14 +59,14 @@
         // Handle pagination clicks
         $(document).on('click', '.page-numbers', function (e) {
             e.preventDefault();
-            var url = $(this).attr('href');
+            let url = $(this).attr('href');
             loadImages(url);
         });
 
         // Handle filter form submission
         $('.forvoyez-filters form').on('submit', function (e) {
             e.preventDefault();
-            var url = $(this).attr('action') + '?' + $(this).serialize();
+            let url = $(this).attr('action') + '?' + $(this).serialize();
             loadImages(url);
         });
 
@@ -77,7 +77,7 @@
 
         // Bulk analyze functionality
         $('#forvoyez-bulk-analyze').on('click', function () {
-            var selectedImages = $('.forvoyez-image-checkbox:checked').map(function () {
+            let selectedImages = $('.forvoyez-image-checkbox:checked').map(function () {
                 return $(this).val();
             }).get();
 
@@ -95,13 +95,13 @@
             url: url,
             type: 'GET',
             success: function (response) {
-                var $response = $(response);
+                let $response = $(response);
                 $('.forvoyez-image-grid').html($response.find('.forvoyez-image-grid').html());
                 $('.forvoyez-filters').html($response.find('.forvoyez-filters').html());
                 $('.pagination').html($response.find('.pagination').html());
 
                 // Update displayed images count
-                var displayedImages = $response.find('.forvoyez-image-grid .forvoyez-image-item').length;
+                let displayedImages = $response.find('.forvoyez-image-grid .forvoyez-image-item').length;
                 $('.forvoyez-displayed-images strong').text(displayedImages);
 
                 history.pushState(null, '', url);
@@ -143,9 +143,9 @@
         if (isLoading) return;
         isLoading = true;
 
-        var $grid = $('.forvoyez-image-grid');
-        var offset = parseInt($grid.data('offset'), 10);
-        var limit = count || 1;
+        let $grid = $('.forvoyez-image-grid');
+        let offset = parseInt($grid.data('offset'), 10);
+        let limit = count || 1;
 
         $.ajax({
             url: ajaxurl,
@@ -178,14 +178,14 @@
         // Pagination clicks
         $('.pagination .page-numbers').on('click', function (e) {
             e.preventDefault();
-            var url = $(this).attr('href');
+            let url = $(this).attr('href');
             loadImages(url);
         });
 
         // Filter form submission
         $('.forvoyez-filters form').on('submit', function (e) {
             e.preventDefault();
-            var url = $(this).attr('action') + '?' + $(this).serialize();
+            let url = $(this).attr('action') + '?' + $(this).serialize();
             loadImages(url);
         });
 
@@ -196,14 +196,14 @@
 
         $('.forvoyez-analyze-button').off('click').on('click', function (e) {
             e.stopPropagation();
-            var imageId = $(this).closest('.forvoyez-image-item').data('image-id');
+            let imageId = $(this).closest('.forvoyez-image-item').data('image-id');
             analyzeImage(imageId);
         });
     }
 
     function toggleImageDetails($item) {
-        var $details = $item.find('.forvoyez-image-details');
-        var $seeMoreButton = $item.find('.forvoyez-see-more');
+        let $details = $item.find('.forvoyez-image-details');
+        let $seeMoreButton = $item.find('.forvoyez-see-more');
 
         if ($details.is(':visible')) {
             $details.slideUp();
@@ -261,14 +261,14 @@
 
     function analyzeImage(imageId, callback, isNotificationActivated = true) {
         return new Promise((resolve) => {
-            var $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
-            var $loader = $imageItem.find('.forvoyez-loader');
+            let $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
+            let $loader = $imageItem.find('.forvoyez-loader');
 
             $loader.css('display', 'flex');
 
             // Simulation de l'appel API (à remplacer par un vrai appel API plus tard)
             setTimeout(function () {
-                var fakeApiResponse = {
+                let fakeApiResponse = {
                     alt_text: 'Generated alt text for image ' + imageId,
                     title: 'Generated title for image ' + imageId,
                     caption: 'Generated caption for image ' + imageId
@@ -315,13 +315,13 @@
     }
 
     function markImageAsAnalyzed(imageId, metadata) {
-        var $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
+        let $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
         $imageItem.addClass('forvoyez-analyzed');
         $imageItem.find('.forvoyez-analyze-button').remove();
         $imageItem.append('<div class="forvoyez-checkmark"><span class="dashicons dashicons-yes-alt"></span></div>');
 
         // Update metadata icons
-        var $metadataIcons = $imageItem.find('.forvoyez-metadata-icons');
+        let $metadataIcons = $imageItem.find('.forvoyez-metadata-icons');
         $metadataIcons.empty();
         if (!metadata.alt_text) {
             $metadataIcons.append('<span class="dashicons dashicons-editor-textcolor" title="Missing Alt Text"></span>');
@@ -334,14 +334,14 @@
         }
 
         // Update image details
-        var $details = $imageItem.find('.forvoyez-image-details');
+        let $details = $imageItem.find('.forvoyez-image-details');
         $details.find('p:contains("Title:")').html('<strong>Title:</strong> ' + (metadata.title || 'Not set'));
         $details.find('p:contains("Alt Text:")').html('<strong>Alt Text:</strong> ' + (metadata.alt_text || 'Not set'));
         $details.find('p:contains("Caption:")').html('<strong>Caption:</strong> ' + (metadata.caption || 'Not set'));
     }
 
     function updateImageCount() {
-        var remainingImages = $('.forvoyez-image-item').length;
+        let remainingImages = $('.forvoyez-image-item').length;
         $('.forvoyez-image-count').text(remainingImages);
 
         if (remainingImages === 0) {
@@ -359,7 +359,7 @@
             currentNotification.remove();
         }
 
-        var $notification = $('<div class="forvoyez-notification ' + type + '">' + message + '</div>');
+        let $notification = $('<div class="forvoyez-notification ' + type + '">' + message + '</div>');
         $('body').append($notification);
         currentNotification = $notification;
 

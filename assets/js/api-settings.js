@@ -1,7 +1,7 @@
 jQuery(document).ready(function ($) {
-    var $modal = $('#forvoyez-api-settings-modal');
-    var $apiKeyInput = $('#forvoyez_api_key');
-    var $toggleVisibility = $('#forvoyez-toggle-visibility');
+    let $modal = $('#forvoyez-api-settings-modal');
+    let $apiKeyInput = $('#forvoyez_api_key');
+    let $toggleVisibility = $('#forvoyez-toggle-visibility');
 
     $toggleVisibility.on('click', function() {
         if ($apiKeyInput.attr('type') === 'password') {
@@ -22,7 +22,7 @@ jQuery(document).ready(function ($) {
     });
 
     $('#forvoyez-save-api-key').on('click', function () {
-        var apiKey = $('#forvoyez_api_key').val();
+        let apiKey = $('#forvoyez_api_key').val();
 
         $.ajax({
             url: ajaxurl,
