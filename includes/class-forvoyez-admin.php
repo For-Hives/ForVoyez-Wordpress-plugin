@@ -42,7 +42,7 @@ class Forvoyez_Admin
     }
 
     public static function display_status_configuration() {
-        $api_key = get_option('forvoyez_api_key');
+        $api_key = forvoyez_get_api_key();
         if (!empty($api_key)) {
             echo '<p>Your ForVoyez API key is configured, you are ready to go!</p>';
         } else {

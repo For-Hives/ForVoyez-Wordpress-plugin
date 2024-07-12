@@ -68,4 +68,9 @@ function forvoyez_count_incomplete_images()
     return $incomplete_count;
 }
 
+function forvoyez_get_api_key(){
+    $settings = new Forvoyez_Settings();
+    return $settings->get_api_key();
+}
+
 add_action('plugins_loaded', 'forvoyez_init');

@@ -31,10 +31,6 @@ class Forvoyez_Settings
 
         $api_key = isset($_POST['api_key']) ? sanitize_text_field($_POST['api_key']) : '';
 
-        if (empty($api_key)) {
-            wp_send_json_error('API key cannot be empty');
-        }
-
         $encrypted_api_key = $this->encrypt($api_key);
         update_option('forvoyez_encrypted_api_key', $encrypted_api_key);
 

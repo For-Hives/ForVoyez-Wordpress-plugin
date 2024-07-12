@@ -139,10 +139,16 @@ class Forvoyez_Image_Processor
 
     private function analyze_single_image($image_id)
     {
-        // Placeholder for actual image analysis logic
-        // Replace this with your actual API call and metadata update
+        $api_key = forvoyez_get_api_key();
+        if (empty($api_key)) {
+            // Handle the case where the API key is not set
+            return false;
+        }
 
-        // Simulate successful analysis
+        // Use $api_key to make API calls to ForVoyez
+        // Implement your actual API call and metadata update logic here
+
+        // For now, we'll just simulate a successful analysis
         update_post_meta($image_id, '_forvoyez_analyzed', true);
 
         return true;
