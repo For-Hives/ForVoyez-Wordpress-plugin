@@ -33,8 +33,4 @@ jQuery(document).ready(function ($) {
             }
         });
     });
-
-    function showNotification(message, type) {
-        // Implement this function to show notifications to the user
-    }
 });

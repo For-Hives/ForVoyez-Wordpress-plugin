@@ -203,14 +203,17 @@
 }
 
 .forvoyez-notification.success {
+    opacity: 1;
     background-color: #4CAF50;
 }
 
 .forvoyez-notification.error {
+    opacity: 1;
     background-color: #f44336;
 }
 
 .forvoyez-notification.info {
+    opacity: 1;
     background-color: #2196F3;
 }
 
