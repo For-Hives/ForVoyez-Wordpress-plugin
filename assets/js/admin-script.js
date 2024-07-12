@@ -354,7 +354,7 @@
 
     let currentNotification = null;
 
-    function showNotification(message, type, duration = 3000) {
+    export  function showNotification(message, type, duration = 3000) {
         if (currentNotification) {
             currentNotification.remove();
         }
