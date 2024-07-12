@@ -311,9 +311,9 @@
                     }
                 });
             }, 2000); // Simulation d'un délai de 2 secondes
-        });                            showNotification('AJAX request failed for image ' + imageId + ': ' + textStatus, 'error');
-
+        });
     }
+
     function markImageAsAnalyzed(imageId, metadata) {
         var $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
         $imageItem.addClass('forvoyez-analyzed');
@@ -354,7 +354,7 @@
 
     let currentNotification = null;
 
-    export  function showNotification(message, type, duration = 3000) {
+    function showNotification(message, type, duration = 3000) {
         if (currentNotification) {
             currentNotification.remove();
         }
@@ -435,4 +435,7 @@
             $imageItem.append('<div class="forvoyez-checkmark"><span class="dashicons dashicons-yes-alt"></span></div>');
         });
     }
+
+    // make the function global
+    window.showNotification = showNotification;
 })(jQuery);

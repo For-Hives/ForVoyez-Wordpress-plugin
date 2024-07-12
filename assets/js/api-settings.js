@@ -1,5 +1,3 @@
-import {showNotification} from "./admin-script.js";
-
 jQuery(document).ready(function ($) {
     var $modal = $('#forvoyez-api-settings-modal');
 
