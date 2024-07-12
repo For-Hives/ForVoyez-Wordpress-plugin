@@ -8,11 +8,12 @@ class Forvoyez_Image_Processor
         add_action('wp_ajax_forvoyez_analyze_image', array($this, 'analyze_image'));
         add_action('wp_ajax_forvoyez_update_image_metadata', array($this, 'update_image_metadata'));
         add_action('wp_ajax_forvoyez_load_more_images', array($this, 'load_more_images'));
+        add_action('wp_ajax_forvoyez_bulk_analyze_images', array($this, 'bulk_analyze_images'));
     }
 
     public function analyze_image()
     {
-        // Implement image analysis logic here
+        // TODO: Implement image analysis logic here
     }
 
     public function update_image_metadata()
@@ -104,8 +105,7 @@ class Forvoyez_Image_Processor
         ));
     }
 
-    public function bulk_analyze_images()
-    {
+    public function bulk_analyze_images() {
         check_ajax_referer('forvoyez_nonce', 'nonce');
 
         if (!current_user_can('upload_files')) {
@@ -118,40 +118,42 @@ class Forvoyez_Image_Processor
             wp_send_json_error('No images selected');
         }
 
-        $processed = 0;
-        $processed_ids = array();
+        $results = array();
 
         foreach ($image_ids as $image_id) {
-            // Here, implement your actual image analysis logic
-            // This is a placeholder for the actual API call and metadata update
             $result = $this->analyze_single_image($image_id);
-
-            if ($result) {
-                $processed++;
-                $processed_ids[] = $image_id;
-            }
+            $results[] = array(
+                'id' => $image_id,
+                'success' => $result['success'],
+                'message' => $result['message'],
+                'metadata' => $result['metadata']
+            );
         }
 
-        wp_send_json_success(array(
-            'processed' => $processed,
-            'processed_ids' => $processed_ids
-        ));
+        wp_send_json_success($results);
     }
 
-    private function analyze_single_image($image_id)
-    {
+    private function analyze_single_image($image_id) {
         $api_key = forvoyez_get_api_key();
         if (empty($api_key)) {
-            // Handle the case where the API key is not set
-            return false;
+            return array('success' => false, 'message' => 'API key not set', 'metadata' => null);
         }
 
-        // Use $api_key to make API calls to ForVoyez
-        // Implement your actual API call and metadata update logic here
+//        TODO: HERE IS THE LOGIC TO IMPLEMENT WITH THE API
+        $metadata = array(
+            'alt_text' => 'Generated alt text for image ' . $image_id,
+            'title' => 'Generated title for image ' . $image_id,
+            'caption' => 'Generated caption for image ' . $image_id
+        );
 
-        // For now, we'll just simulate a successful analysis
+        update_post_meta($image_id, '_wp_attachment_image_alt', $metadata['alt_text']);
+        wp_update_post(array(
+            'ID' => $image_id,
+            'post_title' => $metadata['title'],
+            'post_excerpt' => $metadata['caption']
+        ));
         update_post_meta($image_id, '_forvoyez_analyzed', true);
 
-        return true;
+        return array('success' => true, 'message' => 'Analysis successful', 'metadata' => $metadata);
     }
 }

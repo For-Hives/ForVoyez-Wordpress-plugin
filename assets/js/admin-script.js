@@ -90,6 +90,57 @@
         });
     });
 
+    function analyzeImage(imageId, isNotificationActivated = true) {
+        return new Promise((resolve) => {
+            let $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
+            let $loader = $imageItem.find('.forvoyez-loader');
+
+            $loader.css('display', 'flex');
+
+            // (fake API call simulation (to be replaced with a real API call later)
+            setTimeout(function () {
+                let fakeApiResponse = {
+                    alt_text: 'Generated alt text for image ' + imageId,
+                    title: 'Generated title for image ' + imageId,
+                    caption: 'Generated caption for image ' + imageId
+                };
+
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: {
+                        action: 'forvoyez_update_image_metadata',
+                        image_id: imageId,
+                        metadata: fakeApiResponse,
+                        nonce: forvoyezData.nonce
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            if (isNotificationActivated) {
+                                showNotification('Metadata updated successfully for image ' + imageId, 'success');
+                            }
+                            markImageAsAnalyzed(imageId, fakeApiResponse);
+                            resolve(true);
+                        } else {
+                            if (isNotificationActivated) {
+                                showNotification('Metadata update failed for image ' + imageId + ': ' + response.data, 'error');
+                            }
+                            resolve(false);
+                        }
+                        $loader.hide();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        if (isNotificationActivated) {
+                            showNotification('AJAX request failed for image ' + imageId + ': ' + textStatus, 'error');
+                        }
+                        $loader.hide();
+                        resolve(false);
+                    }
+                });
+            }, 2000);
+        });
+    }
+
     function loadImages(url) {
         $.ajax({
             url: url,
@@ -259,61 +310,6 @@
         }
     }
 
-    function analyzeImage(imageId, callback, isNotificationActivated = true) {
-        return new Promise((resolve) => {
-            let $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
-            let $loader = $imageItem.find('.forvoyez-loader');
-
-            $loader.css('display', 'flex');
-
-            // Simulation de l'appel API (à remplacer par un vrai appel API plus tard)
-            setTimeout(function () {
-                let fakeApiResponse = {
-                    alt_text: 'Generated alt text for image ' + imageId,
-                    title: 'Generated title for image ' + imageId,
-                    caption: 'Generated caption for image ' + imageId
-                };
-
-                // Appel AJAX pour mettre à jour les métadonnées
-                $.ajax({
-                    url: ajaxurl,
-                    type: 'POST',
-                    data: {
-                        action: 'forvoyez_update_image_metadata',
-                        image_id: imageId,
-                        metadata: fakeApiResponse,
-                        nonce: forvoyezData.nonce
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            if (isNotificationActivated) {
-                                showNotification('Metadata updated successfully for image ' + imageId, 'success');
-                            }
-                            markImageAsAnalyzed(imageId, fakeApiResponse);
-                            callback(true);
-                            resolve();
-                        } else {
-                            if (isNotificationActivated) {
-                                showNotification('Metadata update failed for image ' + imageId + ': ' + response.data, 'error');
-                            }
-                            callback(false);
-                            resolve();
-                        }
-                        $loader.hide();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        if (isNotificationActivated) {
-                            showNotification('AJAX request failed for image ' + imageId + ': ' + textStatus, 'error');
-                        }
-                        $loader.hide();
-                        callback(false);
-                        resolve();
-                    }
-                });
-            }, 2000); // Simulation d'un délai de 2 secondes
-        });
-    }
-
     function markImageAsAnalyzed(imageId, metadata) {
         let $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
         $imageItem.addClass('forvoyez-analyzed');
@@ -380,7 +376,7 @@
         }
     }
 
-    function analyzeBulkImages(imageIds) {
+    async function analyzeBulkImages(imageIds) {
         const batchSize = 7;
         const totalImages = imageIds.length;
         let processedCount = 0;
@@ -399,32 +395,22 @@
             }
         }
 
-        function processBatch(batch) {
-            return Promise.all(batch.map(imageId =>
-                new Promise(resolve => {
-                    analyzeImage(imageId, success => {
-                        if (success) {
-                            processedCount++;
-                        } else {
-                            failedCount++;
-                        }
-                        updateProgress();
-                        resolve();
-                    }, false);
-                })
-            ));
+        for (let i = 0; i < totalImages; i += batchSize) {
+            const batch = imageIds.slice(i, i + batchSize);
+            const results = await Promise.all(batch.map(imageId => analyzeImage(imageId, false)));
+
+            results.forEach(success => {
+                if (success) {
+                    processedCount++;
+                } else {
+                    failedCount++;
+                }
+            });
+
+            updateProgress();
         }
 
-        async function processAllBatches() {
-            for (let i = 0; i < totalImages; i += batchSize) {
-                const batch = imageIds.slice(i, i + batchSize);
-                await processBatch(batch);
-            }
-
-            showNotification('Analysis complete. Successful: ' + processedCount + ', Failed: ' + failedCount, 'success', 5000);
-        }
-
-        processAllBatches();
+        showNotification('Analysis complete. Successful: ' + processedCount + ', Failed: ' + failedCount, 'success', 5000);
     }
 
     // make the function global
