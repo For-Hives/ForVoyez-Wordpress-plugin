@@ -427,15 +427,6 @@
         processAllBatches();
     }
 
-    function updateAnalyzedImages(processedIds) {
-        processedIds.forEach(function (imageId) {
-            var $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
-            $imageItem.addClass('forvoyez-analyzed');
-            $imageItem.find('.forvoyez-analyze-button').remove();
-            $imageItem.append('<div class="forvoyez-checkmark"><span class="dashicons dashicons-yes-alt"></span></div>');
-        });
-    }
-
     // make the function global
     window.showNotification = showNotification;
 })(jQuery);
