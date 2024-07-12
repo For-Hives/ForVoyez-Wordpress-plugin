@@ -352,20 +352,32 @@
         }
     }
 
-    function showNotification(message, type) {
+    let currentNotification = null;
+
+    function showNotification(message, type, duration = 3000) {
+        if (currentNotification) {
+            currentNotification.remove();
+        }
+
         var $notification = $('<div class="forvoyez-notification ' + type + '">' + message + '</div>');
         $('body').append($notification);
+        currentNotification = $notification;
 
         setTimeout(function () {
-            $notification.css('opacity', '1');
+            $notification.addClass('show');
         }, 10);
 
-        setTimeout(function () {
-            $notification.css('opacity', '0');
+        if (duration > 0) {
             setTimeout(function () {
-                $notification.remove();
-            }, 300);
-        }, 3000);
+                $notification.removeClass('show');
+                setTimeout(function () {
+                    $notification.remove();
+                    if (currentNotification === $notification) {
+                        currentNotification = null;
+                    }
+                }, 300);
+            }, duration);
+        }
     }
 
     function analyzeBulkImages(imageIds) {
@@ -373,8 +385,19 @@
         const totalImages = imageIds.length;
         let processedCount = 0;
         let failedCount = 0;
+        let lastNotificationTime = 0;
+        const notificationInterval = 1000;
 
-        showNotification('Analyzing ' + totalImages + ' images...', 'info');
+        showNotification('Analyzing ' + totalImages + ' images...', 'info', 0);
+
+        function updateProgress() {
+            const currentTime = Date.now();
+            if (currentTime - lastNotificationTime >= notificationInterval) {
+                const progress = Math.round(((processedCount + failedCount) / totalImages) * 100);
+                showNotification('Processing: ' + progress + '% complete', 'info', 0);
+                lastNotificationTime = currentTime;
+            }
+        }
 
         function processBatch(batch) {
             return Promise.all(batch.map(imageId =>
@@ -385,6 +408,7 @@
                         } else {
                             failedCount++;
                         }
+                        updateProgress();
                         resolve();
                     }, false);
                 })
@@ -395,12 +419,9 @@
             for (let i = 0; i < totalImages; i += batchSize) {
                 const batch = imageIds.slice(i, i + batchSize);
                 await processBatch(batch);
-
-                const progress = Math.round(((processedCount + failedCount) / totalImages) * 100);
-                showNotification('Processing: ' + progress + '% complete', 'info');
             }
 
-            showNotification('Analysis complete. Successful: ' + processedCount + ', Failed: ' + failedCount, 'info');
+            showNotification('Analysis complete. Successful: ' + processedCount + ', Failed: ' + failedCount, 'success', 5000);
         }
 
         processAllBatches();

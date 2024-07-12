@@ -203,11 +203,15 @@
 }
 
 .forvoyez-notification.success {
-    background-color: #2ecc71;
+    background-color: #4CAF50;
 }
 
 .forvoyez-notification.error {
-    background-color: #e74c3c;
+    background-color: #f44336;
+}
+
+.forvoyez-notification.info {
+    background-color: #2196F3;
 }
 
 .forvoyez-image-item.forvoyez-analyzed {
