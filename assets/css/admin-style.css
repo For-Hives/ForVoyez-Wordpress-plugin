@@ -306,11 +306,6 @@
     margin-bottom: 10px;
 }
 
-#forvoyez-close-modal {
-    margin-top: 10px;
-}
-
-
 .forvoyez-bulk-actions {
     margin-bottom: 15px;
 }
@@ -357,4 +352,29 @@
     bottom: 0;
     left: 0;
     right: 0;
+}
+
+.forvoyez-input-api-key{
+    position: relative;
+}
+
+.forvoyez-input-api-key input {
+    width: 100%;
+}
+
+.forvoyez-input-api-key .dashicons {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.forvoyez-api-settings-buttons{
+    padding: 20px 0;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    justify-content: right;
 }

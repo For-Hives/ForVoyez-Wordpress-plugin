@@ -1,7 +1,7 @@
 jQuery(document).ready(function ($) {
     var $modal = $('#forvoyez-api-settings-modal');
     var $apiKeyInput = $('#forvoyez_api_key');
-    var $toggleVisibility = $('<span class="dashicons dashicons-visibility"></span>').insertAfter($apiKeyInput);
+    var $toggleVisibility = $('#forvoyez-toggle-visibility');
 
     $toggleVisibility.on('click', function() {
         if ($apiKeyInput.attr('type') === 'password') {
