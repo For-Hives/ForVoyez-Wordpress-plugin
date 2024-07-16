@@ -22,8 +22,10 @@ class Forvoyez_API_Manager
     }
 
 //    others methods here (with the logic to interact with the ForVoyez API)
-    public function analyze_image($image_id) {
+    public function analyze_image($image_id)
+    {
         $image_url = wp_get_attachment_url($image_id);
+
         if (!$image_url) {
             return array('success' => false, 'message' => 'Image not found', 'metadata' => null);
         }
@@ -43,7 +45,28 @@ class Forvoyez_API_Manager
         }
 
         $body = wp_remote_retrieve_body($response);
+        $response_code = wp_remote_retrieve_response_code($response);
+
+        // Check if the response is valid JSON
         $data = json_decode($body, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE || $response_code !== 200) {
+            // The response is not valid JSON or the response code is not 200
+            return array(
+                'success' => false,
+                'message' => array(
+                    'response_code' => $response_code,
+                    'body' => $body,
+                    'debug_info' => array(
+                        'response_code' => $response_code,
+                        'body' => substr($body, 0, 1000), // Limit the body size to avoid too large output
+                        'image_url' => $image_url,
+                        'api_url' => $this->api_url,
+                    ),
+                    'error' => 'Invalid API response'
+                )
+            );
+        }
 
         if (isset($data['error'])) {
             return array('success' => false, 'message' => $data['error']);
