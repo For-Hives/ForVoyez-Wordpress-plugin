@@ -24,56 +24,80 @@ class Forvoyez_API_Manager
 //    others methods here (with the logic to interact with the ForVoyez API)
     public function analyze_image($image_id)
     {
-        $image_url = wp_get_attachment_url($image_id);
-
-        if (!$image_url) {
-            return array('success' => false, 'message' => 'Image not found', 'metadata' => null);
+        $image_path = get_attached_file($image_id);
+        if (!$image_path) {
+            return $this->format_error('image_not_found', 'Image not found');
         }
 
-        $response = wp_remote_post($this->api_url, array(
+        $image_url = wp_get_attachment_url($image_id);
+        $image_mime = get_post_mime_type($image_id);
+        $image_name = basename($image_path);
+
+        // Prepare the data for the API request
+        $data = array(
+            'data' => json_encode(array(
+                'context' => '', // You can add context if needed
+                'schema' => array(
+                    'title' => 'string',
+                    'alternativeText' => 'string',
+                    'caption' => 'string'
+                )
+            ))
+        );
+
+        // Prepare the file for upload
+        $file_data = file_get_contents($image_path);
+        if ($file_data === false) {
+            return array('success' => false, 'message' => 'Failed to read image file', 'metadata' => null);
+        }
+
+        // Create a boundary for multipart data
+        $boundary = wp_generate_password(24);
+        $delimiter = '-------------' . $boundary;
+
+        // Build the multipart data
+        $post_data = $this->build_data_files($boundary, $data, $image_name, $image_mime, $file_data);
+
+        // Set up the request
+        $args = array(
+            'method' => 'POST',
+            'timeout' => 30,
+            'redirection' => 5,
+            'httpversion' => '1.1',
+            'blocking' => true,
             'headers' => array(
                 'Authorization' => 'Bearer ' . $this->api_key,
-                'Content-Type' => 'application/json'
+                'Content-Type' => 'multipart/form-data; boundary=' . $delimiter,
+                'Content-Length' => strlen($post_data)
             ),
-            'body' => json_encode(array(
-                'image_url' => $image_url
-            ))
-        ));
+            'body' => $post_data,
+        );
+
+        // Make the request
+        $response = wp_remote_post($this->api_url, $args);
 
         if (is_wp_error($response)) {
-            return array('success' => false, 'message' => $response->get_error_message());
+            return $this->format_error('api_request_failed', $response->get_error_message());
         }
 
         $body = wp_remote_retrieve_body($response);
-        $response_code = wp_remote_retrieve_response_code($response);
-
-        // Check if the response is valid JSON
         $data = json_decode($body, true);
 
-        if (json_last_error() !== JSON_ERROR_NONE || $response_code !== 200) {
-            // The response is not valid JSON or the response code is not 200
-            return array(
-                'success' => false,
-                'message' => array(
-                    'response_code' => $response_code,
-                    'body' => $body,
-                    'debug_info' => array(
-                        'response_code' => $response_code,
-                        'body' => substr($body, 0, 1000), // Limit the body size to avoid too large output
-                        'image_url' => $image_url,
-                        'api_url' => $this->api_url,
-                    ),
-                    'error' => 'Invalid API response'
-                )
-            );
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return $this->format_error('invalid_api_response', 'Invalid API response', array(
+                'response_code' => wp_remote_retrieve_response_code($response),
+                'body' => substr($body, 0, 1000),
+                'image_url' => wp_get_attachment_url($image_id),
+                'api_url' => $this->api_url,
+            ));
         }
 
         if (isset($data['error'])) {
-            return array('success' => false, 'message' => $data['error']);
+            return $this->format_error('api_error', $data['error']);
         }
 
         $metadata = array(
-            'alt_text' => $data['alt_text'] ?? '',
+            'alt_text' => $data['alternativeText'] ?? '',
             'title' => $data['title'] ?? '',
             'caption' => $data['caption'] ?? ''
         );
@@ -86,6 +110,48 @@ class Forvoyez_API_Manager
         ));
         update_post_meta($image_id, '_forvoyez_analyzed', true);
 
-        return array('success' => true, 'message' => 'Analysis successful', 'metadata' => $metadata);
+        return array(
+            'success' => true,
+            'message' => 'Analysis successful',
+            'metadata' => $metadata
+        );
+    }
+
+    private function format_error($code, $message, $debug_info = null)
+    {
+        $error = array(
+            'success' => false,
+            'error' => array(
+                'code' => $code,
+                'message' => $message
+            )
+        );
+
+        if ($debug_info) {
+            $error['debug_info'] = $debug_info;
+        }
+
+        return $error;
+    }
+
+    private function build_data_files($boundary, $fields, $file_name, $file_mime, $file_data)
+    {
+        $data = '';
+        $delimiter = '-------------' . $boundary;
+
+        foreach ($fields as $name => $content) {
+            $data .= "--" . $delimiter . "\r\n"
+                . 'Content-Disposition: form-data; name="' . $name . "\"\r\n\r\n"
+                . $content . "\r\n";
+        }
+
+        $data .= "--" . $delimiter . "\r\n"
+            . 'Content-Disposition: form-data; name="image"; filename="' . $file_name . '"' . "\r\n"
+            . 'Content-Type: ' . $file_mime . "\r\n\r\n"
+            . $file_data . "\r\n";
+
+        $data .= "--" . $delimiter . "--\r\n";
+
+        return $data;
     }
 }
