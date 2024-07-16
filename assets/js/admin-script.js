@@ -115,8 +115,18 @@
                         markImageAsAnalyzed(imageId, response.data.metadata);
                         resolve(true);
                     } else {
+                        let errorMessage = 'Unknown error occurred';
+                        let errorCode = 'unknown_error';
+
+                        if (response.data) {
+                            errorMessage = response.data;
+                        } else if (response.error && response.error.message) {
+                            errorMessage = response.error.message;
+                            errorCode = response.error.code || 'unknown_error';
+                        }
+
                         if (isNotificationActivated) {
-                            showErrorNotification(response.error.message, response.error.code, imageId);
+                            showErrorNotification(errorMessage, errorCode, imageId);
                         }
                         resolve(false);
                     }
