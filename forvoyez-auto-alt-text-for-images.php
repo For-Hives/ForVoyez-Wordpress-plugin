@@ -18,6 +18,7 @@ require_once FORVOYEZ_PLUGIN_DIR . 'includes/forvoyez-constants.php';
 require_once FORVOYEZ_PLUGIN_DIR . 'includes/forvoyez-helpers.php';
 require_once FORVOYEZ_PLUGIN_DIR . 'includes/class-forvoyez-admin.php';
 require_once FORVOYEZ_PLUGIN_DIR . 'includes/class-forvoyez-api.php';
+require_once FORVOYEZ_PLUGIN_DIR . 'includes/class-forvoyez-api-manager.php';
 require_once FORVOYEZ_PLUGIN_DIR . 'includes/class-forvoyez-image-processor.php';
 require_once FORVOYEZ_PLUGIN_DIR . 'includes/class-forvoyez-settings.php';
 require_once FORVOYEZ_PLUGIN_DIR . 'includes/class-forvoyez-image-renderer.php';
