@@ -44,6 +44,7 @@ class Forvoyez_Settings
         if (empty($encrypted_api_key)) {
             return '';
         }
+
         return $this->decrypt($encrypted_api_key);
     }
 
@@ -56,8 +57,22 @@ class Forvoyez_Settings
 
     private function decrypt($data)
     {
-        list($encrypted_data, $iv) = explode('::', base64_decode($data), 2);
-        return openssl_decrypt($encrypted_data, 'aes-256-cbc', $this->encryption_key, 0, $iv);
+        if (empty($data)) {
+            return '';
+        }
+
+        $decoded = base64_decode($data);
+        if ($decoded === false) {
+            return '';
+        }
+
+        list($encrypted_data, $iv) = array_pad(explode('::', $decoded, 2), 2, null);
+        if ($iv === null) {
+            return '';
+        }
+
+        $decrypted = openssl_decrypt($encrypted_data, 'aes-256-cbc', $this->encryption_key, 0, $iv);
+        return $decrypted !== false ? $decrypted : '';
     }
 
     private function generate_site_specific_key()

@@ -30,11 +30,9 @@ class Forvoyez_Image_Renderer
                 <?php endif; ?>
             </div>
             <div class="forvoyez-action-buttons">
-                <?php if (!$is_analyzed): ?>
-                    <button class="forvoyez-analyze-button" title="Analyze with ForVoyez">
-                        <span class="dashicons dashicons-upload"></span>
-                    </button>
-                <?php endif; ?>
+                <button class="forvoyez-analyze-button" title="Analyze with ForVoyez">
+                    <span class="dashicons dashicons-upload"></span>
+                </button>
                 <button class="forvoyez-see-more" title="See Details">
                     <span class="dashicons dashicons-visibility"></span>
                 </button>

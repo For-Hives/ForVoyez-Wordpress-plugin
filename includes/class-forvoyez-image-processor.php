@@ -3,6 +3,14 @@ defined('ABSPATH') || exit;
 
 class Forvoyez_Image_Processor
 {
+    private $api_client;
+
+    public function __construct()
+    {
+        $api_key = forvoyez_get_api_key();
+        $this->api_client = new Forvoyez_API_Manager($api_key);
+    }
+
     public function init()
     {
         add_action('wp_ajax_forvoyez_analyze_image', array($this, 'analyze_image'));
@@ -134,16 +142,21 @@ class Forvoyez_Image_Processor
     }
 
     private function analyze_single_image($image_id) {
-        $api_key = forvoyez_get_api_key();
-        if (empty($api_key)) {
-            return array('success' => false, 'message' => 'API key not set', 'metadata' => null);
+        $image_url = wp_get_attachment_url($image_id);
+        if (!$image_url) {
+            return array('success' => false, 'message' => 'Image not found', 'metadata' => null);
         }
 
-//        TODO: HERE IS THE LOGIC TO IMPLEMENT WITH THE API
+        $result = $this->api_client->analyze_image($image_url);
+
+        if (!$result['success']) {
+            return $result;
+        }
+
         $metadata = array(
-            'alt_text' => 'Generated alt text for image ' . $image_id,
-            'title' => 'Generated title for image ' . $image_id,
-            'caption' => 'Generated caption for image ' . $image_id
+            'alt_text' => $result['data']['alt_text'] ?? '',
+            'title' => $result['data']['title'] ?? '',
+            'caption' => $result['data']['caption'] ?? ''
         );
 
         update_post_meta($image_id, '_wp_attachment_image_alt', $metadata['alt_text']);
