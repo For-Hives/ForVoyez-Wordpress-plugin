@@ -97,47 +97,37 @@
 
             $loader.css('display', 'flex');
 
-            // (fake API call simulation (to be replaced with a real API call later)
-            setTimeout(function () {
-                let fakeApiResponse = {
-                    alt_text: 'Generated alt text for image ' + imageId,
-                    title: 'Generated title for image ' + imageId,
-                    caption: 'Generated caption for image ' + imageId
-                };
-
-                $.ajax({
-                    url: ajaxurl,
-                    type: 'POST',
-                    data: {
-                        action: 'forvoyez_update_image_metadata',
-                        image_id: imageId,
-                        metadata: fakeApiResponse,
-                        nonce: forvoyezData.nonce
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            if (isNotificationActivated) {
-                                showNotification('Metadata updated successfully for image ' + imageId, 'success');
-                            }
-                            markImageAsAnalyzed(imageId, fakeApiResponse);
-                            resolve(true);
-                        } else {
-                            if (isNotificationActivated) {
-                                showNotification('Metadata update failed for image ' + imageId + ': ' + response.data, 'error');
-                            }
-                            resolve(false);
-                        }
-                        $loader.hide();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'forvoyez_analyze_image',
+                    image_id: imageId,
+                    nonce: forvoyezData.nonce
+                },
+                success: function (response) {
+                    if (response.success) {
                         if (isNotificationActivated) {
-                            showNotification('AJAX request failed for image ' + imageId + ': ' + textStatus, 'error');
+                            showNotification('Metadata updated successfully for image ' + imageId, 'success');
                         }
-                        $loader.hide();
+                        markImageAsAnalyzed(imageId, response.data.metadata);
+                        resolve(true);
+                    } else {
+                        if (isNotificationActivated) {
+                            showNotification('Metadata update failed for image ' + imageId + ': ' + response.data, 'error');
+                        }
                         resolve(false);
                     }
-                });
-            }, 2000);
+                    $loader.hide();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (isNotificationActivated) {
+                        showNotification('AJAX request failed for image ' + imageId + ': ' + textStatus, 'error');
+                    }
+                    $loader.hide();
+                    resolve(false);
+                }
+            });
         });
     }
 
