@@ -106,6 +106,8 @@
                     nonce: forvoyezData.nonce
                 },
                 success: function (response) {
+                    console.log('AJAX request succeeded for image ' + imageId);
+                    console.log(response);
                     if (response.success) {
                         if (isNotificationActivated) {
                             showNotification('Metadata updated successfully for image ' + imageId, 'success');
@@ -121,6 +123,7 @@
                     $loader.hide();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('AJAX request failed for image ' + imageId + ': ' + textStatus);
                     if (isNotificationActivated) {
                         showNotification('AJAX request failed for image ' + imageId + ': ' + textStatus, 'error');
                     }

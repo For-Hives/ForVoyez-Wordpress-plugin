@@ -21,7 +21,30 @@ class Forvoyez_Image_Processor
 
     public function analyze_image()
     {
-        // TODO: Implement image analysis logic here
+        check_ajax_referer('forvoyez_nonce', 'nonce');
+
+        if (!current_user_can('upload_files')) {
+            wp_send_json_error('Permission denied');
+        }
+
+        $image_id = isset($_POST['image_id']) ? intval($_POST['image_id']) : 0;
+
+        if (!$image_id) {
+            wp_send_json_error('Invalid image ID');
+        }
+
+        forvoyez_log('Starting analysis for image ID: ' . $image_id);
+
+        $result = $this->analyze_single_image($image_id);
+
+        if ($result['success']) {
+            wp_send_json_success(array(
+                'message' => 'Analysis successful',
+                'metadata' => $result['metadata']
+            ));
+        } else {
+            wp_send_json_error($result['message']);
+        }
     }
 
     public function update_image_metadata()
