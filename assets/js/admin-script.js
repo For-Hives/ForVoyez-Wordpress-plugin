@@ -116,7 +116,7 @@
                         resolve(true);
                     } else {
                         if (isNotificationActivated) {
-                            showNotification('Metadata update failed for image ' + imageId + ': ' + response.data, 'error');
+                            showErrorNotification(response.error.message, response.error.code, imageId);
                         }
                         resolve(false);
                     }
@@ -125,13 +125,61 @@
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log('AJAX request failed for image ' + imageId + ': ' + textStatus);
                     if (isNotificationActivated) {
-                        showNotification('AJAX request failed for image ' + imageId + ': ' + textStatus, 'error');
+                        showErrorNotification('AJAX request failed: ' + textStatus, 'ajax_error', imageId);
                     }
                     $loader.hide();
                     resolve(false);
                 }
             });
         });
+    }
+
+    function showErrorNotification(message, code, imageId) {
+        let fullMessage = `Error processing image ${imageId}: ${message}`;
+        let detailedMessage = `Error code: ${code}`;
+
+        // Show error notification
+        showNotification(fullMessage, 'error', 5000);
+
+        // Log detailed error to console
+        console.error(fullMessage, detailedMessage);
+    }
+
+    async function analyzeBulkImages(imageIds) {
+        const batchSize = 7;
+        const totalImages = imageIds.length;
+        let processedCount = 0;
+        let failedCount = 0;
+        let lastNotificationTime = 0;
+        const notificationInterval = 1000;
+
+        showNotification('Starting analysis of ' + totalImages + ' images...', 'info', 0);
+
+        function updateProgress() {
+            const currentTime = Date.now();
+            if (currentTime - lastNotificationTime >= notificationInterval) {
+                const progress = Math.round(((processedCount + failedCount) / totalImages) * 100);
+                showNotification('Processing: ' + progress + '% complete. Successful: ' + processedCount + ', Failed: ' + failedCount, 'info', 0);
+                lastNotificationTime = currentTime;
+            }
+        }
+
+        for (let i = 0; i < totalImages; i += batchSize) {
+            const batch = imageIds.slice(i, i + batchSize);
+            const results = await Promise.all(batch.map(imageId => analyzeImage(imageId, false)));
+
+            results.forEach(success => {
+                if (success) {
+                    processedCount++;
+                } else {
+                    failedCount++;
+                }
+            });
+
+            updateProgress();
+        }
+
+        showNotification('Analysis complete. Successful: ' + processedCount + ', Failed: ' + failedCount, 'success', 5000);
     }
 
     function loadImages(url) {
@@ -367,43 +415,6 @@
                 }, 300);
             }, duration);
         }
-    }
-
-    async function analyzeBulkImages(imageIds) {
-        const batchSize = 7;
-        const totalImages = imageIds.length;
-        let processedCount = 0;
-        let failedCount = 0;
-        let lastNotificationTime = 0;
-        const notificationInterval = 1000;
-
-        showNotification('Analyzing ' + totalImages + ' images...', 'info', 0);
-
-        function updateProgress() {
-            const currentTime = Date.now();
-            if (currentTime - lastNotificationTime >= notificationInterval) {
-                const progress = Math.round(((processedCount + failedCount) / totalImages) * 100);
-                showNotification('Processing: ' + progress + '% complete', 'info', 0);
-                lastNotificationTime = currentTime;
-            }
-        }
-
-        for (let i = 0; i < totalImages; i += batchSize) {
-            const batch = imageIds.slice(i, i + batchSize);
-            const results = await Promise.all(batch.map(imageId => analyzeImage(imageId, false)));
-
-            results.forEach(success => {
-                if (success) {
-                    processedCount++;
-                } else {
-                    failedCount++;
-                }
-            });
-
-            updateProgress();
-        }
-
-        showNotification('Analysis complete. Successful: ' + processedCount + ', Failed: ' + failedCount, 'success', 5000);
     }
 
     // make the function global
