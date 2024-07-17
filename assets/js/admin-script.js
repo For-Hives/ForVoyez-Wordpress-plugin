@@ -119,7 +119,8 @@
                         let errorCode = 'unknown_error';
 
                         if (response.data) {
-                            errorMessage = response.data;
+                            errorMessage = response.data.message;
+                            errorCode = response.data.code || 'unknown_error';
                         } else if (response.error && response.error.message) {
                             errorMessage = response.error.message;
                             errorCode = response.error.code || 'unknown_error';

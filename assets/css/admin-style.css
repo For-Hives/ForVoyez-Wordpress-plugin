@@ -200,18 +200,18 @@
 }
 
 .forvoyez-notification {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 15px 20px;
-    border-radius: 4px;
-    color: white;
-    font-weight: bold;
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    padding: 15px 20px !important;
+    border-radius: 4px !important;
+    color: white !important;
+    font-weight: bold !important;
     z-index: 9999;
     opacity: 0;
-    transition: opacity 0.3s ease;
-    max-width: 300px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    transition: opacity 0.3s ease !important;
+    max-width: 300px !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23) !important;
 }
 
 .forvoyez-notification.show {

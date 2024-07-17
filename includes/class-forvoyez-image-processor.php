@@ -84,8 +84,8 @@ class Forvoyez_Image_Processor
             ));
         } else {
             wp_send_json_error(array(
-                'message' => $result['message'],
-                'code' => $result['error'] ?? 'unknown_error'
+                'message' => $result['error']['message'],
+                'code' => $result['error']['code'] ?? 'unknown_error'
             ));
         }
     }
