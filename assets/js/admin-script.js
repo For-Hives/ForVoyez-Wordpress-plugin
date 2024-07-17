@@ -149,7 +149,7 @@
         let detailedMessage = `Error code: ${code}`;
 
         // Show error notification
-        showNotification(fullMessage, 'error', 5000);
+        showNotification(fullMessage, 'error', 500000);
 
         // Log detailed error to console
         console.error(fullMessage, detailedMessage);
@@ -401,12 +401,19 @@
 
     let currentNotification = null;
 
-    function showNotification(message, type, duration = 3000) {
+    function showNotification(message, type, duration = 3000, detailedMessage = '') {
         if (currentNotification) {
             currentNotification.remove();
         }
 
-        let $notification = $('<div class="forvoyez-notification ' + type + '">' + message + '</div>');
+        let notificationHtml = `
+        <div class="forvoyez-notification ${type}">
+            <div class="notification-main">${message}</div>
+            ${detailedMessage ? `<div class="notification-details">${detailedMessage}</div>` : ''}
+        </div>
+    `;
+
+        let $notification = $(notificationHtml);
         $('body').append($notification);
         currentNotification = $notification;
 

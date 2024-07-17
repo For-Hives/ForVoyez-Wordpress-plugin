@@ -210,20 +210,32 @@
     z-index: 9999;
     opacity: 0;
     transition: opacity 0.3s ease;
+    max-width: 300px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.forvoyez-notification.show {
+    opacity: 1;
+}
+
+.forvoyez-notification .notification-main {
+    margin-bottom: 5px;
+}
+
+.forvoyez-notification .notification-details {
+    font-size: 0.9em;
+    opacity: 0.9;
 }
 
 .forvoyez-notification.success {
-    opacity: 1;
     background-color: #4CAF50;
 }
 
 .forvoyez-notification.error {
-    opacity: 1;
     background-color: #f44336;
 }
 
 .forvoyez-notification.info {
-    opacity: 1;
     background-color: #2196F3;
 }
 
