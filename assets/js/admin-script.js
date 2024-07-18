@@ -29,7 +29,15 @@
         $('.forvoyez-image-grid').on('click', '.forvoyez-analyze-button', function (e) {
             e.preventDefault();
             let imageId = $(this).closest('.forvoyez-image-item').data('image-id');
-            analyzeImage(imageId);
+            $(this).prop('disabled', true);
+            analyzeImage(imageId)
+                .then(() => {
+                    $(this).prop('disabled', false);
+                })
+                .catch((error) => {
+                    console.error('Error analyzing image:', error);
+                    $(this).prop('disabled', false);
+                });
         });
 
         // Toggle all details visibility
