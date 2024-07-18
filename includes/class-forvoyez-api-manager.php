@@ -84,7 +84,7 @@ class Forvoyez_API_Manager
         $data = json_decode($body, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            return $this->format_error($response['response']['code'], $response['body'], array(
+            return $this->format_error('invalid_api_response', 'Invalid API response', array(
                 'response_code' => wp_remote_retrieve_response_code($response),
                 'body' => substr($body, 0, 1000),
                 'image_url' => wp_get_attachment_url($image_id),
