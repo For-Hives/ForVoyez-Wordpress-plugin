@@ -106,14 +106,17 @@ class Forvoyez_Admin
             ?>
         </div>
         <?php
-        echo paginate_links(array(
-            'base' => add_query_arg('paged', '%#%'),
-            'format' => '',
-            'prev_text' => __('&laquo;'),
-            'next_text' => __('&raquo;'),
-            'total' => $query_images->max_num_pages,
-            'current' => $paged
-        ));
+        // Only show pagination if not showing all images
+        if ($per_page !== -1) {
+            echo paginate_links(array(
+                'base' => add_query_arg('paged', '%#%'),
+                'format' => '',
+                'prev_text' => __('&laquo;'),
+                'next_text' => __('&raquo;'),
+                'total' => $query_images->max_num_pages,
+                'current' => $paged
+            ));
+        }
 
         wp_reset_postdata();
     }

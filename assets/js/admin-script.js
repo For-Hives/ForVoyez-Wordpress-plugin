@@ -318,7 +318,7 @@
 
     function attachEventHandlers() {
         // Pagination clicks
-        $('.pagination .page-numbers').on('click', function (e) {
+        $('.pagination .page-numbers').off('click').on('click', function (e) {
             e.preventDefault();
             let url = $(this).attr('href');
             loadImages(url);
