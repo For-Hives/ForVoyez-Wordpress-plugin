@@ -198,6 +198,7 @@ class Forvoyez_Image_Processor
                 'id' => $image_id,
                 'success' => $result['success'],
                 'message' => $result['success'] ? $result['message'] : $result['error']['message'],
+                'code' => $result['success'] ? null : ($result['error']['code'] ?? 'unknown_error'),
                 'metadata' => $result['success'] ? $result['metadata'] : null
             );
         }

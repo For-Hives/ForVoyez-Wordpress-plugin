@@ -91,12 +91,12 @@
     });
 
     function analyzeImage(imageId, isNotificationActivated = true) {
+        let $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
+        let $loader = $imageItem.find('.forvoyez-loader');
+
+        $loader.css('display', 'flex');
+
         return new Promise((resolve) => {
-            let $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
-            let $loader = $imageItem.find('.forvoyez-loader');
-
-            $loader.css('display', 'flex');
-
             $.ajax({
                 url: ajaxurl,
                 type: 'POST',
@@ -168,30 +168,41 @@
             showNotification(`Processing: ${progress}% complete. Successful: ${processedCount}, Failed: ${failedCount}`, 'info', 0);
         }
 
-        function processSingleImage(imageId) {
+        function processBatch(batch) {
             return new Promise((resolve) => {
                 $.ajax({
                     url: ajaxurl,
                     type: 'POST',
                     data: {
-                        action: 'forvoyez_analyze_single_image',
-                        image_id: imageId,
+                        action: 'forvoyez_process_image_batch',
+                        image_ids: batch,
                         nonce: forvoyezData.nonce
                     },
                     success: function(response) {
                         if (response.success) {
-                            processedCount++;
-                            markImageAsAnalyzed(imageId, response.data.metadata);
+                            response.data.results.forEach(result => {
+                                if (result.success) {
+                                    processedCount++;
+                                    markImageAsAnalyzed(result.id, result.metadata);
+                                } else {
+                                    failedCount++;
+                                    showErrorNotification(result.message, result.code, result.id);
+                                }
+                            });
                         } else {
-                            failedCount++;
-                            showErrorNotification(response.data.error.message, response.data.error.code, imageId);
+                            batch.forEach(imageId => {
+                                failedCount++;
+                                showErrorNotification('Batch processing failed', 'batch_error', imageId);
+                            });
                         }
                         updateProgress();
                         resolve();
                     },
                     error: function() {
-                        failedCount++;
-                        showErrorNotification('AJAX request failed', 'ajax_error', imageId);
+                        batch.forEach(imageId => {
+                            failedCount++;
+                            showErrorNotification('AJAX request failed', 'ajax_error', imageId);
+                        });
                         updateProgress();
                         resolve();
                     }
@@ -204,7 +215,7 @@
         async function processAllImages() {
             for (let i = 0; i < totalImages; i += batchSize) {
                 const batch = imageIds.slice(i, Math.min(i + batchSize, totalImages));
-                await Promise.all(batch.map(imageId => processSingleImage(imageId)));
+                await processBatch(batch);
             }
             showNotification(`Analysis complete. Successful: ${processedCount}, Failed: ${failedCount}`, 'success', 5000);
         }
