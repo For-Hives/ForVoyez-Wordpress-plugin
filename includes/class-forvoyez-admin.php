@@ -42,7 +42,8 @@ class Forvoyez_Admin
         include FORVOYEZ_PLUGIN_DIR . 'templates/admin-page.php';
     }
 
-    public static function display_status_configuration() {
+    public static function display_status_configuration()
+    {
         $api_key = forvoyez_get_api_key();
         if (!empty($api_key)) {
             echo '<p>Your ForVoyez API key is configured, you are ready to go!</p>';
@@ -61,8 +62,8 @@ class Forvoyez_Admin
             'post_type' => 'attachment',
             'post_mime_type' => 'image',
             'post_status' => 'inherit',
-            'posts_per_page' => $per_page === -1 ? -1 : $per_page,
-            'paged' => $per_page === -1 ? 1 : $paged,
+            'posts_per_page' => $per_page,
+            'paged' => $paged,
         );
 
         // Apply filters
@@ -106,17 +107,28 @@ class Forvoyez_Admin
             ?>
         </div>
         <?php
-        // Only show pagination if not showing all images
-        if ($per_page !== -1) {
-            echo paginate_links(array(
-                'base' => add_query_arg('paged', '%#%'),
-                'format' => '',
-                'prev_text' => __('&laquo;'),
-                'next_text' => __('&raquo;'),
-                'total' => $query_images->max_num_pages,
-                'current' => $paged
-            ));
+        $base = add_query_arg('paged', '%#%');
+
+        // Add other query parameters to the pagination base
+        if ($per_page !== 25) {
+            $base = add_query_arg('per_page', $per_page, $base);
         }
+        if (!empty($filters)) {
+            foreach ($filters as $filter) {
+                $base = add_query_arg('filter[]', $filter, $base);
+            }
+        }
+
+        echo paginate_links(array(
+            'base' => $base,
+            'format' => '',
+            'current' => $paged,
+            'total' => $query_images->max_num_pages,
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'type' => 'list',
+            'add_args' => false,
+        ));
 
         wp_reset_postdata();
     }
