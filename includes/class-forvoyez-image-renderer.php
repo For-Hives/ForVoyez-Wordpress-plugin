@@ -60,7 +60,7 @@ class Forvoyez_Image_Renderer
                                 <option value="25" <?php selected($per_page, 25); ?>>25</option>
                                 <option value="50" <?php selected($per_page, 50); ?>>50</option>
                                 <option value="100" <?php selected($per_page, 100); ?>>100</option>
-                                <option value="<?= $total_images ?>" <?php selected($per_page, $total_images); ?>>All</option>
+                                <option value="-1" <?php selected($per_page, -1); ?>>All</option>
                             </select>
                         </label>
                     </div>

@@ -80,7 +80,9 @@
 
         // Handle per page change
         $('select[name="per_page"]').on('change', function() {
-            $('.forvoyez-filters form').submit();
+            var form = $(this).closest('form');
+            var url = form.attr('action') + '?' + form.serialize();
+            loadImages(url);
         });
 
         // Select all functionality
@@ -191,7 +193,7 @@
                         image_ids: batch,
                         nonce: forvoyezData.nonce
                     },
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             response.data.results.forEach(result => {
                                 if (result.success) {
@@ -211,7 +213,7 @@
                         updateProgress();
                         resolve();
                     },
-                    error: function() {
+                    error: function () {
                         batch.forEach(imageId => {
                             failedCount++;
                             showErrorNotification('AJAX request failed', 'ajax_error', imageId);
@@ -240,14 +242,15 @@
         $.ajax({
             url: url,
             type: 'GET',
-            success: function(response) {
+            success: function (response) {
                 var $response = $(response);
                 $('.forvoyez-image-grid').html($response.find('.forvoyez-image-grid').html());
                 $('.pagination').html($response.find('.pagination').html());
                 $('.forvoyez-displayed-images').html($response.find('.forvoyez-displayed-images').html());
+                $('.forvoyez-filters').html($response.find('.forvoyez-filters').html());
                 history.pushState(null, '', url);
             },
-            error: function() {
+            error: function () {
                 alert('Failed to load images');
             }
         });
