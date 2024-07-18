@@ -51,7 +51,7 @@ class Forvoyez_Admin
         }
     }
 
-    public static function display_incomplete_images()
+    public function display_incomplete_images()
     {
         $paged = isset($_GET['paged']) ? abs((int)$_GET['paged']) : 1;
         $per_page = isset($_GET['per_page']) ? abs((int)$_GET['per_page']) : 25;
@@ -61,8 +61,8 @@ class Forvoyez_Admin
             'post_type' => 'attachment',
             'post_mime_type' => 'image',
             'post_status' => 'inherit',
-            'posts_per_page' => $per_page,
-            'paged' => $paged,
+            'posts_per_page' => $per_page === -1 ? -1 : $per_page,
+            'paged' => $per_page === -1 ? 1 : $paged,
         );
 
         // Apply filters
@@ -90,11 +90,10 @@ class Forvoyez_Admin
         $query_images = new WP_Query($args);
         $total_images = $query_images->found_posts;
         $displayed_images = $query_images->post_count;
-        $total_pages = ceil($total_images / $per_page);
 
-        Forvoyez_Image_Renderer::display_filters($total_images, $displayed_images);
+        Forvoyez_Image_Renderer::display_filters($total_images, $displayed_images, $per_page, $filters);
         ?>
-        <div class="forvoyez-image-grid">
+        <div class="forvoyez-image-grid" data-total-images="<?php echo esc_attr($total_images); ?>">
             <?php
             if ($query_images->have_posts()) {
                 while ($query_images->have_posts()) {
@@ -112,7 +111,7 @@ class Forvoyez_Admin
             'format' => '',
             'prev_text' => __('&laquo;'),
             'next_text' => __('&raquo;'),
-            'total' => $total_pages,
+            'total' => $query_images->max_num_pages,
             'current' => $paged
         ));
 

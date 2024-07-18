@@ -47,10 +47,8 @@ class Forvoyez_Image_Renderer
         <?php
     }
 
-    public static function display_filters($total_images, $displayed_images)
+    public static function display_filters($total_images, $displayed_images, $per_page, $current_filters)
     {
-        $per_page = isset($_GET['per_page']) ? abs((int)$_GET['per_page']) : 25;
-        $filter = isset($_GET['filter']) ? $_GET['filter'] : array();
         ?>
         <div class="forvoyez-filters">
             <form method="get" action="">
@@ -62,21 +60,21 @@ class Forvoyez_Image_Renderer
                                 <option value="25" <?php selected($per_page, 25); ?>>25</option>
                                 <option value="50" <?php selected($per_page, 50); ?>>50</option>
                                 <option value="100" <?php selected($per_page, 100); ?>>100</option>
-                                <option value="-1" <?php selected($per_page, -1); ?>>All</option>
+                                <option value="<?= $total_images ?>" <?php selected($per_page, $total_images); ?>>All</option>
                             </select>
                         </label>
                     </div>
                     <div class="forvoyez-filter-group">
-                        <label><input type="checkbox" name="filter[]" value="alt" <?php checked(in_array('alt', $filter)); ?>> Missing Alt</label>
-                        <label><input type="checkbox" name="filter[]" value="title" <?php checked(in_array('title', $filter)); ?>> Missing Title</label>
-                        <label><input type="checkbox" name="filter[]" value="caption" <?php checked(in_array('caption', $filter)); ?>> Missing Caption</label>
+                        <label><input type="checkbox" name="filter[]" value="alt" <?php checked(in_array('alt', $current_filters)); ?>> Missing Alt</label>
+                        <label><input type="checkbox" name="filter[]" value="title" <?php checked(in_array('title', $current_filters)); ?>> Missing Title</label>
+                        <label><input type="checkbox" name="filter[]" value="caption" <?php checked(in_array('caption', $current_filters)); ?>> Missing Caption</label>
                     </div>
                     <div class="forvoyez-filter-group">
                         <input type="submit" value="Apply Filters" class="button">
                     </div>
                 </div>
                 <div class="forvoyez-filter-row">
-                    <div class="forvoyez-displayed-images">
+                    <div class="forvoyez-displayed-images" data-total-images="<?php echo esc_attr($total_images); ?>">
                         Images Displayed: <strong><?php echo $displayed_images; ?></strong>
                         /<?php echo $total_images; ?>
                     </div>

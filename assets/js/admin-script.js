@@ -243,7 +243,8 @@
 
                 // Update displayed images count
                 let displayedImages = $response.find('.forvoyez-image-grid .forvoyez-image-item').length;
-                $('.forvoyez-displayed-images strong').text(displayedImages);
+                let totalImages = $response.find('.forvoyez-displayed-images').data('total-images');
+                $('.forvoyez-displayed-images').html('Images Displayed: <strong>' + displayedImages + '</strong> / ' + totalImages);
 
                 history.pushState(null, '', url);
 
