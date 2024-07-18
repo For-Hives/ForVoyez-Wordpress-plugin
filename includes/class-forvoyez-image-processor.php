@@ -17,6 +17,7 @@ class Forvoyez_Image_Processor
         add_action('wp_ajax_forvoyez_update_image_metadata', array($this, 'update_image_metadata'));
         add_action('wp_ajax_forvoyez_load_more_images', array($this, 'load_more_images'));
         add_action('wp_ajax_forvoyez_bulk_analyze_images', array($this, 'bulk_analyze_images'));
+        add_action('wp_ajax_forvoyez_analyze_single_image', array($this, 'analyze_single_image'));
     }
 
     public function update_image_metadata()
@@ -137,8 +138,7 @@ class Forvoyez_Image_Processor
         ));
     }
 
-    public function bulk_analyze_images()
-    {
+    public function bulk_analyze_images() {
         check_ajax_referer('forvoyez_nonce', 'nonce');
 
         if (!current_user_can('upload_files')) {
@@ -151,19 +151,28 @@ class Forvoyez_Image_Processor
             wp_send_json_error('No images selected');
         }
 
-        $batch_size = 7; // Adjust this number based on your server's capacity
-        $results = array();
-        $total_images = count($image_ids);
+        wp_send_json_success(array(
+            'message' => 'Processing started',
+            'total' => count($image_ids)
+        ));
+    }
 
-        for ($i = 0; $i < $total_images; $i += $batch_size) {
-            $batch = array_slice($image_ids, $i, $batch_size);
-            $batch_results = $this->process_batch($batch);
-            foreach ($batch_results as $result) {
-                $results[] = $result;
-            }
+    public function analyze_single_image() {
+        check_ajax_referer('forvoyez_nonce', 'nonce');
+
+        if (!current_user_can('upload_files')) {
+            wp_send_json_error('Permission denied');
         }
 
-        wp_send_json_success($results);
+        $image_id = isset($_POST['image_id']) ? intval($_POST['image_id']) : 0;
+
+        if (!$image_id) {
+            wp_send_json_error('Invalid image ID');
+        }
+
+        $result = $this->api_client->analyze_image($image_id);
+
+        wp_send_json_success($result);
     }
 
     private function process_batch($image_ids)

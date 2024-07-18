@@ -156,41 +156,61 @@
         console.error(fullMessage, detailedMessage);
     }
 
-    async function analyzeBulkImages(imageIds) {
-        const batchSize = 7;
+    function analyzeBulkImages(imageIds) {
         const totalImages = imageIds.length;
         let processedCount = 0;
         let failedCount = 0;
-        let lastNotificationTime = 0;
-        const notificationInterval = 1000;
 
-        showNotification('Starting analysis of ' + totalImages + ' images...', 'info', 0);
+        showNotification(`Starting analysis of ${totalImages} images...`, 'info', 0);
 
         function updateProgress() {
-            const currentTime = Date.now();
-            if (currentTime - lastNotificationTime >= notificationInterval) {
-                const progress = Math.round(((processedCount + failedCount) / totalImages) * 100);
-                showNotification('Processing: ' + progress + '% complete. Successful: ' + processedCount + ', Failed: ' + failedCount, 'info', 0);
-                lastNotificationTime = currentTime;
-            }
+            const progress = Math.round(((processedCount + failedCount) / totalImages) * 100);
+            showNotification(`Processing: ${progress}% complete. Successful: ${processedCount}, Failed: ${failedCount}`, 'info', 0);
         }
 
-        for (let i = 0; i < totalImages; i += batchSize) {
-            const batch = imageIds.slice(i, i + batchSize);
-            const results = await Promise.all(batch.map(imageId => analyzeImage(imageId, false)));
-
-            results.forEach(success => {
-                if (success) {
-                    processedCount++;
-                } else {
-                    failedCount++;
-                }
+        function processSingleImage(imageId) {
+            return new Promise((resolve) => {
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: {
+                        action: 'forvoyez_analyze_single_image',
+                        image_id: imageId,
+                        nonce: forvoyezData.nonce
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            processedCount++;
+                            markImageAsAnalyzed(imageId, response.data.metadata);
+                        } else {
+                            failedCount++;
+                            showErrorNotification(response.data.error.message, response.data.error.code, imageId);
+                        }
+                        updateProgress();
+                        resolve();
+                    },
+                    error: function() {
+                        failedCount++;
+                        showErrorNotification('AJAX request failed', 'ajax_error', imageId);
+                        updateProgress();
+                        resolve();
+                    }
+                });
             });
-
-            updateProgress();
         }
 
-        showNotification('Analysis complete. Successful: ' + processedCount + ', Failed: ' + failedCount, 'success', 5000);
+        const batchSize = 5; // Adjust based on your server's capacity
+        const processBatch = async (batch) => {
+            await Promise.all(batch.map(imageId => processSingleImage(imageId)));
+        };
+
+        (async function processAllImages() {
+            for (let i = 0; i < totalImages; i += batchSize) {
+                const batch = imageIds.slice(i, i + batchSize);
+                await processBatch(batch);
+            }
+            showNotification(`Analysis complete. Successful: ${processedCount}, Failed: ${failedCount}`, 'success', 5000);
+        })();
     }
 
     function loadImages(url) {
