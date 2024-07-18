@@ -107,9 +107,15 @@ class Forvoyez_Admin
             ?>
         </div>
         <?php
+        $this->display_pagination($query_images, $paged, $per_page, $filters);
+
+        wp_reset_postdata();
+    }
+
+    private function display_pagination($query, $current_page, $per_page, $filters)
+    {
         $base = add_query_arg('paged', '%#%');
 
-        // Add other query parameters to the pagination base
         if ($per_page !== 25) {
             $base = add_query_arg('per_page', $per_page, $base);
         }
@@ -119,17 +125,22 @@ class Forvoyez_Admin
             }
         }
 
-        echo paginate_links(array(
+        $pagination = paginate_links(array(
             'base' => $base,
             'format' => '',
-            'current' => $paged,
-            'total' => $query_images->max_num_pages,
+            'current' => $current_page,
+            'total' => $query->max_num_pages,
             'prev_text' => __('&laquo;'),
             'next_text' => __('&raquo;'),
-            'type' => 'list',
-            'add_args' => false,
+            'type' => 'array',
         ));
 
-        wp_reset_postdata();
+        if ($pagination) {
+            echo '<ul class="pagination">';
+            foreach ($pagination as $key => $page_link) {
+                echo '<li class="paginate_button ' . (strpos($page_link, 'current') !== false ? 'active' : '') . '">' . $page_link . '</li>';
+            }
+            echo '</ul>';
+        }
     }
 }

@@ -64,18 +64,23 @@
         attachEventHandlers();
         updateImageCount();
 
-        // Handle pagination clicks
-        $(document).on('click', '.page-numbers', function (e) {
+        // Handle filter form submission
+        $('.forvoyez-filters form').on('submit', function(e) {
             e.preventDefault();
-            let url = $(this).attr('href');
+            var url = $(this).attr('action') + '?' + $(this).serialize();
             loadImages(url);
         });
 
-        // Handle filter form submission
-        $('.forvoyez-filters form').on('submit', function (e) {
+        // Handle pagination clicks
+        $(document).on('click', '.pagination a', function(e) {
             e.preventDefault();
-            let url = $(this).attr('action') + '?' + $(this).serialize();
+            var url = $(this).attr('href');
             loadImages(url);
+        });
+
+        // Handle per page change
+        $('select[name="per_page"]').on('change', function() {
+            $('.forvoyez-filters form').submit();
         });
 
         // Select all functionality
@@ -235,24 +240,15 @@
         $.ajax({
             url: url,
             type: 'GET',
-            success: function (response) {
-                let $response = $(response);
+            success: function(response) {
+                var $response = $(response);
                 $('.forvoyez-image-grid').html($response.find('.forvoyez-image-grid').html());
-                $('.forvoyez-filters').html($response.find('.forvoyez-filters').html());
                 $('.pagination').html($response.find('.pagination').html());
-
-                // Update displayed images count
-                let displayedImages = $response.find('.forvoyez-image-grid .forvoyez-image-item').length;
-                let totalImages = $response.find('.forvoyez-displayed-images').data('total-images');
-                $('.forvoyez-displayed-images').html('Images Displayed: <strong>' + displayedImages + '</strong> / ' + totalImages);
-
+                $('.forvoyez-displayed-images').html($response.find('.forvoyez-displayed-images').html());
                 history.pushState(null, '', url);
-
-                // Reattach event handlers
-                attachEventHandlers();
             },
-            error: function () {
-                showNotification('Failed to load images', 'error');
+            error: function() {
+                alert('Failed to load images');
             }
         });
     }
