@@ -199,18 +199,17 @@
             });
         }
 
-        const batchSize = 5; // Adjust based on your server's capacity
-        const processBatch = async (batch) => {
-            await Promise.all(batch.map(imageId => processSingleImage(imageId)));
-        };
+        const batchSize = 7; // Process 7 images at a time
 
-        (async function processAllImages() {
+        async function processAllImages() {
             for (let i = 0; i < totalImages; i += batchSize) {
-                const batch = imageIds.slice(i, i + batchSize);
-                await processBatch(batch);
+                const batch = imageIds.slice(i, Math.min(i + batchSize, totalImages));
+                await Promise.all(batch.map(imageId => processSingleImage(imageId)));
             }
             showNotification(`Analysis complete. Successful: ${processedCount}, Failed: ${failedCount}`, 'success', 5000);
-        })();
+        }
+
+        processAllImages();
     }
 
     function loadImages(url) {

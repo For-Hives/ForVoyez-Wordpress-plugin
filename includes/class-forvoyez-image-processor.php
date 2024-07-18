@@ -18,6 +18,7 @@ class Forvoyez_Image_Processor
         add_action('wp_ajax_forvoyez_load_more_images', array($this, 'load_more_images'));
         add_action('wp_ajax_forvoyez_bulk_analyze_images', array($this, 'bulk_analyze_images'));
         add_action('wp_ajax_forvoyez_analyze_single_image', array($this, 'analyze_single_image'));
+        add_action('wp_ajax_forvoyez_process_image_batch', array($this, 'process_image_batch'));
     }
 
     public function update_image_metadata()
@@ -151,9 +152,11 @@ class Forvoyez_Image_Processor
             wp_send_json_error('No images selected');
         }
 
+        // We no longer process images here, just return the list of IDs
         wp_send_json_success(array(
             'message' => 'Processing started',
-            'total' => count($image_ids)
+            'total' => count($image_ids),
+            'image_ids' => $image_ids
         ));
     }
 
@@ -175,53 +178,22 @@ class Forvoyez_Image_Processor
         wp_send_json_success($result);
     }
 
-    private function process_batch($image_ids)
-    {
-        $results = array();
-        $processes = array();
+    public function process_image_batch() {
+        check_ajax_referer('forvoyez_nonce', 'nonce');
 
-        foreach ($image_ids as $image_id) {
-            $cmd = sprintf(
-                'php -r \'require_once "%s"; $api_client = new Forvoyez_API_Manager("%s"); echo json_encode($api_client->analyze_image(%d));\'',
-                __DIR__ . '/class-forvoyez-api-manager.php',
-                forvoyez_get_api_key(),
-                $image_id
-            );
-
-            $descriptorspec = array(
-                0 => array("pipe", "r"),
-                1 => array("pipe", "w"),
-                2 => array("pipe", "w")
-            );
-
-            $process = proc_open($cmd, $descriptorspec, $pipes);
-
-            if (is_resource($process)) {
-                $processes[$image_id] = array(
-                    'process' => $process,
-                    'pipes' => $pipes
-                );
-            }
+        if (!current_user_can('upload_files')) {
+            wp_send_json_error('Permission denied');
         }
 
-        foreach ($processes as $image_id => $process_data) {
-            $output = stream_get_contents($process_data['pipes'][1]);
-            fclose($process_data['pipes'][1]);
-            fclose($process_data['pipes'][2]);
+        $image_ids = isset($_POST['image_ids']) ? array_map('intval', $_POST['image_ids']) : array();
 
-            $return_value = proc_close($process_data['process']);
+        if (empty($image_ids)) {
+            wp_send_json_error('No images provided');
+        }
 
-            $result = json_decode($output, true);
-            if ($result === null) {
-                $result = array(
-                    'success' => false,
-                    'error' => array(
-                        'code' => 'json_decode_error',
-                        'message' => 'Failed to decode API response'
-                    )
-                );
-            }
-
+        $results = array();
+        foreach ($image_ids as $image_id) {
+            $result = $this->api_client->analyze_image($image_id);
             $results[] = array(
                 'id' => $image_id,
                 'success' => $result['success'],
@@ -230,6 +202,8 @@ class Forvoyez_Image_Processor
             );
         }
 
-        return $results;
+        wp_send_json_success(array(
+            'results' => $results
+        ));
     }
 }
