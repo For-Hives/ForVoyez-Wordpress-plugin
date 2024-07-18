@@ -137,7 +137,8 @@ class Forvoyez_Image_Processor
         ));
     }
 
-    public function bulk_analyze_images() {
+    public function bulk_analyze_images()
+    {
         check_ajax_referer('forvoyez_nonce', 'nonce');
 
         if (!current_user_can('upload_files')) {
@@ -150,18 +151,76 @@ class Forvoyez_Image_Processor
             wp_send_json_error('No images selected');
         }
 
+        $batch_size = 7; // Adjust this number based on your server's capacity
         $results = array();
+        $total_images = count($image_ids);
 
-        foreach ($image_ids as $image_id) {
-            $result = $this->api_client->analyze_image($image_id);
-            $results[] = array(
-                'id' => $image_id,
-                'success' => $result['success'],
-                'message' => $result['message'],
-                'metadata' => $result['metadata']
-            );
+        for ($i = 0; $i < $total_images; $i += $batch_size) {
+            $batch = array_slice($image_ids, $i, $batch_size);
+            $batch_results = $this->process_batch($batch);
+            foreach ($batch_results as $result) {
+                $results[] = $result;
+            }
         }
 
         wp_send_json_success($results);
+    }
+
+    private function process_batch($image_ids)
+    {
+        $results = array();
+        $processes = array();
+
+        foreach ($image_ids as $image_id) {
+            $cmd = sprintf(
+                'php -r \'require_once "%s"; $api_client = new Forvoyez_API_Manager("%s"); echo json_encode($api_client->analyze_image(%d));\'',
+                __DIR__ . '/class-forvoyez-api-manager.php',
+                forvoyez_get_api_key(),
+                $image_id
+            );
+
+            $descriptorspec = array(
+                0 => array("pipe", "r"),
+                1 => array("pipe", "w"),
+                2 => array("pipe", "w")
+            );
+
+            $process = proc_open($cmd, $descriptorspec, $pipes);
+
+            if (is_resource($process)) {
+                $processes[$image_id] = array(
+                    'process' => $process,
+                    'pipes' => $pipes
+                );
+            }
+        }
+
+        foreach ($processes as $image_id => $process_data) {
+            $output = stream_get_contents($process_data['pipes'][1]);
+            fclose($process_data['pipes'][1]);
+            fclose($process_data['pipes'][2]);
+
+            $return_value = proc_close($process_data['process']);
+
+            $result = json_decode($output, true);
+            if ($result === null) {
+                $result = array(
+                    'success' => false,
+                    'error' => array(
+                        'code' => 'json_decode_error',
+                        'message' => 'Failed to decode API response'
+                    )
+                );
+            }
+
+            $results[] = array(
+                'id' => $image_id,
+                'success' => $result['success'],
+                'message' => $result['success'] ? $result['message'] : $result['error']['message'],
+                'metadata' => $result['success'] ? $result['metadata'] : null
+            );
+        }
+
+        return $results;
     }
 }
