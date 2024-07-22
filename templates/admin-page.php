@@ -7,6 +7,13 @@
 
     <form id="forvoyez-filter-form" class="bg-white p-4 mb-6 border border-gray-200 rounded-lg shadow-sm">
         <!-- Add your filter inputs here -->
+        <select id="forvoyez-per-page" name="per_page">
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+        <!-- Add other filter inputs -->
+        <button type="submit" class="">Apply Filters</button>
     </form>
 
     <div class="forvoyez-bulk-actions mb-4">
