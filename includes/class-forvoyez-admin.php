@@ -185,6 +185,40 @@ class Forvoyez_Admin
         return $pagination;
     }
 
+    private function count_total_images($filters) {
+        $args = array(
+            'post_type' => 'attachment',
+            'post_mime_type' => 'image',
+            'post_status' => 'inherit',
+            'posts_per_page' => -1,
+        );
+
+        // Apply filters
+        if (!empty($filters)) {
+            $meta_query = array('relation' => 'OR');
+
+            if (in_array('alt', $filters)) {
+                $meta_query[] = array(
+                    'key' => '_wp_attachment_image_alt',
+                    'compare' => 'NOT EXISTS'
+                );
+            }
+
+            if (in_array('title', $filters)) {
+                $args['title'] = '';
+            }
+
+            if (in_array('caption', $filters)) {
+                $args['post_excerpt'] = '';
+            }
+
+            $args['meta_query'] = $meta_query;
+        }
+
+        $query = new WP_Query($args);
+        return $query->found_posts;
+    }
+
     public function ajax_load_images() {
         check_ajax_referer('forvoyez_nonce', 'nonce');
 
@@ -193,8 +227,14 @@ class Forvoyez_Admin
         $filters = isset($_POST['filters']) ? $this->parse_filters($_POST['filters']) : array();
 
         $html = $this->display_incomplete_images($paged, $per_page, $filters);
+        $total_images = $this->count_total_images($filters);
 
-        wp_send_json_success(array('html' => $html));
+        wp_send_json_success(array(
+            'html' => $html,
+            'total_images' => $total_images,
+            'current_page' => $paged,
+            'per_page' => $per_page
+        ));
     }
 
     private function parse_filters($filters) {
