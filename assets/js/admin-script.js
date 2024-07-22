@@ -91,39 +91,50 @@
         });
     }
 
-    function loadImages(page = 1) {
-        const perPage = $('#forvoyez-per-page').val();
-        const filters = $('#forvoyez-filter-form').serializeArray();
+    var $container = $('#forvoyez-images-container');
+    var $filterForm = $('#forvoyez-filter-form');
+    var currentPage = 1;
+    var perPage = 25;
 
-        $('#forvoyez-loader').removeClass('hidden');
+    function loadImages(page) {
+        var data = {
+            action: 'forvoyez_load_images',
+            nonce: forvoyezData.nonce,
+            paged: page,
+            per_page: perPage,
+            filters: $filterForm.serializeArray()
+        };
 
-        $.ajax({
-            url: forvoyezData.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'forvoyez_load_images',
-                nonce: forvoyezData.nonce,
-                paged: page,
-                per_page: perPage,
-                filters: filters
-            },
-            success: function(response) {
-                if (response.success && response.data) {
-                    $('#forvoyez-images-container').html(response.data.html);
-                    updatePagination(response.data.current_page, response.data.total_images, response.data.per_page);
-                    updateImageCounter(response.data.total_images, response.data.displayed_images);
-                } else {
-                    showNotification('Failed to load images', 'error');
-                }
-            },
-            error: function() {
-                showNotification('Failed to load images', 'error');
-            },
-            complete: function() {
-                $('#forvoyez-loader').addClass('hidden');
+        $.post(forvoyezData.ajaxurl, data, function(response) {
+            if (response.success) {
+                $container.html(response.data.html);
+                $('#forvoyez-pagination').html(response.data.pagination_html);
+                $('#forvoyez-image-counter').text('Displaying ' + response.data.displayed_images + ' of ' + response.data.total_images + ' images');
+                currentPage = response.data.current_page;
             }
         });
     }
+
+    $filterForm.on('submit', function(e) {
+        e.preventDefault();
+        currentPage = 1;
+        loadImages(currentPage);
+    });
+
+    $(document).on('click', '.pagination-link', function(e) {
+        e.preventDefault();
+        var page = $(this).data('page');
+        loadImages(page);
+    });
+
+    $('#forvoyez-per-page').on('change', function() {
+        perPage = $(this).val();
+        currentPage = 1;
+        loadImages(currentPage);
+    });
+
+    // Initial load
+    loadImages(currentPage);
 
     function updatePagination(currentPage, totalImages, perPage) {
         const totalPages = Math.ceil(totalImages / perPage);

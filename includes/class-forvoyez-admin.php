@@ -155,40 +155,6 @@ class Forvoyez_Admin
         );
     }
 
-    private function display_pagination($query, $current_page, $per_page, $filters)
-    {
-        $total_pages = $query->max_num_pages;
-
-        if ($total_pages <= 1) {
-            return '';
-        }
-
-        $pagination = '<nav class="forvoyez-pagination flex justify-center items-center space-x-2 mt-6">';
-
-        // Previous page
-        if ($current_page > 1) {
-            $pagination .= '<a href="#" class="pagination-link bg-white text-blue-500 hover:bg-blue-100 px-3 py-2 rounded" data-page="' . ($current_page - 1) . '">&laquo; Previous</a>';
-        }
-
-        // Page numbers
-        $start_page = max(1, $current_page - 2);
-        $end_page = min($total_pages, $current_page + 2);
-
-        for ($i = $start_page; $i <= $end_page; $i++) {
-            $active_class = ($i == $current_page) ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 hover:bg-blue-100';
-            $pagination .= '<a href="#" class="pagination-link ' . $active_class . ' px-3 py-2 rounded" data-page="' . $i . '">' . $i . '</a>';
-        }
-
-        // Next page
-        if ($current_page < $total_pages) {
-            $pagination .= '<a href="#" class="pagination-link bg-white text-blue-500 hover:bg-blue-100 px-3 py-2 rounded" data-page="' . ($current_page + 1) . '">Next &raquo;</a>';
-        }
-
-        $pagination .= '</nav>';
-
-        return $pagination;
-    }
-
     private function count_total_images($filters)
     {
         $args = array(
@@ -234,13 +200,49 @@ class Forvoyez_Admin
         $result = $this->display_incomplete_images($paged, $per_page, $filters);
         $total_images = $this->count_total_images($filters);
 
+        $pagination_html = $this->display_pagination($total_images, $paged, $per_page);
+
         wp_send_json_success(array(
             'html' => $result['html'],
             'total_images' => $total_images,
             'displayed_images' => $result['displayed_images'],
             'current_page' => $paged,
-            'per_page' => $per_page
+            'per_page' => $per_page,
+            'pagination_html' => $pagination_html
         ));
+    }
+
+    private function display_pagination($total_images, $current_page, $per_page) {
+        $total_pages = ceil($total_images / $per_page);
+
+        if ($total_pages <= 1) {
+            return '';
+        }
+
+        $pagination = '<nav class="forvoyez-pagination flex justify-center items-center space-x-2 mt-6">';
+
+        // Previous page
+        if ($current_page > 1) {
+            $pagination .= '<a href="#" class="pagination-link bg-white text-blue-500 hover:bg-blue-100 px-3 py-2 rounded" data-page="' . ($current_page - 1) . '">&laquo; Previous</a>';
+        }
+
+        // Page numbers
+        $start_page = max(1, $current_page - 2);
+        $end_page = min($total_pages, $current_page + 2);
+
+        for ($i = $start_page; $i <= $end_page; $i++) {
+            $active_class = ($i == $current_page) ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 hover:bg-blue-100';
+            $pagination .= '<a href="#" class="pagination-link ' . $active_class . ' px-3 py-2 rounded" data-page="' . $i . '">' . $i . '</a>';
+        }
+
+        // Next page
+        if ($current_page < $total_pages) {
+            $pagination .= '<a href="#" class="pagination-link bg-white text-blue-500 hover:bg-blue-100 px-3 py-2 rounded" data-page="' . ($current_page + 1) . '">Next &raquo;</a>';
+        }
+
+        $pagination .= '</nav>';
+
+        return $pagination;
     }
 
     private function parse_filters($filters)
