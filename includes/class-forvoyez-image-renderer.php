@@ -8,37 +8,60 @@ class Forvoyez_Image_Renderer
         $image_url = wp_get_attachment_url($image->ID);
         $image_alt = get_post_meta($image->ID, '_wp_attachment_image_alt', true);
         $is_analyzed = get_post_meta($image->ID, '_forvoyez_analyzed', true);
-        $disabled_class = $is_analyzed ? 'forvoyez-analyzed' : '';
+        $disabled_class = $is_analyzed ? 'opacity-50' : '';
         $all_complete = !empty($image_alt) && !empty($image->post_title) && !empty($image->post_excerpt);
         ?>
-        <div class="forvoyez-image-item <?php echo $disabled_class; ?>" data-image-id="<?php echo esc_attr($image->ID); ?>">
-            <input type="checkbox" class="forvoyez-image-checkbox" value="<?php echo esc_attr($image->ID); ?>">
-            <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>">
-            <div class="forvoyez-metadata-icons">
+        <div class="forvoyez-image-item <?php echo $disabled_class; ?> relative p-2 border rounded-md" data-image-id="<?php echo esc_attr($image->ID); ?>">
+            <input type="checkbox" class="forvoyez-image-checkbox absolute top-2 left-2 form-checkbox" value="<?php echo esc_attr($image->ID); ?>">
+            <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>" class="w-full h-auto">
+            <div class="forvoyez-metadata-icons absolute top-2 right-2 flex">
                 <?php if ($all_complete) : ?>
-                    <span class="dashicons dashicons-yes-alt" title="All metadata complete" style="color: green;"></span>
+                    <span class="text-green-500" title="All metadata complete">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                </span>
                 <?php else : ?>
                     <?php if (empty($image_alt)) : ?>
-                        <span class="dashicons dashicons-editor-textcolor" title="Missing Alt Text"></span>
+                        <span class="text-red-500 mr-1" title="Missing Alt Text">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </span>
                     <?php endif; ?>
                     <?php if (empty($image->post_title)) : ?>
-                        <span class="dashicons dashicons-heading" title="Missing Title"></span>
+                        <span class="text-red-500 mr-1" title="Missing Title">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                    </span>
                     <?php endif; ?>
                     <?php if (empty($image->post_excerpt)) : ?>
-                        <span class="dashicons dashicons-editor-quote" title="Missing Caption"></span>
+                        <span class="text-red-500" title="Missing Caption">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                        </svg>
+                    </span>
                     <?php endif; ?>
                 <?php endif; ?>
             </div>
-            <div class="forvoyez-action-buttons">
-                <button class="forvoyez-analyze-button" title="Analyze with ForVoyez">
-                    <span class="dashicons dashicons-upload"></span>
+            <div class="forvoyez-action-buttons absolute bottom-2 right-2 flex">
+                <button class="forvoyez-analyze-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2" title="Analyze with ForVoyez">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                    </svg>
                 </button>
-                <button class="forvoyez-see-more" title="See Details">
-                    <span class="dashicons dashicons-visibility"></span>
+                <button class="forvoyez-see-more bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-2 rounded" title="See Details">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
                 </button>
             </div>
-            <div class="forvoyez-loader"></div>
-            <div class="forvoyez-image-details" style="display: none;">
+            <div class="forvoyez-loader absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 hidden">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+            </div>
+            <div class="forvoyez-image-details hidden mt-2 p-2 bg-gray-100 rounded-md">
                 <p><strong>Title:</strong> <?php echo esc_html($image->post_title ?: 'Not set'); ?></p>
                 <p><strong>Alt Text:</strong> <?php echo esc_html($image_alt ?: 'Not set'); ?></p>
                 <p><strong>Caption:</strong> <?php echo esc_html($image->post_excerpt ?: 'Not set'); ?></p>
