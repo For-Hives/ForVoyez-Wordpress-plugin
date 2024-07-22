@@ -7,7 +7,7 @@
         let $toggleVisibility = $('.forvoyez-toggle-visibility');
 
         // API Settings Modal
-        $toggleVisibility.on('click', function() {
+        $toggleVisibility.on('click', function () {
             if ($apiKeyInput.attr('type') === 'password') {
                 $apiKeyInput.attr('type', 'text');
                 $toggleVisibility.html(getVisibilityIcon('text'));
@@ -21,7 +21,7 @@
             $modal.removeClass('hidden');
         });
 
-        $('.forvoyez-close-modal').on('click', function() {
+        $('.forvoyez-close-modal').on('click', function () {
             $modal.addClass('hidden');
         });
 
@@ -36,7 +36,7 @@
                     api_key: apiKey,
                     nonce: forvoyezData.nonce
                 },
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
                         showNotification('API key saved successfully', 'success');
                         $modal.addClass('hidden');
@@ -45,7 +45,7 @@
                         showNotification('Failed to save API key: ' + response.data, 'error');
                     }
                 },
-                error: function() {
+                error: function () {
                     showNotification('Failed to save API key', 'error');
                 }
             });
@@ -89,19 +89,19 @@
             analyzeBulkImages(selectedImages);
         });
 
-        $('.forvoyez-filters form').on('submit', function(e) {
+        $('.forvoyez-filters form').on('submit', function (e) {
             e.preventDefault();
             var url = $(this).attr('action') + '?' + $(this).serialize();
             loadImages(url);
         });
 
-        $(document).on('click', '.pagination a', function(e) {
+        $(document).on('click', '.pagination a', function (e) {
             e.preventDefault();
             var url = $(this).attr('href');
             loadImages(url);
         });
 
-        $('select[name="per_page"]').on('change', function() {
+        $('select[name="per_page"]').on('change', function () {
             var form = $(this).closest('form');
             var url = form.attr('action') + '?' + form.serialize();
             loadImages(url);
@@ -253,7 +253,7 @@
                 per_page: perPage,
                 filters: filters
             },
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
                     $('#forvoyez-images-container').html(response.data.html);
                     initializeEventListeners();
@@ -261,20 +261,34 @@
                     showNotification('Failed to load images', 'error');
                 }
             },
-            error: function() {
+            error: function () {
                 showNotification('Failed to load images', 'error');
             },
-            complete: function() {
+            complete: function () {
                 $('#forvoyez-loader').addClass('hidden');
             }
         });
     }
 
     function initializeEventListeners() {
-        $('.forvoyez-pagination .pagination-link').on('click', function(e) {
+        $('.forvoyez-pagination .pagination-link').on('click', function (e) {
             e.preventDefault();
             var page = $(this).data('page');
             loadImages(page);
+        });
+
+        // Initial load
+        loadImages();
+
+        // Filter form submission
+        $('#forvoyez-filter-form').on('submit', function (e) {
+            e.preventDefault();
+            loadImages();
+        });
+
+        // Items per page change event
+        $('#forvoyez-per-page').on('change', function () {
+            loadImages();
         });
 
         // Re-initialize other event listeners for newly loaded content
@@ -298,20 +312,6 @@
                 });
         });
     }
-
-    // Initial load
-    loadImages();
-
-    // Filter form submission
-    $('#forvoyez-filter-form').on('submit', function(e) {
-        e.preventDefault();
-        loadImages();
-    });
-
-    // Items per page change event
-    $('#forvoyez-per-page').on('change', function() {
-        loadImages();
-    });
 
     $('#forvoyez-select-all').on('change', function () {
         $('input[type="checkbox"]').prop('checked', $(this).is(':checked'));
