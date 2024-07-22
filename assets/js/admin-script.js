@@ -131,7 +131,7 @@
 
     function analyzeImage(imageId, isNotificationActivated = true) {
         let $imageItem = $(`li[data-image-id="${imageId}"]`);
-        let $loader = $imageItem.find('.absolute.inset-0.flex.items-center.justify-center');
+        let $loader = $imageItem.find('.loader');
 
         $loader.removeClass('hidden');
 
@@ -157,9 +157,9 @@
                         if (isNotificationActivated) {
                             showErrorNotification(errorMessage, errorCode, imageId);
                         }
+                        $loader.addClass('hidden');
                         resolve(false);
                     }
-                    $loader.addClass('hidden');
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     if (isNotificationActivated) {
@@ -260,28 +260,23 @@
     function markImageAsAnalyzed(imageId, metadata) {
         let $imageItem = $(`li[data-image-id="${imageId}"]`);
         $imageItem.addClass('opacity-50');
-        $imageItem.find('.analyze-button').remove();
+        $imageItem.find('.analyze-button').prop('disabled', true);
 
-        let $metadataIcons = $imageItem.find('.absolute.top-0.right-0');
-        $metadataIcons.empty();
-        if (!metadata.alt_text || !metadata.title || !metadata.caption) {
-            if (!metadata.alt_text) {
-                $metadataIcons.append(`<span class="bg-red-500 text-white rounded-full p-1" title="Missing Alt Text">...</span>`);
-            }
-            if (!metadata.title) {
-                $metadataIcons.append(`<span class="bg-red-500 text-white rounded-full p-1" title="Missing Title">...</span>`);
-            }
-            if (!metadata.caption) {
-                $metadataIcons.append(`<span class="bg-red-500 text-white rounded-full p-1" title="Missing Caption">...</span>`);
-            }
-        }
+        // Update metadata icons
+        let $metadataIcons = $imageItem.find('.metadata-icons');
+        $metadataIcons.find('.alt-missing').toggleClass('hidden', !!metadata.alt_text);
+        $metadataIcons.find('.title-missing').toggleClass('hidden', !!metadata.title);
+        $metadataIcons.find('.caption-missing').toggleClass('hidden', !!metadata.caption);
+        $metadataIcons.find('.all-complete').toggleClass('hidden', !(metadata.alt_text && metadata.title && metadata.caption));
 
+        // Update image details
         let $details = $imageItem.find('.details-view');
-        $details.html(`
-            <p class="text-sm text-gray-500"><strong>Title:</strong> ${metadata.title || 'Not set'}</p>
-            <p class="text-sm text-gray-500"><strong>Alt Text:</strong> ${metadata.alt_text || 'Not set'}</p>
-            <p class="text-sm text-gray-500"><strong>Caption:</strong> ${metadata.caption || 'Not set'}</p>
-        `);
+        $details.find('.title-content').text(metadata.title || 'Not set');
+        $details.find('.alt-content').text(metadata.alt_text || 'Not set');
+        $details.find('.caption-content').text(metadata.caption || 'Not set');
+
+        // Hide loader
+        $imageItem.find('.loader').addClass('hidden');
     }
 
     function showNotification(message, type = 'info', duration = 3000) {
