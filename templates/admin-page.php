@@ -5,16 +5,46 @@
     </button>
     <?php Forvoyez_Admin::display_status_configuration(); ?>
 
-    <form id="forvoyez-filter-form" class="bg-white p-4 mb-6 border border-gray-200 rounded-lg shadow-sm">
-        <!-- Add your filter inputs here -->
-        <select id="forvoyez-per-page" name="per_page">
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-        </select>
-        <!-- Add other filter inputs -->
-        <button type="submit" class="">Apply Filters</button>
-    </form>
+    <div class="bg-white p-4 mb-6 border border-gray-200 rounded-lg shadow-sm">
+        <form id="forvoyez-filter-form" class="space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center space-x-4">
+                    <label class="flex items-center">
+                        <span class="mr-2 text-sm font-medium text-gray-700">Items per page:</span>
+                        <select id="forvoyez-per-page" name="per_page"
+                                class="form-select rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="-1">All</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="flex flex-wrap items-center gap-4">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" name="filter[]" value="alt"
+                               class="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out">
+                        <span class="ml-2 text-sm text-gray-700">Missing Alt</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" name="filter[]" value="title"
+                               class="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out">
+                        <span class="ml-2 text-sm text-gray-700">Missing Title</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" name="filter[]" value="caption"
+                               class="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out">
+                        <span class="ml-2 text-sm text-gray-700">Missing Caption</span>
+                    </label>
+                </div>
+                <div>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                        Apply Filters
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 
     <div class="forvoyez-bulk-actions mb-4">
         <label class="inline-flex items-center">

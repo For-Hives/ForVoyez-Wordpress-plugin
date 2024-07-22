@@ -51,44 +51,6 @@
             });
         });
 
-        // Image Management
-        $('div').on('click', '.see-more-button', function (e) {
-            e.preventDefault();
-            let $item = $(this).closest('li');
-            toggleImageDetails($item);
-        });
-
-        $('div').on('click', '.analyze-button', function (e) {
-            e.preventDefault();
-            let imageId = $(this).closest('li').data('image-id');
-            $(this).prop('disabled', true);
-            analyzeImage(imageId)
-                .then(() => {
-                    $(this).prop('disabled', false);
-                })
-                .catch((error) => {
-                    console.error('Error analyzing image:', error);
-                    $(this).prop('disabled', false);
-                });
-        });
-
-        $('#forvoyez-select-all').on('change', function () {
-            $('input[type="checkbox"]').prop('checked', $(this).is(':checked'));
-        });
-
-        $('#forvoyez-bulk-analyze').on('click', function () {
-            let selectedImages = $('input[type="checkbox"]:checked').map(function () {
-                return $(this).val();
-            }).get();
-
-            if (selectedImages.length === 0) {
-                showNotification('Please select at least one image to analyze', 'info');
-                return;
-            }
-
-            analyzeBulkImages(selectedImages);
-        });
-
         $('.forvoyez-filters form').on('submit', function (e) {
             e.preventDefault();
             var url = $(this).attr('action') + '?' + $(this).serialize();
