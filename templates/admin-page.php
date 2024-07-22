@@ -20,44 +20,28 @@
                         </select>
                     </label>
                 </div>
-                <div class="flex flex-wrap items-center gap-4">
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" name="filter[]" value="alt"
-                               class="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out">
-                        <span class="ml-2 text-sm text-gray-700">Missing Alt</span>
-                    </label>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" name="filter[]" value="title"
-                               class="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out">
-                        <span class="ml-2 text-sm text-gray-700">Missing Title</span>
-                    </label>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" name="filter[]" value="caption"
-                               class="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out">
-                        <span class="ml-2 text-sm text-gray-700">Missing Caption</span>
-                    </label>
-                </div>
                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                     Apply Filters
                 </button>
             </div>
         </form>
+        <div class="forvoyez-bulk-actions mt-4 flex gap-4 items-center w-full justify-between">
+            <div>
+                <label class="inline-flex items-center">
+                    <input type="checkbox" id="forvoyez-select-all" class="form-checkbox h-5 w-5 text-forvoyez-primary">
+                    <span class="ml-2 text-gray-700">Select All</span>
+                </label>
+                <button id="forvoyez-bulk-analyze" class="bg-forvoyez-secondary hover:bg-forvoyez-secondary-dark text-white font-bold py-2 px-4 rounded ml-4">
+                    Analyze Selected Images
+                </button>
+            </div>
+            <div class="h-full flex justify-end items-end">
+                <div id="forvoyez-image-counter" class="text-sm text-gray-600 mb-4"></div>
+            </div>
+        </div>
     </div>
 
-    <div class="forvoyez-bulk-actions mb-4 flex gap-4 items-center w-full justify-between">
-        <div>
-            <label class="inline-flex items-center">
-                <input type="checkbox" id="forvoyez-select-all" class="form-checkbox h-5 w-5 text-forvoyez-primary">
-                <span class="ml-2 text-gray-700">Select All</span>
-            </label>
-            <button id="forvoyez-bulk-analyze" class="bg-forvoyez-secondary hover:bg-forvoyez-secondary-dark text-white font-bold py-2 px-4 rounded ml-4">
-                Analyze Selected Images
-            </button>
-        </div>
-        <div class="">
-            <div id="forvoyez-image-counter" class="text-sm text-gray-600 mb-4"></div>
-        </div>
-    </div>
+
 
     <div id="forvoyez-loader" class="hidden inset-0 flex items-center pt-16 pb-32 justify-center z-50">
         <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-forvoyez-primary"></div>

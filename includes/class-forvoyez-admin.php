@@ -86,9 +86,7 @@ class Forvoyez_Admin
     public static function display_status_configuration()
     {
         $api_key = forvoyez_get_api_key();
-        if (!empty($api_key)) {
-            echo '<p class="text-green-600 font-semibold">Your ForVoyez API key is configured, you are ready to go!</p>';
-        } else {
+        if (empty($api_key)) {
             echo '<p class="text-red-600 font-semibold">Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation.</p>';
         }
     }
@@ -122,9 +120,7 @@ class Forvoyez_Admin
                 $args['post_excerpt'] = '';
             }
 
-            if (!empty($meta_query)) {
-                $args['meta_query'] = $meta_query;
-            }
+            $args['meta_query'] = $meta_query;
         }
 
         $query_images = new WP_Query($args);
