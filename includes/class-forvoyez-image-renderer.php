@@ -8,55 +8,65 @@ class Forvoyez_Image_Renderer
         $image_url = wp_get_attachment_url($image->ID);
         $image_alt = get_post_meta($image->ID, '_wp_attachment_image_alt', true);
         $is_analyzed = get_post_meta($image->ID, '_forvoyez_analyzed', true);
-        $disabled_class = $is_analyzed ? 'opacity-50' : '';
+        $disabled_class = $is_analyzed ? 'opacity-100' : '';
         $all_complete = !empty($image_alt) && !empty($image->post_title) && !empty($image->post_excerpt);
         ?>
-        <li class="relative <?php echo $disabled_class; ?> w-64 h-80" data-image-id="<?php echo esc_attr($image->ID); ?>">
-            <div class="group h-64 w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
-                <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>" class="h-full w-full object-cover group-hover:opacity-75">
-                <input type="checkbox" class="absolute top-2 left-2 form-checkbox h-5 w-5 text-blue-600 rounded transition duration-150 ease-in-out"
-                       value="<?php echo esc_attr($image->ID); ?>">
-                <div class="absolute top-2 right-2 flex space-x-1">
-                    <?php if (!$all_complete) : ?>
-                        <?php if (empty($image_alt)) : ?>
-                            <span class="bg-red-500 text-white rounded-full p-1" title="Missing Alt Text">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                      clip-rule="evenodd"/>
-                            </svg>
-                        </span>
+        <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow <?php echo $disabled_class; ?>" data-image-id="<?php echo esc_attr($image->ID); ?>">
+            <div class="flex flex-1 flex-col p-2 pb-8">
+                <div class="relative w-full h-48 mb-4">
+                    <img class="w-full h-full object-cover rounded-lg" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>">
+                    <input type="checkbox" class="absolute top-2 left-2 form-checkbox h-5 w-5 text-blue-600 rounded transition duration-150 ease-in-out" value="<?php echo esc_attr($image->ID); ?>">
+                    <div class="absolute top-2 right-2 flex space-x-1">
+                        <?php if (!$all_complete) : ?>
+                            <?php if (empty($image_alt)) : ?>
+                                <span class="bg-red-500 text-white rounded-full p-1" title="Missing Alt Text">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </span>
+                            <?php endif; ?>
+                            <?php if (empty($image->post_title)) : ?>
+                                <span class="bg-red-500 text-white rounded-full p-1" title="Missing Title">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                                </svg>
+                            </span>
+                            <?php endif; ?>
+                            <?php if (empty($image->post_excerpt)) : ?>
+                                <span class="bg-red-500 text-white rounded-full p-1" title="Missing Caption">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                                </svg>
+                            </span>
+                            <?php endif; ?>
                         <?php endif; ?>
-                        <?php if (empty($image->post_title)) : ?>
-                            <span class="bg-red-500 text-white rounded-full p-1" title="Missing Title">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                      clip-rule="evenodd"/>
-                            </svg>
-                        </span>
-                        <?php endif; ?>
-                        <?php if (empty($image->post_excerpt)) : ?>
-                            <span class="bg-red-500 text-white rounded-full p-1" title="Missing Caption">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                      clip-rule="evenodd"/>
-                            </svg>
-                        </span>
-                        <?php endif; ?>
-                    <?php endif; ?>
+                    </div>
                 </div>
+                <h3 class="mt-2 text-sm font-medium text-gray-900"><?php echo esc_html($image->post_title ?: 'No Title'); ?></h3>
+                <dl class="mt-1 flex flex-grow flex-col justify-between">
+                    <dd class="text-sm text-gray-500"><?php echo esc_html(wp_trim_words($image->post_excerpt, 10, '...')); ?></dd>
+                </dl>
             </div>
-            <div class="mt-2 flex justify-between">
-                <button class="analyze-button bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                        title="Analyze with ForVoyez">
-                    Analyze
-                </button>
-                <button class="see-more-button bg-gray-200 hover:bg-gray-300 text-gray-800 py-1 px-3 rounded transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50"
-                        title="See Details">
-                    Details
-                </button>
+            <div>
+                <div class="-mt-px flex divide-x divide-gray-200">
+                    <div class="flex w-0 flex-1">
+                        <button class="analyze-button relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900 hover:bg-gray-50">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+                            Analyze
+                        </button>
+                    </div>
+                    <div class="-ml-px flex w-0 flex-1">
+                        <button class="see-more-button relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900 hover:bg-gray-50">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            Details
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" id="details-modal-<?php echo esc_attr($image->ID); ?>">
