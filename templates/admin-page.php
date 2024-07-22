@@ -37,12 +37,9 @@
                         <span class="ml-2 text-sm text-gray-700">Missing Caption</span>
                     </label>
                 </div>
-                <div>
-                    <button type="submit"
-                            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                        Apply Filters
-                    </button>
-                </div>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    Apply Filters
+                </button>
             </div>
         </form>
     </div>

@@ -122,7 +122,9 @@ class Forvoyez_Admin
                 $args['post_excerpt'] = '';
             }
 
-            $args['meta_query'] = $meta_query;
+            if (!empty($meta_query)) {
+                $args['meta_query'] = $meta_query;
+            }
         }
 
         $query_images = new WP_Query($args);

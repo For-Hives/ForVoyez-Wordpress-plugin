@@ -52,6 +52,11 @@
         // Initial load
         loadImages();
 
+        $filterForm.find('input[type="checkbox"]').on('change', function() {
+            currentPage = 1;
+            loadImages();
+        });
+
         // Filter form submission
         $('#forvoyez-filter-form').on('submit', function (e) {
             e.preventDefault();
@@ -96,7 +101,7 @@
     var currentPage = 1;
     var perPage = 25;
 
-    function loadImages(page) {
+    function loadImages(page = currentPage) {
         var data = {
             action: 'forvoyez_load_images',
             nonce: forvoyezData.nonce,
@@ -121,6 +126,11 @@
         loadImages(currentPage);
     });
 
+    $filterForm.find('input[type="checkbox"]').on('change', function() {
+        currentPage = 1;
+        loadImages(currentPage);
+    });
+
     $(document).on('click', '.pagination-link', function(e) {
         e.preventDefault();
         var page = $(this).data('page');
@@ -135,44 +145,6 @@
 
     // Initial load
     loadImages(currentPage);
-
-    function updatePagination(currentPage, totalImages, perPage) {
-        const totalPages = Math.ceil(totalImages / perPage);
-        let paginationHtml = '<nav class="forvoyez-pagination flex justify-center items-center space-x-2 mt-6">';
-
-        // Previous page
-        if (currentPage > 1) {
-            paginationHtml += `<a href="#" class="pagination-link bg-white text-blue-500 hover:bg-blue-100 px-3 py-2 rounded" data-page="${currentPage - 1}">&laquo; Previous</a>`;
-        }
-
-        // Page numbers
-        const startPage = Math.max(1, currentPage - 2);
-        const endPage = Math.min(totalPages, currentPage + 2);
-
-        for (let i = startPage; i <= endPage; i++) {
-            const activeClass = (i === currentPage) ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 hover:bg-blue-100';
-            paginationHtml += `<a href="#" class="pagination-link ${activeClass} px-3 py-2 rounded" data-page="${i}">${i}</a>`;
-        }
-
-        // Next page
-        if (currentPage < totalPages) {
-            paginationHtml += `<a href="#" class="pagination-link bg-white text-blue-500 hover:bg-blue-100 px-3 py-2 rounded" data-page="${currentPage + 1}">Next &raquo;</a>`;
-        }
-
-        paginationHtml += '</nav>';
-
-        $('#forvoyez-pagination').html(paginationHtml);
-
-        $('.pagination-link').on('click', function(e) {
-            e.preventDefault();
-            const page = $(this).data('page');
-            loadImages(page);
-        });
-    }
-
-    function updateImageCounter(totalImages, displayedImages) {
-        $('#forvoyez-image-counter').html(`Displaying <strong>${displayedImages}</strong> out of <strong>${totalImages}</strong> images`);
-    }
 
     function saveApiKey() {
         let apiKey = $apiKeyInput.val();
