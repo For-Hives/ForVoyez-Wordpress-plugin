@@ -127,10 +127,8 @@ class Forvoyez_Admin
 
         $query_images = new WP_Query($args);
         $total_images = $query_images->found_posts;
-        $displayed_images = $query_images->post_count;
 
         ob_start();
-        Forvoyez_Image_Renderer::display_filters($total_images, $displayed_images, $per_page, $filters);
         ?>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" data-total-images="<?php echo esc_attr($total_images); ?>">
             <?php
@@ -192,10 +190,20 @@ class Forvoyez_Admin
 
         $paged = isset($_POST['paged']) ? absint($_POST['paged']) : 1;
         $per_page = isset($_POST['per_page']) ? absint($_POST['per_page']) : 25;
-        $filters = isset($_POST['filters']) ? $_POST['filters'] : array();
+        $filters = isset($_POST['filters']) ? $this->parse_filters($_POST['filters']) : array();
 
         $html = $this->display_incomplete_images($paged, $per_page, $filters);
 
         wp_send_json_success(array('html' => $html));
+    }
+
+    private function parse_filters($filters) {
+        $parsed = array();
+        foreach ($filters as $filter) {
+            if ($filter['name'] === 'filter[]') {
+                $parsed[] = $filter['value'];
+            }
+        }
+        return $parsed;
     }
 }
