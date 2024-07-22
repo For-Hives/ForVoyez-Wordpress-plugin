@@ -134,7 +134,7 @@ class Forvoyez_Admin
 
         Forvoyez_Image_Renderer::display_filters($total_images, $displayed_images, $per_page, $filters);
         ?>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" data-total-images="<?php echo esc_attr($total_images); ?>">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" data-total-images="<?php echo esc_attr($total_images); ?>">
             <?php
             if ($query_images->have_posts()) {
                 while ($query_images->have_posts()) {
