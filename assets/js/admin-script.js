@@ -4,15 +4,63 @@
     let isLoading = false;
 
     $(document).ready(function () {
-        // Handle "Details" button click
+        let $modal = $('.forvoyez-api-settings-modal');
+        let $apiKeyInput = $('.forvoyez-api-key-input');
+        let $toggleVisibility = $('.forvoyez-toggle-visibility');
+
+        // API Settings Modal
+        $toggleVisibility.on('click', function() {
+            if ($apiKeyInput.attr('type') === 'password') {
+                $apiKeyInput.attr('type', 'text');
+                $toggleVisibility.html(getVisibilityIcon('text'));
+            } else {
+                $apiKeyInput.attr('type', 'password');
+                $toggleVisibility.html(getVisibilityIcon('password'));
+            }
+        });
+
+        $('#forvoyez-open-settings, .forvoyez-open-api-settings').on('click', function () {
+            $modal.removeClass('hidden');
+        });
+
+        $('.forvoyez-close-modal').on('click', function() {
+            $modal.addClass('hidden');
+        });
+
+        $('.forvoyez-save-api-key').on('click', function () {
+            let apiKey = $apiKeyInput.val();
+
+            $.ajax({
+                url: forvoyezData.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'forvoyez_save_api_key',
+                    api_key: apiKey,
+                    nonce: forvoyezData.nonce
+                },
+                success: function(response) {
+                    if (response.success) {
+                        showNotification('API key saved successfully', 'success');
+                        $modal.addClass('hidden');
+                        $apiKeyInput.val(apiKey);
+                    } else {
+                        showNotification('Failed to save API key: ' + response.data, 'error');
+                    }
+                },
+                error: function() {
+                    showNotification('Failed to save API key', 'error');
+                }
+            });
+        });
+
+        // Image Management
         $('div').on('click', '.see-more-button', function (e) {
             e.preventDefault();
             let $item = $(this).closest('li');
             toggleImageDetails($item);
         });
 
-        // Handle analyze button click
-        $('ul').on('click', '.analyze-button', function (e) {
+        $('div').on('click', '.analyze-button', function (e) {
             e.preventDefault();
             let imageId = $(this).closest('li').data('image-id');
             $(this).prop('disabled', true);
@@ -26,12 +74,10 @@
                 });
         });
 
-        // Select all functionality
         $('#forvoyez-select-all').on('change', function () {
             $('input[type="checkbox"]').prop('checked', $(this).is(':checked'));
         });
 
-        // Bulk analyze functionality
         $('#forvoyez-bulk-analyze').on('click', function () {
             let selectedImages = $('input[type="checkbox"]:checked').map(function () {
                 return $(this).val();
@@ -45,21 +91,18 @@
             analyzeBulkImages(selectedImages);
         });
 
-        // Handle filter form submission
         $('.forvoyez-filters form').on('submit', function(e) {
             e.preventDefault();
             var url = $(this).attr('action') + '?' + $(this).serialize();
             loadImages(url);
         });
 
-        // Handle pagination clicks
         $(document).on('click', '.pagination a', function(e) {
             e.preventDefault();
             var url = $(this).attr('href');
             loadImages(url);
         });
 
-        // Handle per page change
         $('select[name="per_page"]').on('change', function() {
             var form = $(this).closest('form');
             var url = form.attr('action') + '?' + form.serialize();
@@ -70,32 +113,19 @@
     function toggleImageDetails($item) {
         let $image = $item.find('img');
         let $details = $item.find('.details-view');
-        console.log($details);
         let $seeMoreButtonImages = $item.find('#see-more-button-images');
         let $seeMoreButtonDetails = $item.find('#see-more-button-details');
 
         if ($details.hasClass('hidden')) {
-            // swap hidden & (flex flex-col items-start justify-center gap-2)
-            $image.addClass('hidden');
-            $image.removeClass('flex flex-col items-start justify-center gap-2');
-            $details.addClass('flex flex-col items-start justify-center gap-2');
-            $details.removeClass('hidden');
-            // swap text image, mode image // mode details
-            $seeMoreButtonImages.addClass('hidden');
-            $seeMoreButtonImages.removeClass('inline-flex');
-            $seeMoreButtonDetails.addClass('inline-flex');
-            $seeMoreButtonDetails.removeClass('hidden');
+            $image.addClass('hidden').removeClass('flex flex-col items-start justify-center gap-2');
+            $details.addClass('flex flex-col items-start justify-center gap-2').removeClass('hidden');
+            $seeMoreButtonImages.addClass('hidden').removeClass('inline-flex');
+            $seeMoreButtonDetails.addClass('inline-flex').removeClass('hidden');
         } else {
-            // swap hidden & (flex flex-col items-start justify-center gap-2)
-            $image.addClass('flex flex-col items-start justify-center gap-2');
-            $image.removeClass('hidden');
-            $details.addClass('hidden');
-            $details.removeClass('flex flex-col items-start justify-center gap-2');
-            // swap text image, mode image // mode details
-            $seeMoreButtonImages.addClass('inline-flex');
-            $seeMoreButtonImages.removeClass('hidden');
-            $seeMoreButtonDetails.addClass('hidden');
-            $seeMoreButtonDetails.removeClass('inline-flex');
+            $image.addClass('flex flex-col items-start justify-center gap-2').removeClass('hidden');
+            $details.addClass('hidden').removeClass('flex flex-col items-start justify-center gap-2');
+            $seeMoreButtonImages.addClass('inline-flex').removeClass('hidden');
+            $seeMoreButtonDetails.addClass('hidden').removeClass('inline-flex');
         }
     }
 
@@ -107,7 +137,7 @@
 
         return new Promise((resolve) => {
             $.ajax({
-                url: ajaxurl,
+                url: forvoyezData.ajaxurl,
                 type: 'POST',
                 data: {
                     action: 'forvoyez_analyze_image',
@@ -115,8 +145,6 @@
                     nonce: forvoyezData.nonce
                 },
                 success: function (response) {
-                    console.log('AJAX request succeeded for image ' + imageId);
-                    console.log(response);
                     if (response.success) {
                         if (isNotificationActivated) {
                             showNotification('Metadata updated successfully for image ' + imageId, 'success');
@@ -124,17 +152,8 @@
                         markImageAsAnalyzed(imageId, response.data.metadata);
                         resolve(true);
                     } else {
-                        let errorMessage = 'Unknown error occurred';
-                        let errorCode = 'unknown_error';
-
-                        if (response.data) {
-                            errorMessage = response.data.message;
-                            errorCode = response.data.code || 'unknown_error';
-                        } else if (response.error && response.error.message) {
-                            errorMessage = response.error.message;
-                            errorCode = response.error.code || 'unknown_error';
-                        }
-
+                        let errorMessage = response.data ? response.data.message : 'Unknown error occurred';
+                        let errorCode = response.data ? (response.data.code || 'unknown_error') : 'unknown_error';
                         if (isNotificationActivated) {
                             showErrorNotification(errorMessage, errorCode, imageId);
                         }
@@ -143,7 +162,6 @@
                     $loader.addClass('hidden');
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log('AJAX request failed for image ' + imageId + ': ' + textStatus);
                     if (isNotificationActivated) {
                         showErrorNotification('AJAX request failed: ' + textStatus, 'ajax_error', imageId);
                     }
@@ -152,14 +170,6 @@
                 }
             });
         });
-    }
-
-    function showErrorNotification(message, code, imageId) {
-        let fullMessage = `Error processing image ${imageId}: ${message}`;
-        let detailedMessage = `Error code: ${code}`;
-
-        showNotification(fullMessage, 'error', 5000);
-        console.error(fullMessage, detailedMessage);
     }
 
     function analyzeBulkImages(imageIds) {
@@ -177,7 +187,7 @@
         function processBatch(batch) {
             return new Promise((resolve) => {
                 $.ajax({
-                    url: ajaxurl,
+                    url: forvoyezData.ajaxurl,
                     type: 'POST',
                     data: {
                         action: 'forvoyez_process_image_batch',
@@ -216,7 +226,7 @@
             });
         }
 
-        const batchSize = 7; // Process 7 images at a time
+        const batchSize = 7;
 
         async function processAllImages() {
             for (let i = 0; i < totalImages; i += batchSize) {
@@ -252,7 +262,6 @@
         $imageItem.addClass('opacity-50');
         $imageItem.find('.analyze-button').remove();
 
-        // Update missing metadata indicators
         let $metadataIcons = $imageItem.find('.absolute.top-0.right-0');
         $metadataIcons.empty();
         if (!metadata.alt_text || !metadata.title || !metadata.caption) {
@@ -267,7 +276,6 @@
             }
         }
 
-        // Update image details
         let $details = $imageItem.find('.details-view');
         $details.html(`
             <p class="text-sm text-gray-500"><strong>Title:</strong> ${metadata.title || 'Not set'}</p>
@@ -291,12 +299,28 @@
             notification.classList.remove('opacity-0');
         }, 10);
 
-        setTimeout(() => {
-            notification.classList.add('opacity-0');
+        if (duration > 0) {
             setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 300);
-        }, duration);
+                notification.classList.add('opacity-0');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, duration);
+        }
+    }
+
+    function showErrorNotification(message, code, imageId) {
+        let fullMessage = `Error processing image ${imageId}: ${message}`;
+        let detailedMessage = `Error code: ${code}`;
+
+        showNotification(fullMessage, 'error', 5000);
+        console.error(fullMessage, detailedMessage);
+    }
+
+    function getVisibilityIcon(type) {
+        return type === 'password'
+            ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg>'
+            : '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd" /><path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" /></svg>';
     }
 
     window.showNotification = showNotification;
