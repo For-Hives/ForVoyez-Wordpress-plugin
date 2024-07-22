@@ -12,11 +12,22 @@ class Forvoyez_Image_Renderer
         $all_complete = !empty($image_alt) && !empty($image->post_title) && !empty($image->post_excerpt);
         ?>
         <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow <?php echo $disabled_class; ?>" data-image-id="<?php echo esc_attr($image->ID); ?>">
-            <div class="flex flex-1 flex-col p-2 pb-8">
-                <div class="relative w-full h-48 mb-4">
-                    <img class="w-full h-full object-cover rounded-lg" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>">
+            <div class="flex flex-1 flex-col p-2">
+                <div class="relative w-full h-48">
+                    <div class="w-full h-full flex flex-col items-center justify-center gap-2">
+                        <p class="text-sm text-gray-500">
+                            <strong>Title:</strong> <?php echo esc_html($image->post_title ?: 'Not set'); ?>
+                        </p>
+                        <p class="text-sm text-gray-500">
+                            <strong>Alt Text:</strong> <?php echo esc_html($image_alt ?: 'Not set'); ?>
+                        </p>
+                        <p class="text-sm text-gray-500">
+                            <strong>Caption:</strong> <?php echo esc_html($image->post_excerpt ?: 'Not set'); ?>
+                        </p>
+                    </div>
+<!--                    <img class="w-full h-full object-cover rounded-lg" src="--><?php //echo esc_url($image_url); ?><!--" alt="--><?php //echo esc_attr($image_alt); ?><!--">-->
                     <input type="checkbox" class="absolute top-2 left-2 form-checkbox h-5 w-5 text-blue-600 rounded transition duration-150 ease-in-out" value="<?php echo esc_attr($image->ID); ?>">
-                    <div class="absolute top-2 right-2 flex space-x-1">
+                    <div class="absolute top-0 right-0 flex space-x-1 bg-white p-2 rounded shadow-lg">
                         <?php if (!$all_complete) : ?>
                             <?php if (empty($image_alt)) : ?>
                                 <span class="bg-red-500 text-white rounded-full p-1" title="Missing Alt Text">
@@ -42,10 +53,6 @@ class Forvoyez_Image_Renderer
                         <?php endif; ?>
                     </div>
                 </div>
-                <h3 class="mt-2 text-sm font-medium text-gray-900"><?php echo esc_html($image->post_title ?: 'No Title'); ?></h3>
-                <dl class="mt-1 flex flex-grow flex-col justify-between">
-                    <dd class="text-sm text-gray-500"><?php echo esc_html(wp_trim_words($image->post_excerpt, 10, '...')); ?></dd>
-                </dl>
             </div>
             <div>
                 <div class="-mt-px flex divide-x divide-gray-200">
@@ -65,31 +72,6 @@ class Forvoyez_Image_Renderer
                             </svg>
                             Details
                         </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" id="details-modal-<?php echo esc_attr($image->ID); ?>">
-                <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-                    <div class="mt-3 text-center">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900">Image Details</h3>
-                        <div class="mt-2 px-7 py-3">
-                            <p class="text-sm text-gray-500">
-                                <strong>Title:</strong> <?php echo esc_html($image->post_title ?: 'Not set'); ?>
-                            </p>
-                            <p class="text-sm text-gray-500">
-                                <strong>Alt Text:</strong> <?php echo esc_html($image_alt ?: 'Not set'); ?>
-                            </p>
-                            <p class="text-sm text-gray-500">
-                                <strong>Caption:</strong> <?php echo esc_html($image->post_excerpt ?: 'Not set'); ?>
-                            </p>
-                        </div>
-                        <div class="items-center px-4 py-3">
-                            <button id="close-modal-<?php echo esc_attr($image->ID); ?>"
-                                    class="px-4 py-2 bg-gray-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                                Close
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
