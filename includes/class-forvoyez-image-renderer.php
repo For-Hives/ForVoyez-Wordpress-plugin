@@ -13,8 +13,8 @@ class Forvoyez_Image_Renderer
         ?>
         <div class="forvoyez-image-item <?php echo $disabled_class; ?> relative p-2 border rounded-md" data-image-id="<?php echo esc_attr($image->ID); ?>">
             <input type="checkbox" class="forvoyez-image-checkbox absolute top-2 left-2 form-checkbox" value="<?php echo esc_attr($image->ID); ?>">
-            <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>" class="w-full h-auto">
-            <div class="forvoyez-metadata-icons absolute top-2 right-2 flex">
+            <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>" class="w-full h-48 object-cover rounded">
+            <div class="forvoyez-metadata-icons absolute bottom-2 left-2 bg-white bg-opacity-80 rounded p-1">
                 <?php if ($all_complete) : ?>
                     <span class="text-green-500" title="All metadata complete">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -73,13 +73,14 @@ class Forvoyez_Image_Renderer
     public static function display_filters($total_images, $displayed_images, $per_page, $current_filters)
     {
         ?>
-        <div class="forvoyez-filters">
-            <form method="get" action="">
+        <div class="forvoyez-filters bg-white p-4 mb-6 border border-gray-200 rounded-lg shadow-sm">
+            <form method="get" action="" class="space-y-4">
                 <input type="hidden" name="page" value="forvoyez-auto-alt-text">
-                <div class="forvoyez-filter-row">
-                    <div class="forvoyez-filter-group">
-                        <label>Items per page:
-                            <select name="per_page">
+                <div class="flex flex-wrap items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <label class="flex items-center">
+                            <span class="mr-2">Items per page:</span>
+                            <select name="per_page" class="form-select rounded border-gray-300">
                                 <option value="25" <?php selected($per_page, 25); ?>>25</option>
                                 <option value="50" <?php selected($per_page, 50); ?>>50</option>
                                 <option value="100" <?php selected($per_page, 100); ?>>100</option>
@@ -87,20 +88,26 @@ class Forvoyez_Image_Renderer
                             </select>
                         </label>
                     </div>
-                    <div class="forvoyez-filter-group">
-                        <label><input type="checkbox" name="filter[]" value="alt" <?php checked(in_array('alt', $current_filters)); ?>> Missing Alt</label>
-                        <label><input type="checkbox" name="filter[]" value="title" <?php checked(in_array('title', $current_filters)); ?>> Missing Title</label>
-                        <label><input type="checkbox" name="filter[]" value="caption" <?php checked(in_array('caption', $current_filters)); ?>> Missing Caption</label>
+                    <div class="flex items-center space-x-4">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="filter[]" value="alt" <?php checked(in_array('alt', $current_filters)); ?> class="form-checkbox text-blue-500">
+                            <span class="ml-2">Missing Alt</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="filter[]" value="title" <?php checked(in_array('title', $current_filters)); ?> class="form-checkbox text-blue-500">
+                            <span class="ml-2">Missing Title</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="filter[]" value="caption" <?php checked(in_array('caption', $current_filters)); ?> class="form-checkbox text-blue-500">
+                            <span class="ml-2">Missing Caption</span>
+                        </label>
                     </div>
-                    <div class="forvoyez-filter-group">
-                        <input type="submit" value="Apply Filters" class="button">
+                    <div>
+                        <input type="submit" value="Apply Filters" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     </div>
                 </div>
-                <div class="forvoyez-filter-row">
-                    <div class="forvoyez-displayed-images" data-total-images="<?php echo esc_attr($total_images); ?>">
-                        Images Displayed: <strong><?php echo $displayed_images; ?></strong>
-                        /<?php echo $total_images; ?>
-                    </div>
+                <div class="flex justify-end items-center text-sm text-gray-600">
+                    <span>Images Displayed: <strong><?php echo $displayed_images; ?></strong> / <?php echo $total_images; ?></span>
                 </div>
             </form>
         </div>
