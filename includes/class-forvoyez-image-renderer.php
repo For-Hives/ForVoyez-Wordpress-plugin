@@ -7,9 +7,8 @@ class Forvoyez_Image_Renderer
     {
         $image_url = wp_get_attachment_url($image->ID);
         $image_alt = get_post_meta($image->ID, '_wp_attachment_image_alt', true);
-        $is_analyzed = get_post_meta($image->ID, '_forvoyez_analyzed', true);
-        $disabled_class = $is_analyzed ? 'opacity-100' : '';
         $all_complete = !empty($image_alt) && !empty($image->post_title) && !empty($image->post_excerpt);
+        $disabled_class = $all_complete ? 'opacity-50' : '';
         ?>
         <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow <?php echo $disabled_class; ?>" data-image-id="<?php echo esc_attr($image->ID); ?>">
             <div class="flex flex-1 flex-col p-2">
@@ -51,6 +50,11 @@ class Forvoyez_Image_Renderer
                         </span>
                             <?php endif; ?>
                         <?php endif; ?>
+                        <?= $all_complete ? '<span class="bg-green-500 text-white rounded-full p-1" title="All Complete">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>' : ''; ?>
                     </div>
                 </div>
             </div>

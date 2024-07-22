@@ -133,9 +133,9 @@ class Forvoyez_API_Manager
 
 
         $metadata = array(
-            'alt_text' => '',
-            'title' => '',
-            'caption' => ''
+            'alt_text' => 'alt_complete',
+            'title' => 'title_complete',
+            'caption' => 'caption_complete'
         );
 
         update_post_meta($image_id, '_wp_attachment_image_alt', $metadata['alt_text']);
