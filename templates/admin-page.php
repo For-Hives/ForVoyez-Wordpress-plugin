@@ -1,6 +1,6 @@
 <div class="wrap bg-gray-100 p-6">
     <h1 class="text-3xl font-bold mb-6 text-gray-800">Auto Alt Text for Images</h1>
-    <button id="forvoyez-open-settings" class="bg-forvoyez-primary hover:bg-forvoyez-primary-dark text-white font-bold py-2 px-4 rounded mb-4">
+    <button id="forvoyez-open-settings" class="forvoyez-open-api-settings bg-forvoyez-primary hover:bg-forvoyez-primary-dark text-white font-bold py-2 px-4 rounded mb-4">
         Configure API Settings
     </button>
     <?php Forvoyez_Admin::display_status_configuration(); ?>
