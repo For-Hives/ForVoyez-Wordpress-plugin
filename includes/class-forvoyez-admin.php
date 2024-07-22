@@ -176,9 +176,10 @@ class Forvoyez_Admin
         ));
 
         if ($pagination) {
-            echo '<ul class="pagination">';
+            echo '<ul class="flex justify-center items-center space-x-2 mt-6">';
             foreach ($pagination as $key => $page_link) {
-                echo '<li class="paginate_button ' . (strpos($page_link, 'current') !== false ? 'active' : '') . '">' . $page_link . '</li>';
+                $active_class = strpos($page_link, 'current') !== false ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 hover:bg-blue-100';
+                echo '<li class="paginate_button ' . $active_class . ' px-3 py-2 rounded">' . $page_link . '</li>';
             }
             echo '</ul>';
         }
