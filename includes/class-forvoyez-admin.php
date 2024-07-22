@@ -72,7 +72,7 @@ class Forvoyez_Admin
         </style>
         ";
 
-        add_action('admin_head', function() use ($tailwind_config, $tailwind_styles) {
+        add_action('admin_head', function () use ($tailwind_config, $tailwind_styles) {
             echo $tailwind_config;
             echo $tailwind_styles;
         });
@@ -128,6 +128,8 @@ class Forvoyez_Admin
         $query_images = new WP_Query($args);
         $total_images = $query_images->found_posts;
 
+        $displayed_images = $query_images->post_count;
+
         ob_start();
         ?>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" data-total-images="<?php echo esc_attr($total_images); ?>">
@@ -143,12 +145,14 @@ class Forvoyez_Admin
             ?>
         </div>
         <?php
-        $pagination = $this->display_pagination($query_images, $paged, $per_page, $filters);
-        echo $pagination;
+        $html = ob_get_clean();
 
         wp_reset_postdata();
 
-        return ob_get_clean();
+        return array(
+            'html' => $html,
+            'displayed_images' => $displayed_images
+        );
     }
 
     private function display_pagination($query, $current_page, $per_page, $filters)
@@ -185,7 +189,8 @@ class Forvoyez_Admin
         return $pagination;
     }
 
-    private function count_total_images($filters) {
+    private function count_total_images($filters)
+    {
         $args = array(
             'post_type' => 'attachment',
             'post_mime_type' => 'image',
@@ -226,18 +231,20 @@ class Forvoyez_Admin
         $per_page = isset($_POST['per_page']) ? absint($_POST['per_page']) : 25;
         $filters = isset($_POST['filters']) ? $this->parse_filters($_POST['filters']) : array();
 
-        $html = $this->display_incomplete_images($paged, $per_page, $filters);
+        $result = $this->display_incomplete_images($paged, $per_page, $filters);
         $total_images = $this->count_total_images($filters);
 
         wp_send_json_success(array(
-            'html' => $html,
+            'html' => $result['html'],
             'total_images' => $total_images,
+            'displayed_images' => $result['displayed_images'],
             'current_page' => $paged,
             'per_page' => $per_page
         ));
     }
 
-    private function parse_filters($filters) {
+    private function parse_filters($filters)
+    {
         $parsed = array();
         foreach ($filters as $filter) {
             if ($filter['name'] === 'filter[]') {

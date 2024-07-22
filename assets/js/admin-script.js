@@ -108,10 +108,10 @@
                 filters: filters
             },
             success: function(response) {
-                if (response.success) {
+                if (response.success && response.data) {
                     $('#forvoyez-images-container').html(response.data.html);
                     updatePagination(response.data.current_page, response.data.total_images, response.data.per_page);
-                    updateImageCounter(response.data.total_images);
+                    updateImageCounter(response.data.total_images, response.data.displayed_images);
                 } else {
                     showNotification('Failed to load images', 'error');
                 }
@@ -125,8 +125,42 @@
         });
     }
 
-    function updateImageCounter(totalImages) {
-        $('#forvoyez-image-counter').text(`Total Images: ${totalImages}`);
+    function updatePagination(currentPage, totalImages, perPage) {
+        const totalPages = Math.ceil(totalImages / perPage);
+        let paginationHtml = '<nav class="forvoyez-pagination flex justify-center items-center space-x-2 mt-6">';
+
+        // Previous page
+        if (currentPage > 1) {
+            paginationHtml += `<a href="#" class="pagination-link bg-white text-blue-500 hover:bg-blue-100 px-3 py-2 rounded" data-page="${currentPage - 1}">&laquo; Previous</a>`;
+        }
+
+        // Page numbers
+        const startPage = Math.max(1, currentPage - 2);
+        const endPage = Math.min(totalPages, currentPage + 2);
+
+        for (let i = startPage; i <= endPage; i++) {
+            const activeClass = (i === currentPage) ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 hover:bg-blue-100';
+            paginationHtml += `<a href="#" class="pagination-link ${activeClass} px-3 py-2 rounded" data-page="${i}">${i}</a>`;
+        }
+
+        // Next page
+        if (currentPage < totalPages) {
+            paginationHtml += `<a href="#" class="pagination-link bg-white text-blue-500 hover:bg-blue-100 px-3 py-2 rounded" data-page="${currentPage + 1}">Next &raquo;</a>`;
+        }
+
+        paginationHtml += '</nav>';
+
+        $('#forvoyez-pagination').html(paginationHtml);
+
+        $('.pagination-link').on('click', function(e) {
+            e.preventDefault();
+            const page = $(this).data('page');
+            loadImages(page);
+        });
+    }
+
+    function updateImageCounter(totalImages, displayedImages) {
+        $('#forvoyez-image-counter').html(`Displaying <strong>${displayedImages}</strong> out of <strong>${totalImages}</strong> images`);
     }
 
     function saveApiKey() {
