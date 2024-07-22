@@ -14,7 +14,8 @@ class Forvoyez_Image_Renderer
         <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow <?php echo $disabled_class; ?>" data-image-id="<?php echo esc_attr($image->ID); ?>">
             <div class="flex flex-1 flex-col p-2">
                 <div class="relative w-full h-48">
-                    <div class="w-full h-full flex flex-col items-center justify-center gap-2">
+                    <img class="w-full h-full object-cover rounded-lg" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>">
+                    <div class="hidden absolute inset-0 bg-white p-2 overflow-y-auto details-view">
                         <p class="text-sm text-gray-500">
                             <strong>Title:</strong> <?php echo esc_html($image->post_title ?: 'Not set'); ?>
                         </p>
@@ -25,30 +26,29 @@ class Forvoyez_Image_Renderer
                             <strong>Caption:</strong> <?php echo esc_html($image->post_excerpt ?: 'Not set'); ?>
                         </p>
                     </div>
-<!--                    <img class="w-full h-full object-cover rounded-lg" src="--><?php //echo esc_url($image_url); ?><!--" alt="--><?php //echo esc_attr($image_alt); ?><!--">-->
                     <input type="checkbox" class="absolute top-2 left-2 form-checkbox h-5 w-5 text-blue-600 rounded transition duration-150 ease-in-out" value="<?php echo esc_attr($image->ID); ?>">
                     <div class="absolute top-0 right-0 flex space-x-1 bg-white p-2 rounded shadow-lg">
                         <?php if (!$all_complete) : ?>
                             <?php if (empty($image_alt)) : ?>
                                 <span class="bg-red-500 text-white rounded-full p-1" title="Missing Alt Text">
-                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </span>
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </span>
                             <?php endif; ?>
                             <?php if (empty($image->post_title)) : ?>
                                 <span class="bg-red-500 text-white rounded-full p-1" title="Missing Title">
-                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                                </svg>
-                            </span>
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                            </svg>
+                        </span>
                             <?php endif; ?>
                             <?php if (empty($image->post_excerpt)) : ?>
                                 <span class="bg-red-500 text-white rounded-full p-1" title="Missing Caption">
-                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
-                                </svg>
-                            </span>
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                            </svg>
+                        </span>
                             <?php endif; ?>
                         <?php endif; ?>
                     </div>
@@ -66,11 +66,22 @@ class Forvoyez_Image_Renderer
                     </div>
                     <div class="-ml-px flex w-0 flex-1">
                         <button class="see-more-button relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900 hover:bg-gray-50">
-                            <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                            Details
+<!--                            details -->
+                            <div id="see-more-button-details" class="w-full h-full inline-flex items-center justify-center gap-x-3">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                Details
+                            </div>
+<!--                            images -->
+                            <div id="see-more-button-images" class="images w-full h-full hidden items-center justify-center gap-x-3">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                Images
+                            </div>
                         </button>
                     </div>
                 </div>
