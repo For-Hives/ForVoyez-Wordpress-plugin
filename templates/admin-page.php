@@ -69,5 +69,8 @@
     <div id="forvoyez-images-container">
         <!-- Images will be loaded here dynamically -->
     </div>
+    <div id="forvoyez-pagination" class="forvoyez-pagination">
+        <!-- Pagination will be loaded here dynamically -->
+    </div>
 </div>
 <?php include FORVOYEZ_PLUGIN_DIR . 'templates/api-settings-modal.php'; ?>
