@@ -11,10 +11,10 @@ class Forvoyez_Image_Renderer
         $disabled_class = $is_analyzed ? 'opacity-50' : '';
         $all_complete = !empty($image_alt) && !empty($image->post_title) && !empty($image->post_excerpt);
         ?>
-        <div class="forvoyez-image-item <?php echo $disabled_class; ?> relative p-2 border border-gray-200 rounded-lg shadow-sm transition-all duration-300 hover:shadow-md" data-image-id="<?php echo esc_attr($image->ID); ?>">
-            <input type="checkbox" class="forvoyez-image-checkbox absolute top-2 left-2 form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out" value="<?php echo esc_attr($image->ID); ?>">
+        <div class="relative p-2 border border-gray-200 rounded-lg overflow-hidden cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 <?php echo $disabled_class; ?>" data-image-id="<?php echo esc_attr($image->ID); ?>">
+            <input type="checkbox" class="absolute top-2 left-2 form-checkbox h-5 w-5 text-blue-600 rounded transition duration-150 ease-in-out" value="<?php echo esc_attr($image->ID); ?>">
             <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>" class="w-full h-48 object-cover rounded-md">
-            <div class="forvoyez-metadata-icons absolute bottom-2 left-2 bg-white bg-opacity-80 rounded-md p-1 flex space-x-1">
+            <div class="absolute bottom-2 left-2 bg-white bg-opacity-80 rounded-md p-1 flex space-x-1">
                 <?php if ($all_complete) : ?>
                     <span class="text-green-500" title="All metadata complete">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -45,23 +45,23 @@ class Forvoyez_Image_Renderer
                     <?php endif; ?>
                 <?php endif; ?>
             </div>
-            <div class="forvoyez-action-buttons absolute bottom-2 right-2 flex space-x-2">
-                <button class="forvoyez-analyze-button bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded-md transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" title="Analyze with ForVoyez">
+            <div class="absolute bottom-2 right-2 flex space-x-2">
+                <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded-md transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" title="Analyze with ForVoyez">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                     </svg>
                 </button>
-                <button class="forvoyez-see-more bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-2 rounded-md transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50" title="See Details">
+                <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-2 rounded-md transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50" title="See Details">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
                 </button>
             </div>
-            <div class="forvoyez-loader absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 hidden">
+            <div class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 hidden">
                 <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
             </div>
-            <div class="forvoyez-image-details hidden mt-2 p-2 bg-gray-100 rounded-md">
+            <div class="hidden mt-2 p-2 bg-gray-100 rounded-md">
                 <p class="text-sm"><strong class="font-semibold">Title:</strong> <?php echo esc_html($image->post_title ?: 'Not set'); ?></p>
                 <p class="text-sm"><strong class="font-semibold">Alt Text:</strong> <?php echo esc_html($image_alt ?: 'Not set'); ?></p>
                 <p class="text-sm"><strong class="font-semibold">Caption:</strong> <?php echo esc_html($image->post_excerpt ?: 'Not set'); ?></p>
@@ -73,7 +73,7 @@ class Forvoyez_Image_Renderer
     public static function display_filters($total_images, $displayed_images, $per_page, $current_filters)
     {
         ?>
-        <div class="forvoyez-filters bg-white p-4 mb-6 border border-gray-200 rounded-lg shadow-sm">
+        <div class="bg-white p-4 mb-6 border border-gray-200 rounded-lg shadow-sm">
             <form method="get" action="" class="space-y-4">
                 <input type="hidden" name="page" value="forvoyez-auto-alt-text">
                 <div class="flex flex-wrap items-center justify-between gap-4">

@@ -134,7 +134,7 @@ class Forvoyez_Admin
 
         Forvoyez_Image_Renderer::display_filters($total_images, $displayed_images, $per_page, $filters);
         ?>
-        <div class="forvoyez-image-grid" data-total-images="<?php echo esc_attr($total_images); ?>">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" data-total-images="<?php echo esc_attr($total_images); ?>">
             <?php
             if ($query_images->have_posts()) {
                 while ($query_images->have_posts()) {
@@ -142,7 +142,7 @@ class Forvoyez_Admin
                     Forvoyez_Image_Renderer::render_image_item($query_images->post);
                 }
             } else {
-                echo '<p>No images found matching the selected criteria.</p>';
+                echo '<p class="col-span-full text-center text-gray-500">No images found matching the selected criteria.</p>';
             }
             ?>
         </div>
@@ -179,7 +179,7 @@ class Forvoyez_Admin
             echo '<ul class="flex justify-center items-center space-x-2 mt-6">';
             foreach ($pagination as $key => $page_link) {
                 $active_class = strpos($page_link, 'current') !== false ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 hover:bg-blue-100';
-                echo '<li class="paginate_button ' . $active_class . ' px-3 py-2 rounded">' . $page_link . '</li>';
+                echo '<li class="' . $active_class . ' px-3 py-2 rounded">' . $page_link . '</li>';
             }
             echo '</ul>';
         }
