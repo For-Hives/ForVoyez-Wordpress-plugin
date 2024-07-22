@@ -346,12 +346,21 @@
         let $details = $item.find('.forvoyez-image-details');
         let $seeMoreButton = $item.find('.forvoyez-see-more');
 
-        if ($details.is(':visible')) {
-            $details.slideUp();
-            $seeMoreButton.find('.dashicons').removeClass('dashicons-hidden').addClass('dashicons-visibility');
+        if ($details.hasClass('hidden')) {
+            $details.removeClass('hidden');
+            $seeMoreButton.find('svg').replaceWith(`
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+        `);
         } else {
-            $details.slideDown();
-            $seeMoreButton.find('.dashicons').removeClass('dashicons-visibility').addClass('dashicons-hidden');
+            $details.addClass('hidden');
+            $seeMoreButton.find('svg').replaceWith(`
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+            </svg>
+        `);
         }
     }
 
@@ -402,28 +411,52 @@
 
     function markImageAsAnalyzed(imageId, metadata) {
         let $imageItem = $('.forvoyez-image-item[data-image-id="' + imageId + '"]');
-        $imageItem.addClass('forvoyez-analyzed');
+        $imageItem.addClass('opacity-50');
         $imageItem.find('.forvoyez-analyze-button').remove();
-        $imageItem.append('<div class="forvoyez-checkmark"><span class="dashicons dashicons-yes-alt"></span></div>');
+        $imageItem.append(`
+        <div class="absolute top-2 right-2 bg-green-500 rounded-full p-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+        </div>
+    `);
 
         // Update metadata icons
         let $metadataIcons = $imageItem.find('.forvoyez-metadata-icons');
         $metadataIcons.empty();
         if (!metadata.alt_text) {
-            $metadataIcons.append('<span class="dashicons dashicons-editor-textcolor" title="Missing Alt Text"></span>');
+            $metadataIcons.append(`
+            <span class="text-red-500 mr-1" title="Missing Alt Text">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </span>
+        `);
         }
         if (!metadata.title) {
-            $metadataIcons.append('<span class="dashicons dashicons-heading" title="Missing Title"></span>');
+            $metadataIcons.append(`
+            <span class="text-red-500 mr-1" title="Missing Title">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+            </span>
+        `);
         }
         if (!metadata.caption) {
-            $metadataIcons.append('<span class="dashicons dashicons-editor-quote" title="Missing Caption"></span>');
+            $metadataIcons.append(`
+            <span class="text-red-500" title="Missing Caption">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                </svg>
+            </span>
+        `);
         }
 
         // Update image details
         let $details = $imageItem.find('.forvoyez-image-details');
-        $details.find('p:contains("Title:")').html('<strong>Title:</strong> ' + (metadata.title || 'Not set'));
-        $details.find('p:contains("Alt Text:")').html('<strong>Alt Text:</strong> ' + (metadata.alt_text || 'Not set'));
-        $details.find('p:contains("Caption:")').html('<strong>Caption:</strong> ' + (metadata.caption || 'Not set'));
+        $details.find('p:contains("Title:")').html('<strong class="font-semibold">Title:</strong> ' + (metadata.title || 'Not set'));
+        $details.find('p:contains("Alt Text:")').html('<strong class="font-semibold">Alt Text:</strong> ' + (metadata.alt_text || 'Not set'));
+        $details.find('p:contains("Caption:")').html('<strong class="font-semibold">Caption:</strong> ' + (metadata.caption || 'Not set'));
     }
 
     function updateImageCount() {
@@ -440,37 +473,29 @@
 
     let currentNotification = null;
 
-    function showNotification(message, type, duration = 3000, detailedMessage = '') {
-        if (currentNotification) {
-            currentNotification.remove();
-        }
+    function showNotification(message, type = 'info', duration = 3000) {
+        const notification = document.createElement('div');
+        notification.className = `fixed bottom-4 right-4 p-4 rounded-lg shadow-lg transition-opacity duration-300 opacity-0 ${
+            type === 'success' ? 'bg-green-500' :
+                type === 'error' ? 'bg-red-500' :
+                    'bg-blue-500'
+        } text-white`;
+        notification.textContent = message;
 
-        let notificationHtml = `
-        <div class="forvoyez-notification ${type}">
-            <div class="notification-main">${message}</div>
-            ${detailedMessage ? `<div class="notification-details">${detailedMessage}</div>` : ''}
-        </div>
-    `;
+        document.body.appendChild(notification);
 
-        let $notification = $(notificationHtml);
-        $('body').append($notification);
-        currentNotification = $notification;
-
-        setTimeout(function () {
-            $notification.addClass('show');
+        // Fade in
+        setTimeout(() => {
+            notification.classList.remove('opacity-0');
         }, 10);
 
-        if (duration > 0) {
-            setTimeout(function () {
-                $notification.removeClass('show');
-                setTimeout(function () {
-                    $notification.remove();
-                    if (currentNotification === $notification) {
-                        currentNotification = null;
-                    }
-                }, 300);
-            }, duration);
-        }
+        // Fade out and remove
+        setTimeout(() => {
+            notification.classList.add('opacity-0');
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, duration);
     }
 
     // make the function global
