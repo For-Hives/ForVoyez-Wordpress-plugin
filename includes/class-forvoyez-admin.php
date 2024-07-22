@@ -26,15 +26,55 @@ class Forvoyez_Admin
             return;
         }
 
-        wp_enqueue_style('forvoyez-admin-styles', FORVOYEZ_PLUGIN_URL . 'assets/css/admin-style.css', array(), '1.0.0');
+        // Enqueue Tailwind CSS from CDN
+        wp_enqueue_script('tailwindcss', 'https://cdn.tailwindcss.com', array(), null);
+
+        // Enqueue your custom scripts
         wp_enqueue_script('forvoyez-admin-script', FORVOYEZ_PLUGIN_URL . 'assets/js/admin-script.js', array('jquery'), '1.0.0', true);
         wp_enqueue_script('forvoyez-api-settings', FORVOYEZ_PLUGIN_URL . 'assets/js/api-settings.js', array('jquery'), '1.0.0', true);
 
-
+        // Localize script
         wp_localize_script('forvoyez-admin-script', 'forvoyezData', array(
             'ajaxurl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('forvoyez_nonce')
         ));
+
+        // Add Tailwind configuration
+        $this->add_tailwind_config();
+    }
+
+    private function add_tailwind_config()
+    {
+        $tailwind_config = "
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            'forvoyez-primary': '#4a90e2',
+                            'forvoyez-secondary': '#50e3c2',
+                        },
+                    },
+                },
+            }
+        </script>
+        ";
+
+        // Add custom Tailwind styles
+        $tailwind_styles = "
+        <style type=\"text/tailwindcss\">
+            @layer utilities {
+                .content-auto {
+                    content-visibility: auto;
+                }
+            }
+        </style>
+        ";
+
+        add_action('admin_head', function() use ($tailwind_config, $tailwind_styles) {
+            echo $tailwind_config;
+            echo $tailwind_styles;
+        });
     }
 
     public function render_admin_page()
@@ -46,9 +86,9 @@ class Forvoyez_Admin
     {
         $api_key = forvoyez_get_api_key();
         if (!empty($api_key)) {
-            echo '<p>Your ForVoyez API key is configured, you are ready to go!</p>';
+            echo '<p class="text-green-600 font-semibold">Your ForVoyez API key is configured, you are ready to go!</p>';
         } else {
-            echo '<p>Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation.</p>';
+            echo '<p class="text-red-600 font-semibold">Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation.</p>';
         }
     }
 
