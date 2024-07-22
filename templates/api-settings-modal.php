@@ -3,7 +3,7 @@ $settings = new Forvoyez_Settings();
 $api_key = $settings->get_api_key();
 ?>
 <div class="forvoyez-api-settings-modal hidden fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full" style="z-index: 1000;">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+    <div class="relative top-1/2 -translate-y-1/2 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
         <h2 class="text-2xl font-bold mb-4 text-gray-800">ForVoyez API Settings</h2>
         <p class="mb-4 text-gray-600">Enter your ForVoyez API key below:</p>
         <div class="relative">
