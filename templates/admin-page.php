@@ -4,6 +4,11 @@
         Configure API Settings
     </button>
     <?php Forvoyez_Admin::display_status_configuration(); ?>
+
+    <form id="forvoyez-filter-form" class="bg-white p-4 mb-6 border border-gray-200 rounded-lg shadow-sm">
+        <!-- Add your filter inputs here -->
+    </form>
+
     <div class="forvoyez-bulk-actions mb-4">
         <label class="inline-flex items-center">
             <input type="checkbox" id="forvoyez-select-all" class="form-checkbox h-5 w-5 text-forvoyez-primary">
@@ -13,6 +18,13 @@
             Analyze Selected Images
         </button>
     </div>
-    <?php Forvoyez_Admin::display_incomplete_images(); ?>
+
+    <div id="forvoyez-loader" class="hidden fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50">
+        <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-forvoyez-primary"></div>
+    </div>
+
+    <div id="forvoyez-images-container">
+        <!-- Images will be loaded here dynamically -->
+    </div>
 </div>
 <?php include FORVOYEZ_PLUGIN_DIR . 'templates/api-settings-modal.php'; ?>

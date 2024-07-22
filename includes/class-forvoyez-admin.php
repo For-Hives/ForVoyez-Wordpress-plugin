@@ -7,6 +7,7 @@ class Forvoyez_Admin
     {
         add_action('admin_menu', array($this, 'add_menu_item'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
+        add_action('wp_ajax_forvoyez_load_images', array($this, 'ajax_load_images'));
     }
 
     public function add_menu_item()
@@ -92,12 +93,8 @@ class Forvoyez_Admin
         }
     }
 
-    public function display_incomplete_images()
+    public function display_incomplete_images($paged = 1, $per_page = 25, $filters = array())
     {
-        $paged = isset($_GET['paged']) ? abs((int)$_GET['paged']) : 1;
-        $per_page = isset($_GET['per_page']) ? abs((int)$_GET['per_page']) : 25;
-        $filters = isset($_GET['filter']) ? $_GET['filter'] : array();
-
         $args = array(
             'post_type' => 'attachment',
             'post_mime_type' => 'image',
@@ -132,6 +129,7 @@ class Forvoyez_Admin
         $total_images = $query_images->found_posts;
         $displayed_images = $query_images->post_count;
 
+        ob_start();
         Forvoyez_Image_Renderer::display_filters($total_images, $displayed_images, $per_page, $filters);
         ?>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" data-total-images="<?php echo esc_attr($total_images); ?>">
@@ -147,41 +145,57 @@ class Forvoyez_Admin
             ?>
         </div>
         <?php
-        $this->display_pagination($query_images, $paged, $per_page, $filters);
+        $pagination = $this->display_pagination($query_images, $paged, $per_page, $filters);
+        echo $pagination;
 
         wp_reset_postdata();
+
+        return ob_get_clean();
     }
 
     private function display_pagination($query, $current_page, $per_page, $filters)
     {
-        $base = add_query_arg('paged', '%#%');
+        $total_pages = $query->max_num_pages;
 
-        if ($per_page !== 25) {
-            $base = add_query_arg('per_page', $per_page, $base);
-        }
-        if (!empty($filters)) {
-            foreach ($filters as $filter) {
-                $base = add_query_arg('filter[]', $filter, $base);
-            }
+        if ($total_pages <= 1) {
+            return '';
         }
 
-        $pagination = paginate_links(array(
-            'base' => $base,
-            'format' => '',
-            'current' => $current_page,
-            'total' => $query->max_num_pages,
-            'prev_text' => __('&laquo;'),
-            'next_text' => __('&raquo;'),
-            'type' => 'array',
-        ));
+        $pagination = '<nav class="forvoyez-pagination flex justify-center items-center space-x-2 mt-6">';
 
-        if ($pagination) {
-            echo '<ul class="flex justify-center items-center space-x-2 mt-6">';
-            foreach ($pagination as $key => $page_link) {
-                $active_class = strpos($page_link, 'current') !== false ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 hover:bg-blue-100';
-                echo '<li class="' . $active_class . ' px-3 py-2 rounded">' . $page_link . '</li>';
-            }
-            echo '</ul>';
+        // Previous page
+        if ($current_page > 1) {
+            $pagination .= '<a href="#" class="pagination-link bg-white text-blue-500 hover:bg-blue-100 px-3 py-2 rounded" data-page="' . ($current_page - 1) . '">&laquo; Previous</a>';
         }
+
+        // Page numbers
+        $start_page = max(1, $current_page - 2);
+        $end_page = min($total_pages, $current_page + 2);
+
+        for ($i = $start_page; $i <= $end_page; $i++) {
+            $active_class = ($i == $current_page) ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 hover:bg-blue-100';
+            $pagination .= '<a href="#" class="pagination-link ' . $active_class . ' px-3 py-2 rounded" data-page="' . $i . '">' . $i . '</a>';
+        }
+
+        // Next page
+        if ($current_page < $total_pages) {
+            $pagination .= '<a href="#" class="pagination-link bg-white text-blue-500 hover:bg-blue-100 px-3 py-2 rounded" data-page="' . ($current_page + 1) . '">Next &raquo;</a>';
+        }
+
+        $pagination .= '</nav>';
+
+        return $pagination;
+    }
+
+    public function ajax_load_images() {
+        check_ajax_referer('forvoyez_nonce', 'nonce');
+
+        $paged = isset($_POST['paged']) ? absint($_POST['paged']) : 1;
+        $per_page = isset($_POST['per_page']) ? absint($_POST['per_page']) : 25;
+        $filters = isset($_POST['filters']) ? $_POST['filters'] : array();
+
+        $html = $this->display_incomplete_images($paged, $per_page, $filters);
+
+        wp_send_json_success(array('html' => $html));
     }
 }
