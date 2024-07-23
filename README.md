@@ -1,6 +1,6 @@
 # forvoyez-auto-alt-text-for-images
 
-*this is a plugin for the [Forvoyez](https://forvoyez.com) platform*
+_this is a plugin for the [Forvoyez](https://forvoyez.com) platform_
 
 ## Table of Contents
 
@@ -45,10 +45,15 @@ To use BrowserSync with your WordPlate project, follow these steps:
 
 ```js
 module.exports = {
-    proxy: "localhost:8000", // Replace with your PHP server port
-    files: ["public/**/*.php", "resources/**/*.php", "public/**/*.css", "public/**/*.js"],
-    notify: false
-};
+	proxy: 'localhost:8000', // Replace with your PHP server port
+	files: [
+		'public/**/*.php',
+		'resources/**/*.php',
+		'public/**/*.css',
+		'public/**/*.js',
+	],
+	notify: false,
+}
 ```
 
 2. **Start the PHP Server**:

@@ -1,10 +1,15 @@
+/* global forvoyezData, jQuery */
+
 ;(function ($) {
 	'use strict'
 
+	// Global letiable declarations
+	let $modal, $apiKeyInput, $toggleVisibility
+
 	$(document).ready(function () {
-		let $modal = $('.forvoyez-api-settings-modal')
-		let $apiKeyInput = $('.forvoyez-api-key-input')
-		let $toggleVisibility = $('.forvoyez-toggle-visibility')
+		$modal = $('.forvoyez-api-settings-modal')
+		$apiKeyInput = $('.forvoyez-api-key-input')
+		$toggleVisibility = $('.forvoyez-toggle-visibility')
 
 		// API Settings Modal
 		$toggleVisibility.on('click', function () {
@@ -72,8 +77,8 @@
 			'#forvoyez-analyze-missing, #forvoyez-analyze-missing-alt, #forvoyez-analyze-all'
 		).on('click', function (e) {
 			e.preventDefault()
-			var button = $(this)
-			var type = ''
+			let button = $(this)
+			let type = ''
 
 			if (button.attr('id') === 'forvoyez-analyze-missing') {
 				type = 'missing_all'
@@ -112,10 +117,12 @@
 		// Initial load
 		loadImages()
 
-		$filterForm.find('input[type="checkbox"]').on('change', function () {
-			currentPage = 1
-			loadImages()
-		})
+		$('#forvoyez-filter-form')
+			.find('input[type="checkbox"]')
+			.on('change', function () {
+				currentPage = 1
+				loadImages()
+			})
 
 		// Filter form submission
 		$('#forvoyez-filter-form').on('submit', function (e) {
@@ -132,7 +139,7 @@
 			'.forvoyez-pagination .pagination-link',
 			function (e) {
 				e.preventDefault()
-				var page = $(this).data('page')
+				let page = $(this).data('page')
 				loadImages(page)
 			}
 		)
@@ -160,13 +167,13 @@
 		})
 	}
 
-	var $container = $('#forvoyez-images-container')
-	var $filterForm = $('#forvoyez-filter-form')
-	var currentPage = 1
-	var perPage = 25
+	let $container = $('#forvoyez-images-container')
+	let $filterForm = $('#forvoyez-filter-form')
+	let currentPage = 1
+	let perPage = 25
 
 	function loadImages(page = currentPage) {
-		var data = {
+		let data = {
 			action: 'forvoyez_load_images',
 			nonce: forvoyezData.nonce,
 			paged: page,
@@ -203,7 +210,7 @@
 
 	$(document).on('click', '.pagination-link', function (e) {
 		e.preventDefault()
-		var page = $(this).data('page')
+		let page = $(this).data('page')
 		loadImages(page)
 	})
 
@@ -308,7 +315,7 @@
 						resolve(false)
 					}
 				},
-				error: function (jqXHR, textStatus, errorThrown) {
+				error: function (jqXHR, textStatus) {
 					if (isNotificationActivated) {
 						showErrorNotification(
 							'AJAX request failed: ' + textStatus,
@@ -579,7 +586,7 @@
 	}
 
 	function showConfirmModal(message, onConfirm) {
-		$('#forvoyez-confirm-message').html(message) // Changed from .text() to .html()
+		$('#forvoyez-confirm-message').html(message)
 		$('#forvoyez-confirm-modal').removeClass('hidden')
 
 		$('#forvoyez-confirm-action')
@@ -616,9 +623,9 @@
 		}
 
 		message = `
-        <p>Are you sure you want to ${actionDescription}?</p>
-        <p class="mt-2 text-xs text-gray-500 italic">Cost: ${count} ForVoyez credit${count !== 1 ? 's' : ''}</p>
-    `
+		<p>Are you sure you want to ${actionDescription}?</p>
+		<p class="mt-2 text-xs text-gray-500 italic">Cost: ${count} ForVoyez credit${count !== 1 ? 's' : ''}</p>
+			`
 
 		showConfirmModal(message, function () {
 			analyzeBulkImages(imageIds)
