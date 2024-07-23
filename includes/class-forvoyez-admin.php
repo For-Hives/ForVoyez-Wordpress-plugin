@@ -335,55 +335,27 @@ class Forvoyez_Admin
             'fields' => 'ids'
         );
 
-        switch ($type) {
-            case 'missing_all':
-                $args['meta_query'] = array(
-                    'relation' => 'OR',
-                    array(
-                        'key' => '_wp_attachment_image_alt',
-                        'value' => '',
-                        'compare' => '='
-                    ),
-                    array(
-                        'key' => '_wp_attachment_image_alt',
-                        'compare' => 'NOT EXISTS'
-                    ),
-                    array(
-                        'key' => 'post_title',
-                        'value' => '',
-                        'compare' => '='
-                    ),
-                    array(
-                        'key' => 'post_excerpt',
-                        'value' => '',
-                        'compare' => '='
-                    )
-                );
-                break;
-            case 'missing_alt':
-                $args['meta_query'] = array(
-                    'relation' => 'AND',
-                    array(
-                        'relation' => 'OR',
-                        array(
-                            'key' => '_wp_attachment_image_alt',
-                            'value' => '',
-                            'compare' => '='
-                        ),
-                        array(
-                            'key' => '_wp_attachment_image_alt',
-                            'compare' => 'NOT EXISTS'
-                        )
-                    )
-                );
-                break;
-            case 'all':
-                // No additional conditions for 'all'
-                break;
-        }
-
         $query = new WP_Query($args);
-        return $query->posts;
+        $all_image_ids = $query->posts;
+
+        $filtered_image_ids = array_filter($all_image_ids, function($id) use ($type) {
+            $post = get_post($id);
+            $alt_text = get_post_meta($id, '_wp_attachment_image_alt', true);
+            $title = $post->post_title;
+            $caption = $post->post_excerpt;
+
+            switch ($type) {
+                case 'missing_all':
+                    return empty($alt_text) || empty($title) || empty($caption);
+                case 'missing_alt':
+                    return empty($alt_text);
+                case 'all':
+                default:
+                    return true;
+            }
+        });
+
+        return array_values($filtered_image_ids);
     }
 
     public function ajax_get_image_ids() {
