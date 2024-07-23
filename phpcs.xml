@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="WordPress Coding Standards">
-    <description>A custom set of code standard rules to check for WordPress projects.</description>
+<ruleset name="WordPress Plugin Coding Standards">
+    <description>A custom set of code standard rules to check for WordPress plugins.</description>
 
     <!-- What to scan -->
     <file>.</file>
@@ -16,7 +16,6 @@
     <!-- Rules: Check PHP version compatibility -->
     <config name="testVersion" value="7.4-"/>
     <rule ref="PHPCompatibilityWP"/>
-    <config name="installed_paths" value="vendor/phpcompatibility/php-compatibility,vendor/phpcompatibility/phpcompatibility-paragonie,vendor/phpcompatibility/phpcompatibility-wp"/>
 
     <!-- Rules: WordPress Coding Standards -->
     <config name="minimum_supported_wp_version" value="5.0"/>
@@ -24,11 +23,6 @@
     <rule ref="WordPress-Docs"/>
     <rule ref="WordPress-Extra"/>
 
-    <!-- Rules: Check comment type compatibility -->
-    <rule ref="Generic.Commenting.DocComment"/>
-
-    <!-- Allow short array syntax -->
-    <rule ref="Generic.Arrays.DisallowShortArraySyntax.Found">
-        <severity>0</severity>
-    </rule>
+    <!-- Set the paths for the standards -->
+    <config name="installed_paths" value="vendor/wp-coding-standards/wpcs,vendor/phpcompatibility/php-compatibility,vendor/phpcompatibility/phpcompatibility-paragonie,vendor/phpcompatibility/phpcompatibility-wp"/>
 </ruleset>
