@@ -493,16 +493,16 @@
         let message;
         switch(type) {
             case 'selected':
-                message = `Are you sure you want to analyze ${count} selected image(s)?`;
+                message = `Are you sure you want to analyze ${count} selected image(s)? (cost: ${count} ForVoyez credits).`;
                 break;
             case 'missing_all':
-                message = `Are you sure you want to analyze ${count} image(s) with missing alt text, title, or caption?`;
+                message = `Are you sure you want to analyze ${count} image(s) with missing alt text, title, or caption? (cost: ${count} ForVoyez credits)`;
                 break;
             case 'missing_alt':
-                message = `Are you sure you want to analyze ${count} image(s) with missing alt text?`;
+                message = `Are you sure you want to analyze ${count} image(s) with missing alt text? (cost: ${count} ForVoyez credits)`;
                 break;
             case 'all':
-                message = `Are you sure you want to analyze all ${count} image(s)?`;
+                message = `Are you sure you want to analyze all ${count} image(s)? (cost: ${count} ForVoyez credits)`;
                 break;
         }
 
