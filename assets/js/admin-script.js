@@ -475,7 +475,7 @@
     }
 
     function showConfirmModal(message, onConfirm) {
-        $('#forvoyez-confirm-message').text(message);
+        $('#forvoyez-confirm-message').html(message);  // Changed from .text() to .html()
         $('#forvoyez-confirm-modal').removeClass('hidden');
 
         $('#forvoyez-confirm-action').off('click').on('click', function() {
@@ -490,21 +490,27 @@
 
     function confirmAndAnalyze(type, imageIds) {
         const count = imageIds.length;
-        let message;
+        let message, actionDescription;
+
         switch(type) {
             case 'selected':
-                message = `Are you sure you want to analyze ${count} selected image(s)? (cost: ${count} ForVoyez credits).`;
+                actionDescription = `analyze ${count} selected image(s)`;
                 break;
             case 'missing_all':
-                message = `Are you sure you want to analyze ${count} image(s) with missing alt text, title, or caption? (cost: ${count} ForVoyez credits)`;
+                actionDescription = `analyze ${count} image(s) with missing alt text, title, or caption`;
                 break;
             case 'missing_alt':
-                message = `Are you sure you want to analyze ${count} image(s) with missing alt text? (cost: ${count} ForVoyez credits)`;
+                actionDescription = `analyze ${count} image(s) with missing alt text`;
                 break;
             case 'all':
-                message = `Are you sure you want to analyze all ${count} image(s)? (cost: ${count} ForVoyez credits)`;
+                actionDescription = `analyze all ${count} image(s)`;
                 break;
         }
+
+        message = `
+        <p>Are you sure you want to ${actionDescription}?</p>
+        <p class="mt-2 text-xs text-gray-500 italic">Cost: ${count} ForVoyez credit${count !== 1 ? 's' : ''}</p>
+    `;
 
         showConfirmModal(message, function() {
             analyzeBulkImages(imageIds);
