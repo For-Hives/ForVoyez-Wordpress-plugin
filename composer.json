@@ -17,7 +17,8 @@
 		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
 		"friendsofphp/php-cs-fixer": "^3.59",
 		"phpcompatibility/phpcompatibility-wp": "^2.1",
-		"wp-coding-standards/wpcs": "^3.1"
+		"wp-coding-standards/wpcs": "^3.1",
+		"phpcsstandards/phpcsutils": "^1.0"
 	},
 	"config": {
 		"allow-plugins": {
