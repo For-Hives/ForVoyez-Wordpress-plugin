@@ -1,7 +1,6 @@
 {
   "name": "forvoyez-auto-alt-text-for-images",
   "description": "*this is a plugin for the [Forvoyez](https://forvoyez.com) platform*",
-
   "version": "1.0.0",
   "private": false,
   "scripts": {
@@ -11,7 +10,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
   },
   "lint-staged": {
     "*.js": [
