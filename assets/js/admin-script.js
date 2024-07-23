@@ -441,65 +441,40 @@
             : '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd" /><path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" /></svg>';
     }
 
+    function updateButtonState(buttonId, count) {
+        const $button = $(`#${buttonId}`);
+        const isDisabled = count === 0;
+        $button.prop('disabled', isDisabled);
+        $button.toggleClass('bg-gray-700 hover:bg-gray-900 cursor-not-allowed', isDisabled);
+        $button.toggleClass('bg-blue-500 hover:bg-blue-700 cursor-pointer', !isDisabled);
+    }
+
     function updateImageCounts() {
-        $.ajax({
-            url: forvoyezData.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'forvoyez_get_image_ids',
-                nonce: forvoyezData.nonce,
-                type: 'all'
-            },
-            success: function (response) {
-                if (response.success) {
-                    $('#forvoyez-all-count').text(response.data.count);
-                    if (!(response.data.count === 0)) {
-                        $('#forvoyez-analyze-all').prop('disabled', response.data.count === 0);
-                        $('#forvoyez-analyze-all').removeClass('bg-gray-700 hover:bg-gray-900 cursor-not-allowed');
-                        $('#forvoyez-analyze-all').addClass('bg-blue-500 hover:bg-blue-700 cursor-pointer');
-                    }
-                }
-            }
-        });
+        const types = ['all', 'missing_alt', 'missing_all'];
+        const buttonIds = ['forvoyez-analyze-all', 'forvoyez-analyze-missing-alt', 'forvoyez-analyze-missing'];
+        const countIds = ['forvoyez-all-count', 'forvoyez-missing-alt-count', 'forvoyez-missing-count'];
 
-        $.ajax({
-            url: forvoyezData.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'forvoyez_get_image_ids',
-                nonce: forvoyezData.nonce,
-                type: 'missing_alt'
-            },
-            success: function (response) {
-                if (response.success) {
-                    $('#forvoyez-missing-alt-count').text(response.data.count);
-                    if (!(response.data.count === 0)) {
-                        $('#forvoyez-analyze-missing-alt').prop('disabled', response.data.count === 0);
-                        $('#forvoyez-analyze-missing-alt').removeClass('bg-gray-700 hover:bg-gray-900 cursor-not-allowed');
-                        $('#forvoyez-analyze-missing-alt').addClass('bg-blue-500 hover:bg-blue-700 cursor-pointer');
+        types.forEach((type, index) => {
+            $.ajax({
+                url: forvoyezData.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'forvoyez_get_image_ids',
+                    nonce: forvoyezData.nonce,
+                    type: type
+                },
+                success: function (response) {
+                    if (response.success) {
+                        const count = response.data.count;
+                        $(`#${countIds[index]}`).text(count);
+                        updateButtonState(buttonIds[index], count);
                     }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error(`Error fetching ${type} image count:`, textStatus, errorThrown);
+                    showNotification(`Failed to fetch ${type} image count`, 'error');
                 }
-            }
-        });
-
-        $.ajax({
-            url: forvoyezData.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'forvoyez_get_image_ids',
-                nonce: forvoyezData.nonce,
-                type: 'missing_all'
-            },
-            success: function (response) {
-                if (response.success) {
-                    $('#forvoyez-missing-count').text(response.data.count);
-                    if (!(response.data.count === 0)) {
-                        $('#forvoyez-analyze-missing').prop('disabled', response.data.count === 0);
-                        $('#forvoyez-analyze-missing').removeClass('bg-gray-700 hover:bg-gray-900 cursor-not-allowed');
-                        $('#forvoyez-analyze-missing').addClass('bg-blue-500 hover:bg-blue-700 cursor-pointer');
-                    }
-                }
-            }
+            });
         });
     }
 
