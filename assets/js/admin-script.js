@@ -44,6 +44,26 @@
             analyzeBulkImages(selectedImages);
         });
 
+        function updateImageCounts() {
+            $.ajax({
+                url: forvoyezData.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'forvoyez_get_image_counts',
+                    nonce: forvoyezData.nonce
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#forvoyez-all-count').text(response.data.all);
+                        $('#forvoyez-missing-alt-count').text(response.data.missing_alt);
+                        $('#forvoyez-missing-count').text(response.data.missing_all);
+                    }
+                }
+            });
+        }
+
+        updateImageCounts();
+
         // Initialize event listeners
         initializeEventListeners();
     });
@@ -93,6 +113,44 @@
                     console.error('Error analyzing image:', error);
                     $(this).prop('disabled', false);
                 });
+        });
+
+        $('#forvoyez-analyze-missing, #forvoyez-analyze-missing-alt, #forvoyez-analyze-all').on('click', function(e) {
+            e.preventDefault();
+            var button = $(this);
+            var action = '';
+
+            if (button.attr('id') === 'forvoyez-analyze-missing') {
+                action = 'analyze_missing';
+            } else if (button.attr('id') === 'forvoyez-analyze-missing-alt') {
+                action = 'analyze_missing_alt';
+            } else if (button.attr('id') === 'forvoyez-analyze-all') {
+                action = 'analyze_all';
+            }
+
+            $.ajax({
+                url: forvoyezData.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'forvoyez_bulk_analyze_images',
+                    nonce: forvoyezData.nonce,
+                    analyze_action: action
+                },
+                beforeSend: function() {
+                    button.prop('disabled', true).text('Processing...');
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert('Bulk analysis started for ' + response.data.total + ' images.');
+                        updateImageCounts();
+                    } else {
+                        alert('Error: ' + response.data.message);
+                    }
+                },
+                complete: function() {
+                    button.prop('disabled', false).text(button.data('original-text'));
+                }
+            });
         });
     }
 

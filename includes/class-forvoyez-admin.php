@@ -8,6 +8,7 @@ class Forvoyez_Admin
         add_action('admin_menu', array($this, 'add_menu_item'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
         add_action('wp_ajax_forvoyez_load_images', array($this, 'ajax_load_images'));
+        add_action('wp_ajax_forvoyez_get_image_counts', array($this, 'ajax_get_image_counts'));
     }
 
     public function add_menu_item()
@@ -252,5 +253,75 @@ class Forvoyez_Admin
             }
         }
         return $parsed;
+    }
+
+    public function get_image_counts()
+    {
+        $all_count = wp_count_posts('attachment')->inherit;
+
+        $missing_alt_args = array(
+            'post_type' => 'attachment',
+            'post_mime_type' => 'image',
+            'post_status' => 'inherit',
+            'meta_query' => array(
+                'relation' => 'OR',
+                array(
+                    'key' => '_wp_attachment_image_alt',
+                    'value' => '',
+                    'compare' => '='
+                ),
+                array(
+                    'key' => '_wp_attachment_image_alt',
+                    'compare' => 'NOT EXISTS'
+                )
+            )
+        );
+        $missing_alt_query = new WP_Query($missing_alt_args);
+        $missing_alt_count = $missing_alt_query->found_posts;
+
+        $missing_all_args = array(
+            'post_type' => 'attachment',
+            'post_mime_type' => 'image',
+            'post_status' => 'inherit',
+            'meta_query' => array(
+                'relation' => 'OR',
+                array(
+                    'key' => '_wp_attachment_image_alt',
+                    'value' => '',
+                    'compare' => '='
+                ),
+                array(
+                    'key' => '_wp_attachment_image_alt',
+                    'compare' => 'NOT EXISTS'
+                )
+            ),
+            'tax_query' => array(
+                'relation' => 'OR',
+                array(
+                    'key' => 'post_title',
+                    'value' => '',
+                    'compare' => '='
+                ),
+                array(
+                    'key' => 'post_excerpt',
+                    'value' => '',
+                    'compare' => '='
+                )
+            )
+        );
+        $missing_all_query = new WP_Query($missing_all_args);
+        $missing_all_count = $missing_all_query->found_posts;
+
+        return array(
+            'all' => $all_count,
+            'missing_alt' => $missing_alt_count,
+            'missing_all' => $missing_all_count
+        );
+    }
+
+    public function ajax_get_image_counts()
+    {
+        check_ajax_referer('forvoyez_nonce', 'nonce');
+        wp_send_json_success($this->get_image_counts());
     }
 }
