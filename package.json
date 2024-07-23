@@ -1,12 +1,37 @@
 {
-  "name": "forvoyez-wordpress-plugin",
-  "version": "1.0.0",
+  "name": "forvoyez-auto-alt-text-for-images",
   "description": "*this is a plugin for the [Forvoyez](https://forvoyez.com) platform*",
-  "main": "index.js",
+
+  "version": "1.0.0",
+  "private": false,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prettier": "prettier --write .",
+    "precommit": "lint-staged",
+    "prepare": "husky install",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.php": [
+      "composer run phpcbf",
+      "composer run phpcs"
+    ],
+    "*.json": "prettier --write",
+    "*.css": "prettier --write"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "husky": "^9.1.1",
+    "lint-staged": "^15.2.7",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.5"
+  }
 }
