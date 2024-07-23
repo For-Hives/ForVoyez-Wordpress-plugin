@@ -1,4 +1,4 @@
-<div class="wrap p-6 min-h-screen">
+<div class="wrap p-6 min-h-screen relative">
     <h1 class="text-3xl font-bold mb-6 text-gray-800">Auto Alt Text for Images</h1>
     <div class="py-4 w-full flex justify-between items-start">
         <button id="forvoyez-open-settings" class="forvoyez-open-api-settings bg-forvoyez-primary hover:bg-forvoyez-primary-dark text-white font-bold py-2 px-4 rounded mb-4">
@@ -103,13 +103,15 @@
         </div>
     </div>
 
-    <div id="forvoyez-loader" class="hidden inset-0 flex items-center pt-16 pb-32 justify-center z-50">
-        <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-forvoyez-primary"></div>
+    <div class="relative">
+        <div id="forvoyez-loader" class="hidden absolute rounded pointer-event-none top-0 left-0 w-full h-full flex items-start pt-16 pb-32 justify-center z-50">
+            <div class="animate-spin rounded-full mt-16 h-16 w-16 border-b-2 border-forvoyez-primary"></div>
+        </div>
+        <div id="forvoyez-images-container">
+            <!-- Images will be loaded here dynamically -->
+        </div>
     </div>
 
-    <div id="forvoyez-images-container">
-        <!-- Images will be loaded here dynamically -->
-    </div>
     <div id="forvoyez-pagination" class="forvoyez-pagination">
         <!-- Pagination will be loaded here dynamically -->
     </div>
