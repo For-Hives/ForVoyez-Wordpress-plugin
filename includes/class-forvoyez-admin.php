@@ -9,6 +9,7 @@ class Forvoyez_Admin
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
         add_action('wp_ajax_forvoyez_load_images', array($this, 'ajax_load_images'));
         add_action('wp_ajax_forvoyez_get_image_counts', array($this, 'ajax_get_image_counts'));
+        add_action('wp_ajax_forvoyez_get_image_ids', array($this, 'ajax_get_image_ids'));
     }
 
     public function add_menu_item()
@@ -323,5 +324,86 @@ class Forvoyez_Admin
     {
         check_ajax_referer('forvoyez_nonce', 'nonce');
         wp_send_json_success($this->get_image_counts());
+    }
+
+    public function get_image_ids($type = 'all') {
+        $args = array(
+            'post_type' => 'attachment',
+            'post_mime_type' => 'image',
+            'post_status' => 'inherit',
+            'posts_per_page' => -1,
+            'fields' => 'ids'
+        );
+
+        switch ($type) {
+            case 'missing_all':
+                $args['meta_query'] = array(
+                    'relation' => 'OR',
+                    array(
+                        'key' => '_wp_attachment_image_alt',
+                        'value' => '',
+                        'compare' => '='
+                    ),
+                    array(
+                        'key' => '_wp_attachment_image_alt',
+                        'compare' => 'NOT EXISTS'
+                    )
+                );
+                $args['tax_query'] = array(
+                    'relation' => 'OR',
+                    array(
+                        'key' => 'post_title',
+                        'value' => '',
+                        'compare' => '='
+                    ),
+                    array(
+                        'key' => 'post_title',
+                        'compare' => 'NOT EXISTS'
+                    ),
+                    array(
+                        'key' => 'post_excerpt',
+                        'value' => '',
+                        'compare' => '='
+                    ),
+                    array(
+                        'key' => 'post_excerpt',
+                        'compare' => 'NOT EXISTS'
+                    ),
+                );
+                break;
+            case 'missing_alt':
+                $args['meta_query'] = array(
+                    'relation' => 'OR',
+                    array(
+                        'key' => '_wp_attachment_image_alt',
+                        'value' => '',
+                        'compare' => '='
+                    ),
+                    array(
+                        'key' => '_wp_attachment_image_alt',
+                        'compare' => 'NOT EXISTS'
+                    )
+                );
+                break;
+        }
+
+        $query = new WP_Query($args);
+        return $query->posts;
+    }
+
+    public function ajax_get_image_ids() {
+        check_ajax_referer('forvoyez_nonce', 'nonce');
+
+        if (!current_user_can('upload_files')) {
+            wp_send_json_error('Permission denied');
+        }
+
+        $type = isset($_POST['type']) ? sanitize_text_field($_POST['type']) : 'all';
+        $image_ids = $this->get_image_ids($type);
+
+        wp_send_json_success(array(
+            'image_ids' => $image_ids,
+            'count' => count($image_ids)
+        ));
     }
 }
