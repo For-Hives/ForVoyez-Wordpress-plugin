@@ -44,56 +44,9 @@
             analyzeBulkImages(selectedImages);
         });
 
-        function updateImageCounts() {
-            $.ajax({
-                url: forvoyezData.ajaxurl,
-                type: 'POST',
-                data: {
-                    action: 'forvoyez_get_image_ids',
-                    nonce: forvoyezData.nonce,
-                    type: 'all'
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#forvoyez-all-count').text(response.data.count);
-                    }
-                }
-            });
-
-            $.ajax({
-                url: forvoyezData.ajaxurl,
-                type: 'POST',
-                data: {
-                    action: 'forvoyez_get_image_ids',
-                    nonce: forvoyezData.nonce,
-                    type: 'missing_alt'
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#forvoyez-missing-alt-count').text(response.data.count);
-                    }
-                }
-            });
-
-            $.ajax({
-                url: forvoyezData.ajaxurl,
-                type: 'POST',
-                data: {
-                    action: 'forvoyez_get_image_ids',
-                    nonce: forvoyezData.nonce,
-                    type: 'missing_all'
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#forvoyez-missing-count').text(response.data.count);
-                    }
-                }
-            });
-        }
-
         updateImageCounts();
 
-        $('#forvoyez-analyze-missing, #forvoyez-analyze-missing-alt, #forvoyez-analyze-all').on('click', function(e) {
+        $('#forvoyez-analyze-missing, #forvoyez-analyze-missing-alt, #forvoyez-analyze-all').on('click', function (e) {
             e.preventDefault();
             var button = $(this);
             var type = '';
@@ -114,82 +67,15 @@
                     nonce: forvoyezData.nonce,
                     type: type
                 },
-                beforeSend: function() {
-                    button.prop('disabled', true).text('Processing...');
-                },
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
-                        bulkAnalyzeImages(response.data.image_ids);
+                        analyzeBulkImages(response.data.image_ids);
                     } else {
-                        alert('Error: ' + response.data.message);
+                        showNotification('Error: ' + response.data.message, 'error', 5000);
                     }
-                },
-                complete: function() {
-                    button.prop('disabled', false).text(button.data('original-text'));
                 }
             });
         });
-
-        function bulkAnalyzeImages(imageIds) {
-            $.ajax({
-                url: forvoyezData.ajaxurl,
-                type: 'POST',
-                data: {
-                    action: 'forvoyez_bulk_analyze_images',
-                    nonce: forvoyezData.nonce,
-                    image_ids: imageIds
-                },
-                success: function(response) {
-                    if (response.success) {
-                        processImageBatch(response.data.image_ids, 0, response.data.total);
-                    } else {
-                        alert('Error: ' + response.data.message);
-                    }
-                }
-            });
-        }
-
-        function processImageBatch(imageIds, startIndex, total) {
-            var batchSize = 10; // Process 10 images at a time
-            var endIndex = Math.min(startIndex + batchSize, imageIds.length);
-            var currentBatch = imageIds.slice(startIndex, endIndex);
-
-            $.ajax({
-                url: forvoyezData.ajaxurl,
-                type: 'POST',
-                data: {
-                    action: 'forvoyez_process_image_batch',
-                    nonce: forvoyezData.nonce,
-                    image_ids: currentBatch
-                },
-                success: function(response) {
-                    if (response.success) {
-                        updateProgressBar(endIndex, total);
-                        if (endIndex < imageIds.length) {
-                            processImageBatch(imageIds, endIndex, total);
-                        } else {
-                            alert('Bulk analysis completed!');
-                            $('#forvoyez-progress-container').addClass('hidden');
-                            updateImageCounts();
-                            loadImages();
-                        }
-                    } else {
-                        alert('Error processing batch: ' + response.data.message);
-                    }
-                },
-                error: function() {
-                    alert('An error occurred while processing the image batch.');
-                }
-            });
-        }
-
-        function updateProgressBar(current, total) {
-            var percentage = Math.round((current / total) * 100);
-            $('#forvoyez-progress-container').removeClass('hidden');
-            $('#forvoyez-progress-bar').css('width', percentage + '%');
-            $('#forvoyez-progress-bar-count').removeClass('hidden');
-            $('#forvoyez-progress-bar-count').text(percentage + '%');
-        }
 
         // Initialize event listeners
         initializeEventListeners();
@@ -199,7 +85,7 @@
         // Initial load
         loadImages();
 
-        $filterForm.find('input[type="checkbox"]').on('change', function() {
+        $filterForm.find('input[type="checkbox"]').on('change', function () {
             currentPage = 1;
             loadImages();
         });
@@ -257,7 +143,7 @@
             filters: $filterForm.serializeArray()
         };
 
-        $.post(forvoyezData.ajaxurl, data, function(response) {
+        $.post(forvoyezData.ajaxurl, data, function (response) {
             if (response.success) {
                 $container.html(response.data.html);
                 $('#forvoyez-pagination').html(response.data.pagination_html);
@@ -267,24 +153,24 @@
         });
     }
 
-    $filterForm.on('submit', function(e) {
+    $filterForm.on('submit', function (e) {
         e.preventDefault();
         currentPage = 1;
         loadImages(currentPage);
     });
 
-    $filterForm.find('input[type="checkbox"]').on('change', function() {
+    $filterForm.find('input[type="checkbox"]').on('change', function () {
         currentPage = 1;
         loadImages(currentPage);
     });
 
-    $(document).on('click', '.pagination-link', function(e) {
+    $(document).on('click', '.pagination-link', function (e) {
         e.preventDefault();
         var page = $(this).data('page');
         loadImages(page);
     });
 
-    $('#forvoyez-per-page').on('change', function() {
+    $('#forvoyez-per-page').on('change', function () {
         perPage = $(this).val();
         currentPage = 1;
         loadImages(currentPage);
@@ -391,6 +277,11 @@
         function updateProgress() {
             const progress = Math.round(((processedCount + failedCount) / totalImages) * 100);
             showNotification(`Processing: ${progress}% complete. Successful: ${processedCount}, Failed: ${failedCount}`, 'info', 0);
+
+            // Update progress bar
+            $('#forvoyez-progress-container').removeClass('hidden');
+            $('#forvoyez-progress-bar').css('width', progress + '%');
+            $('#forvoyez-progress-bar-count').removeClass('hidden').text(progress + '%');
         }
 
         function processBatch(batch) {
@@ -443,6 +334,8 @@
                 await processBatch(batch);
             }
             showNotification(`Analysis complete. Successful: ${processedCount}, Failed: ${failedCount}`, 'success', 5000);
+            $('#forvoyez-progress-container').addClass('hidden');
+            updateImageCounts();
         }
 
         processAllImages();
@@ -507,6 +400,53 @@
         return type === 'password'
             ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg>'
             : '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd" /><path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" /></svg>';
+    }
+
+    function updateImageCounts() {
+        $.ajax({
+            url: forvoyezData.ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'forvoyez_get_image_ids',
+                nonce: forvoyezData.nonce,
+                type: 'all'
+            },
+            success: function (response) {
+                if (response.success) {
+                    $('#forvoyez-all-count').text(response.data.count);
+                }
+            }
+        });
+
+        $.ajax({
+            url: forvoyezData.ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'forvoyez_get_image_ids',
+                nonce: forvoyezData.nonce,
+                type: 'missing_alt'
+            },
+            success: function (response) {
+                if (response.success) {
+                    $('#forvoyez-missing-alt-count').text(response.data.count);
+                }
+            }
+        });
+
+        $.ajax({
+            url: forvoyezData.ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'forvoyez_get_image_ids',
+                nonce: forvoyezData.nonce,
+                type: 'missing_all'
+            },
+            success: function (response) {
+                if (response.success) {
+                    $('#forvoyez-missing-count').text(response.data.count);
+                }
+            }
+        });
     }
 
     window.showNotification = showNotification;
