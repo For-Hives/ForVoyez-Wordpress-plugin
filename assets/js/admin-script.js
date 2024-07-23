@@ -453,6 +453,11 @@
             success: function (response) {
                 if (response.success) {
                     $('#forvoyez-all-count').text(response.data.count);
+                    if (!(response.data.count === 0)) {
+                        $('#forvoyez-analyze-all').prop('disabled', response.data.count === 0);
+                        $('#forvoyez-analyze-all').removeClass('bg-gray-700 hover:bg-gray-900 cursor-not-allowed');
+                        $('#forvoyez-analyze-all').addClass('bg-blue-500 hover:bg-blue-700 cursor-pointer');
+                    }
                 }
             }
         });
@@ -468,6 +473,11 @@
             success: function (response) {
                 if (response.success) {
                     $('#forvoyez-missing-alt-count').text(response.data.count);
+                    if (!(response.data.count === 0)) {
+                        $('#forvoyez-analyze-missing-alt').prop('disabled', response.data.count === 0);
+                        $('#forvoyez-analyze-missing-alt').removeClass('bg-gray-700 hover:bg-gray-900 cursor-not-allowed');
+                        $('#forvoyez-analyze-missing-alt').addClass('bg-blue-500 hover:bg-blue-700 cursor-pointer');
+                    }
                 }
             }
         });
@@ -483,6 +493,11 @@
             success: function (response) {
                 if (response.success) {
                     $('#forvoyez-missing-count').text(response.data.count);
+                    if (!(response.data.count === 0)) {
+                        $('#forvoyez-analyze-missing').prop('disabled', response.data.count === 0);
+                        $('#forvoyez-analyze-missing').removeClass('bg-gray-700 hover:bg-gray-900 cursor-not-allowed');
+                        $('#forvoyez-analyze-missing').addClass('bg-blue-500 hover:bg-blue-700 cursor-pointer');
+                    }
                 }
             }
         });

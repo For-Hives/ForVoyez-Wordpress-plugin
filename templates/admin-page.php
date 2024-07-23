@@ -71,13 +71,13 @@
                     </label>
                 </div>
                 <div>
-                    <button type="button" id="forvoyez-analyze-missing" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    <button type="button" id="forvoyez-analyze-missing" class="bg-gray-700 hover:bg-gray-900 cursor-not-allowed text-white font-bold py-2 px-4 rounded" disabled>
                         Analyze all missing alt/caption/title images (<span id="forvoyez-missing-count">0</span>)
                     </button>
-                    <button type="button" id="forvoyez-analyze-missing-alt" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    <button type="button" id="forvoyez-analyze-missing-alt" class="bg-gray-700 hover:bg-gray-900 cursor-not-allowed text-white font-bold py-2 px-4 rounded" disabled>
                         Analyze all missing alt images (<span id="forvoyez-missing-alt-count">0</span>)
                     </button>
-                    <button type="button" id="forvoyez-analyze-all" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    <button type="button" id="forvoyez-analyze-all" class="bg-gray-700 hover:bg-gray-900 cursor-not-allowed text-white font-bold py-2 px-4 rounded" disabled>
                         Analyze all images (<span id="forvoyez-all-count">0</span>)
                     </button>
                 </div>
