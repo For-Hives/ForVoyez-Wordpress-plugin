@@ -10,7 +10,18 @@
     <arg name="colors"/>
     <arg name="extensions" value="php"/>
 
-    <rule ref="WordPress"/>
+    <config name="minimum_supported_wp_version" value="5.0"/>
 
-    <config name="minimum_supported_wp_version" value="6.0"/>
+    <rule ref="WordPress-Core"/>
+    <rule ref="WordPress-Docs"/>
+    <rule ref="WordPress-Extra"/>
+
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array" value="forvoyez-auto-alt-text-for-images"/>
+        </properties>
+    </rule>
+
+    <rule ref="PHPCompatibilityWP"/>
+    <config name="testVersion" value="7.4-"/>
 </ruleset>
