@@ -86,6 +86,7 @@
         <div class="mt-4 w-full bg-gray-200 rounded-full h-2.5 hidden" id="forvoyez-progress-container">
             <div class="bg-blue-600 h-2.5 rounded-full" id="forvoyez-progress-bar" style="width: 0%"></div>
         </div>
+        <div class="w-full mt-2 hidden italic text-gray-700" id="forvoyez-progress-bar-count"></div>
         <div class="forvoyez-bulk-actions mt-4 flex gap-4 items-center w-full justify-between">
             <div>
                 <label class="inline-flex items-center">

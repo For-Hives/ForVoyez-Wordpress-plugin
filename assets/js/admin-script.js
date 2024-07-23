@@ -186,7 +186,9 @@
         function updateProgressBar(current, total) {
             var percentage = Math.round((current / total) * 100);
             $('#forvoyez-progress-container').removeClass('hidden');
-            $('#forvoyez-progress-bar').css('width', percentage + '%').text(percentage + '%');
+            $('#forvoyez-progress-bar').css('width', percentage + '%');
+            $('#forvoyez-progress-bar-count').removeClass('hidden');
+            $('#forvoyez-progress-bar-count').text(percentage + '%');
         }
 
         // Initialize event listeners
