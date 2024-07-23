@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "phpcs": "phpcs",
+    "phpcbf": "phpcbf"
+  }
+}
