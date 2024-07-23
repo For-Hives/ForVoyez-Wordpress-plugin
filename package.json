@@ -11,6 +11,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "phpcs": "composer run phpcs",
+    "phpcbf": "composer run phpcbf"
   },
   "lint-staged": {
     "*.js": [
