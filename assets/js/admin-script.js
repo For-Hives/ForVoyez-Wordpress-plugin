@@ -41,7 +41,7 @@
                 return;
             }
 
-            analyzeBulkImages(selectedImages);
+            confirmAndAnalyze('selected', selectedImages);
         });
 
         updateImageCounts();
@@ -59,8 +59,6 @@
                 type = 'all';
             }
 
-            showLoader();
-
             $.ajax({
                 url: forvoyezData.ajaxurl,
                 type: 'POST',
@@ -71,15 +69,13 @@
                 },
                 success: function (response) {
                     if (response.success) {
-                        analyzeBulkImages(response.data.image_ids);
+                        confirmAndAnalyze(type, response.data.image_ids);
                     } else {
                         showNotification('Error: ' + response.data.message, 'error', 5000);
-                        hideLoader();
                     }
                 },
                 error: function () {
                     showNotification('Error: Failed to fetch image IDs', 'error', 5000);
-                    hideLoader();
                 }
             });
         });
@@ -475,6 +471,43 @@
                     showNotification(`Failed to fetch ${type} image count`, 'error');
                 }
             });
+        });
+    }
+
+    function showConfirmModal(message, onConfirm) {
+        $('#forvoyez-confirm-message').text(message);
+        $('#forvoyez-confirm-modal').removeClass('hidden');
+
+        $('#forvoyez-confirm-action').off('click').on('click', function() {
+            $('#forvoyez-confirm-modal').addClass('hidden');
+            onConfirm();
+        });
+
+        $('#forvoyez-cancel-action').off('click').on('click', function() {
+            $('#forvoyez-confirm-modal').addClass('hidden');
+        });
+    }
+
+    function confirmAndAnalyze(type, imageIds) {
+        const count = imageIds.length;
+        let message;
+        switch(type) {
+            case 'selected':
+                message = `Are you sure you want to analyze ${count} selected image(s)?`;
+                break;
+            case 'missing_all':
+                message = `Are you sure you want to analyze ${count} image(s) with missing alt text, title, or caption?`;
+                break;
+            case 'missing_alt':
+                message = `Are you sure you want to analyze ${count} image(s) with missing alt text?`;
+                break;
+            case 'all':
+                message = `Are you sure you want to analyze all ${count} image(s)?`;
+                break;
+        }
+
+        showConfirmModal(message, function() {
+            analyzeBulkImages(imageIds);
         });
     }
 
