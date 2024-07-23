@@ -8,11 +8,11 @@
  * Text Domain: forvoyez-auto-alt-text-for-images
  */
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 // Define these constants here, before including other files
-define('FORVOYEZ_PLUGIN_DIR', plugin_dir_path(__FILE__));
-define('FORVOYEZ_PLUGIN_URL', plugin_dir_url(__FILE__));
+define( 'FORVOYEZ_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'FORVOYEZ_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 require_once FORVOYEZ_PLUGIN_DIR . 'includes/forvoyez-constants.php';
 require_once FORVOYEZ_PLUGIN_DIR . 'includes/forvoyez-helpers.php';
@@ -24,17 +24,17 @@ require_once FORVOYEZ_PLUGIN_DIR . 'includes/class-forvoyez-settings.php';
 require_once FORVOYEZ_PLUGIN_DIR . 'includes/class-forvoyez-image-renderer.php';
 
 function forvoyez_init() {
-    $admin = new Forvoyez_Admin();
-    $admin->init();
+	$admin = new Forvoyez_Admin();
+	$admin->init();
 
-    $api = new Forvoyez_API();
-    $api->init();
+	$api = new Forvoyez_API();
+	$api->init();
 
-    $image_processor = new Forvoyez_Image_Processor();
-    $image_processor->init();
+	$image_processor = new Forvoyez_Image_Processor();
+	$image_processor->init();
 
-    $settings = new Forvoyez_Settings();
-    $settings->init();
+	$settings = new Forvoyez_Settings();
+	$settings->init();
 }
 
-add_action('plugins_loaded', 'forvoyez_init');
+add_action( 'plugins_loaded', 'forvoyez_init' );
