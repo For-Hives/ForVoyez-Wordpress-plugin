@@ -59,6 +59,8 @@
                 type = 'all';
             }
 
+            showLoader();
+
             $.ajax({
                 url: forvoyezData.ajaxurl,
                 type: 'POST',
@@ -72,7 +74,12 @@
                         analyzeBulkImages(response.data.image_ids);
                     } else {
                         showNotification('Error: ' + response.data.message, 'error', 5000);
+                        hideLoader();
                     }
+                },
+                error: function () {
+                    showNotification('Error: Failed to fetch image IDs', 'error', 5000);
+                    hideLoader();
                 }
             });
         });
@@ -229,6 +236,7 @@
         let $loader = $imageItem.find('.loader');
 
         $loader.removeClass('hidden');
+        showLoader();
 
         return new Promise((resolve) => {
             $.ajax({
@@ -252,7 +260,6 @@
                         if (isNotificationActivated) {
                             showErrorNotification(errorMessage, errorCode, imageId);
                         }
-                        $loader.addClass('hidden');
                         resolve(false);
                     }
                 },
@@ -260,8 +267,11 @@
                     if (isNotificationActivated) {
                         showErrorNotification('AJAX request failed: ' + textStatus, 'ajax_error', imageId);
                     }
-                    $loader.addClass('hidden');
                     resolve(false);
+                },
+                complete: function () {
+                    $loader.addClass('hidden');
+                    hideLoader();
                 }
             });
         });
@@ -272,6 +282,7 @@
         let processedCount = 0;
         let failedCount = 0;
 
+        showLoader();
         showNotification(`Starting analysis of ${totalImages} images...`, 'info', 0);
 
         function updateProgress() {
@@ -337,9 +348,18 @@
             $('#forvoyez-progress-container').addClass('hidden');
             $('#forvoyez-progress-bar-count').addClass('hidden');
             updateImageCounts();
+            hideLoader();
         }
 
         processAllImages();
+    }
+
+    function showLoader() {
+        $('#forvoyez-loader').removeClass('hidden');
+    }
+
+    function hideLoader() {
+        $('#forvoyez-loader').addClass('hidden');
     }
 
     function markImageAsAnalyzed(imageId, metadata) {
