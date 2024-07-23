@@ -364,7 +364,14 @@
         $imageItem.find('.loader').addClass('hidden');
     }
 
+    let currentNotification = null;
+
     function showNotification(message, type = 'info', duration = 3000) {
+        // Remove the current notification if it exists
+        if (currentNotification) {
+            currentNotification.remove();
+        }
+
         const notification = document.createElement('div');
         notification.className = `fixed bottom-4 right-4 p-4 rounded-lg shadow-lg transition-opacity duration-300 opacity-0 ${
             type === 'success' ? 'bg-green-500' :
@@ -374,19 +381,30 @@
         notification.textContent = message;
 
         document.body.appendChild(notification);
+        currentNotification = notification;
 
+        // Fade in
         setTimeout(() => {
             notification.classList.remove('opacity-0');
         }, 10);
 
         if (duration > 0) {
             setTimeout(() => {
-                notification.classList.add('opacity-0');
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
+                fadeOutNotification(notification);
             }, duration);
         }
+    }
+
+    function fadeOutNotification(notification) {
+        notification.classList.add('opacity-0');
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+            if (currentNotification === notification) {
+                currentNotification = null;
+            }
+        }, 300);
     }
 
     function showErrorNotification(message, code, imageId) {
