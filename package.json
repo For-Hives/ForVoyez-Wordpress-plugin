@@ -1,0 +1,12 @@
+{
+  "name": "forvoyez-wordpress-plugin",
+  "version": "1.0.0",
+  "description": "*this is a plugin for the [Forvoyez](https://forvoyez.com) platform*",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
