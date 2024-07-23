@@ -28,11 +28,16 @@
         $('.forvoyez-save-api-key').on('click', saveApiKey);
 
         $('#forvoyez-select-all').on('change', function () {
-            $('input[type="checkbox"]').prop('checked', $(this).is(':checked'));
+            $('input[type="checkbox"][data-forvoyez-image-checkbox]').prop('checked', $(this).is(':checked'));
+        });
+
+        $(document).on('change', 'input[type="checkbox"][data-forvoyez-image-checkbox]', function() {
+            let allChecked = $('input[type="checkbox"][data-forvoyez-image-checkbox]').length === $('input[type="checkbox"][data-forvoyez-image-checkbox]:checked').length;
+            $('#forvoyez-select-all').prop('checked', allChecked);
         });
 
         $('#forvoyez-bulk-analyze').on('click', function () {
-            let selectedImages = $('input[type="checkbox"]:checked').map(function () {
+            let selectedImages = $('input[type="checkbox"][data-forvoyez-image-checkbox]:checked').map(function () {
                 return $(this).val();
             }).get();
 

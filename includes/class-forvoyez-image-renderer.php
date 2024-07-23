@@ -25,7 +25,7 @@ class Forvoyez_Image_Renderer
                             <strong>Caption:</strong> <span class="caption-content"><?php echo esc_html($image->post_excerpt ?: 'Not set'); ?></span>
                         </p>
                     </div>
-                    <input type="checkbox" class="absolute top-2 left-2 form-checkbox h-5 w-5 text-blue-600 rounded transition duration-150 ease-in-out" value="<?php echo esc_attr($image->ID); ?>">
+                    <input type="checkbox" class="absolute top-2 left-2 form-checkbox h-5 w-5 text-blue-600 rounded transition duration-150 ease-in-out" value="<?php echo esc_attr($image->ID); ?>" data-forvoyez-image-checkbox>
                     <div class="absolute top-0 right-0 flex space-x-1 bg-white p-2 rounded shadow-lg metadata-icons">
                     <span class="bg-red-500 text-white rounded-full p-1 <?php echo empty($image_alt) ? '' : 'hidden'; ?> alt-missing" title="Missing Alt Text">
                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
