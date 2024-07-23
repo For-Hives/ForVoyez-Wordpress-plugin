@@ -1,6 +1,26 @@
 {
 	"scripts": {
 		"phpcs": "phpcs",
-		"phpcbf": "phpcbf"
+		"phpcbf": "phpcbf",
+		"php-cs-fixer": "php-cs-fixer fix --allow-risky=yes",
+		"lint": [
+			"@phpcs",
+			"@php-cs-fixer --dry-run --diff"
+		],
+		"fix": [
+			"@phpcbf",
+			"@php-cs-fixer"
+		]
+	},
+	"require-dev": {
+		"squizlabs/php_codesniffer": "^3.10",
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"friendsofphp/php-cs-fixer": "^3.59",
+		"phpcompatibility/phpcompatibility-wp": "^2.1"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	}
 }
