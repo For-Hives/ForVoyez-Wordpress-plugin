@@ -327,35 +327,53 @@ class Forvoyez_Admin
     }
 
     public function get_image_ids($type = 'all') {
-        $args = array(
-            'post_type' => 'attachment',
-            'post_mime_type' => 'image',
-            'post_status' => 'inherit',
-            'posts_per_page' => -1,
-            'fields' => 'ids'
-        );
+        global $wpdb;
 
-        $query = new WP_Query($args);
-        $all_image_ids = $query->posts;
+        // Retrieve all image IDs in a single query
+        $image_ids = $wpdb->get_col("
+        SELECT ID 
+        FROM {$wpdb->posts} 
+        WHERE post_type = 'attachment' 
+        AND post_mime_type LIKE 'image/%'
+    ");
 
-        $filtered_image_ids = array_filter($all_image_ids, function($id) use ($type) {
-            $post = get_post($id);
-            $alt_text = get_post_meta($id, '_wp_attachment_image_alt', true);
-            $title = $post->post_title;
-            $caption = $post->post_excerpt;
+        if (empty($image_ids)) {
+            return [];
+        }
 
-            switch ($type) {
-                case 'missing_all':
-                    return empty($alt_text) || empty($title) || empty($caption);
-                case 'missing_alt':
-                    return empty($alt_text);
-                case 'all':
-                default:
-                    return true;
+        if ($type === 'all') {
+            return $image_ids;
+        }
+
+        // Retrieve metadata in bulk
+        $meta_values = $wpdb->get_results("
+        SELECT post_id, meta_value 
+        FROM {$wpdb->postmeta} 
+        WHERE post_id IN (" . implode(',', $image_ids) . ")
+        AND meta_key = '_wp_attachment_image_alt'
+    ", OBJECT_K);
+
+        // Retrieve titles and captions in bulk
+        $post_data = $wpdb->get_results("
+        SELECT ID, post_title, post_excerpt 
+        FROM {$wpdb->posts} 
+        WHERE ID IN (" . implode(',', $image_ids) . ")
+    ", OBJECT_K);
+
+        $filtered_ids = [];
+        foreach ($image_ids as $id) {
+            $alt_text = isset($meta_values[$id]) ? $meta_values[$id]->meta_value : '';
+            $title = isset($post_data[$id]) ? $post_data[$id]->post_title : '';
+            $caption = isset($post_data[$id]) ? $post_data[$id]->post_excerpt : '';
+
+            if ($type === 'missing_all' && (empty($alt_text) || empty($title) || empty($caption))) {
+                $filtered_ids[] = $id;
+            } elseif ($type === 'missing_alt' && empty($alt_text)) {
+                $filtered_ids[] = $id;
             }
-        });
+        }
 
-        return array_values($filtered_image_ids);
+        return $filtered_ids;
     }
 
     public function ajax_get_image_ids() {
