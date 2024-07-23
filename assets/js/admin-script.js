@@ -49,20 +49,145 @@
                 url: forvoyezData.ajaxurl,
                 type: 'POST',
                 data: {
-                    action: 'forvoyez_get_image_counts',
-                    nonce: forvoyezData.nonce
+                    action: 'forvoyez_get_image_ids',
+                    nonce: forvoyezData.nonce,
+                    type: 'all'
                 },
                 success: function(response) {
                     if (response.success) {
-                        $('#forvoyez-all-count').text(response.data.all);
-                        $('#forvoyez-missing-alt-count').text(response.data.missing_alt);
-                        $('#forvoyez-missing-count').text(response.data.missing_all);
+                        $('#forvoyez-all-count').text(response.data.count);
+                    }
+                }
+            });
+
+            $.ajax({
+                url: forvoyezData.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'forvoyez_get_image_ids',
+                    nonce: forvoyezData.nonce,
+                    type: 'missing_alt'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#forvoyez-missing-alt-count').text(response.data.count);
+                    }
+                }
+            });
+
+            $.ajax({
+                url: forvoyezData.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'forvoyez_get_image_ids',
+                    nonce: forvoyezData.nonce,
+                    type: 'missing_all'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#forvoyez-missing-count').text(response.data.count);
                     }
                 }
             });
         }
 
         updateImageCounts();
+
+        $('#forvoyez-analyze-missing, #forvoyez-analyze-missing-alt, #forvoyez-analyze-all').on('click', function(e) {
+            e.preventDefault();
+            var button = $(this);
+            var type = '';
+
+            if (button.attr('id') === 'forvoyez-analyze-missing') {
+                type = 'missing_all';
+            } else if (button.attr('id') === 'forvoyez-analyze-missing-alt') {
+                type = 'missing_alt';
+            } else if (button.attr('id') === 'forvoyez-analyze-all') {
+                type = 'all';
+            }
+
+            $.ajax({
+                url: forvoyezData.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'forvoyez_get_image_ids',
+                    nonce: forvoyezData.nonce,
+                    type: type
+                },
+                beforeSend: function() {
+                    button.prop('disabled', true).text('Processing...');
+                },
+                success: function(response) {
+                    if (response.success) {
+                        bulkAnalyzeImages(response.data.image_ids);
+                    } else {
+                        alert('Error: ' + response.data.message);
+                    }
+                },
+                complete: function() {
+                    button.prop('disabled', false).text(button.data('original-text'));
+                }
+            });
+        });
+
+        function bulkAnalyzeImages(imageIds) {
+            $.ajax({
+                url: forvoyezData.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'forvoyez_bulk_analyze_images',
+                    nonce: forvoyezData.nonce,
+                    image_ids: imageIds
+                },
+                success: function(response) {
+                    if (response.success) {
+                        processImageBatch(response.data.image_ids, 0, response.data.total);
+                    } else {
+                        alert('Error: ' + response.data.message);
+                    }
+                }
+            });
+        }
+
+        function processImageBatch(imageIds, startIndex, total) {
+            var batchSize = 10; // Process 10 images at a time
+            var endIndex = Math.min(startIndex + batchSize, imageIds.length);
+            var currentBatch = imageIds.slice(startIndex, endIndex);
+
+            $.ajax({
+                url: forvoyezData.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'forvoyez_process_image_batch',
+                    nonce: forvoyezData.nonce,
+                    image_ids: currentBatch
+                },
+                success: function(response) {
+                    if (response.success) {
+                        updateProgressBar(endIndex, total);
+                        if (endIndex < imageIds.length) {
+                            processImageBatch(imageIds, endIndex, total);
+                        } else {
+                            alert('Bulk analysis completed!');
+                            $('#forvoyez-progress-container').addClass('hidden');
+                            updateImageCounts();
+                            loadImages();
+                        }
+                    } else {
+                        alert('Error processing batch: ' + response.data.message);
+                    }
+                },
+                error: function() {
+                    alert('An error occurred while processing the image batch.');
+                }
+            });
+        }
+
+        function updateProgressBar(current, total) {
+            var percentage = Math.round((current / total) * 100);
+            $('#forvoyez-progress-container').removeClass('hidden');
+            $('#forvoyez-progress-bar').css('width', percentage + '%').text(percentage + '%');
+        }
 
         // Initialize event listeners
         initializeEventListeners();
@@ -113,44 +238,6 @@
                     console.error('Error analyzing image:', error);
                     $(this).prop('disabled', false);
                 });
-        });
-
-        $('#forvoyez-analyze-missing, #forvoyez-analyze-missing-alt, #forvoyez-analyze-all').on('click', function(e) {
-            e.preventDefault();
-            var button = $(this);
-            var action = '';
-
-            if (button.attr('id') === 'forvoyez-analyze-missing') {
-                action = 'analyze_missing';
-            } else if (button.attr('id') === 'forvoyez-analyze-missing-alt') {
-                action = 'analyze_missing_alt';
-            } else if (button.attr('id') === 'forvoyez-analyze-all') {
-                action = 'analyze_all';
-            }
-
-            $.ajax({
-                url: forvoyezData.ajaxurl,
-                type: 'POST',
-                data: {
-                    action: 'forvoyez_bulk_analyze_images',
-                    nonce: forvoyezData.nonce,
-                    analyze_action: action
-                },
-                beforeSend: function() {
-                    button.prop('disabled', true).text('Processing...');
-                },
-                success: function(response) {
-                    if (response.success) {
-                        alert('Bulk analysis started for ' + response.data.total + ' images.');
-                        updateImageCounts();
-                    } else {
-                        alert('Error: ' + response.data.message);
-                    }
-                },
-                complete: function() {
-                    button.prop('disabled', false).text(button.data('original-text'));
-                }
-            });
         });
     }
 
