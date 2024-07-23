@@ -335,6 +335,7 @@
             }
             showNotification(`Analysis complete. Successful: ${processedCount}, Failed: ${failedCount}`, 'success', 5000);
             $('#forvoyez-progress-container').addClass('hidden');
+            $('#forvoyez-progress-bar-count').addClass('hidden');
             updateImageCounts();
         }
 
