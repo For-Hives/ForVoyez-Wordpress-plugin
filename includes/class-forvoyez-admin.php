@@ -347,43 +347,38 @@ class Forvoyez_Admin
                     array(
                         'key' => '_wp_attachment_image_alt',
                         'compare' => 'NOT EXISTS'
+                    ),
+                    array(
+                        'key' => 'post_title',
+                        'value' => '',
+                        'compare' => '='
+                    ),
+                    array(
+                        'key' => 'post_excerpt',
+                        'value' => '',
+                        'compare' => '='
                     )
-                );
-                $args['tax_query'] = array(
-                    'relation' => 'OR',
-                    array(
-                        'key' => 'post_title',
-                        'value' => '',
-                        'compare' => '='
-                    ),
-                    array(
-                        'key' => 'post_title',
-                        'compare' => 'NOT EXISTS'
-                    ),
-                    array(
-                        'key' => 'post_excerpt',
-                        'value' => '',
-                        'compare' => '='
-                    ),
-                    array(
-                        'key' => 'post_excerpt',
-                        'compare' => 'NOT EXISTS'
-                    ),
                 );
                 break;
             case 'missing_alt':
                 $args['meta_query'] = array(
-                    'relation' => 'OR',
+                    'relation' => 'AND',
                     array(
-                        'key' => '_wp_attachment_image_alt',
-                        'value' => '',
-                        'compare' => '='
-                    ),
-                    array(
-                        'key' => '_wp_attachment_image_alt',
-                        'compare' => 'NOT EXISTS'
+                        'relation' => 'OR',
+                        array(
+                            'key' => '_wp_attachment_image_alt',
+                            'value' => '',
+                            'compare' => '='
+                        ),
+                        array(
+                            'key' => '_wp_attachment_image_alt',
+                            'compare' => 'NOT EXISTS'
+                        )
                     )
                 );
+                break;
+            case 'all':
+                // No additional conditions for 'all'
                 break;
         }
 
