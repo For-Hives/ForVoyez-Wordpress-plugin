@@ -1,39 +1,40 @@
 {
-  "name": "forvoyez-auto-alt-text-for-images",
-  "description": "*this is a plugin for the [Forvoyez](https://forvoyez.com) platform*",
-  "version": "1.0.0",
-  "private": false,
-  "scripts": {
-    "prettier": "prettier --write .",
-    "precommit": "lint-staged",
-    "prepare": "husky install",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "phpcs": "composer run phpcs",
-    "phpcbf": "composer run phpcbf"
-  },
-  "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "eslint --fix"
-    ],
-    "*.php": [
-      "composer run phpcbf",
-      "composer run phpcs"
-    ],
-    "*.json": "prettier --write",
-    "*.css": "prettier --write"
-  },
-  "devDependencies": {
-    "eslint": "8.57.0",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-prettier": "5.2.1",
-    "eslint-plugin-perfectionist": "2.11.0",
-    "husky": "9.1.1",
-    "lint-staged": "15.2.7",
-    "prettier": "3.3.3",
-    "prettier-plugin-tailwindcss": "0.6.5"
-  }
+	"name": "forvoyez-auto-alt-text-for-images",
+	"description": "*this is a plugin for the [Forvoyez](https://forvoyez.com) platform*",
+	"version": "1.0.0",
+	"private": false,
+	"scripts": {
+		"prettier": "prettier --write .",
+		"precommit": "lint-staged",
+		"prepare": "husky install",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"phpcs": "composer run phpcs",
+		"phpcbf": "composer run phpcbf"
+	},
+	"lint-staged": {
+		"*.js": [
+			"prettier --write",
+			"eslint --fix"
+		],
+		"*.php": [
+			"composer run phpcbf",
+			"composer run phpcs"
+		],
+		"*.json": "prettier --write",
+		"*.css": "prettier --write"
+	},
+	"devDependencies": {
+		"@prettier/plugin-php": "^0.22.2",
+		"eslint": "8.57.0",
+		"eslint-config-prettier": "9.1.0",
+		"eslint-plugin-perfectionist": "2.11.0",
+		"eslint-plugin-prettier": "5.2.1",
+		"husky": "9.1.1",
+		"lint-staged": "15.2.7",
+		"prettier": "^3.3.3",
+		"prettier-plugin-tailwindcss": "0.6.5"
+	}
 }
