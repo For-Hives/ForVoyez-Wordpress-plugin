@@ -10,6 +10,10 @@
 		"fix": [
 			"@phpcbf",
 			"@php-cs-fixer"
+		],
+		"format": [
+			"@fix",
+			"prettier --write ."
 		]
 	},
 	"require-dev": {
