@@ -10,11 +10,21 @@
     <arg name="colors"/>
     <arg name="extensions" value="php"/>
 
+    <config name="installed_paths" value="vendor/wp-coding-standards/wpcs"/>
     <config name="minimum_supported_wp_version" value="5.0"/>
 
-    <rule ref="WordPress-Core"/>
+    <rule ref="WordPress-Core">
+        <exclude name="Generic.WhiteSpace.DisallowSpaceIndent"/>
+    </rule>
     <rule ref="WordPress-Docs"/>
     <rule ref="WordPress-Extra"/>
+
+    <rule ref="Generic.WhiteSpace.ScopeIndent">
+        <properties>
+            <property name="indent" value="4"/>
+            <property name="tabIndent" value="true"/>
+        </properties>
+    </rule>
 
     <rule ref="WordPress.WP.I18n">
         <properties>

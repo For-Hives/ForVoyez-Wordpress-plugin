@@ -4,12 +4,12 @@
 	"version": "1.0.0",
 	"private": false,
 	"scripts": {
-		"prettier": "prettier --write .",
 		"precommit": "lint-staged",
 		"prepare": "husky install",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix",
-		"format": "prettier --write .",
+		"prettier": "prettier --write .",
+		"lint": "eslint . && composer run lint",
+		"lint:fix": "eslint --fix . && composer run fix",
+		"format": "prettier --write . && composer run format",
 		"format:check": "prettier --check .",
 		"phpcs": "composer run phpcs",
 		"phpcbf": "composer run phpcbf"
