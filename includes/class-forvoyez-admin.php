@@ -213,13 +213,32 @@ class Forvoyez_Admin {
 		return $query->found_posts;
 	}
 
+	private function parse_and_sanitize_filters($filters) {
+		$sanitized = [];
+		$allowed_filters = ['alt', 'title', 'caption'];
+		foreach ($filters as $filter) {
+			if (
+				isset($filter['name']) &&
+				$filter['name'] === 'filter[]' &&
+				in_array($filter['value'], $allowed_filters)
+			) {
+				$sanitized[] = sanitize_text_field($filter['value']);
+			}
+		}
+		return $sanitized;
+	}
+
 	public function ajax_load_images() {
 		check_ajax_referer('forvoyez_nonce', 'nonce');
 
-		$paged = isset($_POST['paged']) ? absint($_POST['paged']) : 1;
-		$per_page = isset($_POST['per_page']) ? absint($_POST['per_page']) : 25;
+		$paged = isset($_POST['paged'])
+			? absint(wp_unslash($_POST['paged']))
+			: 1;
+		$per_page = isset($_POST['per_page'])
+			? absint(wp_unslash($_POST['per_page']))
+			: 25;
 		$filters = isset($_POST['filters'])
-			? $this->parse_filters($_POST['filters'])
+			? $this->parse_and_sanitize_filters(wp_unslash($_POST['filters']))
 			: [];
 
 		$result = $this->display_incomplete_images($paged, $per_page, $filters);
@@ -449,9 +468,13 @@ class Forvoyez_Admin {
 			wp_send_json_error('Permission denied');
 		}
 
+		$allowed_types = ['all', 'missing_all', 'missing_alt'];
 		$type = isset($_POST['type'])
-			? sanitize_text_field($_POST['type'])
+			? sanitize_text_field(wp_unslash($_POST['type']))
 			: 'all';
+		if (!in_array($type, $allowed_types)) {
+			$type = 'all';
+		}
 		$image_ids = $this->get_image_ids($type);
 
 		wp_send_json_success([

@@ -36,6 +36,20 @@ class Forvoyez_Image_Processor {
 		]);
 	}
 
+	private function sanitize_metadata($metadata) {
+		$sanitized = [];
+		if (isset($metadata['alt_text'])) {
+			$sanitized['alt_text'] = sanitize_text_field($metadata['alt_text']);
+		}
+		if (isset($metadata['title'])) {
+			$sanitized['title'] = sanitize_text_field($metadata['title']);
+		}
+		if (isset($metadata['caption'])) {
+			$sanitized['caption'] = wp_kses_post($metadata['caption']);
+		}
+		return $sanitized;
+	}
+
 	public function update_image_metadata() {
 		check_ajax_referer('forvoyez_nonce', 'nonce');
 
@@ -43,8 +57,12 @@ class Forvoyez_Image_Processor {
 			wp_send_json_error('Permission denied');
 		}
 
-		$image_id = isset($_POST['image_id']) ? intval($_POST['image_id']) : 0;
-		$metadata = isset($_POST['metadata']) ? $_POST['metadata'] : [];
+		$image_id = isset($_POST['image_id'])
+			? absint(wp_unslash($_POST['image_id']))
+			: 0;
+		$metadata = isset($_POST['metadata'])
+			? $this->sanitize_metadata(wp_unslash($_POST['metadata']))
+			: [];
 
 		if (!$image_id || empty($metadata)) {
 			wp_send_json_error('Invalid data');
@@ -88,9 +106,11 @@ class Forvoyez_Image_Processor {
 			wp_send_json_error('Permission denied');
 		}
 
-		$image_id = isset($_POST['image_id']) ? intval($_POST['image_id']) : 0;
+		$image_id = isset($_POST['image_id'])
+			? absint(wp_unslash($_POST['image_id']))
+			: 0;
 
-		if (!$image_id) {
+		if (!$image_id || !wp_attachment_is_image($image_id)) {
 			wp_send_json_error('Invalid image ID');
 		}
 
@@ -169,11 +189,12 @@ class Forvoyez_Image_Processor {
 		}
 
 		$image_ids = isset($_POST['image_ids'])
-			? array_map('intval', $_POST['image_ids'])
+			? array_map('absint', wp_unslash($_POST['image_ids']))
 			: [];
+		$image_ids = array_filter($image_ids, 'wp_attachment_is_image');
 
 		if (empty($image_ids)) {
-			wp_send_json_error('No images selected');
+			wp_send_json_error('No valid images selected');
 		}
 
 		// We no longer process images here, just return the list of IDs
