@@ -1,25 +1,29 @@
 <?php
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit();
 
-class Forvoyez_API_Manager {
-
+class Forvoyez_API_Manager
+{
 	private $api_key;
 	private $api_url = 'https://forvoyez.com/api/describe';
 
-	public function __construct( $api_key ) {
+	public function __construct($api_key)
+	{
 		$this->api_key = $api_key;
 	}
 
-	public function init() {
-		add_action( 'wp_ajax_forvoyez_verify_api_key', array( $this, 'verify_api_key' ) );
+	public function init()
+	{
+		add_action('wp_ajax_forvoyez_verify_api_key', [$this, 'verify_api_key']);
 	}
 
-	public function verify_api_key() {
+	public function verify_api_key()
+	{
 		// here is the logic to verify the API key
 	}
 
 	// others methods here (with the logic to interact with the ForVoyez API)
-	public function analyze_image( $image_id ) {
+	public function analyze_image($image_id)
+	{
 		// $image_path = get_attached_file($image_id);
 		// if (!$image_path) {
 		// return $this->format_error('image_not_found', 'Image not found');
@@ -112,77 +116,101 @@ class Forvoyez_API_Manager {
 		// 'metadata' => $metadata
 		// );
 
-		$image_path = get_attached_file( $image_id );
-		if ( ! $image_path ) {
-			return $this->format_error( 'image_not_found', 'Image not found' );
+		$image_path = get_attached_file($image_id);
+		if (!$image_path) {
+			return $this->format_error('image_not_found', 'Image not found');
 		}
 
-		$image_url  = wp_get_attachment_url( $image_id );
-		$image_mime = get_post_mime_type( $image_id );
-		$image_name = basename( $image_path );
+		$image_url = wp_get_attachment_url($image_id);
+		$image_mime = get_post_mime_type($image_id);
+		$image_name = basename($image_path);
 
-		$file_data = file_get_contents( $image_path );
-		if ( $file_data === false ) {
-			return array(
-				'success'  => false,
-				'message'  => 'Failed to read image file',
+		$file_data = file_get_contents($image_path);
+		if ($file_data === false) {
+			return [
+				'success' => false,
+				'message' => 'Failed to read image file',
 				'metadata' => null,
-			);
+			];
 		}
 
-		$metadata = array(
+		$metadata = [
 			'alt_text' => 'completed alt_text',
-			'title'    => '',
-			'caption'  => '',
-		);
+			'title' => '',
+			'caption' => '',
+		];
 
-		update_post_meta( $image_id, '_wp_attachment_image_alt', $metadata['alt_text'] );
-		wp_update_post(
-			array(
-				'ID'           => $image_id,
-				'post_title'   => $metadata['title'],
-				'post_excerpt' => $metadata['caption'],
-			)
+		update_post_meta(
+			$image_id,
+			'_wp_attachment_image_alt',
+			$metadata['alt_text']
 		);
-		update_post_meta( $image_id, '_forvoyez_analyzed', true );
+		wp_update_post([
+			'ID' => $image_id,
+			'post_title' => $metadata['title'],
+			'post_excerpt' => $metadata['caption'],
+		]);
+		update_post_meta($image_id, '_forvoyez_analyzed', true);
 
-		return array(
-			'success'  => true,
-			'message'  => 'Analysis successful',
+		return [
+			'success' => true,
+			'message' => 'Analysis successful',
 			'metadata' => $metadata,
-		);
+		];
 	}
 
-	private function format_error( $code, $message, $debug_info = null ) {
-		$error = array(
+	private function format_error($code, $message, $debug_info = null)
+	{
+		$error = [
 			'success' => false,
-			'error'   => array(
-				'code'    => $code,
+			'error' => [
+				'code' => $code,
 				'message' => $message,
-			),
-		);
+			],
+		];
 
-		if ( $debug_info ) {
+		if ($debug_info) {
 			$error['debug_info'] = $debug_info;
 		}
 
 		return $error;
 	}
 
-	private function build_data_files( $boundary, $fields, $file_name, $file_mime, $file_data ) {
-		$data      = '';
+	private function build_data_files(
+		$boundary,
+		$fields,
+		$file_name,
+		$file_mime,
+		$file_data
+	) {
+		$data = '';
 		$delimiter = '-------------' . $boundary;
 
-		foreach ( $fields as $name => $content ) {
-			$data .= '--' . $delimiter . "\r\n"
-				. 'Content-Disposition: form-data; name="' . $name . "\"\r\n\r\n"
-				. $content . "\r\n";
+		foreach ($fields as $name => $content) {
+			$data .=
+				'--' .
+				$delimiter .
+				"\r\n" .
+				'Content-Disposition: form-data; name="' .
+				$name .
+				"\"\r\n\r\n" .
+				$content .
+				"\r\n";
 		}
 
-		$data .= '--' . $delimiter . "\r\n"
-			. 'Content-Disposition: form-data; name="image"; filename="' . $file_name . '"' . "\r\n"
-			. 'Content-Type: ' . $file_mime . "\r\n\r\n"
-			. $file_data . "\r\n";
+		$data .=
+			'--' .
+			$delimiter .
+			"\r\n" .
+			'Content-Disposition: form-data; name="image"; filename="' .
+			$file_name .
+			'"' .
+			"\r\n" .
+			'Content-Type: ' .
+			$file_mime .
+			"\r\n\r\n" .
+			$file_data .
+			"\r\n";
 
 		$data .= '--' . $delimiter . "--\r\n";
 

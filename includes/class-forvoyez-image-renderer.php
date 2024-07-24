@@ -1,47 +1,73 @@
 <?php
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit();
 
-class Forvoyez_Image_Renderer {
-
-	public static function render_image_item( $image ) {
-		$image_url      = wp_get_attachment_url( $image->ID );
-		$image_alt      = get_post_meta( $image->ID, '_wp_attachment_image_alt', true );
-		$all_complete   = ! empty( $image_alt ) && ! empty( $image->post_title ) && ! empty( $image->post_excerpt );
+class Forvoyez_Image_Renderer
+{
+	public static function render_image_item($image)
+	{
+		$image_url = wp_get_attachment_url($image->ID);
+		$image_alt = get_post_meta($image->ID, '_wp_attachment_image_alt', true);
+		$all_complete =
+			!empty($image_alt) &&
+			!empty($image->post_title) &&
+			!empty($image->post_excerpt);
 		$disabled_class = $all_complete ? 'opacity-50' : '';
 		?>
-		<li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow <?php echo $disabled_class; ?>" data-image-id="<?php echo esc_attr( $image->ID ); ?>">
+		<li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow <?php echo $disabled_class; ?>" data-image-id="<?php echo esc_attr($image->ID); ?>">
 			<div class="flex flex-1 flex-col p-2">
 				<div class="relative w-full h-48">
-					<img class="w-full h-full object-cover rounded-lg" src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $image_alt ); ?>">
+					<img class="w-full h-full object-cover rounded-lg" src="<?php echo esc_url(
+     	$image_url
+     ); ?>" alt="<?php echo esc_attr($image_alt); ?>">
 					<div class="hidden absolute inset-0 bg-white p-2 overflow-y-auto details-view">
 						<p class="text-sm text-gray-500">
-							<strong>Title:</strong> <span class="title-content"><?php echo esc_html( $image->post_title ?: 'Not set' ); ?></span>
+							<strong>Title:</strong> <span class="title-content"><?php echo esc_html(
+       	$image->post_title ?: 'Not set'
+       ); ?></span>
 						</p>
 						<p class="text-sm text-gray-500">
-							<strong>Alt Text:</strong> <span class="alt-content"><?php echo esc_html( $image_alt ?: 'Not set' ); ?></span>
+							<strong>Alt Text:</strong> <span class="alt-content"><?php echo esc_html(
+       	$image_alt ?: 'Not set'
+       ); ?></span>
 						</p>
 						<p class="text-sm text-gray-500">
-							<strong>Caption:</strong> <span class="caption-content"><?php echo esc_html( $image->post_excerpt ?: 'Not set' ); ?></span>
+							<strong>Caption:</strong> <span class="caption-content"><?php echo esc_html(
+       	$image->post_excerpt ?: 'Not set'
+       ); ?></span>
 						</p>
 					</div>
-					<input type="checkbox" class="absolute top-2 left-2 form-checkbox h-5 w-5 text-blue-600 rounded transition duration-150 ease-in-out" value="<?php echo esc_attr( $image->ID ); ?>" data-forvoyez-image-checkbox>
+					<input type="checkbox" class="absolute top-2 left-2 form-checkbox h-5 w-5 text-blue-600 rounded transition duration-150 ease-in-out" value="<?php echo esc_attr(
+     	$image->ID
+     ); ?>" data-forvoyez-image-checkbox>
 					<div class="absolute top-0 right-0 flex space-x-1 bg-white p-2 rounded shadow-lg metadata-icons">
-					<span class="bg-red-500 text-white rounded-full p-1 <?php echo empty( $image_alt ) ? '' : 'hidden'; ?> alt-missing" title="Missing Alt Text">
+					<span class="bg-red-500 text-white rounded-full p-1 <?php echo empty($image_alt)
+     	? ''
+     	: 'hidden'; ?> alt-missing" title="Missing Alt Text">
 						<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
 						</svg>
 					</span>
-						<span class="bg-red-500 text-white rounded-full p-1 <?php echo empty( $image->post_title ) ? '' : 'hidden'; ?> title-missing" title="Missing Title">
+						<span class="bg-red-500 text-white rounded-full p-1 <?php echo empty(
+      	$image->post_title
+      )
+      	? ''
+      	: 'hidden'; ?> title-missing" title="Missing Title">
 						<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
 						</svg>
 					</span>
-						<span class="bg-red-500 text-white rounded-full p-1 <?php echo empty( $image->post_excerpt ) ? '' : 'hidden'; ?> caption-missing" title="Missing Caption">
+						<span class="bg-red-500 text-white rounded-full p-1 <?php echo empty(
+      	$image->post_excerpt
+      )
+      	? ''
+      	: 'hidden'; ?> caption-missing" title="Missing Caption">
 						<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
 						</svg>
 					</span>
-						<span class="bg-green-500 text-white rounded-full p-1 <?php echo $all_complete ? '' : 'hidden'; ?> all-complete" title="All Complete">
+						<span class="bg-green-500 text-white rounded-full p-1 <?php echo $all_complete
+      	? ''
+      	: 'hidden'; ?> all-complete" title="All Complete">
 						<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
 						</svg>

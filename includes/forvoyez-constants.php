@@ -1,4 +1,4 @@
 <?php
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit();
 
 // define constant here
