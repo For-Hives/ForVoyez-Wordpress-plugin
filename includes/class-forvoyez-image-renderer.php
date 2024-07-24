@@ -1,12 +1,14 @@
 <?php
 defined('ABSPATH') || exit();
 
-class Forvoyez_Image_Renderer
-{
-	public static function render_image_item($image)
-	{
+class Forvoyez_Image_Renderer {
+	public static function render_image_item($image) {
 		$image_url = wp_get_attachment_url($image->ID);
-		$image_alt = get_post_meta($image->ID, '_wp_attachment_image_alt', true);
+		$image_alt = get_post_meta(
+			$image->ID,
+			'_wp_attachment_image_alt',
+			true,
+		);
 		$all_complete =
 			!empty($image_alt) &&
 			!empty($image->post_title) &&
@@ -17,27 +19,27 @@ class Forvoyez_Image_Renderer
 			<div class="flex flex-1 flex-col p-2">
 				<div class="relative w-full h-48">
 					<img class="w-full h-full object-cover rounded-lg" src="<?php echo esc_url(
-     	$image_url
+     	$image_url,
      ); ?>" alt="<?php echo esc_attr($image_alt); ?>">
 					<div class="hidden absolute inset-0 bg-white p-2 overflow-y-auto details-view">
 						<p class="text-sm text-gray-500">
 							<strong>Title:</strong> <span class="title-content"><?php echo esc_html(
-       	$image->post_title ?: 'Not set'
+       	$image->post_title ?: 'Not set',
        ); ?></span>
 						</p>
 						<p class="text-sm text-gray-500">
 							<strong>Alt Text:</strong> <span class="alt-content"><?php echo esc_html(
-       	$image_alt ?: 'Not set'
+       	$image_alt ?: 'Not set',
        ); ?></span>
 						</p>
 						<p class="text-sm text-gray-500">
 							<strong>Caption:</strong> <span class="caption-content"><?php echo esc_html(
-       	$image->post_excerpt ?: 'Not set'
+       	$image->post_excerpt ?: 'Not set',
        ); ?></span>
 						</p>
 					</div>
 					<input type="checkbox" class="absolute top-2 left-2 form-checkbox h-5 w-5 text-blue-600 rounded transition duration-150 ease-in-out" value="<?php echo esc_attr(
-     	$image->ID
+     	$image->ID,
      ); ?>" data-forvoyez-image-checkbox>
 					<div class="absolute top-0 right-0 flex space-x-1 bg-white p-2 rounded shadow-lg metadata-icons">
 					<span class="bg-red-500 text-white rounded-full p-1 <?php echo empty($image_alt)

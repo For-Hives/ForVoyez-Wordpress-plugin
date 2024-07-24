@@ -1,29 +1,27 @@
 <?php
 defined('ABSPATH') || exit();
 
-class Forvoyez_API_Manager
-{
+class Forvoyez_API_Manager {
 	private $api_key;
 	private $api_url = 'https://forvoyez.com/api/describe';
 
-	public function __construct($api_key)
-	{
+	public function __construct($api_key) {
 		$this->api_key = $api_key;
 	}
 
-	public function init()
-	{
-		add_action('wp_ajax_forvoyez_verify_api_key', [$this, 'verify_api_key']);
+	public function init() {
+		add_action('wp_ajax_forvoyez_verify_api_key', [
+			$this,
+			'verify_api_key',
+		]);
 	}
 
-	public function verify_api_key()
-	{
+	public function verify_api_key() {
 		// here is the logic to verify the API key
 	}
 
 	// others methods here (with the logic to interact with the ForVoyez API)
-	public function analyze_image($image_id)
-	{
+	public function analyze_image($image_id) {
 		// $image_path = get_attached_file($image_id);
 		// if (!$image_path) {
 		// return $this->format_error('image_not_found', 'Image not found');
@@ -143,7 +141,7 @@ class Forvoyez_API_Manager
 		update_post_meta(
 			$image_id,
 			'_wp_attachment_image_alt',
-			$metadata['alt_text']
+			$metadata['alt_text'],
 		);
 		wp_update_post([
 			'ID' => $image_id,
@@ -159,8 +157,7 @@ class Forvoyez_API_Manager
 		];
 	}
 
-	private function format_error($code, $message, $debug_info = null)
-	{
+	private function format_error($code, $message, $debug_info = null) {
 		$error = [
 			'success' => false,
 			'error' => [
@@ -181,7 +178,7 @@ class Forvoyez_API_Manager
 		$fields,
 		$file_name,
 		$file_mime,
-		$file_data
+		$file_data,
 	) {
 		$data = '';
 		$delimiter = '-------------' . $boundary;

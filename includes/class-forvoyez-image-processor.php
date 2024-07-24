@@ -1,19 +1,19 @@
 <?php
 defined('ABSPATH') || exit();
 
-class Forvoyez_Image_Processor
-{
+class Forvoyez_Image_Processor {
 	private $api_client;
 
-	public function __construct()
-	{
+	public function __construct() {
 		$api_key = forvoyez_get_api_key();
 		$this->api_client = new Forvoyez_API_Manager($api_key);
 	}
 
-	public function init()
-	{
-		add_action('wp_ajax_forvoyez_analyze_image', [$this, 'ajax_analyze_image']);
+	public function init() {
+		add_action('wp_ajax_forvoyez_analyze_image', [
+			$this,
+			'ajax_analyze_image',
+		]);
 		add_action('wp_ajax_forvoyez_update_image_metadata', [
 			$this,
 			'update_image_metadata',
@@ -36,8 +36,7 @@ class Forvoyez_Image_Processor
 		]);
 	}
 
-	public function update_image_metadata()
-	{
+	public function update_image_metadata() {
 		check_ajax_referer('forvoyez_nonce', 'nonce');
 
 		if (!current_user_can('upload_files')) {
@@ -56,7 +55,7 @@ class Forvoyez_Image_Processor
 			update_post_meta(
 				$image_id,
 				'_wp_attachment_image_alt',
-				sanitize_text_field($metadata['alt_text'])
+				sanitize_text_field($metadata['alt_text']),
 			);
 		}
 
@@ -82,8 +81,7 @@ class Forvoyez_Image_Processor
 		wp_send_json_success('Metadata updated successfully');
 	}
 
-	public function ajax_analyze_image()
-	{
+	public function ajax_analyze_image() {
 		check_ajax_referer('forvoyez_nonce', 'nonce');
 
 		if (!current_user_can('upload_files')) {
@@ -111,8 +109,7 @@ class Forvoyez_Image_Processor
 		}
 	}
 
-	public function load_more_images()
-	{
+	public function load_more_images() {
 		check_ajax_referer('forvoyez_nonce', 'nonce');
 
 		$offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;
@@ -146,7 +143,9 @@ class Forvoyez_Image_Processor
 		foreach ($query_images->posts as $image) {
 			if (
 				empty($image->post_title) ||
-				empty(get_post_meta($image->ID, '_wp_attachment_image_alt', true)) ||
+				empty(
+					get_post_meta($image->ID, '_wp_attachment_image_alt', true)
+				) ||
 				empty($image->post_excerpt)
 			) {
 				Forvoyez_Image_Renderer::render_image_item($image);
@@ -162,8 +161,7 @@ class Forvoyez_Image_Processor
 		]);
 	}
 
-	public function bulk_analyze_images()
-	{
+	public function bulk_analyze_images() {
 		check_ajax_referer('forvoyez_nonce', 'nonce');
 
 		if (!current_user_can('upload_files')) {
@@ -186,8 +184,7 @@ class Forvoyez_Image_Processor
 		]);
 	}
 
-	public function analyze_single_image()
-	{
+	public function analyze_single_image() {
 		check_ajax_referer('forvoyez_nonce', 'nonce');
 
 		if (!current_user_can('upload_files')) {
@@ -205,8 +202,7 @@ class Forvoyez_Image_Processor
 		wp_send_json_success($result);
 	}
 
-	public function process_image_batch()
-	{
+	public function process_image_batch() {
 		check_ajax_referer('forvoyez_nonce', 'nonce');
 
 		if (!current_user_can('upload_files')) {

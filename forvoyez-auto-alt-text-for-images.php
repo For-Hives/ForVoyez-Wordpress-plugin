@@ -24,8 +24,7 @@ require_once FORVOYEZ_PLUGIN_DIR .
 require_once FORVOYEZ_PLUGIN_DIR . 'includes/class-forvoyez-settings.php';
 require_once FORVOYEZ_PLUGIN_DIR . 'includes/class-forvoyez-image-renderer.php';
 
-function forvoyez_init()
-{
+function forvoyez_init() {
 	$admin = new Forvoyez_Admin();
 	$admin->init();
 
