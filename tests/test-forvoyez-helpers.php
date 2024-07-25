@@ -58,12 +58,22 @@ class TestForVoyezHelpers extends WP_UnitTestCase {
 
         if ($has_title) {
             wp_update_post(['ID' => $attachment_id, 'post_title' => 'Test Title']);
+        } else {
+            // Ensure the title is set to the filename
+            $filename = basename(get_attached_file($attachment_id));
+            wp_update_post(['ID' => $attachment_id, 'post_title' => $filename]);
         }
+
         if ($has_alt) {
             update_post_meta($attachment_id, '_wp_attachment_image_alt', 'Test Alt Text');
+        } else {
+            delete_post_meta($attachment_id, '_wp_attachment_image_alt');
         }
+
         if ($has_caption) {
             wp_update_post(['ID' => $attachment_id, 'post_excerpt' => 'Test Caption']);
+        } else {
+            wp_update_post(['ID' => $attachment_id, 'post_excerpt' => '']);
         }
 
         return $attachment_id;

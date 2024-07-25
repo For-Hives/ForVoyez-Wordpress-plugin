@@ -26,18 +26,6 @@ function forvoyez_count_incomplete_images() {
         'post_mime_type' => 'image',
         'post_status'    => 'inherit',
         'posts_per_page' => -1,
-        'meta_query'     => [
-            'relation' => 'OR',
-            [
-                'key'     => '_wp_attachment_image_alt',
-                'value'   => '',
-                'compare' => '=',
-            ],
-            [
-                'key'     => '_wp_attachment_image_alt',
-                'compare' => 'NOT EXISTS',
-            ],
-        ],
     ];
 
     $query_images = new WP_Query($args);
@@ -45,9 +33,32 @@ function forvoyez_count_incomplete_images() {
 
     foreach ($query_images->posts as $image) {
         $alt_text = get_post_meta($image->ID, '_wp_attachment_image_alt', true);
-        if (empty($image->post_title) || empty($alt_text) || empty($image->post_excerpt)) {
+        $title = $image->post_title;
+        $caption = $image->post_excerpt;
+
+        $is_incomplete = false;
+
+        // Check if title is empty or equals the filename
+        if (empty($title) || $title === pathinfo($image->guid, PATHINFO_FILENAME)) {
+            $is_incomplete = true;
+            error_log("Image {$image->ID} has no proper title");
+        }
+
+        // Check if alt text is empty
+        if (empty($alt_text)) {
+            $is_incomplete = true;
+            error_log("Image {$image->ID} has no alt text");
+        }
+
+        // Check if caption is empty
+        if (empty($caption)) {
+            $is_incomplete = true;
+            error_log("Image {$image->ID} has no caption");
+        }
+
+        if ($is_incomplete) {
             $incomplete_count++;
-            error_log("Incomplete image found: ID {$image->ID}, Title: {$image->post_title}, Alt: {$alt_text}, Caption: {$image->post_excerpt}");
+            error_log("Incomplete image found: ID {$image->ID}, Title: {$title}, Alt: {$alt_text}, Caption: {$caption}");
         }
     }
 
