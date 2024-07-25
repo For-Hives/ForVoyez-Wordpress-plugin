@@ -22,7 +22,9 @@
 		"friendsofphp/php-cs-fixer": "^3.59",
 		"phpcompatibility/phpcompatibility-wp": "^2.1",
 		"wp-coding-standards/wpcs": "^3.1",
-		"phpcsstandards/phpcsutils": "^1.0"
+		"phpcsstandards/phpcsutils": "^1.0",
+		"phpunit/phpunit": "^7.5 || ^8.5 || ^9.5",
+		"yoast/phpunit-polyfills": "^2.0"
 	},
 	"config": {
 		"allow-plugins": {
