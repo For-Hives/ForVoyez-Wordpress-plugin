@@ -44,13 +44,14 @@ function forvoyez_count_incomplete_images() {
     $incomplete_count = 0;
 
     foreach ($query_images->posts as $image) {
-        if (empty($image->post_title) ||
-            empty(get_post_meta($image->ID, '_wp_attachment_image_alt', true)) ||
-            empty($image->post_excerpt)) {
+        $alt_text = get_post_meta($image->ID, '_wp_attachment_image_alt', true);
+        if (empty($image->post_title) || empty($alt_text) || empty($image->post_excerpt)) {
             $incomplete_count++;
+            error_log("Incomplete image found: ID {$image->ID}, Title: {$image->post_title}, Alt: {$alt_text}, Caption: {$image->post_excerpt}");
         }
     }
 
+    error_log("Total incomplete images found: {$incomplete_count}");
     return $incomplete_count;
 }
 

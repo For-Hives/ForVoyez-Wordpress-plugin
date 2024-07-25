@@ -12,12 +12,18 @@ class TestForVoyezHelpers extends WP_UnitTestCase {
      */
     public function test_forvoyez_count_incomplete_images() {
         // Create some test images
-        $this->create_test_image(true, true, true);   // Complete image
-        $this->create_test_image(false, true, true);  // Missing title
-        $this->create_test_image(true, false, true);  // Missing alt text
-        $this->create_test_image(true, true, false);  // Missing caption
+        $complete_id = $this->create_test_image(true, true, true);   // Complete image
+        $no_title_id = $this->create_test_image(false, true, true);  // Missing title
+        $no_alt_id = $this->create_test_image(true, false, true);    // Missing alt text
+        $no_caption_id = $this->create_test_image(true, true, false);// Missing caption
 
         $incomplete_count = forvoyez_count_incomplete_images();
+
+        // Debug information
+        error_log("Complete image (should not be counted): " . print_r(get_post($complete_id), true));
+        error_log("No title image: " . print_r(get_post($no_title_id), true));
+        error_log("No alt image: " . print_r(get_post($no_alt_id), true));
+        error_log("No caption image: " . print_r(get_post($no_caption_id), true));
 
         $this->assertEquals(3, $incomplete_count, 'Incorrect count of incomplete images');
     }
@@ -59,5 +65,7 @@ class TestForVoyezHelpers extends WP_UnitTestCase {
         if ($has_caption) {
             wp_update_post(['ID' => $attachment_id, 'post_excerpt' => 'Test Caption']);
         }
+
+        return $attachment_id;
     }
 }
