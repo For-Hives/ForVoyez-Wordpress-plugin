@@ -1,0 +1,63 @@
+<?php
+/**
+ * Class TestForVoyezHelpers
+ *
+ * @package ForVoyez
+ */
+
+class TestForVoyezHelpers extends WP_UnitTestCase {
+
+    /**
+     * Test forvoyez_count_incomplete_images function.
+     */
+    public function test_forvoyez_count_incomplete_images() {
+        // Create some test images
+        $this->create_test_image(true, true, true);   // Complete image
+        $this->create_test_image(false, true, true);  // Missing title
+        $this->create_test_image(true, false, true);  // Missing alt text
+        $this->create_test_image(true, true, false);  // Missing caption
+
+        $incomplete_count = forvoyez_count_incomplete_images();
+
+        $this->assertEquals(3, $incomplete_count, 'Incorrect count of incomplete images');
+    }
+
+    /**
+     * Test forvoyez_get_api_key function.
+     */
+    public function test_forvoyez_get_api_key() {
+        global $forvoyez_settings;
+
+        // Save the original instance if it exists
+        $original_settings = $forvoyez_settings;
+
+        // Create and set the mock
+        $mock_settings = $this->createMock(Forvoyez_Settings::class);
+        $mock_settings->method('get_api_key')->willReturn('test_api_key');
+        $forvoyez_settings = $mock_settings;
+
+        $api_key = forvoyez_get_api_key();
+
+        $this->assertEquals('test_api_key', $api_key, 'Incorrect API key returned');
+
+        // Restore the original instance
+        $forvoyez_settings = $original_settings;
+    }
+
+    /**
+     * Helper function to create a test image with specified metadata.
+     */
+    private function create_test_image($has_title, $has_alt, $has_caption) {
+        $attachment_id = $this->factory->attachment->create_upload_object(__DIR__ . '/assets/test-image.webp');
+
+        if ($has_title) {
+            wp_update_post(['ID' => $attachment_id, 'post_title' => 'Test Title']);
+        }
+        if ($has_alt) {
+            update_post_meta($attachment_id, '_wp_attachment_image_alt', 'Test Alt Text');
+        }
+        if ($has_caption) {
+            wp_update_post(['ID' => $attachment_id, 'post_excerpt' => 'Test Caption']);
+        }
+    }
+}
