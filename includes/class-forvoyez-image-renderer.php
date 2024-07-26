@@ -113,7 +113,7 @@ class Forvoyez_Image_Renderer {
      * @param bool $all_complete Whether all metadata is complete.
      * @return void
      */
-    private static function render_metadata_icons($image_alt, $post_title, $post_excerpt, $all_complete) {
+    public static function render_metadata_icons($image_alt, $post_title, $post_excerpt, $all_complete) {
         ?>
         <div class="absolute top-0 right-0 flex space-x-1 bg-white p-2 rounded shadow-lg metadata-icons">
             <?php self::render_metadata_icon('alt', $image_alt, 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'); ?>
@@ -167,7 +167,7 @@ class Forvoyez_Image_Renderer {
      *
      * @return void
      */
-    private static function render_action_buttons() {
+    public static function render_action_buttons() {
         ?>
         <div>
             <div class="-mt-px flex divide-x divide-gray-200">

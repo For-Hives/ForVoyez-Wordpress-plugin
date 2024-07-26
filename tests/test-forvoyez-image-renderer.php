@@ -13,54 +13,57 @@ class TestForVoyezImageRenderer extends WP_UnitTestCase {
      * Test the is_metadata_complete method.
      */
     public function test_is_metadata_complete() {
-        $result = $this->call_private_method(Forvoyez_Image_Renderer::class, 'is_metadata_complete', ['Alt Text', 'Title', 'Caption']);
-        $this->assertTrue($result);
+        $complete = $this->call_private_method(Forvoyez_Image_Renderer::class, 'is_metadata_complete', ['Alt Text', 'Title', 'Caption']);
+        $this->assertTrue($complete, 'Metadata should be complete when all fields are filled');
 
-        $result = $this->call_private_method(Forvoyez_Image_Renderer::class, 'is_metadata_complete', ['', 'Title', 'Caption']);
-        $this->assertFalse($result);
+        $incomplete_alt = $this->call_private_method(Forvoyez_Image_Renderer::class, 'is_metadata_complete', ['', 'Title', 'Caption']);
+        $this->assertFalse($incomplete_alt, 'Metadata should be incomplete when alt text is missing');
 
-        $result = $this->call_private_method(Forvoyez_Image_Renderer::class, 'is_metadata_complete', ['Alt Text', '', 'Caption']);
-        $this->assertFalse($result);
+        $incomplete_title = $this->call_private_method(Forvoyez_Image_Renderer::class, 'is_metadata_complete', ['Alt Text', '', 'Caption']);
+        $this->assertFalse($incomplete_title, 'Metadata should be incomplete when title is missing');
 
-        $result = $this->call_private_method(Forvoyez_Image_Renderer::class, 'is_metadata_complete', ['Alt Text', 'Title', '']);
-        $this->assertFalse($result);
+        $incomplete_caption = $this->call_private_method(Forvoyez_Image_Renderer::class, 'is_metadata_complete', ['Alt Text', 'Title', '']);
+        $this->assertFalse($incomplete_caption, 'Metadata should be incomplete when caption is missing');
 
-        $result = $this->call_private_method(Forvoyez_Image_Renderer::class, 'is_metadata_complete', ['', '', '']);
-        $this->assertFalse($result);
+        $all_empty = $this->call_private_method(Forvoyez_Image_Renderer::class, 'is_metadata_complete', ['', '', '']);
+        $this->assertFalse($all_empty, 'Metadata should be incomplete when all fields are empty');
     }
 
     /**
-     * Test the logic for determining which metadata icons should be displayed.
+     * Test the render_metadata_icons method for correct icon visibility.
      */
-    public function test_metadata_icon_logic() {
-        $complete_metadata = ['Alt Text', 'Title', 'Caption'];
-        $incomplete_metadata = ['', 'Title', ''];
+    public function test_render_metadata_icons() {
+        ob_start();
+        Forvoyez_Image_Renderer::render_metadata_icons('Alt Text', 'Title', 'Caption', true);
+        $output = ob_get_clean();
 
-        $complete_result = $this->call_private_method(Forvoyez_Image_Renderer::class, 'render_metadata_icons', $complete_metadata);
-        $incomplete_result = $this->call_private_method(Forvoyez_Image_Renderer::class, 'render_metadata_icons', $incomplete_metadata);
+        $this->assertStringContainsString('hidden alt-missing', $output, 'Alt icon should be hidden when alt text is present');
+        $this->assertStringContainsString('hidden title-missing', $output, 'Title icon should be hidden when title is present');
+        $this->assertStringContainsString('hidden caption-missing', $output, 'Caption icon should be hidden when caption is present');
+        $this->assertStringNotContainsString('hidden all-complete', $output, 'All complete icon should be visible when all metadata is present');
 
-        // For complete metadata, all icons should be hidden except 'all-complete'
-        $this->assertStringContainsString('hidden alt-missing', $complete_result);
-        $this->assertStringContainsString('hidden title-missing', $complete_result);
-        $this->assertStringContainsString('hidden caption-missing', $complete_result);
-        $this->assertStringNotContainsString('hidden all-complete', $complete_result);
+        ob_start();
+        Forvoyez_Image_Renderer::render_metadata_icons('', '', '', false);
+        $output = ob_get_clean();
 
-        // For incomplete metadata, 'alt-missing' and 'caption-missing' should be visible, 'title-missing' should be hidden
-        $this->assertStringNotContainsString('hidden alt-missing', $incomplete_result);
-        $this->assertStringContainsString('hidden title-missing', $incomplete_result);
-        $this->assertStringNotContainsString('hidden caption-missing', $incomplete_result);
-        $this->assertStringContainsString('hidden all-complete', $incomplete_result);
+        $this->assertStringNotContainsString('hidden alt-missing', $output, 'Alt icon should be visible when alt text is missing');
+        $this->assertStringNotContainsString('hidden title-missing', $output, 'Title icon should be visible when title is missing');
+        $this->assertStringNotContainsString('hidden caption-missing', $output, 'Caption icon should be visible when caption is missing');
+        $this->assertStringContainsString('hidden all-complete', $output, 'All complete icon should be hidden when metadata is incomplete');
     }
 
     /**
-     * Test the logic for generating action buttons.
+     * Test the render_action_buttons method for correct button presence.
      */
-    public function test_action_button_generation() {
-        $result = $this->call_private_method(Forvoyez_Image_Renderer::class, 'render_action_buttons', []);
+    public function test_render_action_buttons() {
+        ob_start();
+        Forvoyez_Image_Renderer::render_action_buttons();
+        $output = ob_get_clean();
 
-        // Check that both 'analyze' and 'see-more' buttons are generated
-        $this->assertStringContainsString('analyze-button', $result);
-        $this->assertStringContainsString('see-more-button', $result);
+        $this->assertStringContainsString('analyze-button', $output, 'Analyze button should be present');
+        $this->assertStringContainsString('see-more-button', $output, 'See more button should be present');
+        $this->assertStringContainsString('Analyze', $output, 'Analyze label should be present');
+        $this->assertStringContainsString('Details', $output, 'Details label should be present');
     }
 
     /**
