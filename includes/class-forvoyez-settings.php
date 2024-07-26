@@ -1,97 +1,142 @@
 <?php
-defined('ABSPATH') || exit();
+/**
+ * Class Forvoyez_Settings
+ *
+ * Handles the plugin settings, including API key encryption and decryption.
+ *
+ * @package ForVoyez
+ * @since 1.0.0
+ */
+
+defined('ABSPATH') || exit('Direct access to this file is not allowed.');
 
 class Forvoyez_Settings {
-	private $encryption_key;
+    /**
+     * @var string The encryption key used for API key encryption/decryption.
+     */
+    private $encryption_key;
 
-	public function __construct() {
-		$this->encryption_key = $this->generate_site_specific_key();
-	}
+    /**
+     * Constructor.
+     */
+    public function __construct() {
+        $this->encryption_key = $this->generate_site_specific_key();
+    }
 
-	public function init() {
-		add_action('admin_init', [$this, 'register_settings']);
-		add_action('wp_ajax_forvoyez_save_api_key', [
-			$this,
-			'ajax_save_api_key',
-		]);
-	}
+    /**
+     * Initialize the settings.
+     */
+    public function init() {
+        add_action('admin_init', [$this, 'register_settings']);
+        add_action('wp_ajax_forvoyez_save_api_key', [$this, 'ajax_save_api_key']);
+    }
 
-	public function register_settings() {
-		register_setting('forvoyez_settings', 'forvoyez_encrypted_api_key');
-	}
+    /**
+     * Register the plugin settings.
+     */
+    public function register_settings() {
+        register_setting('forvoyez_settings', 'forvoyez_encrypted_api_key', [
+            'type' => 'string',
+            'sanitize_callback' => [$this, 'sanitize_api_key'],
+            'default' => '',
+        ]);
+    }
 
-	public function ajax_save_api_key() {
-		check_ajax_referer('forvoyez_nonce', 'nonce');
+    /**
+     * AJAX callback to save the API key.
+     */
+    public function ajax_save_api_key() {
+        check_ajax_referer('forvoyez_nonce', 'nonce');
 
-		if (!current_user_can('manage_options')) {
-			wp_send_json_error('Permission denied');
-		}
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Permission denied', 403);
+        }
 
-		$api_key = isset($_POST['api_key'])
-			? sanitize_text_field($_POST['api_key'])
-			: '';
+        $api_key = isset($_POST['api_key']) ? sanitize_text_field($_POST['api_key']) : '';
 
-		$encrypted_api_key = $this->encrypt($api_key);
-		update_option('forvoyez_encrypted_api_key', $encrypted_api_key);
+        if (empty($api_key)) {
+            wp_send_json_error('API key cannot be empty', 400);
+        }
 
-		wp_send_json_success('API key saved successfully');
-	}
+        $encrypted_api_key = $this->encrypt($api_key);
+        update_option('forvoyez_encrypted_api_key', $encrypted_api_key);
 
-	public function get_api_key() {
-		$encrypted_api_key = get_option('forvoyez_encrypted_api_key');
-		if (empty($encrypted_api_key)) {
-			return '';
-		}
+        wp_send_json_success('API key saved successfully');
+    }
 
-		return $this->decrypt($encrypted_api_key);
-	}
+    /**
+     * Get the decrypted API key.
+     *
+     * @return string The decrypted API key or an empty string if not set.
+     */
+    public function get_api_key() {
+        $encrypted_api_key = get_option('forvoyez_encrypted_api_key');
+        if (empty($encrypted_api_key)) {
+            return '';
+        }
 
-	private function encrypt($data) {
-		$iv = openssl_random_pseudo_bytes(
-			openssl_cipher_iv_length('aes-256-cbc'),
-		);
-		$encrypted = openssl_encrypt(
-			$data,
-			'aes-256-cbc',
-			$this->encryption_key,
-			0,
-			$iv,
-		);
-		return base64_encode($encrypted . '::' . $iv);
-	}
+        return $this->decrypt($encrypted_api_key);
+    }
 
-	private function decrypt($data) {
-		if (empty($data)) {
-			return '';
-		}
+    /**
+     * Encrypt the given data.
+     *
+     * @param string $data The data to encrypt.
+     * @return string The encrypted data.
+     */
+    private function encrypt($data) {
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $encrypted = openssl_encrypt($data, 'aes-256-cbc', $this->encryption_key, 0, $iv);
+        return base64_encode($encrypted . '::' . $iv);
+    }
 
-		$decoded = base64_decode($data);
-		if ($decoded === false) {
-			return '';
-		}
+    /**
+     * Decrypt the given data.
+     *
+     * @param string $data The data to decrypt.
+     * @return string The decrypted data or an empty string if decryption fails.
+     */
+    private function decrypt($data) {
+        if (empty($data)) {
+            return '';
+        }
 
-		[$encrypted_data, $iv] = array_pad(explode('::', $decoded, 2), 2, null);
-		if ($iv === null) {
-			return '';
-		}
+        $decoded = base64_decode($data);
+        if ($decoded === false) {
+            return '';
+        }
 
-		$decrypted = openssl_decrypt(
-			$encrypted_data,
-			'aes-256-cbc',
-			$this->encryption_key,
-			0,
-			$iv,
-		);
-		return $decrypted !== false ? $decrypted : '';
-	}
+        [$encrypted_data, $iv] = array_pad(explode('::', $decoded, 2), 2, null);
+        if ($iv === null) {
+            return '';
+        }
 
-	private function generate_site_specific_key() {
-		$site_url = get_site_url();
-		$auth_key = defined('AUTH_KEY') ? AUTH_KEY : '';
-		$secure_auth_key = defined('SECURE_AUTH_KEY') ? SECURE_AUTH_KEY : '';
+        $decrypted = openssl_decrypt($encrypted_data, 'aes-256-cbc', $this->encryption_key, 0, $iv);
+        return $decrypted !== false ? $decrypted : '';
+    }
 
-		$raw_key = $site_url . $auth_key . $secure_auth_key;
+    /**
+     * Generate a site-specific encryption key.
+     *
+     * @return string The generated encryption key.
+     */
+    private function generate_site_specific_key() {
+        $site_url = get_site_url();
+        $auth_key = defined('AUTH_KEY') ? AUTH_KEY : '';
+        $secure_auth_key = defined('SECURE_AUTH_KEY') ? SECURE_AUTH_KEY : '';
 
-		return hash('sha256', $raw_key, true);
-	}
+        $raw_key = $site_url . $auth_key . $secure_auth_key;
+
+        return hash('sha256', $raw_key, true);
+    }
+
+    /**
+     * Sanitize the API key before saving.
+     *
+     * @param string $api_key The API key to sanitize.
+     * @return string The sanitized API key.
+     */
+    public function sanitize_api_key($api_key) {
+        return sanitize_text_field($api_key);
+    }
 }
