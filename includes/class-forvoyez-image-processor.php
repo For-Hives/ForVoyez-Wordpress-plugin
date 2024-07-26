@@ -11,22 +11,13 @@
 defined('ABSPATH') || exit('Direct access to this file is not allowed.');
 
 class Forvoyez_Image_Processor {
-    /**
-     * @var Forvoyez_API_Manager The API client instance.
-     */
     private $api_client;
 
-    /**
-     * Constructor.
-     */
     public function __construct() {
         $api_key = forvoyez_get_api_key();
         $this->api_client = new Forvoyez_API_Manager($api_key);
     }
 
-    /**
-     * Initialize the class and set up WordPress hooks.
-     */
     public function init() {
         add_action('wp_ajax_forvoyez_analyze_image', [$this, 'ajax_analyze_image']);
         add_action('wp_ajax_forvoyez_update_image_metadata', [$this, 'update_image_metadata']);
@@ -36,12 +27,6 @@ class Forvoyez_Image_Processor {
         add_action('wp_ajax_forvoyez_process_image_batch', [$this, 'process_image_batch']);
     }
 
-    /**
-     * Sanitize image metadata.
-     *
-     * @param array $metadata Raw metadata.
-     * @return array Sanitized metadata.
-     */
     private function sanitize_metadata($metadata) {
         $sanitized = [];
         if (isset($metadata['alt_text'])) {
@@ -56,9 +41,6 @@ class Forvoyez_Image_Processor {
         return $sanitized;
     }
 
-    /**
-     * Update image metadata via AJAX.
-     */
     public function update_image_metadata() {
         $this->verify_ajax_request();
 
@@ -74,12 +56,6 @@ class Forvoyez_Image_Processor {
         wp_send_json_success('Metadata updated successfully');
     }
 
-    /**
-     * Update image meta data.
-     *
-     * @param int $image_id The image ID.
-     * @param array $metadata The metadata to update.
-     */
     private function update_image_meta($image_id, $metadata) {
         if (isset($metadata['alt_text'])) {
             update_post_meta($image_id, '_wp_attachment_image_alt', $metadata['alt_text']);
@@ -98,12 +74,9 @@ class Forvoyez_Image_Processor {
             wp_update_post($post_data);
         }
 
-        update_post_meta($image_id, '_forvoyez_analyzed', true);
+        update_post_meta($image_id, '_forvoyez_analyzed', '1');
     }
 
-    /**
-     * Analyze image via AJAX.
-     */
     public function ajax_analyze_image() {
         $this->verify_ajax_request();
 
@@ -128,9 +101,6 @@ class Forvoyez_Image_Processor {
         }
     }
 
-    /**
-     * Load more images via AJAX.
-     */
     public function load_more_images() {
         check_ajax_referer('forvoyez_nonce', 'nonce');
 
@@ -152,13 +122,6 @@ class Forvoyez_Image_Processor {
         ]);
     }
 
-    /**
-     * Get incomplete images.
-     *
-     * @param int $offset Offset for query.
-     * @param int $limit Limit for query.
-     * @return array Array of image posts.
-     */
     private function get_incomplete_images($offset, $limit) {
         $args = [
             'post_type' => 'attachment',
@@ -184,21 +147,12 @@ class Forvoyez_Image_Processor {
         return array_filter($query_images->posts, [$this, 'is_image_incomplete']);
     }
 
-    /**
-     * Check if an image is incomplete (missing title, alt text, or caption).
-     *
-     * @param WP_Post $image The image post object.
-     * @return bool True if the image is incomplete, false otherwise.
-     */
     private function is_image_incomplete($image) {
         return empty($image->post_title) ||
             empty(get_post_meta($image->ID, '_wp_attachment_image_alt', true)) ||
             empty($image->post_excerpt);
     }
 
-    /**
-     * Bulk analyze images via AJAX.
-     */
     public function bulk_analyze_images() {
         $this->verify_ajax_request();
 
@@ -216,9 +170,6 @@ class Forvoyez_Image_Processor {
         ]);
     }
 
-    /**
-     * Analyze a single image via AJAX.
-     */
     public function analyze_single_image() {
         $this->verify_ajax_request();
 
@@ -233,9 +184,6 @@ class Forvoyez_Image_Processor {
         wp_send_json_success($result);
     }
 
-    /**
-     * Process a batch of images via AJAX.
-     */
     public function process_image_batch() {
         $this->verify_ajax_request();
 
@@ -250,12 +198,6 @@ class Forvoyez_Image_Processor {
         wp_send_json_success(['results' => $results]);
     }
 
-    /**
-     * Process multiple images.
-     *
-     * @param array $image_ids Array of image IDs to process.
-     * @return array Results of image processing.
-     */
     private function process_images($image_ids) {
         $results = [];
         foreach ($image_ids as $image_id) {
