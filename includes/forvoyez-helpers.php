@@ -43,7 +43,7 @@ function forvoyez_count_incomplete_images() {
         $reason = [];
 
         // Check title
-        $filename = basename(parse_url($image->guid, PHP_URL_PATH));
+        $filename = wp_basename($image->guid);
         if (empty($image->post_title) || $image->post_title === $filename || preg_match('/-scaled$/', $image->post_title)) {
             $is_incomplete = true;
             $reason[] = 'title';

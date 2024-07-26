@@ -140,7 +140,7 @@ class TestForVoyezHelpers extends WP_UnitTestCase {
 
         $attachment_id = $this->factory->attachment->create_object($upload['file'], 0, [
             'post_mime_type' => 'image/webp',
-            'post_title'     => $has_title ? 'Test Title' : basename($upload['file']),
+            'post_title'     => $has_title ? 'Test Title' : '',
             'post_excerpt'   => $has_caption ? 'Test Caption' : '',
         ]);
 
@@ -149,6 +149,11 @@ class TestForVoyezHelpers extends WP_UnitTestCase {
         } else {
             delete_post_meta($attachment_id, '_wp_attachment_image_alt');
         }
+
+        // Force update the guid to match the filename
+        $attachment = get_post($attachment_id);
+        $attachment->guid = wp_get_attachment_url($attachment_id);
+        wp_update_post($attachment);
 
         error_log("Created test image: " . print_r(get_post($attachment_id), true));
 
