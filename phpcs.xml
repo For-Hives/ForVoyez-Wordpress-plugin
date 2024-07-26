@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
-<ruleset name="WordPress Plugin Minimal Coding Standards">
-    <file>.</file>
+<ruleset name="WordPress Plugin Custom Coding Standards">
+    <description>Custom coding standards for WordPress plugins, aligned with Prettier</description>
 
+    <file>.</file>
     <exclude-pattern>/vendor/</exclude-pattern>
     <exclude-pattern>/node_modules/</exclude-pattern>
 
@@ -11,14 +12,17 @@
 
     <config name="minimum_supported_wp_version" value="5.0"/>
 
-    <rule ref="WordPress-Core"/>
-
-    <rule ref="WordPress.WP.I18n">
-        <properties>
-            <property name="text_domain" type="array" value="votre-domaine-de-texte"/>
-        </properties>
+    <!-- WordPress Core Rules -->
+    <rule ref="WordPress-Core">
+        <!-- Exclusions to align with Prettier -->
+        <exclude name="Generic.WhiteSpace.DisallowSpaceIndent"/>
+        <exclude name="Generic.WhiteSpace.ScopeIndent"/>
+        <exclude name="WordPress.Arrays.ArrayDeclarationSpacing"/>
+        <exclude name="WordPress.WhiteSpace.OperatorSpacing"/>
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine"/>
     </rule>
 
+    <!-- Indentation Configuration -->
     <rule ref="Generic.WhiteSpace.ScopeIndent">
         <properties>
             <property name="indent" value="4"/>
@@ -26,5 +30,42 @@
         </properties>
     </rule>
 
+    <!-- Use of tabs -->
+    <rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
+    <rule ref="Generic.WhiteSpace.ScopeIndent">
+        <properties>
+            <property name="tabIndent" value="true"/>
+        </properties>
+    </rule>
+
+    <!-- Line length -->
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="80"/>
+            <property name="absoluteLineLimit" value="120"/>
+        </properties>
+    </rule>
+
+    <!-- Brace style -->
+    <rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie"/>
+
+    <!-- Single quotes -->
+    <rule ref="Squiz.Strings.DoubleQuoteUsage.NotRequired"/>
+
+    <!-- Trailing comma in multiline arrays -->
+    <rule ref="WordPress.Arrays.MultipleStatementAlignment">
+        <properties>
+            <property name="alignMultilineItems" value="!=100"/>
+        </properties>
+    </rule>
+
+    <!-- Internationalization rules -->
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array" value="your-text-domain"/>
+        </properties>
+    </rule>
+
+    <!-- PHP version -->
     <config name="testVersion" value="8.2-"/>
 </ruleset>
