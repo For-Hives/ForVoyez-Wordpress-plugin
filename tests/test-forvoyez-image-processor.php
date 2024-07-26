@@ -44,7 +44,7 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase {
         ];
 
         $expected = [
-            'alt_text' => 'Test alert("XSS")',
+            'alt_text' => 'Test',
             'title' => 'Test Title',
             'caption' => '<p>Test <strong>Caption</strong></p>'
         ];
@@ -59,7 +59,7 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase {
      */
     public function test_update_image_meta() {
         // Create a test image
-        $attachment_id = $this->factory->attachment->create_upload_object(__DIR__ . '/assets/test-image.jpg', 0);
+        $attachment_id = $this->factory->attachment->create_upload_object(__DIR__ . '/assets/test-image.webp', 0);
 
         $metadata = [
             'alt_text' => 'New Alt Text',
@@ -169,7 +169,7 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase {
      * @return int The attachment ID of the created image.
      */
     private function create_test_image($has_alt, $has_title, $has_caption) {
-        $attachment_id = $this->factory->attachment->create_upload_object(__DIR__ . '/assets/test-image.jpg', 0);
+        $attachment_id = $this->factory->attachment->create_upload_object(__DIR__ . '/assets/test-image.webp', 0);
 
         if ($has_alt) {
             update_post_meta($attachment_id, '_wp_attachment_image_alt', 'Test Alt');
