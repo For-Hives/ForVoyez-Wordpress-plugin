@@ -1,153 +1,187 @@
 <?php
 /**
- * Class TestForVoyezHelpers
+ * Class TestForvoyezImageProcessor
+ *
+ * Unit tests for the Forvoyez_Image_Processor class logic.
  *
  * @package ForVoyez
  */
 
-class TestForVoyezHelpers extends WP_UnitTestCase {
+class TestForvoyezImageProcessor extends WP_UnitTestCase {
+    /**
+     * @var Forvoyez_Image_Processor
+     */
+    private $image_processor;
 
     /**
-     * Test forvoyez_count_incomplete_images function.
+     * @var Forvoyez_API_Manager|PHPUnit_Framework_MockObject_MockObject
      */
-    public function test_forvoyez_count_incomplete_images() {
+    private $mock_api_client;
+
+    public function setUp(): void {
+        parent::setUp();
+
+        // Mock the API client
+        $this->mock_api_client = $this->createMock(Forvoyez_API_Manager::class);
+
+        // Create an instance of the image processor with the mocked API client
+        $this->image_processor = new Forvoyez_Image_Processor();
+        $reflection = new ReflectionClass($this->image_processor);
+        $property = $reflection->getProperty('api_client');
+        $property->setAccessible(true);
+        $property->setValue($this->image_processor, $this->mock_api_client);
+    }
+
+    /**
+     * Test sanitize_metadata method.
+     */
+    public function test_sanitize_metadata() {
+        $raw_metadata = [
+            'alt_text' => 'Test <script>alert("XSS")</script>',
+            'title' => 'Test Title',
+            'caption' => '<p>Test <strong>Caption</strong></p>',
+            'extra_field' => 'Should be removed'
+        ];
+
+        $expected = [
+            'alt_text' => 'Test alert("XSS")',
+            'title' => 'Test Title',
+            'caption' => '<p>Test <strong>Caption</strong></p>'
+        ];
+
+        $result = $this->call_private_method($this->image_processor, 'sanitize_metadata', [$raw_metadata]);
+
+        $this->assertEquals($expected, $result, 'Metadata was not sanitized correctly');
+    }
+
+    /**
+     * Test update_image_meta method.
+     */
+    public function test_update_image_meta() {
+        // Create a test image
+        $attachment_id = $this->factory->attachment->create_upload_object(__DIR__ . '/assets/test-image.jpg', 0);
+
+        $metadata = [
+            'alt_text' => 'New Alt Text',
+            'title' => 'New Title',
+            'caption' => 'New Caption'
+        ];
+
+        $this->call_private_method($this->image_processor, 'update_image_meta', [$attachment_id, $metadata]);
+
+        // Check if metadata was updated correctly
+        $this->assertEquals('New Alt Text', get_post_meta($attachment_id, '_wp_attachment_image_alt', true), 'Alt text was not updated correctly');
+        $this->assertEquals('New Title', get_post($attachment_id)->post_title, 'Title was not updated correctly');
+        $this->assertEquals('New Caption', get_post($attachment_id)->post_excerpt, 'Caption was not updated correctly');
+        $this->assertTrue(get_post_meta($attachment_id, '_forvoyez_analyzed', true), 'Image was not marked as analyzed');
+
+        // Clean up
+        wp_delete_attachment($attachment_id, true);
+    }
+
+    /**
+     * Test get_incomplete_images method.
+     */
+    public function test_get_incomplete_images() {
         // Create test images
         $complete_id = $this->create_test_image(true, true, true);
-        $no_title_id = $this->create_test_image(false, true, true);
-        $no_alt_id = $this->create_test_image(true, false, true);
+        $no_alt_id = $this->create_test_image(false, true, true);
+        $no_title_id = $this->create_test_image(true, false, true);
         $no_caption_id = $this->create_test_image(true, true, false);
 
-        $incomplete_count = forvoyez_count_incomplete_images();
+        $incomplete_images = $this->call_private_method($this->image_processor, 'get_incomplete_images', [0, 10]);
 
-        $this->assertEquals(3, $incomplete_count, 'Incorrect count of incomplete images');
+        $this->assertCount(3, $incomplete_images, 'Incorrect number of incomplete images returned');
+        $this->assertContains($no_alt_id, wp_list_pluck($incomplete_images, 'ID'), 'Image with no alt text should be included');
+        $this->assertContains($no_title_id, wp_list_pluck($incomplete_images, 'ID'), 'Image with no title should be included');
+        $this->assertContains($no_caption_id, wp_list_pluck($incomplete_images, 'ID'), 'Image with no caption should be included');
+        $this->assertNotContains($complete_id, wp_list_pluck($incomplete_images, 'ID'), 'Complete image should not be included');
 
         // Clean up
         wp_delete_attachment($complete_id, true);
-        wp_delete_attachment($no_title_id, true);
         wp_delete_attachment($no_alt_id, true);
+        wp_delete_attachment($no_title_id, true);
         wp_delete_attachment($no_caption_id, true);
     }
 
     /**
-     * Test forvoyez_get_api_key function.
+     * Test is_image_incomplete method.
      */
-    public function test_forvoyez_get_api_key() {
-        global $forvoyez_settings;
+    public function test_is_image_incomplete() {
+        // Create test images
+        $complete_id = $this->create_test_image(true, true, true);
+        $incomplete_id = $this->create_test_image(false, true, false);
 
-        // Save the original instance if it exists
-        $original_settings = $forvoyez_settings;
+        $complete_image = get_post($complete_id);
+        $incomplete_image = get_post($incomplete_id);
 
-        // Create and set the mock
-        $mock_settings = $this->createMock(Forvoyez_Settings::class);
-        $mock_settings->method('get_api_key')->willReturn('test_api_key');
-        $forvoyez_settings = $mock_settings;
+        $this->assertFalse($this->call_private_method($this->image_processor, 'is_image_incomplete', [$complete_image]), 'Complete image should not be marked as incomplete');
+        $this->assertTrue($this->call_private_method($this->image_processor, 'is_image_incomplete', [$incomplete_image]), 'Incomplete image should be marked as incomplete');
 
-        $api_key = forvoyez_get_api_key();
-
-        $this->assertEquals('test_api_key', $api_key, 'Incorrect API key returned');
-
-        // Test the filter
-        add_filter('forvoyez_api_key', function($key) {
-            return 'filtered_' . $key;
-        });
-
-        $filtered_api_key = forvoyez_get_api_key();
-        $this->assertEquals('filtered_test_api_key', $filtered_api_key, 'API key filter not applied correctly');
-
-        // Remove the filter
-        remove_all_filters('forvoyez_api_key');
-
-        // Restore the original instance
-        $forvoyez_settings = $original_settings;
+        // Clean up
+        wp_delete_attachment($complete_id, true);
+        wp_delete_attachment($incomplete_id, true);
     }
 
     /**
-     * Test forvoyez_sanitize_api_key function.
+     * Test process_images method.
      */
-    public function test_forvoyez_sanitize_api_key() {
-        // Test valid JWT
-        $valid_jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-        $sanitized_jwt = forvoyez_sanitize_api_key($valid_jwt);
-        $this->assertEquals($valid_jwt, $sanitized_jwt, 'Valid JWT not sanitized correctly');
+    public function test_process_images() {
+        $image_ids = [1, 2, 3];
 
-        // Test invalid JWT (wrong format)
-        $invalid_jwt = 'not.a.valid.jwt';
-        $result = forvoyez_sanitize_api_key($invalid_jwt);
-        $this->assertInstanceOf(WP_Error::class, $result, 'Invalid JWT not detected');
-        $this->assertEquals('invalid_api_key', $result->get_error_code(), 'Incorrect error code for invalid JWT');
+        $this->mock_api_client->expects($this->exactly(3))
+            ->method('analyze_image')
+            ->willReturnOnConsecutiveCalls(
+                ['success' => true, 'message' => 'Success 1', 'metadata' => ['alt' => 'Alt 1']],
+                ['success' => false, 'error' => ['message' => 'Error 2', 'code' => 'error_code']],
+                ['success' => true, 'message' => 'Success 3', 'metadata' => ['alt' => 'Alt 3']]
+            );
 
-        // Test JWT verification
-        $payload = [
-            'iss' => 'ForVoyez',
-            'aud' => 'ForVoyez',
-            'exp' => time() + 3600, // 1 hour from now
-        ];
-        $jwt = $this->generate_test_jwt($payload);
-        $verification_result = forvoyez_verify_jwt($jwt);
-        $this->assertTrue($verification_result, 'Valid JWT failed verification');
+        $results = $this->call_private_method($this->image_processor, 'process_images', [$image_ids]);
 
-        // Test expired JWT
-        $expired_payload = [
-            'iss' => 'ForVoyez',
-            'aud' => 'ForVoyez',
-            'exp' => time() - 3600, // 1 hour ago
-        ];
-        $expired_jwt = $this->generate_test_jwt($expired_payload);
-        $expired_verification_result = forvoyez_verify_jwt($expired_jwt);
-        $this->assertInstanceOf(WP_Error::class, $expired_verification_result, 'Expired JWT not detected');
-        $this->assertEquals('expired_token', $expired_verification_result->get_error_code(), 'Incorrect error code for expired JWT');
+        $this->assertCount(3, $results, 'Incorrect number of results returned');
+        $this->assertTrue($results[0]['success'], 'First result should be successful');
+        $this->assertFalse($results[1]['success'], 'Second result should be unsuccessful');
+        $this->assertTrue($results[2]['success'], 'Third result should be successful');
     }
 
     /**
-     * Helper function to generate a test JWT.
-     * Note: This is a very basic implementation for testing purposes only.
-     */
-    private function generate_test_jwt($payload) {
-        $header = [
-            'alg' => 'HS256',
-            'typ' => 'JWT'
-        ];
-        $header_encoded = $this->base64url_encode(json_encode($header));
-        $payload_encoded = $this->base64url_encode(json_encode($payload));
-        $signature = hash_hmac('sha256', "$header_encoded.$payload_encoded", 'test_secret', true);
-        $signature_encoded = $this->base64url_encode($signature);
-        return "$header_encoded.$payload_encoded.$signature_encoded";
-    }
-
-    private function base64url_encode($data) {
-        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
-    }
-
-    /**
-     * Helper function to create a test image with specified metadata.
+     * Helper method to call private methods for testing.
      *
-     * @param bool $has_title Whether the image should have a title.
+     * @param object $object The object containing the private method.
+     * @param string $method_name The name of the private method.
+     * @param array $parameters The parameters to pass to the method.
+     * @return mixed The result of the method call.
+     */
+    private function call_private_method($object, $method_name, array $parameters = []) {
+        $reflection = new ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($method_name);
+        $method->setAccessible(true);
+        return $method->invokeArgs($object, $parameters);
+    }
+
+    /**
+     * Helper method to create a test image with specified metadata.
+     *
      * @param bool $has_alt Whether the image should have alt text.
+     * @param bool $has_title Whether the image should have a title.
      * @param bool $has_caption Whether the image should have a caption.
      * @return int The attachment ID of the created image.
      */
-    private function create_test_image($has_title, $has_alt, $has_caption) {
-        $filename = plugin_dir_path(__FILE__) . 'assets/test-image.webp';
-        $contents = file_get_contents($filename);
-        $upload = wp_upload_bits(basename($filename), null, $contents);
-        $this->assertTrue(empty($upload['error']), 'Upload failed: ' . ($upload['error'] ?? 'Unknown error'));
-
-        $attachment_id = $this->factory->attachment->create_object($upload['file'], 0, [
-            'post_mime_type' => 'image/webp',
-            'post_title'     => $has_title ? 'Test Title' : '',
-            'post_excerpt'   => $has_caption ? 'Test Caption' : '',
-        ]);
+    private function create_test_image($has_alt, $has_title, $has_caption) {
+        $attachment_id = $this->factory->attachment->create_upload_object(__DIR__ . '/assets/test-image.jpg', 0);
 
         if ($has_alt) {
-            update_post_meta($attachment_id, '_wp_attachment_image_alt', 'Test Alt Text');
-        } else {
-            delete_post_meta($attachment_id, '_wp_attachment_image_alt');
+            update_post_meta($attachment_id, '_wp_attachment_image_alt', 'Test Alt');
         }
 
-        // Force update the guid to match the filename
-        $attachment = get_post($attachment_id);
-        $attachment->guid = wp_get_attachment_url($attachment_id);
-        wp_update_post($attachment);
+        if ($has_title) {
+            wp_update_post(['ID' => $attachment_id, 'post_title' => 'Test Title']);
+        }
+
+        if ($has_caption) {
+            wp_update_post(['ID' => $attachment_id, 'post_excerpt' => 'Test Caption']);
+        }
 
         return $attachment_id;
     }
