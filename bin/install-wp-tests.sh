@@ -16,6 +16,41 @@ SKIP_DB_CREATE=${6-false}
 WP_TESTS_DIR=${WP_TESTS_DIR-/tmp/wordpress-tests-lib}
 WP_CORE_DIR=${WP_CORE_DIR-/tmp/wordpress/}
 
+# Check if required variables are set
+if [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASS" ] || [ -z "$DB_HOST" ]; then
+    echo "Error: Database configuration is incomplete. Please check your .env.testing file."
+    exit 1
+fi
+
+# Function to run MySQL commands
+run_mysql_command() {
+    sudo mysql --host="$DB_HOST" --user="root" --password="$MYSQL_ROOT_PASSWORD" -e "$1"
+}
+
+# Function to reset database and user
+reset_db_and_user() {
+    echo "Resetting database and user..."
+
+    # Drop database if it exists
+    run_mysql_command "DROP DATABASE IF EXISTS \`$DB_NAME\`;"
+    echo "Database $DB_NAME dropped (if it existed)."
+
+    # Drop user if it exists
+    run_mysql_command "DROP USER IF EXISTS '$DB_USER'@'localhost';"
+    echo "User $DB_USER dropped (if it existed)."
+
+    # Create database
+    run_mysql_command "CREATE DATABASE \`$DB_NAME\`;"
+    echo "Database $DB_NAME created."
+
+    # Create user and grant privileges
+    run_mysql_command "CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';"
+    run_mysql_command "GRANT ALL PRIVILEGES ON \`$DB_NAME\`.* TO '$DB_USER'@'localhost';"
+    run_mysql_command "FLUSH PRIVILEGES;"
+    echo "User $DB_USER created and granted privileges on $DB_NAME."
+}
+
+# Function to download a file
 download() {
     if [ `which curl` ]; then
         curl -s "$1" > "$2";
@@ -24,33 +59,8 @@ download() {
     fi
 }
 
-if [[ $WP_VERSION =~ ^[0-9]+\.[0-9]+\$ ]]; then
-    WP_TESTS_TAG="branches/$WP_VERSION"
-elif [[ $WP_VERSION =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
-    if [[ $WP_VERSION =~ [0-9]+\.[0-9]+\.[0] ]]; then
-        # version x.x.0 means the first release of the major version, so strip off the .0 and download version x.x
-        WP_TESTS_TAG="tags/${WP_VERSION%??}"
-    else
-        WP_TESTS_TAG="tags/$WP_VERSION"
-    fi
-elif [[ $WP_VERSION == 'nightly' || $WP_VERSION == 'trunk' ]]; then
-    WP_TESTS_TAG="trunk"
-else
-    # http serves a single offer, whereas https serves multiple. we only want one
-    download http://api.wordpress.org/core/version-check/1.7/ /tmp/wp-latest.json
-    grep '[0-9]+\.[0-9]+(\.[0-9]+)?' /tmp/wp-latest.json
-    LATEST_VERSION=$(grep -o '"version":"[^"]*' /tmp/wp-latest.json | sed 's/"version":"//')
-    if [[ -z "$LATEST_VERSION" ]]; then
-        echo "Latest WordPress version could not be found"
-        exit 1
-    fi
-    WP_TESTS_TAG="tags/$LATEST_VERSION"
-fi
-
-set -ex
-
+# Function to install WordPress
 install_wp() {
-
     if [ -d $WP_CORE_DIR ]; then
         return;
     fi
@@ -75,10 +85,11 @@ install_wp() {
     download https://raw.github.com/markoheijnen/wp-mysqli/master/db.php $WP_CORE_DIR/wp-content/db.php
 }
 
+# Function to install test suite
 install_test_suite() {
     # portable in-place argument for both GNU sed and Mac OSX sed
     if [[ $(uname -s) == 'Darwin' ]]; then
-        local ioption='-i.bak'
+        local ioption='-i .bak'
     else
         local ioption='-i'
     fi
@@ -87,55 +98,64 @@ install_test_suite() {
     if [ ! -d $WP_TESTS_DIR ]; then
         # set up testing suite
         mkdir -p $WP_TESTS_DIR
-        svn co --quiet https://develop.svn.wordpress.org/${WP_TESTS_TAG}/tests/phpunit/includes/ $WP_TESTS_DIR/includes
-        svn co --quiet https://develop.svn.wordpress.org/${WP_TESTS_TAG}/tests/phpunit/data/ $WP_TESTS_DIR/data
+        svn co --quiet https://develop.svn.wordpress.org/${WP_VERSION}/tests/phpunit/includes/ $WP_TESTS_DIR/includes
+        svn co --quiet https://develop.svn.wordpress.org/${WP_VERSION}/tests/phpunit/data/ $WP_TESTS_DIR/data
     fi
 
-    if [ ! -f wp-tests-config.php ]; then
-        download https://develop.svn.wordpress.org/${WP_TESTS_TAG}/wp-tests-config-sample.php "$WP_TESTS_DIR"/wp-tests-config.php
-        # remove all forward slashes in the end
-        WP_CORE_DIR=$(echo $WP_CORE_DIR | sed "s:/\+$::")
-        sed $ioption "s:dirname( __FILE__ ) . '/src/':'$WP_CORE_DIR/':" "$WP_TESTS_DIR"/wp-tests-config.php
-        sed $ioption "s/youremptytestdbnamehere/$DB_NAME/" "$WP_TESTS_DIR"/wp-tests-config.php
-        sed $ioption "s/yourusernamehere/$DB_USER/" "$WP_TESTS_DIR"/wp-tests-config.php
-        sed $ioption "s/yourpasswordhere/$DB_PASS/" "$WP_TESTS_DIR"/wp-tests-config.php
-        sed $ioption "s|localhost|${DB_HOST}|" "$WP_TESTS_DIR"/wp-tests-config.php
-    fi
-
+    create_wp_tests_config
 }
 
-install_db() {
-
-    if [ ${SKIP_DB_CREATE} = "true" ]; then
-        return 0
+create_wp_tests_config() {
+    # Check if the file already exists
+    if [ -f "$WP_TESTS_DIR/wp-tests-config.php" ]; then
+        echo "wp-tests-config.php already exists."
+        return
     fi
 
-    # parse DB_HOST for port or socket references
-    local PARTS=(${DB_HOST//\:/ })
-    local DB_HOSTNAME=${PARTS[0]};
-    local DB_SOCK_OR_PORT=${PARTS[1]};
-    local EXTRA=""
+    echo "Creating wp-tests-config.php..."
+    cat > "$WP_TESTS_DIR/wp-tests-config.php" << EOF
+<?php
 
-    if ! [ -z $DB_HOSTNAME ] ; then
-        if [ $(echo $DB_SOCK_OR_PORT | grep -e '^[0-9]\{1,\}$') ]; then
-            EXTRA=" --host=$DB_HOSTNAME --port=$DB_SOCK_OR_PORT --protocol=tcp"
-        elif ! [ -z $DB_SOCK_OR_PORT ] ; then
-            EXTRA=" --socket=$DB_SOCK_OR_PORT"
-        elif ! [ -z $DB_HOSTNAME ] ; then
-            EXTRA=" --host=$DB_HOSTNAME --protocol=tcp"
-        fi
-    fi
+/* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
+define( 'ABSPATH', '$WP_CORE_DIR/' );
 
-    # Drop the test database if it exists
-    mysqladmin drop $DB_NAME --force --user="$DB_USER" --password="$DB_PASS"$EXTRA;
+define( 'WP_DEFAULT_THEME', 'default' );
 
-    # Drop the user if it exists
-    mysql -e "DROP USER IF EXISTS '$DB_USER'@'localhost'";
+// Test with WordPress debug mode (default).
+define( 'WP_DEBUG', true );
 
-    # create database
-    mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA;
+// ** Database settings ** //
+define( 'DB_NAME', '$DB_NAME' );
+define( 'DB_USER', '$DB_USER' );
+define( 'DB_PASSWORD', '$DB_PASS' );
+define( 'DB_HOST', '$DB_HOST' );
+define( 'DB_CHARSET', 'utf8' );
+define( 'DB_COLLATE', '' );
+
+\$table_prefix = 'wptests_';
+
+define( 'WP_TESTS_DOMAIN', 'example.org' );
+define( 'WP_TESTS_EMAIL', 'admin@example.org' );
+define( 'WP_TESTS_TITLE', 'Test Blog' );
+
+define( 'WP_PHP_BINARY', 'php' );
+
+define( 'WPLANG', '' );
+EOF
+    echo "wp-tests-config.php created successfully."
 }
 
+# Main execution
+echo "Starting WordPress test environment setup..."
+
+# Reset database and user
+reset_db_and_user
+
+# Install WordPress
 install_wp
+
+# Install test suite
 install_test_suite
-install_db
+
+echo "WordPress test environment setup completed successfully."
+
