@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
-if [ $# -lt 3 ]; then
-    echo "usage: $0 <db-name> <db-user> <db-pass> [db-host] [wp-version] [skip-database-creation]"
-    exit 1
+# Load environment variables from .env.testing file
+if [ -f ".env.testing" ]; then
+    export $(grep -v '^#' .env.testing | xargs)
 fi
 
-DB_NAME=$1
-DB_USER=$2
-DB_PASS=$3
-DB_HOST=${4-localhost}
+# Use environment variables, fallback to arguments if not set
+DB_NAME=${WP_TESTS_DB_NAME:-$1}
+DB_USER=${WP_TESTS_DB_USER:-$2}
+DB_PASS=${WP_TESTS_DB_PASSWORD:-$3}
+DB_HOST=${WP_TESTS_DB_HOST:-$4}
 WP_VERSION=${5-latest}
 SKIP_DB_CREATE=${6-false}
 
@@ -125,8 +126,14 @@ install_db() {
         fi
     fi
 
+    # Drop the test database if it exists
+    mysqladmin drop $DB_NAME --force --user="$DB_USER" --password="$DB_PASS"$EXTRA;
+
+    # Drop the user if it exists
+    mysql -e "DROP USER IF EXISTS '$DB_USER'@'localhost'";
+
     # create database
-    mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA
+    mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA;
 }
 
 install_wp
