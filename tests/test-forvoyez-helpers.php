@@ -11,21 +11,21 @@ class TestForVoyezHelpers extends WP_UnitTestCase {
      * Test forvoyez_count_incomplete_images function.
      */
     public function test_forvoyez_count_incomplete_images() {
-        // Create some test images
-        $complete_id = $this->create_test_image(true, true, true);   // Complete image
-        $no_title_id = $this->create_test_image(false, true, true);  // Missing title
-        $no_alt_id = $this->create_test_image(true, false, true);    // Missing alt text
-        $no_caption_id = $this->create_test_image(true, true, false);// Missing caption
+        // Create test images
+        $complete_id = $this->create_test_image(true, true, true);
+        $no_title_id = $this->create_test_image(false, true, true);
+        $no_alt_id = $this->create_test_image(true, false, true);
+        $no_caption_id = $this->create_test_image(true, true, false);
 
         $incomplete_count = forvoyez_count_incomplete_images();
 
-        // Debug information
-        error_log("Complete image (should not be counted): " . print_r(get_post($complete_id), true));
-        error_log("No title image: " . print_r(get_post($no_title_id), true));
-        error_log("No alt image: " . print_r(get_post($no_alt_id), true));
-        error_log("No caption image: " . print_r(get_post($no_caption_id), true));
-
         $this->assertEquals(3, $incomplete_count, 'Incorrect count of incomplete images');
+
+        // Clean up
+        wp_delete_attachment($complete_id, true);
+        wp_delete_attachment($no_title_id, true);
+        wp_delete_attachment($no_alt_id, true);
+        wp_delete_attachment($no_caption_id, true);
     }
 
     /**
@@ -46,34 +46,64 @@ class TestForVoyezHelpers extends WP_UnitTestCase {
 
         $this->assertEquals('test_api_key', $api_key, 'Incorrect API key returned');
 
+        // Test the filter
+        add_filter('forvoyez_api_key', function($key) {
+            return 'filtered_' . $key;
+        });
+
+        $filtered_api_key = forvoyez_get_api_key();
+        $this->assertEquals('filtered_test_api_key', $filtered_api_key, 'API key filter not applied correctly');
+
+        // Remove the filter
+        remove_all_filters('forvoyez_api_key');
+
         // Restore the original instance
         $forvoyez_settings = $original_settings;
     }
 
     /**
+     * Test forvoyez_sanitize_api_key function.
+     */
+    public function test_forvoyez_sanitize_api_key() {
+        // Test valid key
+        $valid_key = 'abcdefghijklmnopqrstuvwxyz123456';
+        $sanitized_key = forvoyez_sanitize_api_key($valid_key);
+        $this->assertEquals($valid_key, $sanitized_key, 'Valid API key not sanitized correctly');
+
+        // Test invalid key (too short)
+        $invalid_key = 'short';
+        $result = forvoyez_sanitize_api_key($invalid_key);
+        $this->assertInstanceOf(WP_Error::class, $result, 'Invalid API key not detected');
+        $this->assertEquals('invalid_api_key', $result->get_error_code(), 'Incorrect error code for invalid API key');
+
+        // Test with potential XSS
+        $xss_key = '<script>alert("XSS")</script>validkey12345678901234567890';
+        $sanitized_xss_key = forvoyez_sanitize_api_key($xss_key);
+        $this->assertEquals('validkey12345678901234567890', $sanitized_xss_key, 'XSS not properly sanitized from API key');
+    }
+
+    /**
      * Helper function to create a test image with specified metadata.
+     *
+     * @param bool $has_title Whether the image should have a title.
+     * @param bool $has_alt Whether the image should have alt text.
+     * @param bool $has_caption Whether the image should have a caption.
+     * @return int The attachment ID of the created image.
      */
     private function create_test_image($has_title, $has_alt, $has_caption) {
-        $attachment_id = $this->factory->attachment->create_upload_object(__DIR__ . '/assets/test-image.webp');
+        $filename = plugin_dir_path(__FILE__) . 'assets/test-image.webp';
+        $contents = file_get_contents($filename);
+        $upload = wp_upload_bits(basename($filename), null, $contents);
+        $this->assertTrue(empty($upload['error']), 'Upload failed: ' . ($upload['error'] ?? 'Unknown error'));
 
-        if ($has_title) {
-            wp_update_post(['ID' => $attachment_id, 'post_title' => 'Test Title']);
-        } else {
-            // Ensure the title is set to the filename
-            $filename = basename(get_attached_file($attachment_id));
-            wp_update_post(['ID' => $attachment_id, 'post_title' => $filename]);
-        }
+        $attachment_id = $this->factory->attachment->create_object($upload['file'], 0, [
+            'post_mime_type' => 'image/webp',
+            'post_title'     => $has_title ? 'Test Title' : basename($upload['file']),
+            'post_excerpt'   => $has_caption ? 'Test Caption' : '',
+        ]);
 
         if ($has_alt) {
             update_post_meta($attachment_id, '_wp_attachment_image_alt', 'Test Alt Text');
-        } else {
-            delete_post_meta($attachment_id, '_wp_attachment_image_alt');
-        }
-
-        if ($has_caption) {
-            wp_update_post(['ID' => $attachment_id, 'post_excerpt' => 'Test Caption']);
-        } else {
-            wp_update_post(['ID' => $attachment_id, 'post_excerpt' => '']);
         }
 
         return $attachment_id;
