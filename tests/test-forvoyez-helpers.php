@@ -19,6 +19,12 @@ class TestForVoyezHelpers extends WP_UnitTestCase {
 
         $incomplete_count = forvoyez_count_incomplete_images();
 
+        // Debug information
+        error_log("Complete image: " . print_r(get_post($complete_id), true));
+        error_log("No title image: " . print_r(get_post($no_title_id), true));
+        error_log("No alt image: " . print_r(get_post($no_alt_id), true));
+        error_log("No caption image: " . print_r(get_post($no_caption_id), true));
+
         $this->assertEquals(3, $incomplete_count, 'Incorrect count of incomplete images');
 
         // Clean up

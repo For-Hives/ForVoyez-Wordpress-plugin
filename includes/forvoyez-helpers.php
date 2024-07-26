@@ -26,23 +26,54 @@ if (!defined('ABSPATH')) {
 function forvoyez_count_incomplete_images() {
     global $wpdb;
 
-    $query = $wpdb->prepare("
-        SELECT COUNT(DISTINCT p.ID) 
+    $query = "
+        SELECT p.ID, p.post_title, p.post_excerpt, pm_alt.meta_value as alt_text
         FROM {$wpdb->posts} p
         LEFT JOIN {$wpdb->postmeta} pm_alt ON p.ID = pm_alt.post_id AND pm_alt.meta_key = '_wp_attachment_image_alt'
         WHERE p.post_type = 'attachment' 
-        AND p.post_mime_type LIKE %s
-        AND (
-            p.post_title = '' 
-            OR p.post_title = SUBSTRING_INDEX(p.guid, '/', -1)
-            OR p.post_title LIKE %s
-            OR pm_alt.meta_value IS NULL 
-            OR pm_alt.meta_value = ''
-            OR p.post_excerpt = ''
-        )
-    ", 'image/%', '%-scaled');
+        AND p.post_mime_type LIKE 'image/%'
+    ";
 
-    $incomplete_count = intval($wpdb->get_var($query));
+    $results = $wpdb->get_results($query);
+    $incomplete_count = 0;
+    $debug_info = [];
+
+    foreach ($results as $image) {
+        $is_incomplete = false;
+        $reason = [];
+
+        // Check title
+        if (empty($image->post_title) || $image->post_title === basename($image->guid) || preg_match('/-scaled$/', $image->post_title)) {
+            $is_incomplete = true;
+            $reason[] = 'title';
+        }
+
+        // Check alt text
+        if (empty($image->alt_text)) {
+            $is_incomplete = true;
+            $reason[] = 'alt';
+        }
+
+        // Check caption
+        if (empty($image->post_excerpt)) {
+            $is_incomplete = true;
+            $reason[] = 'caption';
+        }
+
+        if ($is_incomplete) {
+            $incomplete_count++;
+            $debug_info[] = [
+                'id' => $image->ID,
+                'title' => $image->post_title,
+                'alt' => $image->alt_text,
+                'caption' => $image->post_excerpt,
+                'reason' => implode(', ', $reason)
+            ];
+        }
+    }
+
+    // Log debug info
+    error_log('Incomplete images debug info: ' . print_r($debug_info, true));
 
     return apply_filters('forvoyez_incomplete_images_count', $incomplete_count);
 }
