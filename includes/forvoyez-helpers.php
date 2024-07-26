@@ -75,9 +75,6 @@ function forvoyez_count_incomplete_images() {
         }
     }
 
-    // Log debug info
-    error_log('Incomplete images debug info: ' . print_r($debug_info, true));
-
     return apply_filters('forvoyez_incomplete_images_count', $incomplete_count);
 }
 
@@ -170,20 +167,4 @@ function forvoyez_verify_jwt($jwt) {
     }
 
     return true;
-}
-
-/**
- * Log messages for debugging purposes.
- *
- * This function provides a standardized way to log messages for debugging.
- * It only logs messages if WP_DEBUG is true.
- *
- * @since 1.0.0
- * @param string $message The message to log.
- * @param string $level The log level (e.g., 'info', 'warning', 'error').
- */
-function forvoyez_debug_log($message, $level = 'info') {
-    if (defined('WP_DEBUG') && WP_DEBUG) {
-        error_log(sprintf('[ForVoyez %s] %s', strtoupper($level), $message));
-    }
 }
