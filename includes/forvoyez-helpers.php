@@ -26,28 +26,24 @@ if (!defined('ABSPATH')) {
 function forvoyez_count_incomplete_images() {
     global $wpdb;
 
-    $query = "
+    $query = $wpdb->prepare("
         SELECT COUNT(DISTINCT p.ID) 
         FROM {$wpdb->posts} p
         LEFT JOIN {$wpdb->postmeta} pm_alt ON p.ID = pm_alt.post_id AND pm_alt.meta_key = '_wp_attachment_image_alt'
         WHERE p.post_type = 'attachment' 
-        AND p.post_mime_type LIKE 'image/%'
+        AND p.post_mime_type LIKE %s
         AND (
             p.post_title = '' 
             OR p.post_title = SUBSTRING_INDEX(p.guid, '/', -1)
-            OR pm_alt.meta_value IS NULL OR pm_alt.meta_value = ''
+            OR p.post_title LIKE %s
+            OR pm_alt.meta_value IS NULL 
+            OR pm_alt.meta_value = ''
             OR p.post_excerpt = ''
         )
-    ";
+    ", 'image/%', '%-scaled');
 
     $incomplete_count = intval($wpdb->get_var($query));
 
-    /**
-     * Filters the count of incomplete images.
-     *
-     * @since 1.0.0
-     * @param int $incomplete_count The number of incomplete images.
-     */
     return apply_filters('forvoyez_incomplete_images_count', $incomplete_count);
 }
 
@@ -88,7 +84,11 @@ function forvoyez_get_api_key() {
  * @return string|WP_Error The sanitized API key or WP_Error if validation fails.
  */
 function forvoyez_sanitize_api_key($api_key) {
-    $sanitized_key = sanitize_text_field($api_key);
+    // Remove all non-alphanumeric characters
+    $sanitized_key = preg_replace('/[^a-zA-Z0-9]/', '', $api_key);
+
+    // Trim the key to a maximum of 64 characters (adjust as needed)
+    $sanitized_key = substr($sanitized_key, 0, 64);
 
     // Basic validation: ensure the key is not empty and meets a minimum length requirement
     if (empty($sanitized_key) || strlen($sanitized_key) < 32) {

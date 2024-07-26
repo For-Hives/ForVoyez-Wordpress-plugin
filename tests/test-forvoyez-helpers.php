@@ -66,7 +66,7 @@ class TestForVoyezHelpers extends WP_UnitTestCase {
      */
     public function test_forvoyez_sanitize_api_key() {
         // Test valid key
-        $valid_key = 'abcdefghijklmnopqrstuvwxyz123456';
+        $valid_key = 'abcdefghijklmnopqrstuvwxyz1234.56';
         $sanitized_key = forvoyez_sanitize_api_key($valid_key);
         $this->assertEquals($valid_key, $sanitized_key, 'Valid API key not sanitized correctly');
 
@@ -77,9 +77,9 @@ class TestForVoyezHelpers extends WP_UnitTestCase {
         $this->assertEquals('invalid_api_key', $result->get_error_code(), 'Incorrect error code for invalid API key');
 
         // Test with potential XSS
-        $xss_key = '<script>alert("XSS")</script>validkey12345678901234567890';
+        $xss_key = '<script>alert("XSS")</script>validkey1234567890123456789.0';
         $sanitized_xss_key = forvoyez_sanitize_api_key($xss_key);
-        $this->assertEquals('validkey12345678901234567890', $sanitized_xss_key, 'XSS not properly sanitized from API key');
+        $this->assertEquals('scriptalertXSSscriptvalidkey1234567890123456789.0', $sanitized_xss_key, 'XSS not properly sanitized from API key');
     }
 
     /**
