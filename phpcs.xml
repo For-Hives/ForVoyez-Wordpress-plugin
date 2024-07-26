@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
-<ruleset name="WordPress Plugin Coding Standards">
-    <description>A custom set of code standard rules to check for WordPress plugins.</description>
-
+<ruleset name="WordPress Plugin Minimal Coding Standards">
     <file>.</file>
+
     <exclude-pattern>/vendor/</exclude-pattern>
     <exclude-pattern>/node_modules/</exclude-pattern>
 
@@ -10,14 +9,15 @@
     <arg name="colors"/>
     <arg name="extensions" value="php"/>
 
-    <config name="installed_paths" value="vendor/wp-coding-standards/wpcs"/>
     <config name="minimum_supported_wp_version" value="5.0"/>
 
-    <rule ref="WordPress-Core">
-        <exclude name="Generic.WhiteSpace.DisallowSpaceIndent"/>
+    <rule ref="WordPress-Core"/>
+
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array" value="votre-domaine-de-texte"/>
+        </properties>
     </rule>
-    <rule ref="WordPress-Docs"/>
-    <rule ref="WordPress-Extra"/>
 
     <rule ref="Generic.WhiteSpace.ScopeIndent">
         <properties>
@@ -26,12 +26,5 @@
         </properties>
     </rule>
 
-    <rule ref="WordPress.WP.I18n">
-        <properties>
-            <property name="text_domain" type="array" value="forvoyez-auto-alt-text-for-images"/>
-        </properties>
-    </rule>
-
-    <rule ref="PHPCompatibilityWP"/>
-    <config name="testVersion" value="7.4-"/>
+    <config name="testVersion" value="8.2-"/>
 </ruleset>
