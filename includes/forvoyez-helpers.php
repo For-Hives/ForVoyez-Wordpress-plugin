@@ -43,7 +43,8 @@ function forvoyez_count_incomplete_images() {
         $reason = [];
 
         // Check title
-        if (empty($image->post_title) || $image->post_title === basename($image->guid) || preg_match('/-scaled$/', $image->post_title)) {
+        $filename = basename(parse_url($image->guid, PHP_URL_PATH));
+        if (empty($image->post_title) || $image->post_title === $filename || preg_match('/-scaled$/', $image->post_title)) {
             $is_incomplete = true;
             $reason[] = 'title';
         }
@@ -68,6 +69,7 @@ function forvoyez_count_incomplete_images() {
                 'alt' => $image->alt_text,
                 'caption' => $image->post_excerpt,
                 'guid' => $image->guid,
+                'filename' => $filename,
                 'reason' => implode(', ', $reason)
             ];
         }
