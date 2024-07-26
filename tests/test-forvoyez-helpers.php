@@ -17,13 +17,13 @@ class TestForVoyezHelpers extends WP_UnitTestCase {
         $no_alt_id = $this->create_test_image(true, false, true);
         $no_caption_id = $this->create_test_image(true, true, false);
 
-        $incomplete_count = forvoyez_count_incomplete_images();
-
         // Debug information
         error_log("Complete image: " . print_r(get_post($complete_id), true));
         error_log("No title image: " . print_r(get_post($no_title_id), true));
         error_log("No alt image: " . print_r(get_post($no_alt_id), true));
         error_log("No caption image: " . print_r(get_post($no_caption_id), true));
+
+        $incomplete_count = forvoyez_count_incomplete_images();
 
         $this->assertEquals(3, $incomplete_count, 'Incorrect count of incomplete images');
 
@@ -146,7 +146,11 @@ class TestForVoyezHelpers extends WP_UnitTestCase {
 
         if ($has_alt) {
             update_post_meta($attachment_id, '_wp_attachment_image_alt', 'Test Alt Text');
+        } else {
+            delete_post_meta($attachment_id, '_wp_attachment_image_alt');
         }
+
+        error_log("Created test image: " . print_r(get_post($attachment_id), true));
 
         return $attachment_id;
     }

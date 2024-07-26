@@ -27,7 +27,7 @@ function forvoyez_count_incomplete_images() {
     global $wpdb;
 
     $query = "
-        SELECT p.ID, p.post_title, p.post_excerpt, pm_alt.meta_value as alt_text
+        SELECT p.ID, p.post_title, p.post_excerpt, p.guid, pm_alt.meta_value as alt_text
         FROM {$wpdb->posts} p
         LEFT JOIN {$wpdb->postmeta} pm_alt ON p.ID = pm_alt.post_id AND pm_alt.meta_key = '_wp_attachment_image_alt'
         WHERE p.post_type = 'attachment' 
@@ -67,6 +67,7 @@ function forvoyez_count_incomplete_images() {
                 'title' => $image->post_title,
                 'alt' => $image->alt_text,
                 'caption' => $image->post_excerpt,
+                'guid' => $image->guid,
                 'reason' => implode(', ', $reason)
             ];
         }
