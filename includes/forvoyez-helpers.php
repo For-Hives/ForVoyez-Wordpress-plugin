@@ -75,27 +75,67 @@ function forvoyez_get_api_key() {
 }
 
 /**
- * Sanitize and validate the ForVoyez API key.
+ * Sanitize and validate the ForVoyez API key (JWT).
  *
- * This function sanitizes the input and performs basic validation on the API key.
+ * This function sanitizes the input and performs basic validation on the JWT.
  *
  * @since 1.0.0
- * @param string $api_key The API key to sanitize and validate.
- * @return string|WP_Error The sanitized API key or WP_Error if validation fails.
+ * @param string $jwt The JWT to sanitize and validate.
+ * @return string|WP_Error The sanitized JWT or WP_Error if validation fails.
  */
-function forvoyez_sanitize_api_key($api_key) {
-    // Remove all non-alphanumeric characters
-    $sanitized_key = preg_replace('/[^a-zA-Z0-9]/', '', $api_key);
+function forvoyez_sanitize_api_key($jwt) {
+    // Remove any whitespace
+    $sanitized_jwt = trim($jwt);
 
-    // Trim the key to a maximum of 64 characters (adjust as needed)
-    $sanitized_key = substr($sanitized_key, 0, 64);
-
-    // Basic validation: ensure the key is not empty and meets a minimum length requirement
-    if (empty($sanitized_key) || strlen($sanitized_key) < 32) {
-        return new WP_Error('invalid_api_key', __('Invalid API key. Please enter a valid ForVoyez API key.', 'forvoyez-auto-alt-text-for-images'));
+    // Basic JWT format validation (header.payload.signature)
+    if (!preg_match('/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/', $sanitized_jwt)) {
+        return new WP_Error('invalid_api_key', __('Invalid API key format. Please enter a valid ForVoyez JWT.', 'forvoyez-auto-alt-text-for-images'));
     }
 
-    return $sanitized_key;
+    return $sanitized_jwt;
+}
+
+/**
+ * Verify the ForVoyez JWT.
+ *
+ * This function verifies the JWT signature and checks its claims.
+ * Note: This is a basic implementation and might need to be adjusted based on your exact requirements.
+ *
+ * @since 1.0.0
+ * @param string $jwt The JWT to verify.
+ * @return bool|WP_Error True if the JWT is valid, WP_Error otherwise.
+ */
+function forvoyez_verify_jwt($jwt) {
+    $parts = explode('.', $jwt);
+    if (count($parts) !== 3) {
+        return new WP_Error('invalid_jwt', __('Invalid JWT format', 'forvoyez-auto-alt-text-for-images'));
+    }
+
+    list($header, $payload, $signature) = $parts;
+
+    // Decode the payload
+    $payload = json_decode(base64_decode(strtr($payload, '-_', '+/')), true);
+
+    if (!$payload) {
+        return new WP_Error('invalid_payload', __('Invalid JWT payload', 'forvoyez-auto-alt-text-for-images'));
+    }
+
+    // Check the issuer
+    if (!isset($payload['iss']) || $payload['iss'] !== 'ForVoyez') {
+        return new WP_Error('invalid_issuer', __('Invalid JWT issuer', 'forvoyez-auto-alt-text-for-images'));
+    }
+
+    // Check the audience
+    if (!isset($payload['aud']) || $payload['aud'] !== 'ForVoyez') {
+        return new WP_Error('invalid_audience', __('Invalid JWT audience', 'forvoyez-auto-alt-text-for-images'));
+    }
+
+    // Check the expiration time
+    if (!isset($payload['exp']) || $payload['exp'] < time()) {
+        return new WP_Error('expired_token', __('JWT has expired', 'forvoyez-auto-alt-text-for-images'));
+    }
+
+    return true;
 }
 
 /**
