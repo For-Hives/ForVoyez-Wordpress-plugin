@@ -34,7 +34,6 @@ define('FORVOYEZ_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
 // Include required files
 $required_files = [
-    'includes/forvoyez-constants.php',
     'includes/forvoyez-helpers.php',
     'includes/class-forvoyez-admin.php',
     'includes/class-forvoyez-api.php',
