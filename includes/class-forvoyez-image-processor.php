@@ -123,6 +123,8 @@ class Forvoyez_Image_Processor {
     }
 
     private function get_incomplete_images($offset, $limit) {
+        error_log("Getting incomplete images with offset $offset and limit $limit");
+
         $args = [
             'post_type' => 'attachment',
             'post_mime_type' => 'image',
@@ -144,13 +146,24 @@ class Forvoyez_Image_Processor {
         ];
 
         $query_images = new WP_Query($args);
-        return array_filter($query_images->posts, [$this, 'is_image_incomplete']);
+        error_log("WP_Query found " . count($query_images->posts) . " images");
+
+        $incomplete_images = array_filter($query_images->posts, [$this, 'is_image_incomplete']);
+        error_log("After filtering, found " . count($incomplete_images) . " incomplete images");
+
+        return $incomplete_images;
     }
 
     private function is_image_incomplete($image) {
-        return empty($image->post_title) ||
-            empty(get_post_meta($image->ID, '_wp_attachment_image_alt', true)) ||
-            empty($image->post_excerpt);
+        $alt_text = get_post_meta($image->ID, '_wp_attachment_image_alt', true);
+        $is_incomplete = empty($image->post_title) || empty($alt_text) || empty($image->post_excerpt);
+
+        error_log("Checking image {$image->ID}: title=" . (empty($image->post_title) ? 'empty' : 'set') .
+            ", alt=" . (empty($alt_text) ? 'empty' : 'set') .
+            ", caption=" . (empty($image->post_excerpt) ? 'empty' : 'set') .
+            " - Is incomplete: " . ($is_incomplete ? 'yes' : 'no'));
+
+        return $is_incomplete;
     }
 
     public function bulk_analyze_images() {
