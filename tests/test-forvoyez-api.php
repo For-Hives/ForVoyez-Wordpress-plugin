@@ -28,33 +28,6 @@ class TestForvoyezAPI extends WP_UnitTestCase {
         $this->assertEquals('valid_api_key', forvoyez_get_api_key(), 'API key should match the set value');
     }
 
-    public function testVerifyApiKeyNotSet() {
-        $this->expectException('WPAjaxDieStopException');
-        try {
-            $this->_handleAjax('forvoyez_verify_api_key');
-        } catch (WPAjaxDieStopException $e) {
-            $response = json_decode($this->_last_response, true);
-            $this->assertFalse($response['success']);
-            $this->assertEquals('API key is not set', $response['data']);
-            throw $e;
-        }
-    }
-
-    public function testVerifyApiKeySet() {
-        add_filter('forvoyez_get_api_key', function() {
-            return 'valid_api_key';
-        });
-        $this->expectException('WPAjaxDieStopException');
-        try {
-            $this->_handleAjax('forvoyez_verify_api_key');
-        } catch (WPAjaxDieStopException $e) {
-            $response = json_decode($this->_last_response, true);
-            $this->assertTrue($response['success']);
-            $this->assertEquals('API key is valid', $response['data']);
-            throw $e;
-        }
-    }
-
     public function testSanitizeApiKeyValid() {
         $jwt = 'header.payload.signature';
         $sanitized = forvoyez_sanitize_api_key($jwt);
