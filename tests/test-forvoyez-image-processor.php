@@ -60,12 +60,18 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase {
     }
 
     public function test_get_incomplete_images() {
+        error_log("Starting test_get_incomplete_images");
+
         $complete_id = $this->create_test_image(true, true, true);
         $no_alt_id = $this->create_test_image(false, true, true);
         $no_title_id = $this->create_test_image(true, false, true);
         $no_caption_id = $this->create_test_image(true, true, false);
 
+        error_log("Created test images: complete=$complete_id, no_alt=$no_alt_id, no_title=$no_title_id, no_caption=$no_caption_id");
+
         $incomplete_images = $this->call_private_method($this->image_processor, 'get_incomplete_images', [0, 10]);
+
+        error_log("Retrieved incomplete images: " . print_r(wp_list_pluck($incomplete_images, 'ID'), true));
 
         $this->assertCount(3, $incomplete_images, 'Incorrect number of incomplete images returned');
         $this->assertContains($no_alt_id, wp_list_pluck($incomplete_images, 'ID'), 'Image with no alt text should be included');
@@ -77,6 +83,8 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase {
         wp_delete_attachment($no_alt_id, true);
         wp_delete_attachment($no_title_id, true);
         wp_delete_attachment($no_caption_id, true);
+
+        error_log("Finished test_get_incomplete_images");
     }
 
     public function test_is_image_incomplete() {
