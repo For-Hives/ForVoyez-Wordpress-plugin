@@ -35,9 +35,9 @@ class PluginMainTest extends WP_UnitTestCase {
             'function' => ['forvoyez_get_api_key'],
             'class' => [
                 'Forvoyez_Admin',
-                'Forvoyez_API',
                 'Forvoyez_API_Manager',
                 'Forvoyez_Image_Processor',
+                'Forvoyez_Helpers',
                 'Forvoyez_Settings',
                 'Forvoyez_Image_Renderer'
             ]
