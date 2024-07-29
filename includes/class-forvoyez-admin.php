@@ -1,495 +1,443 @@
 <?php
-defined('ABSPATH') || exit();
+/**
+ * Class Forvoyez_Admin
+ *
+ * Handles all admin-related functionality for the Forvoyez plugin.
+ */
+defined('ABSPATH') || exit('Direct access to this file is not allowed.');
 
 class Forvoyez_Admin {
+    /**
+     * @var Forvoyez_API_Manager
+     */
     private $api_manager;
 
+    /**
+     * Constructor.
+     *
+     * @param Forvoyez_API_Manager $api_manager API manager instance.
+     */
     public function __construct(Forvoyez_API_Manager $api_manager) {
         $this->api_manager = $api_manager;
     }
 
+    /**
+     * Initialize admin hooks.
+     */
     public function init() {
-		add_action('admin_menu', [$this, 'add_menu_item']);
-		add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_scripts']);
-		add_action('wp_ajax_forvoyez_load_images', [$this, 'ajax_load_images']);
-		add_action('wp_ajax_forvoyez_get_image_counts', [
-			$this,
-			'ajax_get_image_counts',
-		]);
-		add_action('wp_ajax_forvoyez_get_image_ids', [
-			$this,
-			'ajax_get_image_ids',
-		]);
+        add_action('admin_menu', [$this, 'add_menu_item']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_scripts']);
+        add_action('wp_ajax_forvoyez_load_images', [$this, 'ajax_load_images']);
+        add_action('wp_ajax_forvoyez_get_image_counts', [$this, 'ajax_get_image_counts']);
+        add_action('wp_ajax_forvoyez_get_image_ids', [$this, 'ajax_get_image_ids']);
         add_action('wp_ajax_forvoyez_verify_api_key', [$this, 'ajax_verify_api_key']);
-	}
+    }
 
-	public function add_menu_item() {
-		add_options_page(
-			'Auto Alt Text Settings',
-			'Auto Alt Text',
-			'manage_options',
-			'forvoyez-auto-alt-text',
-			[$this, 'render_admin_page'],
-		);
-	}
+    /**
+     * Add menu item to WordPress admin.
+     */
+    public function add_menu_item() {
+        add_options_page(
+            'Auto Alt Text Settings',
+            'Auto Alt Text',
+            'manage_options',
+            'forvoyez-auto-alt-text',
+            [$this, 'render_admin_page']
+        );
+    }
 
-	public function enqueue_admin_scripts($hook) {
-		if ('settings_page_forvoyez-auto-alt-text' !== $hook) {
-			return;
-		}
+    /**
+     * Enqueue admin scripts and styles.
+     *
+     * @param string $hook Current admin page hook.
+     */
+    public function enqueue_admin_scripts($hook) {
+        if ('settings_page_forvoyez-auto-alt-text' !== $hook) {
+            return;
+        }
 
-		// Enqueue Tailwind CSS from CDN
-		wp_enqueue_script(
-			'tailwindcss',
-			'https://cdn.tailwindcss.com',
-			[],
-			null,
-		);
+        // Enqueue Tailwind CSS from CDN
+        wp_enqueue_script('tailwindcss', 'https://cdn.tailwindcss.com', [], null);
 
-		// Enqueue your custom scripts
-		wp_enqueue_script(
-			'forvoyez-admin-script',
-			FORVOYEZ_PLUGIN_URL . 'assets/js/admin-script.js',
-			['jquery'],
-			'1.0.0',
-			true,
-		);
-		wp_enqueue_script(
-			'forvoyez-api-settings',
-			FORVOYEZ_PLUGIN_URL . 'assets/js/api-settings.js',
-			['jquery'],
-			'1.0.0',
-			true,
-		);
+        // Enqueue custom scripts
+        $this->enqueue_custom_scripts();
 
-		// Localize script
-		wp_localize_script('forvoyez-admin-script', 'forvoyezData', [
-			'ajaxurl' => admin_url('admin-ajax.php'),
-			'nonce' => wp_create_nonce('forvoyez_nonce'),
-		]);
+        // Localize script
+        wp_localize_script('forvoyez-admin-script', 'forvoyezData', [
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('forvoyez_nonce'),
+        ]);
 
-		// Add Tailwind configuration
-		$this->add_tailwind_config();
-	}
+        // Add Tailwind configuration
+        $this->add_tailwind_config();
+    }
 
-	private function add_tailwind_config() {
-		$tailwind_config = "
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            'forvoyez-primary': '#4a90e2',
-                            'forvoyez-secondary': '#50e3c2',
-                        },
-                    },
-                },
-            }
-        </script>
-        ";
+    /**
+     * Enqueue custom scripts for the admin page.
+     */
+    private function enqueue_custom_scripts() {
+        wp_enqueue_script(
+            'forvoyez-admin-script',
+            FORVOYEZ_PLUGIN_URL . 'assets/js/admin-script.js',
+            ['jquery'],
+            FORVOYEZ_VERSION,
+            true
+        );
+        wp_enqueue_script(
+            'forvoyez-api-settings',
+            FORVOYEZ_PLUGIN_URL . 'assets/js/api-settings.js',
+            ['jquery'],
+            FORVOYEZ_VERSION,
+            true
+        );
+    }
 
-		// Add custom Tailwind styles
-		$tailwind_styles = '
-        <style type="text/tailwindcss">
-            @layer utilities {
-                .content-auto {
-                    content-visibility: auto;
-                }
-            }
-        </style>
-        ';
+    /**
+     * Add Tailwind configuration to admin head.
+     */
+    private function add_tailwind_config() {
+        $tailwind_config = "<script>tailwind.config = {theme: {extend: {colors: {'forvoyez-primary': '#4a90e2','forvoyez-secondary': '#50e3c2',},},},}</script>";
+        $tailwind_styles = "<style type='text/tailwindcss'>@layer utilities {.content-auto {content-visibility: auto;}}</style>";
 
-		add_action('admin_head', function () use (
-			$tailwind_config,
-			$tailwind_styles,
-		) {
-			echo $tailwind_config;
-			echo $tailwind_styles;
-		});
-	}
+        add_action('admin_head', function () use ($tailwind_config, $tailwind_styles) {
+            echo $tailwind_config . $tailwind_styles;
+        });
+    }
 
-	public function render_admin_page() {
-		include FORVOYEZ_PLUGIN_DIR . 'templates/admin-page.php';
-	}
+    /**
+     * Render the admin page.
+     */
+    public function render_admin_page() {
+        include FORVOYEZ_PLUGIN_DIR . 'templates/admin-page.php';
+    }
 
-	public static function display_status_configuration() {
-		$api_key = forvoyez_get_api_key();
-		if (empty($api_key)) {
-			echo '<p class="text-red-600 font-semibold">Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation.</p>';
-		}
-	}
+    /**
+     * Display API key configuration status.
+     */
+    public static function display_status_configuration() {
+        $api_key = forvoyez_get_api_key();
+        if (empty($api_key)) {
+            echo '<p class="text-red-600 font-semibold">Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation.</p>';
+        }
+    }
 
-	public function display_incomplete_images(
-		$paged = 1,
-		$per_page = 25,
-		$filters = [],
-	) {
-		$args = [
-			'post_type' => 'attachment',
-			'post_mime_type' => 'image',
-			'post_status' => 'inherit',
-			'posts_per_page' => $per_page,
-			'paged' => $paged,
-		];
+    /**
+     * Display incomplete images.
+     *
+     * @param int $paged Current page number.
+     * @param int $per_page Number of items per page.
+     * @param array $filters Applied filters.
+     * @return array HTML content and number of displayed images.
+     */
+    public function display_incomplete_images($paged = 1, $per_page = 25, $filters = []) {
+        $args = $this->get_query_args($paged, $per_page, $filters);
+        $query_images = new WP_Query($args);
+        $total_images = $query_images->found_posts;
+        $displayed_images = $query_images->post_count;
 
-		// Apply filters
-		if (!empty($filters)) {
-			$meta_query = ['relation' => 'OR'];
-
-			if (in_array('alt', $filters)) {
-				$meta_query[] = [
-					'key' => '_wp_attachment_image_alt',
-					'compare' => 'NOT EXISTS',
-				];
-			}
-
-			if (in_array('title', $filters)) {
-				$args['title'] = '';
-			}
-
-			if (in_array('caption', $filters)) {
-				$args['post_excerpt'] = '';
-			}
-
-			$args['meta_query'] = $meta_query;
-		}
-
-		$query_images = new WP_Query($args);
-		$total_images = $query_images->found_posts;
-
-		$displayed_images = $query_images->post_count;
-
-		ob_start();
-		?>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" data-total-images="<?php echo esc_attr(
-        	$total_images,
-        ); ?>">
-            <?php if ($query_images->have_posts()) {
-            	while ($query_images->have_posts()) {
-            		$query_images->the_post();
-            		Forvoyez_Image_Renderer::render_image_item(
-            			$query_images->post,
-            		);
-            	}
-            } else {
-            	echo '<p class="col-span-full text-center text-gray-500">No images found matching the selected criteria.</p>';
-            } ?>
-        </div>
-        <?php
+        ob_start();
+        $this->render_images_grid($query_images, $total_images);
         $html = ob_get_clean();
 
         wp_reset_postdata();
 
         return [
-        	'html' => $html,
-        	'displayed_images' => $displayed_images,
+            'html' => $html,
+            'displayed_images' => $displayed_images,
         ];
-	}
+    }
 
-	private function count_total_images($filters) {
-		$args = [
-			'post_type' => 'attachment',
-			'post_mime_type' => 'image',
-			'post_status' => 'inherit',
-			'posts_per_page' => -1,
-		];
+    /**
+     * Get WP_Query arguments for incomplete images.
+     *
+     * @param int $paged Current page number.
+     * @param int $per_page Number of items per page.
+     * @param array $filters Applied filters.
+     * @return array Query arguments.
+     */
+    private function get_query_args($paged, $per_page, $filters) {
+        $args = [
+            'post_type' => 'attachment',
+            'post_mime_type' => 'image',
+            'post_status' => 'inherit',
+            'posts_per_page' => $per_page,
+            'paged' => $paged,
+        ];
 
-		// Apply filters
-		if (!empty($filters)) {
-			$meta_query = ['relation' => 'OR'];
+        if (!empty($filters)) {
+            $args['meta_query'] = $this->build_meta_query($filters);
+        }
 
-			if (in_array('alt', $filters)) {
-				$meta_query[] = [
-					'key' => '_wp_attachment_image_alt',
-					'compare' => 'NOT EXISTS',
-				];
-			}
+        return $args;
+    }
 
-			if (in_array('title', $filters)) {
-				$args['title'] = '';
-			}
+    /**
+     * Build meta query based on filters.
+     *
+     * @param array $filters Applied filters.
+     * @return array Meta query.
+     */
+    private function build_meta_query($filters) {
+        $meta_query = ['relation' => 'OR'];
 
-			if (in_array('caption', $filters)) {
-				$args['post_excerpt'] = '';
-			}
+        if (in_array('alt', $filters, true)) {
+            $meta_query[] = [
+                'key' => '_wp_attachment_image_alt',
+                'compare' => 'NOT EXISTS',
+            ];
+        }
 
-			$args['meta_query'] = $meta_query;
-		}
+        if (in_array('title', $filters, true)) {
+            $meta_query[] = [
+                'key' => 'post_title',
+                'value' => '',
+                'compare' => '=',
+            ];
+        }
 
-		$query = new WP_Query($args);
-		return $query->found_posts;
-	}
+        if (in_array('caption', $filters, true)) {
+            $meta_query[] = [
+                'key' => 'post_excerpt',
+                'value' => '',
+                'compare' => '=',
+            ];
+        }
 
-	private function parse_and_sanitize_filters($filters) {
-		$sanitized = [];
-		$allowed_filters = ['alt', 'title', 'caption'];
-		foreach ($filters as $filter) {
-			if (
-				isset($filter['name']) &&
-				$filter['name'] === 'filter[]' &&
-				in_array($filter['value'], $allowed_filters)
-			) {
-				$sanitized[] = sanitize_text_field($filter['value']);
-			}
-		}
-		return $sanitized;
-	}
+        return $meta_query;
+    }
 
-	public function ajax_load_images() {
-		check_ajax_referer('forvoyez_nonce', 'nonce');
+    /**
+     * Render images grid.
+     *
+     * @param WP_Query $query_images Query result containing images.
+     * @param int $total_images Total number of images.
+     */
+    private function render_images_grid($query_images, $total_images) {
+        ?>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" data-total-images="<?php echo esc_attr($total_images); ?>">
+            <?php
+            if ($query_images->have_posts()) {
+                while ($query_images->have_posts()) {
+                    $query_images->the_post();
+                    Forvoyez_Image_Renderer::render_image_item($query_images->post);
+                }
+            } else {
+                echo '<p class="col-span-full text-center text-gray-500">No images found matching the selected criteria.</p>';
+            }
+            ?>
+        </div>
+        <?php
+    }
 
-		$paged = isset($_POST['paged'])
-			? absint(wp_unslash($_POST['paged']))
-			: 1;
-		$per_page = isset($_POST['per_page'])
-			? absint(wp_unslash($_POST['per_page']))
-			: 25;
-		$filters = isset($_POST['filters'])
-			? $this->parse_and_sanitize_filters(wp_unslash($_POST['filters']))
-			: [];
+    /**
+     * Count total images based on filters.
+     *
+     * @param array $filters Applied filters.
+     * @return int Total number of images.
+     */
+    private function count_total_images($filters) {
+        $args = $this->get_query_args(1, -1, $filters);
+        $args['fields'] = 'ids'; // Only get post IDs for efficiency
+        $query = new WP_Query($args);
+        return $query->found_posts;
+    }
 
-		$result = $this->display_incomplete_images($paged, $per_page, $filters);
-		$total_images = $this->count_total_images($filters);
+    /**
+     * Parse and sanitize filters.
+     *
+     * @param array $filters Raw filters array.
+     * @return array Sanitized filters.
+     */
+    private function parse_and_sanitize_filters($filters) {
+        $sanitized = [];
+        $allowed_filters = ['alt', 'title', 'caption'];
+        foreach ($filters as $filter) {
+            if (
+                isset($filter['name'], $filter['value']) &&
+                $filter['name'] === 'filter[]' &&
+                in_array($filter['value'], $allowed_filters, true)
+            ) {
+                $sanitized[] = sanitize_text_field($filter['value']);
+            }
+        }
+        return $sanitized;
+    }
 
-		$pagination_html = $this->display_pagination(
-			$total_images,
-			$paged,
-			$per_page,
-		);
+    /**
+     * AJAX handler for loading images.
+     */
+    public function ajax_load_images() {
+        check_ajax_referer('forvoyez_nonce', 'nonce');
 
-		wp_send_json_success([
-			'html' => $result['html'],
-			'total_images' => $total_images,
-			'displayed_images' => $result['displayed_images'],
-			'current_page' => $paged,
-			'per_page' => $per_page,
-			'pagination_html' => $pagination_html,
-		]);
-	}
+        $paged = isset($_POST['paged']) ? absint(wp_unslash($_POST['paged'])) : 1;
+        $per_page = isset($_POST['per_page']) ? absint(wp_unslash($_POST['per_page'])) : 25;
+        $filters = isset($_POST['filters']) ? $this->parse_and_sanitize_filters(wp_unslash($_POST['filters'])) : [];
 
-	private function display_pagination(
-		$total_images,
-		$current_page,
-		$per_page,
-	) {
-		$total_pages = ceil($total_images / $per_page);
+        $result = $this->display_incomplete_images($paged, $per_page, $filters);
+        $total_images = $this->count_total_images($filters);
 
-		if ($total_pages <= 1) {
-			return '';
-		}
+        $pagination_html = $this->display_pagination($total_images, $paged, $per_page);
 
-		$pagination =
-			'<nav class="forvoyez-pagination flex justify-center items-center space-x-2 mt-6">';
+        wp_send_json_success([
+            'html' => $result['html'],
+            'total_images' => $total_images,
+            'displayed_images' => $result['displayed_images'],
+            'current_page' => $paged,
+            'per_page' => $per_page,
+            'pagination_html' => $pagination_html,
+        ]);
+    }
 
-		// Previous page
-		if ($current_page > 1) {
-			$pagination .=
-				'<a href="#" class="pagination-link bg-white text-blue-500 hover:bg-blue-100 px-3 py-2 rounded" data-page="' .
-				($current_page - 1) .
-				'">&laquo; Previous</a>';
-		}
+    /**
+     * Generate pagination HTML.
+     *
+     * @param int $total_images Total number of images.
+     * @param int $current_page Current page number.
+     * @param int $per_page Number of items per page.
+     * @return string Pagination HTML.
+     */
+    private function display_pagination($total_images, $current_page, $per_page) {
+        $total_pages = ceil($total_images / $per_page);
 
-		// Page numbers
-		$start_page = max(1, $current_page - 2);
-		$end_page = min($total_pages, $current_page + 2);
+        if ($total_pages <= 1) {
+            return '';
+        }
 
-		for ($i = $start_page; $i <= $end_page; $i++) {
-			$active_class =
-				$i == $current_page
-					? 'bg-blue-500 text-white'
-					: 'bg-white text-blue-500 hover:bg-blue-100';
-			$pagination .=
-				'<a href="#" class="pagination-link ' .
-				$active_class .
-				' px-3 py-2 rounded" data-page="' .
-				$i .
-				'">' .
-				$i .
-				'</a>';
-		}
+        $pagination = '<nav class="forvoyez-pagination flex justify-center items-center space-x-2 mt-6">';
 
-		// Next page
-		if ($current_page < $total_pages) {
-			$pagination .=
-				'<a href="#" class="pagination-link bg-white text-blue-500 hover:bg-blue-100 px-3 py-2 rounded" data-page="' .
-				($current_page + 1) .
-				'">Next &raquo;</a>';
-		}
+        // Previous page
+        if ($current_page > 1) {
+            $pagination .= $this->pagination_link($current_page - 1, '&laquo; Previous');
+        }
 
-		$pagination .= '</nav>';
+        // Page numbers
+        $start_page = max(1, $current_page - 2);
+        $end_page = min($total_pages, $current_page + 2);
 
-		return $pagination;
-	}
+        for ($i = $start_page; $i <= $end_page; $i++) {
+            $active_class = $i == $current_page ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 hover:bg-blue-100';
+            $pagination .= $this->pagination_link($i, $i, $active_class);
+        }
 
-	private function parse_filters($filters) {
-		$parsed = [];
-		foreach ($filters as $filter) {
-			if ($filter['name'] === 'filter[]') {
-				$parsed[] = $filter['value'];
-			}
-		}
-		return $parsed;
-	}
+        // Next page
+        if ($current_page < $total_pages) {
+            $pagination .= $this->pagination_link($current_page + 1, 'Next &raquo;');
+        }
 
-	public function get_image_counts() {
-		$all_count = wp_count_posts('attachment')->inherit;
+        $pagination .= '</nav>';
 
-		$missing_alt_args = [
-			'post_type' => 'attachment',
-			'post_mime_type' => 'image',
-			'post_status' => 'inherit',
-			'meta_query' => [
-				'relation' => 'OR',
-				[
-					'key' => '_wp_attachment_image_alt',
-					'value' => '',
-					'compare' => '=',
-				],
-				[
-					'key' => '_wp_attachment_image_alt',
-					'compare' => 'NOT EXISTS',
-				],
-			],
-		];
-		$missing_alt_query = new WP_Query($missing_alt_args);
-		$missing_alt_count = $missing_alt_query->found_posts;
+        return $pagination;
+    }
 
-		$missing_all_args = [
-			'post_type' => 'attachment',
-			'post_mime_type' => 'image',
-			'post_status' => 'inherit',
-			'meta_query' => [
-				'relation' => 'OR',
-				[
-					'key' => '_wp_attachment_image_alt',
-					'value' => '',
-					'compare' => '=',
-				],
-				[
-					'key' => '_wp_attachment_image_alt',
-					'compare' => 'NOT EXISTS',
-				],
-			],
-			'tax_query' => [
-				'relation' => 'OR',
-				[
-					'key' => 'post_title',
-					'value' => '',
-					'compare' => '=',
-				],
-				[
-					'key' => 'post_excerpt',
-					'value' => '',
-					'compare' => '=',
-				],
-			],
-		];
-		$missing_all_query = new WP_Query($missing_all_args);
-		$missing_all_count = $missing_all_query->found_posts;
+    /**
+     * Generate a pagination link.
+     *
+     * @param int $page Page number.
+     * @param string $text Link text.
+     * @param string $class Additional CSS classes.
+     * @return string Pagination link HTML.
+     */
+    private function pagination_link($page, $text, $class = 'bg-white text-blue-500 hover:bg-blue-100') {
+        return sprintf(
+            '<a href="#" class="pagination-link %s px-3 py-2 rounded" data-page="%d">%s</a>',
+            esc_attr($class),
+            esc_attr($page),
+            esc_html($text)
+        );
+    }
 
-		return [
-			'all' => $all_count,
-			'missing_alt' => $missing_alt_count,
-			'missing_all' => $missing_all_count,
-		];
-	}
+    /**
+     * Get image counts.
+     *
+     * @return array Image counts.
+     */
+    public function get_image_counts() {
+        $all_count = wp_count_posts('attachment')->inherit;
+        $missing_alt_count = $this->count_images_with_missing_data(['alt']);
+        $missing_all_count = $this->count_images_with_missing_data(['alt', 'title', 'caption']);
 
-	public function ajax_get_image_counts() {
-		check_ajax_referer('forvoyez_nonce', 'nonce');
-		wp_send_json_success($this->get_image_counts());
-	}
+        return [
+            'all' => $all_count,
+            'missing_alt' => $missing_alt_count,
+            'missing_all' => $missing_all_count,
+        ];
+    }
 
-	public function get_image_ids($type = 'all') {
-		global $wpdb;
+    /**
+     * Count images with missing data.
+     *
+     * @param array $missing_fields Fields to check for missing data.
+     * @return int Number of images with missing data.
+     */
+    private function count_images_with_missing_data($missing_fields) {
+        $args = [
+            'post_type' => 'attachment',
+            'post_mime_type' => 'image',
+            'post_status' => 'inherit',
+            'posts_per_page' => -1,
+            'fields' => 'ids',
+            'meta_query' => $this->build_meta_query($missing_fields),
+        ];
 
-		// Retrieve all image IDs in a single query
-		$image_ids = $wpdb->get_col(
-			"
-        SELECT ID 
-        FROM {$wpdb->posts} 
-        WHERE post_type = 'attachment' 
-        AND post_mime_type LIKE 'image/%'
-    ",
-		);
+        $query = new WP_Query($args);
+        return $query->found_posts;
+    }
 
-		if (empty($image_ids)) {
-			return [];
-		}
+    /**
+     * AJAX handler for getting image counts.
+     */
+    public function ajax_get_image_counts() {
+        check_ajax_referer('forvoyez_nonce', 'nonce');
+        wp_send_json_success($this->get_image_counts());
+    }
 
-		if ($type === 'all') {
-			return $image_ids;
-		}
+    /**
+     * Get image IDs based on type.
+     *
+     * @param string $type Type of images to retrieve ('all', 'missing_all', 'missing_alt').
+     * @return array Array of image IDs.
+     */
+    public function get_image_ids($type = 'all') {
+        global $wpdb;
 
-		// Retrieve metadata in bulk
-		$meta_values = $wpdb->get_results(
-			"
-        SELECT post_id, meta_value 
-        FROM {$wpdb->postmeta} 
-        WHERE post_id IN (" .
-				implode(',', $image_ids) .
-				")
-        AND meta_key = '_wp_attachment_image_alt'
-    ",
-			OBJECT_K,
-		);
+        $query = "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%'";
 
-		// Retrieve titles and captions in bulk
-		$post_data = $wpdb->get_results(
-			"
-        SELECT ID, post_title, post_excerpt 
-        FROM {$wpdb->posts} 
-        WHERE ID IN (" .
-				implode(',', $image_ids) .
-				')
-    ',
-			OBJECT_K,
-		);
+        if ($type === 'missing_alt') {
+            $query .= " AND ID NOT IN (SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attachment_image_alt' AND meta_value != '')";
+        } elseif ($type === 'missing_all') {
+            $query .= " AND (ID NOT IN (SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attachment_image_alt' AND meta_value != '')
+                        OR post_title = ''
+                        OR post_excerpt = '')";
+        }
 
-		$filtered_ids = [];
-		foreach ($image_ids as $id) {
-			$alt_text = isset($meta_values[$id])
-				? $meta_values[$id]->meta_value
-				: '';
-			$title = isset($post_data[$id]) ? $post_data[$id]->post_title : '';
-			$caption = isset($post_data[$id])
-				? $post_data[$id]->post_excerpt
-				: '';
+        return $wpdb->get_col($query);
+    }
 
-			if (
-				$type === 'missing_all' &&
-				(empty($alt_text) || empty($title) || empty($caption))
-			) {
-				$filtered_ids[] = $id;
-			} elseif ($type === 'missing_alt' && empty($alt_text)) {
-				$filtered_ids[] = $id;
-			}
-		}
+    /**
+     * AJAX handler for getting image IDs.
+     */
+    public function ajax_get_image_ids() {
+        check_ajax_referer('forvoyez_nonce', 'nonce');
 
-		return $filtered_ids;
-	}
+        if (!current_user_can('upload_files')) {
+            wp_send_json_error('Permission denied', 403);
+        }
 
-	public function ajax_get_image_ids() {
-		check_ajax_referer('forvoyez_nonce', 'nonce');
+        $allowed_types = ['all', 'missing_all', 'missing_alt'];
+        $type = isset($_POST['type']) ? sanitize_text_field(wp_unslash($_POST['type'])) : 'all';
+        $type = in_array($type, $allowed_types, true) ? $type : 'all';
 
-		if (!current_user_can('upload_files')) {
-			wp_send_json_error('Permission denied');
-		}
+        $image_ids = $this->get_image_ids($type);
 
-		$allowed_types = ['all', 'missing_all', 'missing_alt'];
-		$type = isset($_POST['type'])
-			? sanitize_text_field(wp_unslash($_POST['type']))
-			: 'all';
-		if (!in_array($type, $allowed_types)) {
-			$type = 'all';
-		}
-		$image_ids = $this->get_image_ids($type);
+        wp_send_json_success([
+            'image_ids' => $image_ids,
+            'count' => count($image_ids),
+        ]);
+    }
 
-		wp_send_json_success([
-			'image_ids' => $image_ids,
-			'count' => count($image_ids),
-		]);
-	}
-
+    /**
+     * AJAX handler for verifying API key.
+     */
     public function ajax_verify_api_key() {
         check_ajax_referer('forvoyez_nonce', 'nonce');
 
