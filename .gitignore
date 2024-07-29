@@ -2,3 +2,5 @@
 node_modules
 composer.lock
 vendor
+.phpunit.result.cache
+tests/assets

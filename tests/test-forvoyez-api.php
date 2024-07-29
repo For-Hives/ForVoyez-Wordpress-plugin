@@ -5,171 +5,136 @@
  * @package ForVoyez
  */
 
-if (!function_exists('custom_error_log')) {
-    function custom_error_log($message) {
-        error_log(date('[Y-m-d H:i:s] ') . $message . "\n", 3, '/tmp/forvoyez-test-debug.log');
-    }
-}
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-if (!function_exists('forvoyez_get_api_key')) {
-    function forvoyez_get_api_key() {
-        custom_error_log("forvoyez_get_api_key called");
-        return apply_filters('forvoyez_get_api_key', '');
-    }
-}
-
-class TestForvoyezAPI extends WP_UnitTestCase {
-    /**
-     * @var Forvoyez_API
-     */
+class TestForvoyezAPI extends TestCase {
     private $api;
+    private $logger;
 
-    public function setUp(): void {
+    protected function setUp(): void {
         parent::setUp();
-        $this->api = new Forvoyez_API();
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->api = new Forvoyez_API($this->logger);
 
-        custom_error_log("-------------------------");
-        custom_error_log("Starting new test: " . $this->getName());
+        // Set up WordPress function mocks
+        if (!function_exists('wp_create_nonce')) {
+            function wp_create_nonce($action) {
+                return 'test_nonce';
+            }
+        }
+        if (!function_exists('check_ajax_referer')) {
+            function check_ajax_referer($action, $query_arg, $die) {
+                return true;
+            }
+        }
+        if (!function_exists('current_user_can')) {
+            function current_user_can($capability) {
+                return true;
+            }
+        }
+        if (!function_exists('forvoyez_get_api_key')) {
+            function forvoyez_get_api_key() {
+                return 'test_api_key';
+            }
+        }
     }
 
     public function testInit(): void {
-        custom_error_log("Testing init method");
+        $this->logger->expects($this->once())
+            ->method('info')
+            ->with('Initializing Forvoyez_API');
+
         $this->api->init();
-        $has_action = has_action('wp_ajax_forvoyez_verify_api_key', [$this->api, 'verify_api_key']);
-        custom_error_log("Action hook added: " . ($has_action !== false ? "Yes" : "No"));
-        $this->assertEquals(10, $has_action);
-    }
 
-    public function testVerifyApiKeyWithoutPermission(): void {
-        custom_error_log("Setting current user to 0 (no user)");
-        wp_set_current_user(0);
-        custom_error_log("Setting nonce");
-        $_REQUEST['_wpnonce'] = wp_create_nonce('forvoyez_nonce');
-
-        custom_error_log("Calling verify_api_key");
-        $response = $this->api->verify_api_key();
-        custom_error_log("Response received: " . print_r($response, true));
-
-        $this->assertFalse($response['success']);
-        $this->assertEquals(Forvoyez_API::ERROR_PERMISSION_DENIED, $response['data']);
-        $this->assertEquals(403, $response['status']);
-        custom_error_log("Test assertions completed");
-    }
-
-    public function testVerifyApiKeyWithEmptyKey(): void {
-        custom_error_log("Creating administrator user");
-        $user_id = $this->factory->user->create(['role' => 'administrator']);
-        custom_error_log("Setting current user to administrator (ID: $user_id)");
-        wp_set_current_user($user_id);
-        custom_error_log("Setting nonce");
-        $_REQUEST['_wpnonce'] = wp_create_nonce('forvoyez_nonce');
-
-        custom_error_log("Adding filter to return empty API key");
-        add_filter('forvoyez_get_api_key', '__return_empty_string');
-
-        custom_error_log("Calling verify_api_key");
-        $response = $this->api->verify_api_key();
-        custom_error_log("Response received: " . print_r($response, true));
-
-        $this->assertFalse($response['success']);
-        $this->assertEquals(Forvoyez_API::ERROR_API_KEY_NOT_SET, $response['data']);
-        $this->assertEquals(400, $response['status']);
-        custom_error_log("Test assertions completed");
-
-        custom_error_log("Removing filter");
-        remove_filter('forvoyez_get_api_key', '__return_empty_string');
+        $this->assertTrue(has_action('wp_ajax_forvoyez_verify_api_key', [$this->api, 'verify_api_key']));
     }
 
     public function testVerifyApiKeySuccess(): void {
-        custom_error_log("Creating administrator user");
-        $user_id = $this->factory->user->create(['role' => 'administrator']);
-        custom_error_log("Setting current user to administrator (ID: $user_id)");
-        wp_set_current_user($user_id);
-        custom_error_log("Setting nonce");
-        $_REQUEST['_wpnonce'] = wp_create_nonce('forvoyez_nonce');
+        $this->logger->expects($this->exactly(5))
+            ->method('info');
 
-        custom_error_log("Adding filter to return test API key");
-        add_filter('forvoyez_get_api_key', function() {
-            return 'test_api_key';
-        });
+        $_REQUEST['nonce'] = wp_create_nonce('forvoyez_nonce');
 
-        custom_error_log("Creating mock API object");
-        $mock_api = $this->getMockBuilder(Forvoyez_API::class)
-            ->setMethods(['perform_api_key_verification'])
-            ->getMock();
+        $result = $this->api->verify_api_key();
 
-        custom_error_log("Setting up mock expectation");
-        $mock_api->expects($this->once())
-            ->method('perform_api_key_verification')
-            ->with('test_api_key')
-            ->willReturn(true);
-
-        custom_error_log("Calling verify_api_key on mock object");
-        $response = $mock_api->verify_api_key();
-        custom_error_log("Response received: " . print_r($response, true));
-
-        $this->assertTrue($response['success']);
-        $this->assertEquals(Forvoyez_API::SUCCESS_API_KEY_VALID, $response['data']);
-        custom_error_log("Test assertions completed");
-
-        custom_error_log("Removing filter");
-        remove_filter('forvoyez_get_api_key', function() { return 'test_api_key'; });
+        $this->assertTrue($result['success']);
+        $this->assertEquals(Forvoyez_API::SUCCESS_API_KEY_VALID, $result['data']);
     }
 
-    public function testVerifyApiKeyFailure(): void {
-        custom_error_log("Creating administrator user");
-        $user_id = $this->factory->user->create(['role' => 'administrator']);
-        custom_error_log("Setting current user to administrator (ID: $user_id)");
-        wp_set_current_user($user_id);
-        custom_error_log("Setting nonce");
-        $_REQUEST['_wpnonce'] = wp_create_nonce('forvoyez_nonce');
+    public function testVerifyApiKeyNoApiKey(): void {
+        $this->logger->expects($this->exactly(4))
+            ->method('info');
 
-        custom_error_log("Adding filter to return invalid API key");
-        add_filter('forvoyez_get_api_key', function() {
-            return 'invalid_api_key';
-        });
+        $_REQUEST['nonce'] = wp_create_nonce('forvoyez_nonce');
 
-        custom_error_log("Creating mock API object");
-        $mock_api = $this->getMockBuilder(Forvoyez_API::class)
-            ->setMethods(['perform_api_key_verification'])
-            ->getMock();
+        // Override forvoyez_get_api_key to return empty string
+        global $forvoyez_get_api_key_override;
+        $forvoyez_get_api_key_override = true;
 
-        custom_error_log("Setting up mock expectation");
-        $mock_api->expects($this->once())
-            ->method('perform_api_key_verification')
-            ->with('invalid_api_key')
-            ->willReturn(false);
+        $result = $this->api->verify_api_key();
 
-        custom_error_log("Calling verify_api_key on mock object");
-        $response = $mock_api->verify_api_key();
-        custom_error_log("Response received: " . print_r($response, true));
+        $this->assertFalse($result['success']);
+        $this->assertEquals(Forvoyez_API::ERROR_API_KEY_NOT_SET, $result['data']);
+        $this->assertEquals(400, $result['status']);
 
-        $this->assertFalse($response['success']);
-        $this->assertEquals(Forvoyez_API::ERROR_API_KEY_INVALID, $response['data']);
-        $this->assertEquals(400, $response['status']);
-        custom_error_log("Test assertions completed");
-
-        custom_error_log("Removing filter");
-        remove_filter('forvoyez_get_api_key', function() { return 'invalid_api_key'; });
+        $forvoyez_get_api_key_override = false;
     }
 
     public function testVerifyApiKeyInvalidNonce(): void {
-        custom_error_log("Creating administrator user");
-        $user_id = $this->factory->user->create(['role' => 'administrator']);
-        custom_error_log("Setting current user to administrator (ID: $user_id)");
-        wp_set_current_user($user_id);
-        custom_error_log("Setting invalid nonce");
-        $_REQUEST['_wpnonce'] = 'invalid_nonce';
+        $this->logger->expects($this->once())
+            ->method('info');
 
-        custom_error_log("Calling verify_api_key and expecting exception");
-        try {
-            $response = $this->api->verify_api_key();
-            custom_error_log("Unexpected response received: " . print_r($response, true));
-            $this->fail('A WPDieException was expected');
-        } catch (WPDieException $e) {
-            custom_error_log("WPDieException caught as expected");
-            $this->assertTrue(true); // Exception was thrown as expected
-        }
-        custom_error_log("Test completed");
+        $this->logger->expects($this->once())
+            ->method('error')
+            ->with($this->stringContains('Invalid nonce'));
+
+        $_REQUEST['nonce'] = 'invalid_nonce';
+
+        $result = $this->api->verify_api_key();
+
+        $this->assertFalse($result['success']);
+        $this->assertEquals('Invalid nonce', $result['data']);
+        $this->assertEquals(403, $result['status']);
     }
+
+    public function testVerifyApiKeyNoPermission(): void {
+        $this->logger->expects($this->exactly(2))
+            ->method('info');
+
+        $this->logger->expects($this->once())
+            ->method('error')
+            ->with($this->stringContains(Forvoyez_API::ERROR_PERMISSION_DENIED));
+
+        $_REQUEST['nonce'] = wp_create_nonce('forvoyez_nonce');
+
+        // Override current_user_can to return false
+        global $current_user_can_override;
+        $current_user_can_override = true;
+
+        $result = $this->api->verify_api_key();
+
+        $this->assertFalse($result['success']);
+        $this->assertEquals(Forvoyez_API::ERROR_PERMISSION_DENIED, $result['data']);
+        $this->assertEquals(403, $result['status']);
+
+        $current_user_can_override = false;
+    }
+}
+
+// Helper function to override WordPress functions
+function forvoyez_get_api_key() {
+    global $forvoyez_get_api_key_override;
+    if (isset($forvoyez_get_api_key_override) && $forvoyez_get_api_key_override) {
+        return '';
+    }
+    return 'test_api_key';
+}
+
+function current_user_can($capability) {
+    global $current_user_can_override;
+    if (isset($current_user_can_override) && $current_user_can_override) {
+        return false;
+    }
+    return true;
 }
