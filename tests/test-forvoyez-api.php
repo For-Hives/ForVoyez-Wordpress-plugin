@@ -12,22 +12,37 @@ class TestForvoyezAPI extends WP_UnitTestCase {
         $this->api = new Forvoyez_API();
     }
 
+    public function tearDown(): void {
+        remove_all_filters('forvoyez_get_api_key');
+        parent::tearDown();
+    }
+
     public function testGetApiKeyWhenNotSet() {
-        // Simuler une API key non définie
-        add_filter('forvoyez_get_api_key', '__return_empty_string');
-        $this->assertEmpty(forvoyez_get_api_key());
-        remove_filter('forvoyez_get_api_key', '__return_empty_string');
+        $this->assertEmpty(forvoyez_get_api_key(), 'API key should be empty when not set');
     }
 
     public function testGetApiKeyWhenSet() {
-        // Simuler une API key définie
         add_filter('forvoyez_get_api_key', function() {
             return 'valid_api_key';
         });
-        $this->assertEquals('valid_api_key', forvoyez_get_api_key());
-        remove_filter('forvoyez_get_api_key', function() {
+        $this->assertEquals('valid_api_key', forvoyez_get_api_key(), 'API key should match the set value');
+    }
+
+    public function testVerifyApiKeyNotSet() {
+        $_REQUEST['action'] = 'forvoyez_verify_api_key';
+        $this->expectException('WPAjaxDieContinueException');
+        $this->expectOutputString('0');
+        $this->api->verify_api_key();
+    }
+
+    public function testVerifyApiKeySet() {
+        add_filter('forvoyez_get_api_key', function() {
             return 'valid_api_key';
         });
+        $_REQUEST['action'] = 'forvoyez_verify_api_key';
+        $this->expectException('WPAjaxDieContinueException');
+        $this->expectOutputString('1');
+        $this->api->verify_api_key();
     }
 
     public function testSanitizeApiKeyValid() {
