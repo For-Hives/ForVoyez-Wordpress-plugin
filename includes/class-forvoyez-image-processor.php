@@ -155,10 +155,11 @@ class Forvoyez_Image_Processor {
 
     private function is_image_incomplete($image) {
         $alt_text = get_post_meta($image->ID, '_wp_attachment_image_alt', true);
-        $is_incomplete = empty($image->post_title) || empty($alt_text) || empty($image->post_excerpt);
+        $has_default_title = preg_match('/^test-image-\d+\.webp$/', $image->post_title);
+        $is_incomplete = empty($image->post_title) || $has_default_title || empty($alt_text) || empty($image->post_excerpt);
 
         error_log("Checking image {$image->ID}: " .
-            "title='" . $image->post_title . "', " .
+            "title='" . $image->post_title . "' (default: " . ($has_default_title ? 'yes' : 'no') . "), " .
             "alt='" . $alt_text . "', " .
             "caption='" . $image->post_excerpt . "' " .
             "- Is incomplete: " . ($is_incomplete ? 'yes' : 'no'));

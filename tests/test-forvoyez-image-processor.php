@@ -130,17 +130,35 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase {
     private function create_test_image($has_alt, $has_title, $has_caption) {
         $attachment_id = $this->factory->attachment->create_upload_object(__DIR__ . '/assets/test-image.webp', 0);
 
+        $post_data = ['ID' => $attachment_id];
+
         if ($has_alt) {
             update_post_meta($attachment_id, '_wp_attachment_image_alt', 'Test Alt');
+        } else {
+            delete_post_meta($attachment_id, '_wp_attachment_image_alt');
         }
 
         if ($has_title) {
-            wp_update_post(['ID' => $attachment_id, 'post_title' => 'Test Title']);
+            $post_data['post_title'] = 'Test Title';
+        } else {
+            $post_data['post_title'] = ''; // Explicitly set an empty title
         }
 
         if ($has_caption) {
-            wp_update_post(['ID' => $attachment_id, 'post_excerpt' => 'Test Caption']);
+            $post_data['post_excerpt'] = 'Test Caption';
+        } else {
+            $post_data['post_excerpt'] = ''; // Explicitly set an empty caption
         }
+
+        wp_update_post($post_data);
+
+        $image = get_post($attachment_id);
+        $alt_text = get_post_meta($attachment_id, '_wp_attachment_image_alt', true);
+
+        error_log("Created test image: ID=$attachment_id, " .
+            "title='" . $image->post_title . "', " .
+            "alt='" . $alt_text . "', " .
+            "caption='" . $image->post_excerpt . "'");
 
         return $attachment_id;
     }
