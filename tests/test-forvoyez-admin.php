@@ -87,6 +87,8 @@ class Test_Forvoyez_Admin extends WP_UnitTestCase {
     public function test_get_image_ids() {
         // Create test images
         $normal_image = $this->factory->attachment->create(['post_mime_type' => 'image/webp']);
+        update_post_meta($normal_image, '_wp_attachment_image_alt', 'Normal Alt Text');
+
         $missing_alt_image = $this->factory->attachment->create(['post_mime_type' => 'image/webp']);
         delete_post_meta($missing_alt_image, '_wp_attachment_image_alt');
 
