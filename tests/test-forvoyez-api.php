@@ -12,69 +12,49 @@ class TestForvoyezAPI extends WP_UnitTestCase {
         $this->api = new Forvoyez_API();
     }
 
-    public function testInitAddsAjaxAction() {
-        // Initialize the API
-        $this->api->init();
-
-        // Check if the action is added
-        $this->assertTrue(has_action('wp_ajax_forvoyez_verify_api_key', [$this->api, 'verify_api_key']) !== false);
-    }
-
-    public function testVerifyApiKeyNoApiKey() {
-        // Mock forvoyez_get_api_key to return an empty value
+    public function testGetApiKeyWhenNotSet() {
+        // Simuler une API key non définie
         add_filter('forvoyez_get_api_key', '__return_empty_string');
-
-        // Capture the JSON response
-        $response = $this->captureAjaxOutput([$this->api, 'verify_api_key']);
-        $this->assertFalse($response['success']);
-        $this->assertEquals('API key is not set', $response['data']);
-
-        // Remove the filter
+        $this->assertEmpty(forvoyez_get_api_key());
         remove_filter('forvoyez_get_api_key', '__return_empty_string');
     }
 
-    public function testVerifyApiKeySuccess() {
-        // Mock forvoyez_get_api_key to return a valid key
+    public function testGetApiKeyWhenSet() {
+        // Simuler une API key définie
         add_filter('forvoyez_get_api_key', function() {
             return 'valid_api_key';
         });
-
-        // Capture the JSON response
-        $response = $this->captureAjaxOutput([$this->api, 'verify_api_key']);
-        $this->assertTrue($response['success']);
-        $this->assertEquals('API key is valid', $response['data']);
-
-        // Remove the filter
+        $this->assertEquals('valid_api_key', forvoyez_get_api_key());
         remove_filter('forvoyez_get_api_key', function() {
             return 'valid_api_key';
         });
     }
 
-    // Custom handler for wp_die to capture JSON responses in tests
-    public function wpDieHandler($message) {
-        throw new WPAjaxDieStopException($message);
+    public function testSanitizeApiKeyValid() {
+        $jwt = 'header.payload.signature';
+        $sanitized = forvoyez_sanitize_api_key($jwt);
+        $this->assertEquals($jwt, $sanitized);
     }
 
-    // Function to capture AJAX output
-    private function captureAjaxOutput($callback) {
-        add_filter('wp_die_ajax_handler', [$this, 'wpDieHandler'], 10, 1);
+    public function testSanitizeApiKeyInvalid() {
+        $invalid_jwt = 'invalid_jwt_format';
+        $sanitized = forvoyez_sanitize_api_key($invalid_jwt);
+        $this->assertWPError($sanitized);
+        $this->assertEquals('invalid_api_key', $sanitized->get_error_code());
+    }
 
-        ob_start(); // Start output buffering
-        try {
-            call_user_func($callback);
-        } catch (WPAjaxDieStopException $e) {
-            remove_filter('wp_die_ajax_handler', [$this, 'wpDieHandler'], 10);
-            ob_end_clean(); // Clear the output buffer
-            return json_decode($e->getMessage(), true);
-        }
-        ob_end_clean(); // Clear the output buffer if no exception
-        remove_filter('wp_die_ajax_handler', [$this, 'wpDieHandler'], 10);
-        return null;
+    public function testVerifyJwtValid() {
+        $jwt = 'header.payload.signature';
+        $payload = base64_encode(json_encode(['iss' => 'ForVoyez', 'aud' => 'ForVoyez', 'exp' => time() + 3600]));
+        $valid_jwt = "header.$payload.signature";
+        $result = forvoyez_verify_jwt($valid_jwt);
+        $this->assertTrue($result);
+    }
+
+    public function testVerifyJwtInvalid() {
+        $invalid_jwt = 'header.payload.invalid_signature';
+        $result = forvoyez_verify_jwt($invalid_jwt);
+        $this->assertWPError($result);
+        $this->assertEquals('invalid_payload', $result->get_error_code());
     }
 }
-
-// Check if the custom exception class already exists before declaring it
-if (!class_exists('WPAjaxDieStopException')) {
-    class WPAjaxDieStopException extends Exception {}
-}
-
