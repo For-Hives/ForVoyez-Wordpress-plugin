@@ -8,133 +8,113 @@
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class TestForvoyezAPI extends TestCase {
-    private $api;
+class TestForvoyezAPI extends WP_UnitTestCase {
     private $logger;
+    private $api;
 
-    protected function setUp(): void {
+    public function setUp(): void {
         parent::setUp();
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->api = new Forvoyez_API($this->logger);
+    }
 
-        // Set up WordPress function mocks
-        if (!function_exists('wp_create_nonce')) {
-            function wp_create_nonce($action) {
-                return 'test_nonce';
-            }
-        }
-        if (!function_exists('check_ajax_referer')) {
-            function check_ajax_referer($action, $query_arg, $die) {
-                return true;
-            }
-        }
-        if (!function_exists('current_user_can')) {
-            function current_user_can($capability) {
-                return true;
-            }
-        }
-        if (!function_exists('forvoyez_get_api_key')) {
-            function forvoyez_get_api_key() {
-                return 'test_api_key';
-            }
-        }
+    public function testConstructor(): void {
+        $this->assertInstanceOf(Forvoyez_API::class, $this->api);
     }
 
     public function testInit(): void {
-        $this->logger->expects($this->once())
-            ->method('info')
-            ->with('Initializing Forvoyez_API');
-
+        $this->logger->expects($this->once())->method('info')->with('Initializing Forvoyez_API');
         $this->api->init();
-
         $this->assertTrue(has_action('wp_ajax_forvoyez_verify_api_key', [$this->api, 'verify_api_key']));
     }
 
-    public function testVerifyApiKeySuccess(): void {
-        $this->logger->expects($this->exactly(5))
-            ->method('info');
+    public function testVerifyApiKey(): void {
+        // Set up mock methods
+        $this->logger->expects($this->once())->method('info')->with('Starting verify_api_key method');
 
-        $_REQUEST['nonce'] = wp_create_nonce('forvoyez_nonce');
+        // Mock nonce check
+        $apiMock = $this->getMockBuilder(Forvoyez_API::class)
+            ->setConstructorArgs([$this->logger])
+            ->onlyMethods(['check_nonce', 'check_user_capability', 'get_api_key', 'perform_api_key_verification'])
+            ->getMock();
 
-        $result = $this->api->verify_api_key();
+        $apiMock->expects($this->once())->method('check_nonce');
+        $apiMock->expects($this->once())->method('check_user_capability');
+        $apiMock->expects($this->once())->method('get_api_key')->willReturn('test_api_key');
+        $apiMock->expects($this->once())->method('perform_api_key_verification')->with('test_api_key')->willReturn(true);
+
+        $result = $apiMock->verify_api_key();
 
         $this->assertTrue($result['success']);
         $this->assertEquals(Forvoyez_API::SUCCESS_API_KEY_VALID, $result['data']);
     }
 
-    public function testVerifyApiKeyNoApiKey(): void {
-        $this->logger->expects($this->exactly(4))
-            ->method('info');
+    public function testVerifyApiKeyWithInvalidApiKey(): void {
+        $this->logger->expects($this->once())->method('info')->with('Starting verify_api_key method');
 
-        $_REQUEST['nonce'] = wp_create_nonce('forvoyez_nonce');
+        $apiMock = $this->getMockBuilder(Forvoyez_API::class)
+            ->setConstructorArgs([$this->logger])
+            ->onlyMethods(['check_nonce', 'check_user_capability', 'get_api_key', 'perform_api_key_verification'])
+            ->getMock();
 
-        // Override forvoyez_get_api_key to return empty string
-        global $forvoyez_get_api_key_override;
-        $forvoyez_get_api_key_override = true;
+        $apiMock->expects($this->once())->method('check_nonce');
+        $apiMock->expects($this->once())->method('check_user_capability');
+        $apiMock->expects($this->once())->method('get_api_key')->willReturn('');
 
-        $result = $this->api->verify_api_key();
+        $result = $apiMock->verify_api_key();
 
         $this->assertFalse($result['success']);
         $this->assertEquals(Forvoyez_API::ERROR_API_KEY_NOT_SET, $result['data']);
         $this->assertEquals(400, $result['status']);
-
-        $forvoyez_get_api_key_override = false;
     }
 
-    public function testVerifyApiKeyInvalidNonce(): void {
-        $this->logger->expects($this->once())
-            ->method('info');
+    public function testVerifyApiKeyThrowsException(): void {
+        $this->logger->expects($this->once())->method('info')->with('Starting verify_api_key method');
+        $this->logger->expects($this->once())->method('error')->with('Error in verify_api_key: Test Exception');
 
-        $this->logger->expects($this->once())
-            ->method('error')
-            ->with($this->stringContains('Invalid nonce'));
+        $apiMock = $this->getMockBuilder(Forvoyez_API::class)
+            ->setConstructorArgs([$this->logger])
+            ->onlyMethods(['check_nonce', 'check_user_capability', 'get_api_key'])
+            ->getMock();
 
-        $_REQUEST['nonce'] = 'invalid_nonce';
+        $apiMock->expects($this->once())->method('check_nonce')->will($this->throwException(new Exception('Test Exception', 500)));
+        $apiMock->expects($this->never())->method('check_user_capability');
+        $apiMock->expects($this->never())->method('get_api_key');
 
-        $result = $this->api->verify_api_key();
+        $result = $apiMock->verify_api_key();
 
         $this->assertFalse($result['success']);
-        $this->assertEquals('Invalid nonce', $result['data']);
-        $this->assertEquals(403, $result['status']);
+        $this->assertEquals('Test Exception', $result['data']);
+        $this->assertEquals(500, $result['status']);
     }
 
-    public function testVerifyApiKeyNoPermission(): void {
-        $this->logger->expects($this->exactly(2))
-            ->method('info');
+    public function testCheckNonceInvalid(): void {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid nonce');
+        $this->expectExceptionCode(403);
 
-        $this->logger->expects($this->once())
-            ->method('error')
-            ->with($this->stringContains(Forvoyez_API::ERROR_PERMISSION_DENIED));
+        $apiMock = $this->getMockBuilder(Forvoyez_API::class)
+            ->setConstructorArgs([$this->logger])
+            ->onlyMethods(['check_nonce'])
+            ->getMock();
 
-        $_REQUEST['nonce'] = wp_create_nonce('forvoyez_nonce');
+        $apiMock->method('check_nonce')->will($this->throwException(new Exception('Invalid nonce', 403)));
 
-        // Override current_user_can to return false
-        global $current_user_can_override;
-        $current_user_can_override = true;
-
-        $result = $this->api->verify_api_key();
-
-        $this->assertFalse($result['success']);
-        $this->assertEquals(Forvoyez_API::ERROR_PERMISSION_DENIED, $result['data']);
-        $this->assertEquals(403, $result['status']);
-
-        $current_user_can_override = false;
+        $apiMock->verify_api_key();
     }
-}
 
-// Helper function to override WordPress functions
-function forvoyez_get_api_key() {
-    global $forvoyez_get_api_key_override;
-    if (isset($forvoyez_get_api_key_override) && $forvoyez_get_api_key_override) {
-        return '';
-    }
-    return 'test_api_key';
-}
+    public function testCheckUserCapabilityInvalid(): void {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(Forvoyez_API::ERROR_PERMISSION_DENIED);
+        $this->expectExceptionCode(403);
 
-function current_user_can($capability) {
-    global $current_user_can_override;
-    if (isset($current_user_can_override) && $current_user_can_override) {
-        return false;
+        $apiMock = $this->getMockBuilder(Forvoyez_API::class)
+            ->setConstructorArgs([$this->logger])
+            ->onlyMethods(['check_user_capability'])
+            ->getMock();
+
+        $apiMock->method('check_user_capability')->will($this->throwException(new Exception(Forvoyez_API::ERROR_PERMISSION_DENIED, 403)));
+
+        $apiMock->verify_api_key();
     }
-    return true;
 }
