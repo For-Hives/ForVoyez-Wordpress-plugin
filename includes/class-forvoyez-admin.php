@@ -414,7 +414,7 @@ class Forvoyez_Admin {
 
         error_log("Final query: " . $query);
 
-        $results = $wpdb->get_col($query);
+        $results = array_map('intval', $wpdb->get_col($query));
         error_log("Query results: " . print_r($results, true));
 
         return $results;

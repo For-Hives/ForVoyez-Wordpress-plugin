@@ -94,14 +94,14 @@ class Test_Forvoyez_Admin extends WP_UnitTestCase {
         error_log("Missing alt image ID: " . $missing_alt_image);
 
         // Test for 'all'
-        $all_ids = $this->forvoyez_admin->get_image_ids('all');
+        $all_ids = array_map('intval', $this->forvoyez_admin->get_image_ids('all'));
         error_log("All IDs: " . print_r($all_ids, true));
 
         $this->assertContains($normal_image, $all_ids, "Normal image should be in 'all' results");
         $this->assertContains($missing_alt_image, $all_ids, "Missing alt image should be in 'all' results");
 
         // Test for 'missing_alt'
-        $missing_alt_ids = $this->forvoyez_admin->get_image_ids('missing_alt');
+        $missing_alt_ids = array_map('intval', $this->forvoyez_admin->get_image_ids('missing_alt'));
         error_log("Missing alt IDs: " . print_r($missing_alt_ids, true));
 
         $this->assertNotContains($normal_image, $missing_alt_ids, "Normal image should not be in 'missing_alt' results");
