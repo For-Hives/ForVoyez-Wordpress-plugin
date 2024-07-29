@@ -96,12 +96,6 @@ function forvoyez_get_api_key() {
 
     $api_key = $forvoyez_settings->get_api_key();
 
-    /**
-     * Filters the retrieved API key.
-     *
-     * @since 1.0.0
-     * @param string $api_key The ForVoyez API key.
-     */
     return apply_filters('forvoyez_api_key', $api_key);
 }
 

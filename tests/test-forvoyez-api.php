@@ -4,6 +4,7 @@
  *
  * @package ForVoyez
  */
+
 class TestForvoyezAPI extends WP_UnitTestCase {
     private $api;
 
@@ -13,7 +14,7 @@ class TestForvoyezAPI extends WP_UnitTestCase {
     }
 
     public function tearDown(): void {
-        remove_all_filters('forvoyez_get_api_key');
+        remove_all_filters('forvoyez_api_key');
         parent::tearDown();
     }
 
@@ -22,36 +23,61 @@ class TestForvoyezAPI extends WP_UnitTestCase {
     }
 
     public function testGetApiKeyWhenSet() {
-        add_filter('forvoyez_get_api_key', function() {
+        $test_key = 'valid_api_key';
+
+        add_filter('forvoyez_api_key', function() use ($test_key) {
+            return $test_key;
+        });
+
+        $this->assertEquals($test_key, forvoyez_get_api_key(), 'API key should match the set value');
+    }
+
+    public function testSanitizeApiKey() {
+        $dirty_key = ' Test<script>alert("XSS")</script>Key ';
+        $expected_clean_key = 'TestKey';
+
+        $clean_key = $this->api->sanitize_api_key($dirty_key);
+
+        $this->assertEquals($expected_clean_key, $clean_key, 'API key should be properly sanitized');
+    }
+
+    public function testValidateApiKeyFormatValid() {
+        $valid_key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+
+        $this->assertTrue($this->api->validate_api_key_format($valid_key), 'Valid API key format should be recognized');
+    }
+
+    public function testValidateApiKeyFormatInvalid() {
+        $invalid_key = 'not a valid jwt token';
+
+        $this->assertFalse($this->api->validate_api_key_format($invalid_key), 'Invalid API key format should be recognized');
+    }
+
+    public function testVerifyApiKeyNotSet() {
+        // We need to capture the JSON output
+        ob_start();
+        $this->api->verify_api_key();
+        $output = ob_get_clean();
+
+        $response = json_decode($output, true);
+
+        $this->assertFalse($response['success']);
+        $this->assertEquals('API key is not set', $response['data']);
+    }
+
+    public function testVerifyApiKeySet() {
+        add_filter('forvoyez_api_key', function() {
             return 'valid_api_key';
         });
-        $this->assertEquals('valid_api_key', forvoyez_get_api_key(), 'API key should match the set value');
-    }
 
-    public function testSanitizeApiKeyValid() {
-        $jwt = 'header.payload.signature';
-        $sanitized = forvoyez_sanitize_api_key($jwt);
-        $this->assertEquals($jwt, $sanitized);
-    }
+        // We need to capture the JSON output
+        ob_start();
+        $this->api->verify_api_key();
+        $output = ob_get_clean();
 
-    public function testSanitizeApiKeyInvalid() {
-        $invalid_jwt = 'invalid_jwt_format';
-        $sanitized = forvoyez_sanitize_api_key($invalid_jwt);
-        $this->assertInstanceOf(WP_Error::class, $sanitized);
-        $this->assertEquals('invalid_api_key', $sanitized->get_error_code());
-    }
+        $response = json_decode($output, true);
 
-    public function testVerifyJwtValid() {
-        $payload = base64_encode(json_encode(['iss' => 'ForVoyez', 'aud' => 'ForVoyez', 'exp' => time() + 3600]));
-        $valid_jwt = "header.$payload.signature";
-        $result = forvoyez_verify_jwt($valid_jwt);
-        $this->assertTrue($result);
-    }
-
-    public function testVerifyJwtInvalid() {
-        $invalid_jwt = 'header.payload.invalid_signature';
-        $result = forvoyez_verify_jwt($invalid_jwt);
-        $this->assertInstanceOf(WP_Error::class, $result);
-        $this->assertEquals('invalid_payload', $result->get_error_code());
+        $this->assertTrue($response['success']);
+        $this->assertEquals('API key is valid', $response['data']);
     }
 }
