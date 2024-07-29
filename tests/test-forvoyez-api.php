@@ -58,12 +58,16 @@ class TestForvoyezAPI extends WP_UnitTestCase {
     // Function to capture AJAX output
     private function captureAjaxOutput($callback) {
         add_filter('wp_die_ajax_handler', [$this, 'wpDieHandler'], 10, 1);
+
+        ob_start(); // Start output buffering
         try {
             call_user_func($callback);
         } catch (WPAjaxDieStopException $e) {
             remove_filter('wp_die_ajax_handler', [$this, 'wpDieHandler'], 10);
+            ob_end_clean(); // Clear the output buffer
             return json_decode($e->getMessage(), true);
         }
+        ob_end_clean(); // Clear the output buffer if no exception
         remove_filter('wp_die_ajax_handler', [$this, 'wpDieHandler'], 10);
         return null;
     }
@@ -73,3 +77,4 @@ class TestForvoyezAPI extends WP_UnitTestCase {
 if (!class_exists('WPAjaxDieStopException')) {
     class WPAjaxDieStopException extends Exception {}
 }
+
