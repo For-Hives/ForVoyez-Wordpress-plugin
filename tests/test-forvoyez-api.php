@@ -4,7 +4,6 @@
  *
  * @package ForVoyez
  */
-
 class TestForvoyezAPI extends WP_UnitTestCase {
     private $api;
 
@@ -54,15 +53,12 @@ class TestForvoyezAPI extends WP_UnitTestCase {
     }
 
     public function testVerifyApiKeyNotSet() {
-        // We need to capture the JSON output
-        ob_start();
+        add_filter('forvoyez_api_key', '__return_empty_string');
+
+        $this->expectException('WPDieException');
+        $this->expectOutputRegex('/{"success":false,"data":"API key is not set"}/');
+
         $this->api->verify_api_key();
-        $output = ob_get_clean();
-
-        $response = json_decode($output, true);
-
-        $this->assertFalse($response['success']);
-        $this->assertEquals('API key is not set', $response['data']);
     }
 
     public function testVerifyApiKeySet() {
@@ -70,14 +66,9 @@ class TestForvoyezAPI extends WP_UnitTestCase {
             return 'valid_api_key';
         });
 
-        // We need to capture the JSON output
-        ob_start();
+        $this->expectException('WPDieException');
+        $this->expectOutputRegex('/{"success":true,"data":"API key is valid"}/');
+
         $this->api->verify_api_key();
-        $output = ob_get_clean();
-
-        $response = json_decode($output, true);
-
-        $this->assertTrue($response['success']);
-        $this->assertEquals('API key is valid', $response['data']);
     }
 }
