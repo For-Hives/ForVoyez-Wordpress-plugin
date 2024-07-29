@@ -59,5 +59,14 @@ class TestForvoyezAPI extends WP_UnitTestCase {
             return 'valid_api_key';
         });
     }
+
+    // Custom handler for wp_die to capture JSON responses in tests
+    public function wpDieHandler($message) {
+        throw new WPAjaxDieStopException($message);
+    }
 }
 
+// Check if the custom exception class already exists before declaring it
+if (!class_exists('WPAjaxDieStopException')) {
+    class WPAjaxDieStopException extends Exception {}
+}
