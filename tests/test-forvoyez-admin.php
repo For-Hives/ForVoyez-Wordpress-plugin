@@ -90,14 +90,31 @@ class Test_Forvoyez_Admin extends WP_UnitTestCase {
         $missing_alt_image = $this->factory->attachment->create(['post_mime_type' => 'image/webp']);
         delete_post_meta($missing_alt_image, '_wp_attachment_image_alt');
 
+        error_log("Normal image ID: " . $normal_image);
+        error_log("Missing alt image ID: " . $missing_alt_image);
+
         // Test for 'all'
         $all_ids = $this->forvoyez_admin->get_image_ids('all');
-        $this->assertContains($normal_image, $all_ids);
-        $this->assertContains($missing_alt_image, $all_ids);
+        error_log("All IDs: " . print_r($all_ids, true));
+
+        $this->assertContains($normal_image, $all_ids, "Normal image should be in 'all' results");
+        $this->assertContains($missing_alt_image, $all_ids, "Missing alt image should be in 'all' results");
 
         // Test for 'missing_alt'
         $missing_alt_ids = $this->forvoyez_admin->get_image_ids('missing_alt');
-        $this->assertNotContains($normal_image, $missing_alt_ids);
-        $this->assertContains($missing_alt_image, $missing_alt_ids);
+        error_log("Missing alt IDs: " . print_r($missing_alt_ids, true));
+
+        $this->assertNotContains($normal_image, $missing_alt_ids, "Normal image should not be in 'missing_alt' results");
+        $this->assertContains($missing_alt_image, $missing_alt_ids, "Missing alt image should be in 'missing_alt' results");
+
+        // Additional checks
+        error_log("Normal image alt text: " . get_post_meta($normal_image, '_wp_attachment_image_alt', true));
+        error_log("Missing alt image alt text: " . get_post_meta($missing_alt_image, '_wp_attachment_image_alt', true));
+
+        // Check if images are actually created
+        $normal_post = get_post($normal_image);
+        $missing_alt_post = get_post($missing_alt_image);
+        error_log("Normal image post: " . print_r($normal_post, true));
+        error_log("Missing alt image post: " . print_r($missing_alt_post, true));
     }
 }

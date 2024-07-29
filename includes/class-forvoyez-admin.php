@@ -402,15 +402,22 @@ class Forvoyez_Admin {
 
         $query = "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%'";
 
+        error_log("Base query: " . $query);
+
         if ($type === 'missing_alt') {
             $query .= " AND ID NOT IN (SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attachment_image_alt' AND meta_value != '')";
         } elseif ($type === 'missing_all') {
             $query .= " AND (ID NOT IN (SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attachment_image_alt' AND meta_value != '')
-                        OR post_title = ''
-                        OR post_excerpt = '')";
+                    OR post_title = ''
+                    OR post_excerpt = '')";
         }
 
-        return $wpdb->get_col($query);
+        error_log("Final query: " . $query);
+
+        $results = $wpdb->get_col($query);
+        error_log("Query results: " . print_r($results, true));
+
+        return $results;
     }
 
     /**
