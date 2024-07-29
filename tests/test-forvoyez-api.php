@@ -29,20 +29,30 @@ class TestForvoyezAPI extends WP_UnitTestCase {
     }
 
     public function testVerifyApiKeyNotSet() {
-        $_REQUEST['action'] = 'forvoyez_verify_api_key';
-        $this->expectException('WPAjaxDieContinueException');
-        $this->expectOutputString('0');
-        $this->api->verify_api_key();
+        $this->expectException('WPAjaxDieStopException');
+        try {
+            $this->_handleAjax('forvoyez_verify_api_key');
+        } catch (WPAjaxDieStopException $e) {
+            $response = json_decode($this->_last_response, true);
+            $this->assertFalse($response['success']);
+            $this->assertEquals('API key is not set', $response['data']);
+            throw $e;
+        }
     }
 
     public function testVerifyApiKeySet() {
         add_filter('forvoyez_get_api_key', function() {
             return 'valid_api_key';
         });
-        $_REQUEST['action'] = 'forvoyez_verify_api_key';
-        $this->expectException('WPAjaxDieContinueException');
-        $this->expectOutputString('1');
-        $this->api->verify_api_key();
+        $this->expectException('WPAjaxDieStopException');
+        try {
+            $this->_handleAjax('forvoyez_verify_api_key');
+        } catch (WPAjaxDieStopException $e) {
+            $response = json_decode($this->_last_response, true);
+            $this->assertTrue($response['success']);
+            $this->assertEquals('API key is valid', $response['data']);
+            throw $e;
+        }
     }
 
     public function testSanitizeApiKeyValid() {
@@ -54,12 +64,11 @@ class TestForvoyezAPI extends WP_UnitTestCase {
     public function testSanitizeApiKeyInvalid() {
         $invalid_jwt = 'invalid_jwt_format';
         $sanitized = forvoyez_sanitize_api_key($invalid_jwt);
-        $this->assertWPError($sanitized);
+        $this->assertInstanceOf(WP_Error::class, $sanitized);
         $this->assertEquals('invalid_api_key', $sanitized->get_error_code());
     }
 
     public function testVerifyJwtValid() {
-        $jwt = 'header.payload.signature';
         $payload = base64_encode(json_encode(['iss' => 'ForVoyez', 'aud' => 'ForVoyez', 'exp' => time() + 3600]));
         $valid_jwt = "header.$payload.signature";
         $result = forvoyez_verify_jwt($valid_jwt);
@@ -69,7 +78,7 @@ class TestForvoyezAPI extends WP_UnitTestCase {
     public function testVerifyJwtInvalid() {
         $invalid_jwt = 'header.payload.invalid_signature';
         $result = forvoyez_verify_jwt($invalid_jwt);
-        $this->assertWPError($result);
+        $this->assertInstanceOf(WP_Error::class, $result);
         $this->assertEquals('invalid_payload', $result->get_error_code());
     }
 }
