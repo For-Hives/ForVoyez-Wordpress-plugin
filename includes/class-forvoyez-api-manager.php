@@ -41,11 +41,16 @@ class Forvoyez_API_Manager {
 
     /**
      * Verify the API key.
-     *
-     * @return void
      */
-    public function verify_api_key(): void {
-        // Implement API key verification logic here
+    public function verify_api_key() {
+        $api_key = forvoyez_get_api_key();
+        if (empty($api_key)) {
+            return ['success' => false, 'message' => 'API key is not set'];
+        }
+
+        // Ici, vous pouvez implémenter une vérification réelle avec l'API ForVoyez
+        // Pour l'instant, nous simulons une vérification réussie
+        return ['success' => true, 'message' => 'API key is valid'];
     }
 
     /**

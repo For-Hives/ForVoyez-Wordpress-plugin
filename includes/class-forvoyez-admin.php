@@ -2,7 +2,13 @@
 defined('ABSPATH') || exit();
 
 class Forvoyez_Admin {
-	public function init() {
+    private $api_manager;
+
+    public function __construct(Forvoyez_API_Manager $api_manager) {
+        $this->api_manager = $api_manager;
+    }
+
+    public function init() {
 		add_action('admin_menu', [$this, 'add_menu_item']);
 		add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_scripts']);
 		add_action('wp_ajax_forvoyez_load_images', [$this, 'ajax_load_images']);
@@ -14,6 +20,7 @@ class Forvoyez_Admin {
 			$this,
 			'ajax_get_image_ids',
 		]);
+        add_action('wp_ajax_forvoyez_verify_api_key', [$this, 'ajax_verify_api_key']);
 	}
 
 	public function add_menu_item() {
@@ -482,4 +489,20 @@ class Forvoyez_Admin {
 			'count' => count($image_ids),
 		]);
 	}
+
+    public function ajax_verify_api_key() {
+        check_ajax_referer('forvoyez_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Permission denied', 403);
+        }
+
+        $result = $this->api_manager->verify_api_key();
+
+        if ($result['success']) {
+            wp_send_json_success($result['message']);
+        } else {
+            wp_send_json_error($result['message']);
+        }
+    }
 }

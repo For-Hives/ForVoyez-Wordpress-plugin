@@ -36,7 +36,6 @@ define('FORVOYEZ_PLUGIN_BASENAME', plugin_basename(__FILE__));
 $required_files = [
     'includes/forvoyez-helpers.php',
     'includes/class-forvoyez-admin.php',
-    'includes/class-forvoyez-api.php',
     'includes/class-forvoyez-api-manager.php',
     'includes/class-forvoyez-image-processor.php',
     'includes/class-forvoyez-settings.php',
@@ -56,17 +55,15 @@ foreach ($required_files as $file) {
  * @since 1.0.0
  */
 function forvoyez_init() {
-    $classes = [
-        'Forvoyez_Admin',
-        'Forvoyez_API',
-        'Forvoyez_Image_Processor',
-        'Forvoyez_Settings'
-    ];
+    $settings = new Forvoyez_Settings();
+    $api_manager = new Forvoyez_API_Manager(forvoyez_get_api_key());
+    $image_processor = new Forvoyez_Image_Processor($api_manager);
+    $admin = new Forvoyez_Admin($api_manager, $settings, $image_processor);
 
-    foreach ($classes as $class) {
-        $instance = new $class();
-        $instance->init();
-    }
+    $settings->init();
+    $api_manager->init();
+    $image_processor->init();
+    $admin->init();
 }
 add_action('plugins_loaded', 'forvoyez_init');
 
