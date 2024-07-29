@@ -129,27 +129,26 @@ class Forvoyez_Image_Processor {
             'post_type' => 'attachment',
             'post_mime_type' => 'image',
             'post_status' => 'inherit',
-            'posts_per_page' => $limit,
-            'offset' => $offset,
-            'meta_query' => [
-                'relation' => 'OR',
-                [
-                    'key' => '_wp_attachment_image_alt',
-                    'value' => '',
-                    'compare' => '=',
-                ],
-                [
-                    'key' => '_wp_attachment_image_alt',
-                    'compare' => 'NOT EXISTS',
-                ],
-            ],
+            'posts_per_page' => -1, // Get all images
+            'fields' => 'ids', // Only get IDs for efficiency
         ];
 
         $query_images = new WP_Query($args);
-        error_log("WP_Query found " . count($query_images->posts) . " images");
+        $all_image_ids = $query_images->posts;
+        error_log("WP_Query found " . count($all_image_ids) . " total images");
 
-        $incomplete_images = array_filter($query_images->posts, [$this, 'is_image_incomplete']);
-        error_log("After filtering, found " . count($incomplete_images) . " incomplete images");
+        $incomplete_images = [];
+        foreach ($all_image_ids as $image_id) {
+            $image = get_post($image_id);
+            if ($this->is_image_incomplete($image)) {
+                $incomplete_images[] = $image;
+            }
+        }
+
+        error_log("Found " . count($incomplete_images) . " incomplete images");
+
+        // Apply offset and limit
+        $incomplete_images = array_slice($incomplete_images, $offset, $limit);
 
         return $incomplete_images;
     }
@@ -158,10 +157,11 @@ class Forvoyez_Image_Processor {
         $alt_text = get_post_meta($image->ID, '_wp_attachment_image_alt', true);
         $is_incomplete = empty($image->post_title) || empty($alt_text) || empty($image->post_excerpt);
 
-        error_log("Checking image {$image->ID}: title=" . (empty($image->post_title) ? 'empty' : 'set') .
-            ", alt=" . (empty($alt_text) ? 'empty' : 'set') .
-            ", caption=" . (empty($image->post_excerpt) ? 'empty' : 'set') .
-            " - Is incomplete: " . ($is_incomplete ? 'yes' : 'no'));
+        error_log("Checking image {$image->ID}: " .
+            "title='" . $image->post_title . "', " .
+            "alt='" . $alt_text . "', " .
+            "caption='" . $image->post_excerpt . "' " .
+            "- Is incomplete: " . ($is_incomplete ? 'yes' : 'no'));
 
         return $is_incomplete;
     }

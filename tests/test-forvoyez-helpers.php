@@ -129,22 +129,29 @@ class TestForVoyezHelpers extends WP_UnitTestCase {
     private function create_test_image($has_alt, $has_title, $has_caption) {
         $attachment_id = $this->factory->attachment->create_upload_object(__DIR__ . '/assets/test-image.webp', 0);
 
-        error_log("Created test image with ID: $attachment_id");
+        $post_data = ['ID' => $attachment_id];
 
         if ($has_alt) {
             update_post_meta($attachment_id, '_wp_attachment_image_alt', 'Test Alt');
-            error_log("Set alt text for image $attachment_id");
         }
 
         if ($has_title) {
-            wp_update_post(['ID' => $attachment_id, 'post_title' => 'Test Title']);
-            error_log("Set title for image $attachment_id");
+            $post_data['post_title'] = 'Test Title';
         }
 
         if ($has_caption) {
-            wp_update_post(['ID' => $attachment_id, 'post_excerpt' => 'Test Caption']);
-            error_log("Set caption for image $attachment_id");
+            $post_data['post_excerpt'] = 'Test Caption';
         }
+
+        wp_update_post($post_data);
+
+        $image = get_post($attachment_id);
+        $alt_text = get_post_meta($attachment_id, '_wp_attachment_image_alt', true);
+
+        error_log("Created test image: ID=$attachment_id, " .
+            "title='" . $image->post_title . "', " .
+            "alt='" . $alt_text . "', " .
+            "caption='" . $image->post_excerpt . "'");
 
         return $attachment_id;
     }
