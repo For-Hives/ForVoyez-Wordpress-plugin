@@ -123,8 +123,6 @@ class Forvoyez_Image_Processor {
     }
 
     private function get_incomplete_images($offset, $limit) {
-        error_log("Getting incomplete images with offset $offset and limit $limit");
-
         $args = [
             'post_type' => 'attachment',
             'post_mime_type' => 'image',
@@ -135,7 +133,6 @@ class Forvoyez_Image_Processor {
 
         $query_images = new WP_Query($args);
         $all_image_ids = $query_images->posts;
-        error_log("WP_Query found " . count($all_image_ids) . " total images");
 
         $incomplete_images = [];
         foreach ($all_image_ids as $image_id) {
@@ -144,8 +141,6 @@ class Forvoyez_Image_Processor {
                 $incomplete_images[] = $image;
             }
         }
-
-        error_log("Found " . count($incomplete_images) . " incomplete images");
 
         // Apply offset and limit
         $incomplete_images = array_slice($incomplete_images, $offset, $limit);
@@ -157,12 +152,6 @@ class Forvoyez_Image_Processor {
         $alt_text = get_post_meta($image->ID, '_wp_attachment_image_alt', true);
         $has_default_title = preg_match('/^test-image-\d+\.webp$/', $image->post_title);
         $is_incomplete = empty($image->post_title) || $has_default_title || empty($alt_text) || empty($image->post_excerpt);
-
-        error_log("Checking image {$image->ID}: " .
-            "title='" . $image->post_title . "' (default: " . ($has_default_title ? 'yes' : 'no') . "), " .
-            "alt='" . $alt_text . "', " .
-            "caption='" . $image->post_excerpt . "' " .
-            "- Is incomplete: " . ($is_incomplete ? 'yes' : 'no'));
 
         return $is_incomplete;
     }
