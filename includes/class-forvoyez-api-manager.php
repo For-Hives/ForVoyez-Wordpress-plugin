@@ -175,7 +175,7 @@ class Forvoyez_API_Manager {
             'post_title' => $metadata['title'],
             'post_excerpt' => $metadata['caption'],
         ]);
-        update_post_meta($image_id, '_forvoyez_analyzed', true);
+        update_post_meta($image_id, '_forvoyez_analyzed', 1);
     }
 
     /**
