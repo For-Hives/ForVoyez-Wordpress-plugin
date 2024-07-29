@@ -126,28 +126,25 @@ class TestForVoyezHelpers extends WP_UnitTestCase {
      * @param bool $has_caption Whether the image should have a caption.
      * @return int The attachment ID of the created image.
      */
-    private function create_test_image($has_title, $has_alt, $has_caption) {
-        $filename = plugin_dir_path(__FILE__) . 'assets/test-image.webp';
-        $contents = file_get_contents($filename);
-        $upload = wp_upload_bits(basename($filename), null, $contents);
-        $this->assertTrue(empty($upload['error']), 'Upload failed: ' . ($upload['error'] ?? 'Unknown error'));
+    private function create_test_image($has_alt, $has_title, $has_caption) {
+        $attachment_id = $this->factory->attachment->create_upload_object(__DIR__ . '/assets/test-image.webp', 0);
 
-        $attachment_id = $this->factory->attachment->create_object($upload['file'], 0, [
-            'post_mime_type' => 'image/webp',
-            'post_title'     => $has_title ? 'Test Title' : '',
-            'post_excerpt'   => $has_caption ? 'Test Caption' : '',
-        ]);
+        error_log("Created test image with ID: $attachment_id");
 
         if ($has_alt) {
-            update_post_meta($attachment_id, '_wp_attachment_image_alt', 'Test Alt Text');
-        } else {
-            delete_post_meta($attachment_id, '_wp_attachment_image_alt');
+            update_post_meta($attachment_id, '_wp_attachment_image_alt', 'Test Alt');
+            error_log("Set alt text for image $attachment_id");
         }
 
-        // Force update the guid to match the filename
-        $attachment = get_post($attachment_id);
-        $attachment->guid = wp_get_attachment_url($attachment_id);
-        wp_update_post($attachment);
+        if ($has_title) {
+            wp_update_post(['ID' => $attachment_id, 'post_title' => 'Test Title']);
+            error_log("Set title for image $attachment_id");
+        }
+
+        if ($has_caption) {
+            wp_update_post(['ID' => $attachment_id, 'post_excerpt' => 'Test Caption']);
+            error_log("Set caption for image $attachment_id");
+        }
 
         return $attachment_id;
     }
