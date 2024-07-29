@@ -25,14 +25,9 @@ class TestForvoyezAPI extends WP_UnitTestCase {
         add_filter('forvoyez_get_api_key', '__return_empty_string');
 
         // Capture the JSON response
-        add_filter('wp_die_ajax_handler', [$this, 'wpDieHandler'], 10, 1);
-        try {
-            $this->api->verify_api_key();
-        } catch (WPAjaxDieStopException $e) {
-            $response = json_decode($e->getMessage(), true);
-            $this->assertFalse($response['success']);
-            $this->assertEquals('API key is not set', $response['data']);
-        }
+        $response = $this->captureAjaxOutput([$this->api, 'verify_api_key']);
+        $this->assertFalse($response['success']);
+        $this->assertEquals('API key is not set', $response['data']);
 
         // Remove the filter
         remove_filter('forvoyez_get_api_key', '__return_empty_string');
@@ -45,14 +40,9 @@ class TestForvoyezAPI extends WP_UnitTestCase {
         });
 
         // Capture the JSON response
-        add_filter('wp_die_ajax_handler', [$this, 'wpDieHandler'], 10, 1);
-        try {
-            $this->api->verify_api_key();
-        } catch (WPAjaxDieStopException $e) {
-            $response = json_decode($e->getMessage(), true);
-            $this->assertTrue($response['success']);
-            $this->assertEquals('API key is valid', $response['data']);
-        }
+        $response = $this->captureAjaxOutput([$this->api, 'verify_api_key']);
+        $this->assertTrue($response['success']);
+        $this->assertEquals('API key is valid', $response['data']);
 
         // Remove the filter
         remove_filter('forvoyez_get_api_key', function() {
@@ -63,6 +53,19 @@ class TestForvoyezAPI extends WP_UnitTestCase {
     // Custom handler for wp_die to capture JSON responses in tests
     public function wpDieHandler($message) {
         throw new WPAjaxDieStopException($message);
+    }
+
+    // Function to capture AJAX output
+    private function captureAjaxOutput($callback) {
+        add_filter('wp_die_ajax_handler', [$this, 'wpDieHandler'], 10, 1);
+        try {
+            call_user_func($callback);
+        } catch (WPAjaxDieStopException $e) {
+            remove_filter('wp_die_ajax_handler', [$this, 'wpDieHandler'], 10);
+            return json_decode($e->getMessage(), true);
+        }
+        remove_filter('wp_die_ajax_handler', [$this, 'wpDieHandler'], 10);
+        return null;
     }
 }
 
