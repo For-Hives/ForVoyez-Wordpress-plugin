@@ -81,7 +81,7 @@ reset_db_and_user() {
 # Function to install WordPress
 install_wp() {
     if [ -d $WP_CORE_DIR ]; then
-        return;
+        rm -rf $WP_CORE_DIR
     fi
 
     mkdir -p $WP_CORE_DIR
@@ -101,7 +101,12 @@ install_wp() {
         tar --strip-components=1 -zxmf $TMPDIR/wordpress.tar.gz -C $WP_CORE_DIR
     fi
 
-    download https://raw.github.com/markoheijnen/wp-mysqli/master/db.php $WP_CORE_DIRwp-content/db.php
+    download https://raw.github.com/markoheijnen/wp-mysqli/master/db.php $WP_CORE_DIR/wp-content/db.php
+
+    if [ ! -f "$WP_CORE_DIR/wp-includes/version.php" ]; then
+        echo "WordPress installation failed."
+        exit 1
+    fi
 }
 
 # Function to install test suite
