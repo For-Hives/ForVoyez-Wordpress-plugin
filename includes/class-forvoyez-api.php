@@ -11,29 +11,44 @@ class Forvoyez_API {
         add_action('wp_ajax_forvoyez_verify_api_key', [$this, 'verify_api_key']);
     }
 
-    public function verify_api_key(): void {
+    public function verify_api_key(): array {
         check_ajax_referer('forvoyez_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
-            wp_send_json_error(self::ERROR_PERMISSION_DENIED, 403);
+            return $this->error_response(self::ERROR_PERMISSION_DENIED, 403);
         }
 
         $api_key = forvoyez_get_api_key();
         if (empty($api_key)) {
-            wp_send_json_error(self::ERROR_API_KEY_NOT_SET, 400);
+            return $this->error_response(self::ERROR_API_KEY_NOT_SET, 400);
         }
 
         $verification_result = $this->perform_api_key_verification($api_key);
 
         if ($verification_result) {
-            wp_send_json_success(self::SUCCESS_API_KEY_VALID);
+            return $this->success_response(self::SUCCESS_API_KEY_VALID);
         } else {
-            wp_send_json_error(self::ERROR_API_KEY_INVALID, 400);
+            return $this->error_response(self::ERROR_API_KEY_INVALID, 400);
         }
     }
 
     protected function perform_api_key_verification(string $api_key): bool {
         // TODO: Implement actual API key verification logic here
         return true;
+    }
+
+    private function error_response(string $message, int $status = 400): array {
+        return [
+            'success' => false,
+            'data' => $message,
+            'status' => $status,
+        ];
+    }
+
+    private function success_response(string $message): array {
+        return [
+            'success' => true,
+            'data' => $message,
+        ];
     }
 }

@@ -16,8 +16,10 @@ class TestForvoyezAPI extends WP_UnitTestCase {
         wp_set_current_user(0);
         $_REQUEST['_wpnonce'] = wp_create_nonce('forvoyez_nonce');
 
-        $this->expectOutputRegex('/"success":false.*"data":"' . preg_quote(Forvoyez_API::ERROR_PERMISSION_DENIED, '/') . '"/');
-        $this->api->verify_api_key();
+        $response = $this->api->verify_api_key();
+        $this->assertFalse($response['success']);
+        $this->assertEquals(Forvoyez_API::ERROR_PERMISSION_DENIED, $response['data']);
+        $this->assertEquals(403, $response['status']);
     }
 
     public function testVerifyApiKeyWithEmptyKey(): void {
@@ -27,8 +29,10 @@ class TestForvoyezAPI extends WP_UnitTestCase {
 
         add_filter('forvoyez_get_api_key', '__return_empty_string');
 
-        $this->expectOutputRegex('/"success":false.*"data":"' . preg_quote(Forvoyez_API::ERROR_API_KEY_NOT_SET, '/') . '"/');
-        $this->api->verify_api_key();
+        $response = $this->api->verify_api_key();
+        $this->assertFalse($response['success']);
+        $this->assertEquals(Forvoyez_API::ERROR_API_KEY_NOT_SET, $response['data']);
+        $this->assertEquals(400, $response['status']);
     }
 
     public function testVerifyApiKeySuccess(): void {
@@ -49,8 +53,9 @@ class TestForvoyezAPI extends WP_UnitTestCase {
             ->with('test_api_key')
             ->willReturn(true);
 
-        $this->expectOutputRegex('/"success":true.*"data":"' . preg_quote(Forvoyez_API::SUCCESS_API_KEY_VALID, '/') . '"/');
-        $mock_api->verify_api_key();
+        $response = $mock_api->verify_api_key();
+        $this->assertTrue($response['success']);
+        $this->assertEquals(Forvoyez_API::SUCCESS_API_KEY_VALID, $response['data']);
     }
 
     public function testVerifyApiKeyFailure(): void {
@@ -71,8 +76,10 @@ class TestForvoyezAPI extends WP_UnitTestCase {
             ->with('invalid_api_key')
             ->willReturn(false);
 
-        $this->expectOutputRegex('/"success":false.*"data":"' . preg_quote(Forvoyez_API::ERROR_API_KEY_INVALID, '/') . '"/');
-        $mock_api->verify_api_key();
+        $response = $mock_api->verify_api_key();
+        $this->assertFalse($response['success']);
+        $this->assertEquals(Forvoyez_API::ERROR_API_KEY_INVALID, $response['data']);
+        $this->assertEquals(400, $response['status']);
     }
 
     public function testVerifyApiKeyInvalidNonce(): void {
