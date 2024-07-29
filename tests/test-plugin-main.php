@@ -32,12 +32,11 @@ class PluginMainTest extends WP_UnitTestCase {
      */
     public function test_required_files_included() {
         $expected_components = [
-            'function' => ['forvoyez_get_api_key'],
+            'function' => ['forvoyez_get_api_key', 'forvoyez_count_incomplete_images', 'forvoyez_sanitize_api_key', 'forvoyez_verify_jwt'],
             'class' => [
                 'Forvoyez_Admin',
                 'Forvoyez_API_Manager',
                 'Forvoyez_Image_Processor',
-                'Forvoyez_Helpers',
                 'Forvoyez_Settings',
                 'Forvoyez_Image_Renderer'
             ]

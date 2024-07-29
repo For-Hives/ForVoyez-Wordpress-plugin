@@ -144,9 +144,6 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase {
 
         wp_update_post($post_data);
 
-        $image = get_post($attachment_id);
-        $alt_text = get_post_meta($attachment_id, '_wp_attachment_image_alt', true);
-
         return $attachment_id;
     }
 }
