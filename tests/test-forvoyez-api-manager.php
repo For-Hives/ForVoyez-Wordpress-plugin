@@ -101,17 +101,6 @@ class TestForvoyezAPIManager extends WP_UnitTestCase {
         $this->assertStringContainsString('test_file_data', $result);
     }
 
-    public function testMockForvoyezApiCall(): void {
-        $result = $this->callPrivateMethod($this->api_manager, 'mock_forvoyez_api_call', [$this->test_image_id]);
-
-        $this->assertArrayHasKey('alt_text', $result);
-        $this->assertArrayHasKey('title', $result);
-        $this->assertArrayHasKey('caption', $result);
-        $this->assertEquals('Sample alt text for image ' . $this->test_image_id, $result['alt_text']);
-        $this->assertEquals('Sample title for image ' . $this->test_image_id, $result['title']);
-        $this->assertEquals('Sample caption for image ' . $this->test_image_id, $result['caption']);
-    }
-
     public function testUpdateImageMetadata(): void {
         $metadata = [
             'alt_text' => 'Test Alt',
