@@ -6,7 +6,8 @@
  */
 defined('ABSPATH') || exit('Direct access to this file is not allowed.');
 
-class Forvoyez_Admin {
+class Forvoyez_Admin
+{
     /**
      * @var Forvoyez_API_Manager
      */
@@ -17,14 +18,16 @@ class Forvoyez_Admin {
      *
      * @param Forvoyez_API_Manager $api_manager API manager instance.
      */
-    public function __construct(Forvoyez_API_Manager $api_manager) {
+    public function __construct(Forvoyez_API_Manager $api_manager)
+    {
         $this->api_manager = $api_manager;
     }
 
     /**
      * Initialize admin hooks.
      */
-    public function init() {
+    public function init()
+    {
         add_action('admin_menu', [$this, 'add_menu_item']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_scripts']);
         add_action('wp_ajax_forvoyez_load_images', [$this, 'ajax_load_images']);
@@ -36,7 +39,8 @@ class Forvoyez_Admin {
     /**
      * Add menu item to WordPress admin.
      */
-    public function add_menu_item() {
+    public function add_menu_item()
+    {
         add_menu_page(
             'Auto Alt Text for Images',
             'Auto Alt Text',
@@ -53,7 +57,8 @@ class Forvoyez_Admin {
      *
      * @param string $hook Current admin page hook.
      */
-    public function enqueue_admin_scripts($hook) {
+    public function enqueue_admin_scripts($hook)
+    {
         if ('toplevel_page_forvoyez-auto-alt-text' !== $hook) {
             return;
         }
@@ -77,6 +82,9 @@ class Forvoyez_Admin {
             true
         );
 
+        // include css style
+        wp_enqueue_style('forvoyez-admin-style', FORVOYEZ_PLUGIN_URL . 'assets/css/admin-style.css', [], FORVOYEZ_VERSION);
+
         // Localize script
         wp_localize_script('forvoyez-admin-script', 'forvoyezData', [
             'ajaxurl' => admin_url('admin-ajax.php'),
@@ -90,7 +98,8 @@ class Forvoyez_Admin {
     /**
      * Enqueue custom scripts for the admin page.
      */
-    private function enqueue_custom_scripts() {
+    private function enqueue_custom_scripts()
+    {
         wp_enqueue_script(
             'forvoyez-admin-script',
             FORVOYEZ_PLUGIN_URL . 'assets/js/admin-script.js',
@@ -110,7 +119,8 @@ class Forvoyez_Admin {
     /**
      * Add Tailwind configuration to admin head.
      */
-    private function add_tailwind_config() {
+    private function add_tailwind_config()
+    {
         $tailwind_config = "<script>tailwind.config = {theme: {extend: {colors: {'forvoyez-primary': '#4a90e2','forvoyez-secondary': '#50e3c2',},},},}</script>";
         $tailwind_styles = "<style type='text/tailwindcss'>@layer utilities {.content-auto {content-visibility: auto;}}</style>";
 
@@ -122,7 +132,8 @@ class Forvoyez_Admin {
     /**
      * Render the admin page.
      */
-    public function render_admin_page() {
+    public function render_admin_page()
+    {
         $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'dashboard';
         include FORVOYEZ_PLUGIN_DIR . 'templates/main-page.php';
     }
@@ -130,7 +141,8 @@ class Forvoyez_Admin {
     /**
      * Display API key configuration status.
      */
-    public static function display_status_configuration() {
+    public static function display_status_configuration()
+    {
         $api_key = forvoyez_get_api_key();
         if (empty($api_key)) {
             echo '<p class="text-red-600 font-semibold">Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation.</p>';
@@ -145,7 +157,8 @@ class Forvoyez_Admin {
      * @param array $filters Applied filters.
      * @return array HTML content and number of displayed images.
      */
-    public function display_incomplete_images($paged = 1, $per_page = 25, $filters = []) {
+    public function display_incomplete_images($paged = 1, $per_page = 25, $filters = [])
+    {
         $args = $this->get_query_args($paged, $per_page, $filters);
         $query_images = new WP_Query($args);
         $total_images = $query_images->found_posts;
@@ -171,7 +184,8 @@ class Forvoyez_Admin {
      * @param array $filters Applied filters.
      * @return array Query arguments.
      */
-    private function get_query_args($paged, $per_page, $filters) {
+    private function get_query_args($paged, $per_page, $filters)
+    {
         $args = [
             'post_type' => 'attachment',
             'post_mime_type' => 'image',
@@ -193,7 +207,8 @@ class Forvoyez_Admin {
      * @param array $filters Applied filters.
      * @return array Meta query.
      */
-    private function build_meta_query($filters) {
+    private function build_meta_query($filters)
+    {
         $meta_query = ['relation' => 'OR'];
 
         if (in_array('alt', $filters, true)) {
@@ -228,7 +243,8 @@ class Forvoyez_Admin {
      * @param WP_Query $query_images Query result containing images.
      * @param int $total_images Total number of images.
      */
-    private function render_images_grid($query_images, $total_images) {
+    private function render_images_grid($query_images, $total_images)
+    {
         ?>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4" data-total-images="<?php echo esc_attr($total_images); ?>">
             <?php
@@ -251,7 +267,8 @@ class Forvoyez_Admin {
      * @param array $filters Applied filters.
      * @return int Total number of images.
      */
-    private function count_total_images($filters) {
+    private function count_total_images($filters)
+    {
         $args = $this->get_query_args(1, -1, $filters);
         $args['fields'] = 'ids'; // Only get post IDs for efficiency
         $query = new WP_Query($args);
@@ -262,7 +279,8 @@ class Forvoyez_Admin {
      * Get total images count.
      * @return mixed
      */
-    private function get_total_images_count() {
+    private function get_total_images_count()
+    {
         return wp_count_posts('attachment')->inherit;
     }
 
@@ -270,7 +288,8 @@ class Forvoyez_Admin {
      * Get processed images count.
      * @return int|mixed
      */
-    private function get_processed_images_count() {
+    private function get_processed_images_count()
+    {
         return $this->get_total_images_count() - $this->count_images_with_missing_data(['alt']);
     }
 
@@ -278,7 +297,8 @@ class Forvoyez_Admin {
      * Get pending images count.
      * @return int
      */
-    private function get_pending_images_count() {
+    private function get_pending_images_count()
+    {
         return $this->count_images_with_missing_data(['alt', 'title', 'caption']);
     }
 
@@ -288,7 +308,8 @@ class Forvoyez_Admin {
      * @param array $filters Raw filters array.
      * @return array Sanitized filters.
      */
-    private function parse_and_sanitize_filters($filters) {
+    private function parse_and_sanitize_filters($filters)
+    {
         $sanitized = [];
         $allowed_filters = ['alt', 'title', 'caption'];
         foreach ($filters as $filter) {
@@ -306,7 +327,8 @@ class Forvoyez_Admin {
     /**
      * AJAX handler for loading images.
      */
-    public function ajax_load_images() {
+    public function ajax_load_images()
+    {
         check_ajax_referer('forvoyez_nonce', 'nonce');
 
         $paged = isset($_POST['paged']) ? absint(wp_unslash($_POST['paged'])) : 1;
@@ -336,7 +358,8 @@ class Forvoyez_Admin {
      * @param int $per_page Number of items per page.
      * @return string Pagination HTML.
      */
-    private function display_pagination($total_images, $current_page, $per_page) {
+    private function display_pagination($total_images, $current_page, $per_page)
+    {
         $total_pages = ceil($total_images / $per_page);
 
         if ($total_pages <= 1) {
@@ -377,7 +400,8 @@ class Forvoyez_Admin {
      * @param string $class Additional CSS classes.
      * @return string Pagination link HTML.
      */
-    private function pagination_link($page, $text, $class = 'bg-white text-blue-500 hover:bg-blue-100') {
+    private function pagination_link($page, $text, $class = 'bg-white text-blue-500 hover:bg-blue-100')
+    {
         return sprintf(
             '<a href="#" class="pagination-link %s px-3 py-2 rounded" data-page="%d">%s</a>',
             esc_attr($class),
@@ -391,7 +415,8 @@ class Forvoyez_Admin {
      *
      * @return array Image counts.
      */
-    public function get_image_counts() {
+    public function get_image_counts()
+    {
         $all_count = wp_count_posts('attachment')->inherit;
         $missing_alt_count = $this->count_images_with_missing_data(['alt']);
         $missing_all_count = $this->count_images_with_missing_data(['alt', 'title', 'caption']);
@@ -409,7 +434,8 @@ class Forvoyez_Admin {
      * @param array $missing_fields Fields to check for missing data.
      * @return int Number of images with missing data.
      */
-    private function count_images_with_missing_data($missing_fields) {
+    private function count_images_with_missing_data($missing_fields)
+    {
         $args = [
             'post_type' => 'attachment',
             'post_mime_type' => 'image',
@@ -426,7 +452,8 @@ class Forvoyez_Admin {
     /**
      * AJAX handler for getting image counts.
      */
-    public function ajax_get_image_counts() {
+    public function ajax_get_image_counts()
+    {
         check_ajax_referer('forvoyez_nonce', 'nonce');
         wp_send_json_success($this->get_image_counts());
     }
@@ -437,7 +464,8 @@ class Forvoyez_Admin {
      * @param string $type Type of images to retrieve ('all', 'missing_all', 'missing_alt').
      * @return array Array of image IDs.
      */
-    public function get_image_ids($type = 'all') {
+    public function get_image_ids($type = 'all')
+    {
         global $wpdb;
 
         $query = "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%'";
@@ -471,7 +499,8 @@ class Forvoyez_Admin {
     /**
      * AJAX handler for getting image IDs.
      */
-    public function ajax_get_image_ids() {
+    public function ajax_get_image_ids()
+    {
         check_ajax_referer('forvoyez_nonce', 'nonce');
 
         if (!current_user_can('upload_files')) {
@@ -493,7 +522,8 @@ class Forvoyez_Admin {
     /**
      * AJAX handler for verifying API key.
      */
-    public function ajax_verify_api_key() {
+    public function ajax_verify_api_key()
+    {
         check_ajax_referer('forvoyez_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {

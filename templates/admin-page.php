@@ -1,4 +1,4 @@
-<div class="wrap p-6 min-h-screen relative">
+<div class="wrap p-6 min-h-screen relative [&_button,a]:shadow-none [&_button,a]:outline-none">
 	<h1 class="text-3xl font-bold mb-6 text-gray-800">Auto Alt Text for Images</h1>
 	<div class="py-4 w-full flex justify-between items-start">
 		<div class="flex flex-col gap-2 items-center">
