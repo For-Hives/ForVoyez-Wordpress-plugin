@@ -252,19 +252,19 @@
 		if ($details.hasClass('hidden')) {
 			$image
 				.addClass('hidden')
-				.removeClass('flex flex-col items-start justify-center gap-2')
+				.removeClass('flex flex-col items-start justify-start gap-2')
 			$details
-				.addClass('flex flex-col items-start justify-center gap-2')
+				.addClass('flex flex-col items-start justify-start gap-2')
 				.removeClass('hidden')
 			$seeMoreButtonImages.addClass('hidden').removeClass('inline-flex')
 			$seeMoreButtonDetails.addClass('inline-flex').removeClass('hidden')
 		} else {
 			$image
-				.addClass('flex flex-col items-start justify-center gap-2')
+				.addClass('flex flex-col items-start justify-start gap-2')
 				.removeClass('hidden')
 			$details
 				.addClass('hidden')
-				.removeClass('flex flex-col items-start justify-center gap-2')
+				.removeClass('flex flex-col items-start justify-start gap-2')
 			$seeMoreButtonImages.addClass('inline-flex').removeClass('hidden')
 			$seeMoreButtonDetails.addClass('hidden').removeClass('inline-flex')
 		}
