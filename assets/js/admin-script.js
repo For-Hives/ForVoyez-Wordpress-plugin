@@ -170,28 +170,28 @@
 			nonce: forvoyezData.nonce,
 			paged: page,
 			per_page: perPage,
-			filters: $filterForm.serializeArray()
-		};
+			filters: $filterForm.serializeArray(),
+		}
 
 		// If perPage is -1 (All), set it to a very large number
 		if (perPage === '-1') {
-			data.per_page = 999999; // Use a very large number instead of -1
+			data.per_page = 999999 // Use a very large number instead of -1
 		}
 
 		$.post(forvoyezData.ajaxurl, data, function (response) {
 			if (response.success) {
-				$container.html(response.data.html);
-				$('#forvoyez-pagination').html(response.data.pagination_html);
+				$container.html(response.data.html)
+				$('#forvoyez-pagination').html(response.data.pagination_html)
 				$('#forvoyez-image-counter').text(
 					'Displaying ' +
-					response.data.displayed_images +
-					' of ' +
-					response.data.total_images +
-					' images'
-				);
-				currentPage = response.data.current_page;
+						response.data.displayed_images +
+						' of ' +
+						response.data.total_images +
+						' images'
+				)
+				currentPage = response.data.current_page
 			}
-		});
+		})
 	}
 
 	$filterForm.on('submit', function (e) {
