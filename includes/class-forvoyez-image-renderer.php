@@ -78,7 +78,7 @@ class Forvoyez_Image_Renderer {
      */
     private static function render_details_view($image, $image_alt) {
         ?>
-        <div class="hidden absolute inset-0 bg-white p-2 overflow-y-auto details-view">
+        <div class="hidden absolute inset-0 bg-white p-2 pt-8 overflow-y-auto details-view">
             <p class="text-sm text-gray-500 text-left">
                 <strong>Title:</strong> <span class="title-content"><?php echo esc_html($image->post_title ?: 'Not set'); ?></span>
             </p>
@@ -189,8 +189,8 @@ class Forvoyez_Image_Renderer {
     private static function render_action_button($type, $label, $icon_path) {
         ?>
         <div class="flex w-0 flex-1">
-            <button class="<?php echo $type; ?>-button relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900 hover:bg-gray-50">
-                <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button class="<?php echo $type; ?>-button relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-xs font-semibold text-gray-900 hover:bg-gray-50">
+                <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?php echo $icon_path; ?>" />
                 </svg>
                 <?php echo esc_html($label); ?>
