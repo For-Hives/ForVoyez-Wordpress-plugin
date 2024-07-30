@@ -3,37 +3,27 @@
 ;(function ($) {
 	'use strict'
 
-	// Global letiable declarations
-	let $modal, $apiKeyInput, $toggleVisibility
-
 	$(document).ready(function () {
-		$modal = $('.forvoyez-api-settings-modal')
-		$apiKeyInput = $('.forvoyez-api-key-input')
-		$toggleVisibility = $('.forvoyez-toggle-visibility')
+		$configApiKeyInput = $('#forvoyez-api-key');
 
 		// API Settings Modal
-		$toggleVisibility.on('click', function () {
-			if ($apiKeyInput.attr('type') === 'password') {
-				$apiKeyInput.attr('type', 'text')
-				$toggleVisibility.html(getVisibilityIcon('text'))
+		$('.forvoyez-toggle-visibility').on('click', function() {
+			toggleApiKeyVisibility($configApiKeyInput, $(this));
+		});
+
+		function toggleApiKeyVisibility($input, $button) {
+			if ($input.attr('type') === 'password') {
+				$input.attr('type', 'text');
+				$button.html(getVisibilityIcon('text'));
 			} else {
-				$apiKeyInput.attr('type', 'password')
-				$toggleVisibility.html(getVisibilityIcon('password'))
+				$input.attr('type', 'password');
+				$button.html(getVisibilityIcon('password'));
 			}
-		})
+		}
 
-		$('#forvoyez-open-settings, .forvoyez-open-api-settings').on(
-			'click',
-			function () {
-				$modal.removeClass('hidden')
-			}
-		)
-
-		$('.forvoyez-close-modal').on('click', function () {
-			$modal.addClass('hidden')
-		})
-
-		$('.forvoyez-save-api-key').on('click', saveApiKey)
+		$('.forvoyez-save-api-key').on('click', function() {
+			saveApiKey($configApiKeyInput.val());
+		});
 
 		$('#forvoyez-select-all').on('change', function () {
 			$('input[type="checkbox"][data-forvoyez-image-checkbox]').prop(
@@ -223,9 +213,7 @@
 	// Initial load
 	loadImages(currentPage)
 
-	function saveApiKey() {
-		let apiKey = $apiKeyInput.val()
-
+	function saveApiKey(apiKey) {
 		$.ajax({
 			url: forvoyezData.ajaxurl,
 			type: 'POST',
@@ -234,19 +222,18 @@
 				api_key: apiKey,
 				nonce: forvoyezData.nonce,
 			},
-			success: function (response) {
+			success: function(response) {
 				if (response.success) {
-					showNotification('API key saved successfully', 'success')
-					$modal.addClass('hidden')
-					$apiKeyInput.val(apiKey)
+					showNotification('API key saved successfully', 'success');
+					$configApiKeyInput.val(apiKey);
 				} else {
-					showNotification('Failed to save API key: ' + response.data, 'error')
+					showNotification('Failed to save API key: ' + response.data, 'error');
 				}
 			},
-			error: function () {
-				showNotification('Failed to save API key', 'error')
+			error: function() {
+				showNotification('Failed to save API key', 'error');
 			},
-		})
+		});
 	}
 
 	function toggleImageDetails($item) {
