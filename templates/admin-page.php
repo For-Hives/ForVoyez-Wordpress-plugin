@@ -1,9 +1,6 @@
 <div class="wrap p-6 min-h-screen relative">
 	<h1 class="text-3xl font-bold mb-6 text-gray-800">Auto Alt Text for Images</h1>
 	<div class="py-4 w-full flex justify-between items-start">
-		<button id="forvoyez-open-settings" class="forvoyez-open-api-settings bg-forvoyez-primary hover:bg-forvoyez-primary-dark text-white font-bold py-2 px-4 rounded mb-4">
-			Configure API Settings
-		</button>
 		<div class="flex flex-col gap-2 items-center">
 			<h3 class="text-start w-full font-bold">
 				Legend :
