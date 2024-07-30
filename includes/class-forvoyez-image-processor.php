@@ -104,10 +104,15 @@ class Forvoyez_Image_Processor {
     public function load_more_images() {
         check_ajax_referer('forvoyez_nonce', 'nonce');
 
-        $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;
-        $limit = isset($_POST['limit']) ? intval($_POST['limit']) : 21;
+        $page = isset($_POST['paged']) ? intval($_POST['paged']) : 1;
+        $per_page = isset($_POST['per_page']) ? intval($_POST['per_page']) : 21;
 
-        $images = $this->get_incomplete_images($offset, $limit);
+        // If per_page is not set or is -1, consider it as "All"
+        if (!isset($_POST['per_page']) || $per_page === -1) {
+            $per_page = -1; // This will get all images in WordPress
+        }
+
+        $images = $this->get_incomplete_images(0, $per_page);
 
         ob_start();
         foreach ($images as $image) {
@@ -115,10 +120,15 @@ class Forvoyez_Image_Processor {
         }
         $html = ob_get_clean();
 
+        $total_images = forvoyez_count_incomplete_images();
+
         wp_send_json_success([
             'html' => $html,
             'count' => count($images),
-            'total' => forvoyez_count_incomplete_images(),
+            'total' => $total_images,
+            'displayed_images' => count($images),
+            'total_images' => $total_images,
+            'current_page' => $page,
         ]);
     }
 
