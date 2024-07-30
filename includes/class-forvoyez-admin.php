@@ -470,8 +470,6 @@ class Forvoyez_Admin
 
         $query = "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%'";
 
-        error_log("Base query: " . $query);
-
         if ($type === 'missing_alt') {
             $query = "SELECT p.ID 
                   FROM {$wpdb->posts} p 
@@ -488,10 +486,7 @@ class Forvoyez_Admin
                   AND (pm.meta_value IS NULL OR pm.meta_value = '' OR p.post_title = '' OR p.post_excerpt = '')";
         }
 
-        error_log("Final query: " . $query);
-
         $results = array_map('intval', $wpdb->get_col($query));
-        error_log("Query results: " . print_r($results, true));
 
         return $results;
     }
