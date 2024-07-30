@@ -62,7 +62,20 @@ class Forvoyez_Admin {
         wp_enqueue_script('tailwindcss', 'https://cdn.tailwindcss.com', [], null);
 
         // Enqueue custom scripts
-        $this->enqueue_custom_scripts();
+        wp_enqueue_script(
+            'forvoyez-admin-script',
+            FORVOYEZ_PLUGIN_URL . 'assets/js/admin-script.js',
+            ['jquery'],
+            FORVOYEZ_VERSION,
+            true
+        );
+        wp_enqueue_script(
+            'forvoyez-api-settings',
+            FORVOYEZ_PLUGIN_URL . 'assets/js/api-settings.js',
+            ['jquery'],
+            FORVOYEZ_VERSION,
+            true
+        );
 
         // Localize script
         wp_localize_script('forvoyez-admin-script', 'forvoyezData', [
