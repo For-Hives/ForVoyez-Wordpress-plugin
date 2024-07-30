@@ -48,9 +48,24 @@ class Forvoyez_API_Manager {
             return ['success' => false, 'message' => 'API key is not set'];
         }
 
-        // Ici, vous pouvez implémenter une vérification réelle avec l'API ForVoyez
-        // Pour l'instant, nous simulons une vérification réussie
-        return ['success' => true, 'message' => 'API key is valid'];
+        $response = wp_remote_get($this->api_url . '/verify', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $api_key,
+            ],
+        ]);
+
+        if (is_wp_error($response)) {
+            return ['success' => false, 'message' => $response->get_error_message()];
+        }
+
+        $body = wp_remote_retrieve_body($response);
+        $data = json_decode($body, true);
+
+        if (wp_remote_retrieve_response_code($response) === 200) {
+            return ['success' => true, 'message' => 'API key is valid'];
+        } else {
+            return ['success' => false, 'message' => $data['error'] ?? 'Invalid API key'];
+        }
     }
 
     /**
@@ -71,45 +86,38 @@ class Forvoyez_API_Manager {
 
         $file_data = file_get_contents($image_path);
         if ($file_data === false) {
-            return [
-                'success' => false,
-                'message' => 'Failed to read image file',
-                'metadata' => null,
-            ];
+            return $this->format_error('read_error', 'Failed to read image file');
         }
 
-        // TODO: Implement actual API call to ForVoyez service
-        // Uncomment and complete the following section when ready to integrate with the real API
-        /*
-        $data = array(
-            'data' => json_encode(array(
+        $data = [
+            'data' => json_encode([
                 'context' => '',
-                'schema' => array(
+                'schema' => [
                     'title' => 'string',
                     'alternativeText' => 'string',
                     'caption' => 'string'
-                )
-            ))
-        );
+                ]
+            ])
+        ];
 
         $boundary = wp_generate_password(24);
         $delimiter = '-------------' . $boundary;
 
         $post_data = $this->build_data_files($boundary, $data, $image_name, $image_mime, $file_data);
 
-        $args = array(
+        $args = [
             'method' => 'POST',
             'timeout' => 30,
             'redirection' => 5,
             'httpversion' => '1.1',
             'blocking' => true,
-            'headers' => array(
+            'headers' => [
                 'Authorization' => 'Bearer ' . $this->api_key,
                 'Content-Type' => 'multipart/form-data; boundary=' . $delimiter,
                 'Content-Length' => strlen($post_data)
-            ),
+            ],
             'body' => $post_data,
-        );
+        ];
 
         $response = wp_remote_post($this->api_url, $args);
 
@@ -121,27 +129,23 @@ class Forvoyez_API_Manager {
         $data = json_decode($body, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            return $this->format_error($response['response']['code'], $response['body'], array(
+            return $this->format_error('json_decode_error', 'Failed to decode API response', [
                 'response_code' => wp_remote_retrieve_response_code($response),
                 'body' => substr($body, 0, 1000),
                 'image_url' => $image_url,
                 'api_url' => $this->api_url,
-            ));
+            ]);
         }
 
         if (isset($data['error'])) {
             return $this->format_error('api_error', $data['error']);
         }
 
-        $metadata = array(
+        $metadata = [
             'alt_text' => $data['alternativeText'] ?? '',
             'title' => $data['title'] ?? '',
             'caption' => $data['caption'] ?? ''
-        );
-        */
-
-        // For testing purposes, use the mock API call
-        $metadata = $this->mock_forvoyez_api_call($image_id);
+        ];
 
         $this->update_image_metadata($image_id, $metadata);
 
@@ -149,20 +153,6 @@ class Forvoyez_API_Manager {
             'success' => true,
             'message' => 'Analysis successful',
             'metadata' => $metadata,
-        ];
-    }
-
-    /**
-     * Mock API call to ForVoyez for testing purposes.
-     *
-     * @param int $image_id The ID of the image to analyze.
-     * @return array The mocked metadata.
-     */
-    private function mock_forvoyez_api_call(int $image_id): array {
-        return [
-            'alt_text' => 'Sample alt text for image ' . $image_id,
-            'title' => 'Sample title for image ' . $image_id,
-            'caption' => 'Sample caption for image ' . $image_id,
         ];
     }
 
