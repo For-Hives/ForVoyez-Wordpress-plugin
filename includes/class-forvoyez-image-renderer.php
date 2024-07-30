@@ -79,13 +79,13 @@ class Forvoyez_Image_Renderer {
     private static function render_details_view($image, $image_alt) {
         ?>
         <div class="hidden absolute inset-0 bg-white p-2 overflow-y-auto details-view">
-            <p class="text-sm text-gray-500">
+            <p class="text-sm text-gray-500 text-left">
                 <strong>Title:</strong> <span class="title-content"><?php echo esc_html($image->post_title ?: 'Not set'); ?></span>
             </p>
-            <p class="text-sm text-gray-500">
+            <p class="text-sm text-gray-500 text-left">
                 <strong>Alt Text:</strong> <span class="alt-content"><?php echo esc_html($image_alt ?: 'Not set'); ?></span>
             </p>
-            <p class="text-sm text-gray-500">
+            <p class="text-sm text-gray-500 text-left">
                 <strong>Caption:</strong> <span class="caption-content"><?php echo esc_html($image->post_excerpt ?: 'Not set'); ?></span>
             </p>
         </div>

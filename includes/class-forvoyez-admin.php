@@ -37,12 +37,14 @@ class Forvoyez_Admin {
      * Add menu item to WordPress admin.
      */
     public function add_menu_item() {
-        add_options_page(
-            'Auto Alt Text Settings',
+        add_menu_page(
+            'Auto Alt Text for Images',
             'Auto Alt Text',
             'manage_options',
             'forvoyez-auto-alt-text',
-            [$this, 'render_admin_page']
+            [$this, 'render_admin_page'],
+            'dashicons-format-image',
+            30
         );
     }
 
@@ -52,7 +54,7 @@ class Forvoyez_Admin {
      * @param string $hook Current admin page hook.
      */
     public function enqueue_admin_scripts($hook) {
-        if ('settings_page_forvoyez-auto-alt-text' !== $hook) {
+        if ('toplevel_page_forvoyez-auto-alt-text' !== $hook) {
             return;
         }
 
@@ -108,7 +110,8 @@ class Forvoyez_Admin {
      * Render the admin page.
      */
     public function render_admin_page() {
-        include FORVOYEZ_PLUGIN_DIR . 'templates/admin-page.php';
+        $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'dashboard';
+        include FORVOYEZ_PLUGIN_DIR . 'templates/main-page.php';
     }
 
     /**
@@ -214,7 +217,7 @@ class Forvoyez_Admin {
      */
     private function render_images_grid($query_images, $total_images) {
         ?>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" data-total-images="<?php echo esc_attr($total_images); ?>">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4" data-total-images="<?php echo esc_attr($total_images); ?>">
             <?php
             if ($query_images->have_posts()) {
                 while ($query_images->have_posts()) {
@@ -240,6 +243,30 @@ class Forvoyez_Admin {
         $args['fields'] = 'ids'; // Only get post IDs for efficiency
         $query = new WP_Query($args);
         return $query->found_posts;
+    }
+
+    /**
+     * Get total images count.
+     * @return mixed
+     */
+    private function get_total_images_count() {
+        return wp_count_posts('attachment')->inherit;
+    }
+
+    /**
+     * Get processed images count.
+     * @return int|mixed
+     */
+    private function get_processed_images_count() {
+        return $this->get_total_images_count() - $this->count_images_with_missing_data(['alt']);
+    }
+
+    /**
+     * Get pending images count.
+     * @return int
+     */
+    private function get_pending_images_count() {
+        return $this->count_images_with_missing_data(['alt', 'title', 'caption']);
     }
 
     /**
