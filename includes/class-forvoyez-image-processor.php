@@ -107,8 +107,8 @@ class Forvoyez_Image_Processor {
         $page = isset($_POST['paged']) ? intval($_POST['paged']) : 1;
         $per_page = isset($_POST['per_page']) ? intval($_POST['per_page']) : 21;
 
-        // If per_page is not set or is -1, consider it as "All"
-        if (!isset($_POST['per_page']) || $per_page === -1) {
+        // If per_page is very large (e.g., 999999), consider it as "All"
+        if ($per_page > 1000) {
             $per_page = -1; // This will get all images in WordPress
         }
 
