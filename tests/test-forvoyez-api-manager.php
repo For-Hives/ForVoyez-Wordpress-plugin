@@ -6,20 +6,14 @@
  */
 
 class TestForvoyezAPIManager extends WP_UnitTestCase {
-    /**
-     * @var Forvoyez_API_Manager
-     */
     private $api_manager;
-
-    /**
-     * @var int
-     */
     private $test_image_id;
+    private $mock_http_client;
 
     public function setUp(): void {
         parent::setUp();
-        $mock_http_client = new MockHttpClient();
-        $this->api_manager = new Forvoyez_API_Manager('test_api_key', $mock_http_client);
+        $this->mock_http_client = $this->createMock(WP_Http::class);
+        $this->api_manager = new Forvoyez_API_Manager('test_api_key', $this->mock_http_client);
 
         // Create a test image attachment
         $this->test_image_id = $this->factory->attachment->create_upload_object(__DIR__ . '/assets/test-image.webp', 0);
@@ -35,6 +29,21 @@ class TestForvoyezAPIManager extends WP_UnitTestCase {
     }
 
     public function testAnalyzeImage(): void {
+        // Set up the mock response
+        $mock_response = [
+            'body' => json_encode([
+                'title' => 'Mocked Title',
+                'alternativeText' => 'Mocked Alt Text',
+                'caption' => 'Mocked Caption'
+            ]),
+            'response' => [
+                'code' => 200
+            ]
+        ];
+
+        // Configure the mock to return our prepared response
+        $this->mock_http_client->method('post')->willReturn($mock_response);
+
         $result = $this->api_manager->analyze_image($this->test_image_id);
 
         $this->assertTrue($result['success']);
@@ -131,23 +140,5 @@ class TestForvoyezAPIManager extends WP_UnitTestCase {
         $method = $reflection->getMethod($method_name);
         $method->setAccessible(true);
         return $method->invokeArgs($object, $parameters);
-    }
-}
-
-/**
- * Mocked HTTP client for testing.
- */
-class MockHttpClient {
-    public function post($url, $args) {
-        return [
-            'body' => json_encode([
-                'title' => 'Mocked Title',
-                'alternativeText' => 'Mocked Alt Text',
-                'caption' => 'Mocked Caption'
-            ], JSON_THROW_ON_ERROR),
-            'response' => [
-                'code' => 200
-            ]
-        ];
     }
 }
