@@ -10,6 +10,25 @@ $api_key = $settings->get_api_key();
             <p class="mt-1 max-w-2xl text-sm text-gray-500">Manage your ForVoyez API settings here</p>
         </div>
         <div class="border-t border-gray-200 px-4 py-5 sm:p-6">
+            <div class="mb-6">
+                <h3 class="text-md font-medium text-gray-900 mb-2">About ForVoyez API</h3>
+                <p class="text-sm text-gray-600 mb-2">
+                    ForVoyez API provides powerful image analysis capabilities for your WordPress site.
+                    To use this plugin, you need to obtain an API key from ForVoyez.
+                </p>
+                <p class="text-sm text-gray-600 mb-2">
+                    To get started:
+                </p>
+                <ol class="list-decimal list-inside text-sm text-gray-600 mb-4 ml-4">
+                    <li>Visit the <a href="https://forvoyez.com/signup" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez signup page</a> to create an account.</li>
+                    <li>Once logged in, navigate to your <a href="https://forvoyez.com/dashboard" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez dashboard</a>.</li>
+                    <li>Generate an API key in the API section of your dashboard.</li>
+                    <li>Copy the API key and paste it in the field below.</li>
+                </ol>
+                <p class="text-sm text-gray-600">
+                    For more information, please refer to the <a href="https://doc.forvoyez.com" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez API documentation</a>.
+                </p>
+            </div>
             <div class="mb-4">
                 <label for="forvoyez-api-key" class="block text-sm font-medium text-gray-700">API Key</label>
                 <div class="mt-1 flex rounded-md shadow-sm">
