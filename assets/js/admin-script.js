@@ -3,27 +3,29 @@
 ;(function ($) {
 	'use strict'
 
+	let $configApiKeyInput
+
 	$(document).ready(function () {
-		$configApiKeyInput = $('#forvoyez-api-key');
+		$configApiKeyInput = $('#forvoyez-api-key')
 
 		// API Settings Modal
-		$('.forvoyez-toggle-visibility').on('click', function() {
-			toggleApiKeyVisibility($configApiKeyInput, $(this));
-		});
+		$('.forvoyez-toggle-visibility').on('click', function () {
+			toggleApiKeyVisibility($configApiKeyInput, $(this))
+		})
 
 		function toggleApiKeyVisibility($input, $button) {
 			if ($input.attr('type') === 'password') {
-				$input.attr('type', 'text');
-				$button.html(getVisibilityIcon('text'));
+				$input.attr('type', 'text')
+				$button.html(getVisibilityIcon('text'))
 			} else {
-				$input.attr('type', 'password');
-				$button.html(getVisibilityIcon('password'));
+				$input.attr('type', 'password')
+				$button.html(getVisibilityIcon('password'))
 			}
 		}
 
-		$('.forvoyez-save-api-key').on('click', function() {
-			saveApiKey($configApiKeyInput.val());
-		});
+		$('.forvoyez-save-api-key').on('click', function () {
+			saveApiKey($configApiKeyInput.val())
+		})
 
 		$('#forvoyez-select-all').on('change', function () {
 			$('input[type="checkbox"][data-forvoyez-image-checkbox]').prop(
@@ -222,18 +224,18 @@
 				api_key: apiKey,
 				nonce: forvoyezData.nonce,
 			},
-			success: function(response) {
+			success: function (response) {
 				if (response.success) {
-					showNotification('API key saved successfully', 'success');
-					$configApiKeyInput.val(apiKey);
+					showNotification('API key saved successfully', 'success')
+					$configApiKeyInput.val(apiKey)
 				} else {
-					showNotification('Failed to save API key: ' + response.data, 'error');
+					showNotification('Failed to save API key: ' + response.data, 'error')
 				}
 			},
-			error: function() {
-				showNotification('Failed to save API key', 'error');
+			error: function () {
+				showNotification('Failed to save API key', 'error')
 			},
-		});
+		})
 	}
 
 	function toggleImageDetails($item) {
