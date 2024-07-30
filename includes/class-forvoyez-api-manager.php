@@ -10,7 +10,8 @@
 
 defined('ABSPATH') || exit('Direct access to this file is not allowed.');
 
-class Forvoyez_API_Manager {
+class Forvoyez_API_Manager
+{
     /**
      * @var string The API key for ForVoyez service.
      */
@@ -19,15 +20,23 @@ class Forvoyez_API_Manager {
     /**
      * @var string The URL of the ForVoyez API endpoint.
      */
-    private $api_url = 'https://forvoyez.com/api/describe';
+    private $api_url;
+
+    /**
+     * @var WP_Http The HTTP client for making requests.
+     */
+    private $http_client;
 
     /**
      * Constructor.
      *
      * @param string $api_key The API key for ForVoyez service.
      */
-    public function __construct(string $api_key) {
+    public function __construct(string $api_key, $http_client = null)
+    {
         $this->api_key = $api_key;
+        $this->api_url = 'https://forvoyez.com/api/describe';
+        $this->http_client = $http_client ?: new WP_Http();
     }
 
     /**
@@ -35,14 +44,16 @@ class Forvoyez_API_Manager {
      *
      * @return void
      */
-    public function init(): void {
+    public function init(): void
+    {
         add_action('wp_ajax_forvoyez_verify_api_key', [$this, 'verify_api_key']);
     }
 
     /**
      * Verify the API key.
      */
-    public function verify_api_key() {
+    public function verify_api_key()
+    {
         $api_key = forvoyez_get_api_key();
         if (empty($api_key)) {
             return ['success' => false, 'message' => 'API key is not set'];
@@ -74,7 +85,8 @@ class Forvoyez_API_Manager {
      * @param int $image_id The ID of the image to analyze.
      * @return array The analysis result.
      */
-    public function analyze_image(int $image_id): array {
+    public function analyze_image(int $image_id): array
+    {
         $image_path = get_attached_file($image_id);
         if (!$image_path) {
             return $this->format_error('image_not_found', 'Image not found');
@@ -119,7 +131,7 @@ class Forvoyez_API_Manager {
             'body' => $post_data,
         ];
 
-        $response = wp_remote_post($this->api_url, $args);
+        $response = $this->http_client->post($this->api_url, $args);
 
         if (is_wp_error($response)) {
             return $this->format_error('api_request_failed', $response->get_error_message());
@@ -163,7 +175,8 @@ class Forvoyez_API_Manager {
      * @param array $metadata The metadata to update.
      * @return void
      */
-    private function update_image_metadata(int $image_id, array $metadata): void {
+    private function update_image_metadata(int $image_id, array $metadata): void
+    {
         update_post_meta($image_id, '_wp_attachment_image_alt', $metadata['alt_text']);
         wp_update_post([
             'ID' => $image_id,
@@ -181,7 +194,8 @@ class Forvoyez_API_Manager {
      * @param array|null $debug_info Optional debug information.
      * @return array The formatted error.
      */
-    private function format_error(string $code, string $message, ?array $debug_info = null): array {
+    private function format_error(string $code, string $message, ?array $debug_info = null): array
+    {
         $error = [
             'success' => false,
             'error' => [
@@ -207,7 +221,8 @@ class Forvoyez_API_Manager {
      * @param string $file_data The file data.
      * @return string The built multipart data.
      */
-    private function build_data_files(string $boundary, array $fields, string $file_name, string $file_mime, string $file_data): string {
+    private function build_data_files(string $boundary, array $fields, string $file_name, string $file_mime, string $file_data): string
+    {
         $data = '';
         $delimiter = '-------------' . $boundary;
 
