@@ -18,7 +18,8 @@ class TestForvoyezAPIManager extends WP_UnitTestCase {
 
     public function setUp(): void {
         parent::setUp();
-        $this->api_manager = new Forvoyez_API_Manager('test_api_key');
+        $mock_http_client = new MockHttpClient();
+        $this->api_manager = new Forvoyez_API_Manager('test_api_key', $mock_http_client);
 
         // Create a test image attachment
         $this->test_image_id = $this->factory->attachment->create_upload_object(__DIR__ . '/assets/test-image.webp', 0);
@@ -42,10 +43,10 @@ class TestForvoyezAPIManager extends WP_UnitTestCase {
         $this->assertArrayHasKey('title', $result['metadata']);
         $this->assertArrayHasKey('caption', $result['metadata']);
 
-        // Check if metadata was updated
-        $this->assertEquals('Sample alt text for image ' . $this->test_image_id, get_post_meta($this->test_image_id, '_wp_attachment_image_alt', true));
-        $this->assertEquals('Sample title for image ' . $this->test_image_id, get_post($this->test_image_id)->post_title);
-        $this->assertEquals('Sample caption for image ' . $this->test_image_id, get_post($this->test_image_id)->post_excerpt);
+        // Check if metadata was updated with mocked values
+        $this->assertEquals('Mocked Alt Text', get_post_meta($this->test_image_id, '_wp_attachment_image_alt', true));
+        $this->assertEquals('Mocked Title', get_post($this->test_image_id)->post_title);
+        $this->assertEquals('Mocked Caption', get_post($this->test_image_id)->post_excerpt);
         $this->assertEquals('1', get_post_meta($this->test_image_id, '_forvoyez_analyzed', true));
     }
 
@@ -130,5 +131,23 @@ class TestForvoyezAPIManager extends WP_UnitTestCase {
         $method = $reflection->getMethod($method_name);
         $method->setAccessible(true);
         return $method->invokeArgs($object, $parameters);
+    }
+}
+
+/**
+ * Mocked HTTP client for testing.
+ */
+class MockHttpClient {
+    public function post($url, $args) {
+        return [
+            'body' => json_encode([
+                'title' => 'Mocked Title',
+                'alternativeText' => 'Mocked Alt Text',
+                'caption' => 'Mocked Caption'
+            ], JSON_THROW_ON_ERROR),
+            'response' => [
+                'code' => 200
+            ]
+        ];
     }
 }
