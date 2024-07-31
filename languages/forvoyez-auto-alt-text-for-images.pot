@@ -9,12 +9,13 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-07-31T08:34:35+00:00\n"
+"POT-Creation-Date: 2024-07-31T08:57:03+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: forvoyez-auto-alt-text-for-images\n"
 
 #. Plugin Name of the plugin
+#: includes/class-forvoyez-admin.php:45
 msgid "Auto Alt Text for Images"
 msgstr ""
 
@@ -32,6 +33,130 @@ msgstr ""
 
 #. Author URI of the plugin
 msgid "https://forvoyez.com"
+msgstr ""
+
+#: includes/class-forvoyez-admin.php:46
+msgid "Auto Alt Text"
+msgstr ""
+
+#: includes/class-forvoyez-admin.php:138
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: includes/class-forvoyez-admin.php:151
+msgid "Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation."
+msgstr ""
+
+#: includes/class-forvoyez-admin.php:260
+msgid "No images found matching the selected criteria."
+msgstr ""
+
+#: includes/class-forvoyez-admin.php:337
+#: includes/class-forvoyez-admin.php:465
+#: includes/class-forvoyez-admin.php:521
+#: includes/class-forvoyez-admin.php:544
+#: includes/class-forvoyez-image-processor.php:238
+#: includes/class-forvoyez-settings.php:55
+msgid "Permission denied"
+msgstr ""
+
+#: includes/class-forvoyez-admin.php:379
+msgid "&laquo; Previous"
+msgstr ""
+
+#: includes/class-forvoyez-admin.php:393
+msgid "Next &raquo;"
+msgstr ""
+
+#: includes/class-forvoyez-api-manager.php:59
+msgid "API key is not set"
+msgstr ""
+
+#: includes/class-forvoyez-api-manager.php:76
+msgid "API key is valid"
+msgstr ""
+
+#: includes/class-forvoyez-api-manager.php:78
+msgid "Invalid API key"
+msgstr ""
+
+#: includes/class-forvoyez-api-manager.php:92
+msgid "Image not found"
+msgstr ""
+
+#: includes/class-forvoyez-api-manager.php:101
+msgid "Failed to read image file"
+msgstr ""
+
+#: includes/class-forvoyez-api-manager.php:144
+msgid "Failed to decode API response"
+msgstr ""
+
+#: includes/class-forvoyez-api-manager.php:166
+#: includes/class-forvoyez-image-processor.php:93
+msgid "Analysis successful"
+msgstr ""
+
+#: includes/class-forvoyez-image-processor.php:51
+msgid "Invalid data"
+msgstr ""
+
+#: includes/class-forvoyez-image-processor.php:56
+msgid "Metadata updated successfully"
+msgstr ""
+
+#: includes/class-forvoyez-image-processor.php:176
+msgid "No valid images selected"
+msgstr ""
+
+#: includes/class-forvoyez-image-processor.php:180
+msgid "Processing started"
+msgstr ""
+
+#: includes/class-forvoyez-image-processor.php:192
+msgid "Invalid image ID"
+msgstr ""
+
+#: includes/class-forvoyez-image-processor.php:206
+msgid "No images provided"
+msgstr ""
+
+#: includes/class-forvoyez-image-renderer.php:83
+msgid "Title:"
+msgstr ""
+
+#: includes/class-forvoyez-image-renderer.php:83
+#: includes/class-forvoyez-image-renderer.php:86
+#: includes/class-forvoyez-image-renderer.php:89
+msgid "Not set"
+msgstr ""
+
+#: includes/class-forvoyez-image-renderer.php:86
+msgid "Alt Text:"
+msgstr ""
+
+#: includes/class-forvoyez-image-renderer.php:89
+msgid "Caption:"
+msgstr ""
+
+#: includes/class-forvoyez-image-renderer.php:141
+msgid "Missing %s"
+msgstr ""
+
+#: includes/class-forvoyez-image-renderer.php:174
+msgid "Analyze"
+msgstr ""
+
+#: includes/class-forvoyez-image-renderer.php:175
+msgid "Details"
+msgstr ""
+
+#: includes/class-forvoyez-settings.php:61
+msgid "API key cannot be empty"
+msgstr ""
+
+#: includes/class-forvoyez-settings.php:67
+msgid "API key saved successfully"
 msgstr ""
 
 #: includes/forvoyez-helpers.php:117

@@ -334,7 +334,7 @@ class Forvoyez_Admin
     {
         check_ajax_referer('forvoyez_nonce', 'nonce');
         if (!current_user_can('upload_files')) {
-            wp_send_json_error('Permission denied', 403);
+            wp_send_json_error(__('Permission denied', 'forvoyez-auto-alt-text-for-images'), 403);
         }
 
         $paged = isset($_POST['paged']) ? absint(wp_unslash($_POST['paged'])) : 1;
@@ -376,7 +376,7 @@ class Forvoyez_Admin
 
         // Previous page
         if ($current_page > 1) {
-            $pagination .= $this->pagination_link($current_page - 1, '&laquo; Previous');
+            $pagination .= $this->pagination_link($current_page - 1, __('&laquo; Previous', 'forvoyez-auto-alt-text-for-images'));
         }
 
         // Page numbers
@@ -390,7 +390,7 @@ class Forvoyez_Admin
 
         // Next page
         if ($current_page < $total_pages) {
-            $pagination .= $this->pagination_link($current_page + 1, 'Next &raquo;');
+            $pagination .= $this->pagination_link($current_page + 1, __('Next &raquo;', 'forvoyez-auto-alt-text-for-images'));
         }
 
         $pagination .= '</nav>';
@@ -462,7 +462,7 @@ class Forvoyez_Admin
     {
         check_ajax_referer('forvoyez_nonce', 'nonce');
         if (!current_user_can('upload_files')) {
-            wp_send_json_error('Permission denied', 403);
+            wp_send_json_error(__('Permission denied', 'forvoyez-auto-alt-text-for-images'), 403);
         }
         wp_send_json_success($this->get_image_counts());
     }
@@ -477,22 +477,32 @@ class Forvoyez_Admin
     {
         global $wpdb;
 
-        $query = "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%'";
+        $query = "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_mime_type LIKE " . $wpdb->prepare('%s', 'image/%');
 
         if ($type === 'missing_alt') {
-            $query = "SELECT p.ID 
-                  FROM {$wpdb->posts} p 
-                  LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = '_wp_attachment_image_alt'
-                  WHERE p.post_type = 'attachment' 
-                  AND p.post_mime_type LIKE 'image/%'
-                  AND (pm.meta_value IS NULL OR pm.meta_value = '')";
+            $query = $wpdb->prepare("SELECT p.ID 
+              FROM {$wpdb->posts} p 
+              LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = %s
+              WHERE p.post_type = %s 
+              AND p.post_mime_type LIKE %s
+              AND (pm.meta_value IS NULL OR pm.meta_value = %s)",
+                '_wp_attachment_image_alt',
+                'attachment',
+                'image/%',
+                '');
         } elseif ($type === 'missing_all') {
-            $query = "SELECT p.ID 
-                  FROM {$wpdb->posts} p 
-                  LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = '_wp_attachment_image_alt'
-                  WHERE p.post_type = 'attachment' 
-                  AND p.post_mime_type LIKE 'image/%'
-                  AND (pm.meta_value IS NULL OR pm.meta_value = '' OR p.post_title = '' OR p.post_excerpt = '')";
+            $query = $wpdb->prepare("SELECT p.ID 
+              FROM {$wpdb->posts} p 
+              LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = %s
+              WHERE p.post_type = %s 
+              AND p.post_mime_type LIKE %s
+              AND (pm.meta_value IS NULL OR pm.meta_value = %s OR p.post_title = %s OR p.post_excerpt = %s)",
+                '_wp_attachment_image_alt',
+                'attachment',
+                'image/%',
+                '',
+                '',
+                '');
         }
 
         $results = array_map('intval', $wpdb->get_col($query));
@@ -508,7 +518,7 @@ class Forvoyez_Admin
         check_ajax_referer('forvoyez_nonce', 'nonce');
 
         if (!current_user_can('upload_files')) {
-            wp_send_json_error('Permission denied', 403);
+            wp_send_json_error(__('Permission denied', 'forvoyez-auto-alt-text-for-images'), 403);
         }
 
         $allowed_types = ['all', 'missing_all', 'missing_alt'];
@@ -531,7 +541,7 @@ class Forvoyez_Admin
         check_ajax_referer('forvoyez_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
-            wp_send_json_error('Permission denied', 403);
+            wp_send_json_error(__('Permission denied', 'forvoyez-auto-alt-text-for-images'), 403);
         }
 
         $result = $this->api_manager->verify_api_key();

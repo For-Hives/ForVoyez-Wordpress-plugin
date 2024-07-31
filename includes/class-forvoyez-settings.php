@@ -52,19 +52,19 @@ class Forvoyez_Settings {
         check_ajax_referer('forvoyez_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
-            wp_send_json_error('Permission denied', 403);
+            wp_send_json_error(__('Permission denied', 'forvoyez-auto-alt-text-for-images'), 403);
         }
 
         $api_key = isset($_POST['api_key']) ? sanitize_text_field($_POST['api_key']) : '';
 
         if (empty($api_key)) {
-            wp_send_json_error('API key cannot be empty', 400);
+            wp_send_json_error(__('API key cannot be empty', 'forvoyez-auto-alt-text-for-images'), 400);
         }
 
         $encrypted_api_key = $this->encrypt($api_key);
         update_option('forvoyez_encrypted_api_key', $encrypted_api_key);
 
-        wp_send_json_success('API key saved successfully');
+        wp_send_json_success(__('API key saved successfully', 'forvoyez-auto-alt-text-for-images'));
     }
 
     /**

@@ -80,13 +80,13 @@ class Forvoyez_Image_Renderer {
         ?>
         <div class="hidden absolute inset-0 bg-white p-2 pt-8 overflow-y-auto details-view">
             <p class="text-sm text-gray-500 text-left">
-                <strong>Title:</strong> <span class="title-content"><?php echo esc_html($image->post_title ?: 'Not set'); ?></span>
+                <strong><?php _e('Title:', 'forvoyez-auto-alt-text-for-images'); ?></strong> <span class="title-content"><?php echo esc_html($image->post_title ?: __('Not set', 'forvoyez-auto-alt-text-for-images')); ?></span>
             </p>
             <p class="text-sm text-gray-500 text-left">
-                <strong>Alt Text:</strong> <span class="alt-content"><?php echo esc_html($image_alt ?: 'Not set'); ?></span>
+                <strong><?php _e('Alt Text:', 'forvoyez-auto-alt-text-for-images'); ?></strong> <span class="alt-content"><?php echo esc_html($image_alt ?: __('Not set', 'forvoyez-auto-alt-text-for-images')); ?></span>
             </p>
             <p class="text-sm text-gray-500 text-left">
-                <strong>Caption:</strong> <span class="caption-content"><?php echo esc_html($image->post_excerpt ?: 'Not set'); ?></span>
+                <strong><?php _e('Caption:', 'forvoyez-auto-alt-text-for-images'); ?></strong> <span class="caption-content"><?php echo esc_html($image->post_excerpt ?: __('Not set', 'forvoyez-auto-alt-text-for-images')); ?></span>
             </p>
         </div>
         <?php
@@ -138,7 +138,7 @@ class Forvoyez_Image_Renderer {
      */
     private static function render_metadata_icon($type, $value, $path) {
         ?>
-        <span class="bg-red-500 text-white rounded-full p-1 <?php echo empty($value) ? '' : 'hidden'; ?> <?php echo $type; ?>-missing" title="Missing <?php echo ucfirst($type); ?>">
+        <span class="bg-red-500 text-white rounded-full p-1 <?php echo empty($value) ? '' : 'hidden'; ?> <?php echo $type; ?>-missing" title="<?php echo esc_attr(sprintf(__('Missing %s', 'forvoyez-auto-alt-text-for-images'), ucfirst($type))); ?>">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?php echo $path; ?>" />
             </svg>
@@ -171,8 +171,8 @@ class Forvoyez_Image_Renderer {
         ?>
         <div>
             <div class="-mt-px flex divide-x divide-gray-200">
-                <?php self::render_action_button('analyze', 'Analyze', 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'); ?>
-                <?php self::render_action_button('see-more', 'Details', 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'); ?>
+                <?php self::render_action_button('analyze',  _e('Analyze', 'forvoyez-auto-alt-text-for-images'), 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'); ?>
+                <?php self::render_action_button('see-more', _e('Details', 'forvoyez-auto-alt-text-for-images'), 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'); ?>
             </div>
         </div>
         <?php
