@@ -42,8 +42,8 @@ class Forvoyez_Admin
     public function add_menu_item()
     {
         add_menu_page(
-            'Auto Alt Text for Images',
-            'Auto Alt Text',
+            __('Auto Alt Text for Images', 'forvoyez-auto-alt-text-for-images'),
+            __('Auto Alt Text', 'forvoyez-auto-alt-text-for-images'),
             'manage_options',
             'forvoyez-auto-alt-text',
             [$this, 'render_admin_page'],
@@ -135,7 +135,7 @@ class Forvoyez_Admin
     public function render_admin_page()
     {
         if (!current_user_can('manage_options')) {
-            wp_die(__('You do not have sufficient permissions to access this page.'));
+            wp_die(__('You do not have sufficient permissions to access this page.', 'forvoyez-auto-alt-text-for-images'));
         }
         $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'dashboard';
         include FORVOYEZ_PLUGIN_DIR . 'templates/main-page.php';

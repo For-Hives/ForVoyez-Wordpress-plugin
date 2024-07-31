@@ -1,0 +1,59 @@
+# Copyright (C) 2024 ForVoyez
+# This file is distributed under the same license as the Auto Alt Text for Images plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Auto Alt Text for Images 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ForVoyez-Wordpress-plugin\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-07-31T08:34:35+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: forvoyez-auto-alt-text-for-images\n"
+
+#. Plugin Name of the plugin
+msgid "Auto Alt Text for Images"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://forvoyez.com/plugins/auto-alt-text"
+msgstr ""
+
+#. Description of the plugin
+msgid "Automatically generate alt text and SEO metadata for images using ForVoyez API."
+msgstr ""
+
+#. Author of the plugin
+msgid "ForVoyez"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://forvoyez.com"
+msgstr ""
+
+#: includes/forvoyez-helpers.php:117
+msgid "Invalid API key format. Please enter a valid ForVoyez JWT."
+msgstr ""
+
+#: includes/forvoyez-helpers.php:136
+msgid "Invalid JWT format"
+msgstr ""
+
+#: includes/forvoyez-helpers.php:145
+msgid "Invalid JWT payload"
+msgstr ""
+
+#: includes/forvoyez-helpers.php:150
+msgid "Invalid JWT issuer"
+msgstr ""
+
+#: includes/forvoyez-helpers.php:155
+msgid "Invalid JWT audience"
+msgstr ""
+
+#: includes/forvoyez-helpers.php:160
+msgid "JWT has expired"
+msgstr ""
