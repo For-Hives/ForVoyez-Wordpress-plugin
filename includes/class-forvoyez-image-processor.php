@@ -48,12 +48,12 @@ class Forvoyez_Image_Processor {
         $metadata = isset($_POST['metadata']) ? $this->sanitize_metadata(wp_unslash($_POST['metadata'])) : [];
 
         if (!$image_id || empty($metadata)) {
-            wp_send_json_error('Invalid data');
+            wp_send_json_error(__('Invalid data', 'forvoyez-auto-alt-text-for-images'));
         }
 
         $this->update_image_meta($image_id, $metadata);
 
-        wp_send_json_success('Metadata updated successfully');
+        wp_send_json_success(__('Metadata updated successfully', 'forvoyez-auto-alt-text-for-images'));
     }
 
     private function update_image_meta($image_id, $metadata) {
@@ -90,7 +90,7 @@ class Forvoyez_Image_Processor {
 
         if ($result['success']) {
             wp_send_json_success([
-                'message' => 'Analysis successful',
+                'message' => __('Analysis successful', 'forvoyez-auto-alt-text-for-images'),
                 'metadata' => $result['metadata'],
             ]);
         } else {
@@ -173,11 +173,11 @@ class Forvoyez_Image_Processor {
         $image_ids = array_filter($image_ids, 'wp_attachment_is_image');
 
         if (empty($image_ids)) {
-            wp_send_json_error('No valid images selected');
+            wp_send_json_error(__('No valid images selected', 'forvoyez-auto-alt-text-for-images'));
         }
 
         wp_send_json_success([
-            'message' => 'Processing started',
+            'message' => __('Processing started', 'forvoyez-auto-alt-text-for-images'),
             'total' => count($image_ids),
             'image_ids' => $image_ids,
         ]);
@@ -189,7 +189,7 @@ class Forvoyez_Image_Processor {
         $image_id = isset($_POST['image_id']) ? intval($_POST['image_id']) : 0;
 
         if (!$image_id) {
-            wp_send_json_error('Invalid image ID');
+            wp_send_json_error(__('Invalid image ID', 'forvoyez-auto-alt-text-for-images'));
         }
 
         $result = $this->api_client->analyze_image($image_id);
@@ -203,7 +203,7 @@ class Forvoyez_Image_Processor {
         $image_ids = isset($_POST['image_ids']) ? array_map('intval', $_POST['image_ids']) : [];
 
         if (empty($image_ids)) {
-            wp_send_json_error('No images provided');
+            wp_send_json_error(__('No images provided', 'forvoyez-auto-alt-text-for-images'));
         }
 
         $results = $this->process_images($image_ids);
@@ -235,7 +235,7 @@ class Forvoyez_Image_Processor {
         check_ajax_referer('forvoyez_nonce', 'nonce');
 
         if (!current_user_can('upload_files')) {
-            wp_send_json_error('Permission denied');
+            wp_send_json_error(__('Permission denied', 'forvoyez-auto-alt-text-for-images'));
         }
     }
 }
