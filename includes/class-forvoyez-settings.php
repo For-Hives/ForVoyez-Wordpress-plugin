@@ -35,6 +35,9 @@ class Forvoyez_Settings {
      * Register the plugin settings.
      */
     public function register_settings() {
+        if (!current_user_can('manage_options')) {
+            return;
+        }
         register_setting('forvoyez_settings', 'forvoyez_encrypted_api_key', [
             'type' => 'string',
             'sanitize_callback' => [$this, 'sanitize_api_key'],

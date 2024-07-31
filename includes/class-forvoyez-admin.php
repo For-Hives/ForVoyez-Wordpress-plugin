@@ -134,6 +134,9 @@ class Forvoyez_Admin
      */
     public function render_admin_page()
     {
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You do not have sufficient permissions to access this page.'));
+        }
         $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'dashboard';
         include FORVOYEZ_PLUGIN_DIR . 'templates/main-page.php';
     }
