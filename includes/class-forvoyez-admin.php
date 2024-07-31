@@ -330,6 +330,9 @@ class Forvoyez_Admin
     public function ajax_load_images()
     {
         check_ajax_referer('forvoyez_nonce', 'nonce');
+        if (!current_user_can('upload_files')) {
+            wp_send_json_error('Permission denied', 403);
+        }
 
         $paged = isset($_POST['paged']) ? absint(wp_unslash($_POST['paged'])) : 1;
         $per_page = isset($_POST['per_page']) ? absint(wp_unslash($_POST['per_page'])) : 25;
@@ -455,6 +458,9 @@ class Forvoyez_Admin
     public function ajax_get_image_counts()
     {
         check_ajax_referer('forvoyez_nonce', 'nonce');
+        if (!current_user_can('upload_files')) {
+            wp_send_json_error('Permission denied', 403);
+        }
         wp_send_json_success($this->get_image_counts());
     }
 
