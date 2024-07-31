@@ -56,7 +56,7 @@ class Forvoyez_API_Manager
     {
         $api_key = forvoyez_get_api_key();
         if (empty($api_key)) {
-            return ['success' => false, 'message' => 'API key is not set'];
+            return ['success' => false, 'message' => __('API key is not set', 'forvoyez-auto-alt-text-for-images')];
         }
 
         $response = wp_remote_get($this->api_url . '/verify', [
@@ -73,9 +73,9 @@ class Forvoyez_API_Manager
         $data = json_decode($body, true);
 
         if (wp_remote_retrieve_response_code($response) === 200) {
-            return ['success' => true, 'message' => 'API key is valid'];
+            return ['success' => true, 'message' => __('API key is valid', 'forvoyez-auto-alt-text-for-images')];
         } else {
-            return ['success' => false, 'message' => $data['error'] ?? 'Invalid API key'];
+            return ['success' => false, 'message' => $data['error'] ?? __('Invalid API key', 'forvoyez-auto-alt-text-for-images')];
         }
     }
 
@@ -89,7 +89,7 @@ class Forvoyez_API_Manager
     {
         $image_path = get_attached_file($image_id);
         if (!$image_path) {
-            return $this->format_error('image_not_found', 'Image not found');
+            return $this->format_error('image_not_found', __('Image not found', 'forvoyez-auto-alt-text-for-images'));
         }
 
         $image_url = wp_get_attachment_url($image_id);
@@ -98,7 +98,7 @@ class Forvoyez_API_Manager
 
         $file_data = file_get_contents($image_path);
         if ($file_data === false) {
-            return $this->format_error('read_error', 'Failed to read image file');
+            return $this->format_error('read_error', __('Failed to read image file', 'forvoyez-auto-alt-text-for-images'));
         }
 
         $data = [
@@ -141,7 +141,7 @@ class Forvoyez_API_Manager
         $data = json_decode($body, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            return $this->format_error('json_decode_error', 'Failed to decode API response', [
+            return $this->format_error('json_decode_error', __('Failed to decode API response', 'forvoyez-auto-alt-text-for-images'), [
                 'response_code' => wp_remote_retrieve_response_code($response),
                 'body' => substr($body, 0, 1000),
                 'image_url' => $image_url,
@@ -163,7 +163,7 @@ class Forvoyez_API_Manager
 
         return [
             'success' => true,
-            'message' => 'Analysis successful',
+            'message' => __('Analysis successful', 'forvoyez-auto-alt-text-for-images'),
             'metadata' => $metadata,
         ];
     }
