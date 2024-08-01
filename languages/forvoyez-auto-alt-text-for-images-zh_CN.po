@@ -362,7 +362,7 @@ msgstr "开始之前，请确保您具备以下条件："
 
 #: templates/dashboard-tab.php:32
 msgid "Go to the 'Settings' tab"
-msgstr "转到"设置"标签"
+msgstr "转到'设置'标签"
 
 #: templates/dashboard-tab.php:33
 msgid "Enter your ForVoyez API key"
@@ -370,7 +370,7 @@ msgstr "输入您的ForVoyez API密钥"
 
 #: templates/dashboard-tab.php:34
 msgid "Click on 'Save API Key'"
-msgstr "点击"保存API密钥""
+msgstr "点击'保存API密钥'"
 
 #: templates/dashboard-tab.php:40
 msgid "Quick Start"
@@ -382,7 +382,7 @@ msgstr "按照以下步骤为您的图片生成替代文本："
 
 #: templates/dashboard-tab.php:45
 msgid "Go to the 'Manage Images' tab"
-msgstr "转到"管理图片"标签"
+msgstr "转到'管理图片'标签"
 
 #: templates/dashboard-tab.php:46
 msgid "Select the images you want to process"
@@ -390,7 +390,7 @@ msgstr "选择您要处理的图片"
 
 #: templates/dashboard-tab.php:47
 msgid "Click on 'Generate Alt Text' to start the process"
-msgstr "点击"生成替代文本"开始处理"
+msgstr "点击'生成替代文本'开始处理"
 
 #: templates/dashboard-tab.php:48
 msgid "Review and edit the generated alt text as needed"
