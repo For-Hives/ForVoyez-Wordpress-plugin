@@ -83,7 +83,7 @@ class Forvoyez_Image_Processor {
         $image_id = isset($_POST['image_id']) ? absint(wp_unslash($_POST['image_id'])) : 0;
 
         if (!$image_id || !wp_attachment_is_image($image_id)) {
-            wp_send_json_error('Invalid image ID');
+            wp_send_json_error(__('Invalid image ID', 'forvoyez-auto-alt-text-for-images'));
         }
 
         $result = $this->api_client->analyze_image($image_id);
@@ -96,7 +96,7 @@ class Forvoyez_Image_Processor {
         } else {
             wp_send_json_error([
                 'message' => $result['error']['message'],
-                'code' => $result['error']['code'] ?? 'unknown_error',
+                'code' => $result['success'] ? null : ($result['error']['code'] ?? __('unknown_error', 'forvoyez-auto-alt-text-for-images')),
             ]);
         }
     }
@@ -219,7 +219,7 @@ class Forvoyez_Image_Processor {
                 'id' => $image_id,
                 'success' => $result['success'],
                 'message' => $result['success'] ? $result['message'] : $result['error']['message'],
-                'code' => $result['success'] ? null : ($result['error']['code'] ?? 'unknown_error'),
+                'code' => $result['success'] ? null : ($result['error']['code'] ?? __('unknown_error', 'forvoyez-auto-alt-text-for-images')),
                 'metadata' => $result['success'] ? $result['metadata'] : null,
             ];
         }
