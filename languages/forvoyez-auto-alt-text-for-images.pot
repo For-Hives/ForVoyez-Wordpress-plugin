@@ -9,13 +9,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-07-31T08:57:03+00:00\n"
+"POT-Creation-Date: 2024-08-01T10:19:11+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: forvoyez-auto-alt-text-for-images\n"
 
 #. Plugin Name of the plugin
 #: includes/class-forvoyez-admin.php:45
+#: templates/admin-page.php:2
 msgid "Auto Alt Text for Images"
 msgstr ""
 
@@ -105,16 +106,22 @@ msgstr ""
 msgid "Metadata updated successfully"
 msgstr ""
 
+#: includes/class-forvoyez-image-processor.php:86
+#: includes/class-forvoyez-image-processor.php:192
+msgid "Invalid image ID"
+msgstr ""
+
+#: includes/class-forvoyez-image-processor.php:99
+#: includes/class-forvoyez-image-processor.php:222
+msgid "unknown_error"
+msgstr ""
+
 #: includes/class-forvoyez-image-processor.php:176
 msgid "No valid images selected"
 msgstr ""
 
 #: includes/class-forvoyez-image-processor.php:180
 msgid "Processing started"
-msgstr ""
-
-#: includes/class-forvoyez-image-processor.php:192
-msgid "Invalid image ID"
 msgstr ""
 
 #: includes/class-forvoyez-image-processor.php:206
@@ -137,6 +144,11 @@ msgstr ""
 
 #: includes/class-forvoyez-image-renderer.php:89
 msgid "Caption:"
+msgstr ""
+
+#: includes/class-forvoyez-image-renderer.php:122
+#: templates/admin-page.php:44
+msgid "All Complete"
 msgstr ""
 
 #: includes/class-forvoyez-image-renderer.php:141
@@ -181,4 +193,223 @@ msgstr ""
 
 #: includes/forvoyez-helpers.php:160
 msgid "JWT has expired"
+msgstr ""
+
+#: templates/admin-page.php:6
+msgid "Legend :"
+msgstr ""
+
+#: templates/admin-page.php:11
+msgid "Missing Alt Text :"
+msgstr ""
+
+#: templates/admin-page.php:13
+msgid "Missing Alt Text"
+msgstr ""
+
+#: templates/admin-page.php:21
+msgid "Missing title :"
+msgstr ""
+
+#: templates/admin-page.php:23
+msgid "Missing Title"
+msgstr ""
+
+#: templates/admin-page.php:32
+msgid "Missing caption :"
+msgstr ""
+
+#: templates/admin-page.php:34
+msgid "Missing Caption"
+msgstr ""
+
+#: templates/admin-page.php:42
+msgid "All complete :"
+msgstr ""
+
+#: templates/admin-page.php:60
+msgid "Items per page:"
+msgstr ""
+
+#: templates/admin-page.php:66
+msgid "All"
+msgstr ""
+
+#: templates/admin-page.php:72
+msgid "Analyze all missing alt/caption/title images"
+msgstr ""
+
+#: templates/admin-page.php:75
+msgid "Analyze all missing alt images"
+msgstr ""
+
+#: templates/admin-page.php:78
+msgid "Analyze all images"
+msgstr ""
+
+#: templates/admin-page.php:91
+msgid "Select All"
+msgstr ""
+
+#: templates/admin-page.php:94
+msgid "Analyze Selected Images"
+msgstr ""
+
+#: templates/admin-page.php:118
+msgid "Confirm Analysis"
+msgstr ""
+
+#: templates/admin-page.php:122
+msgid "Confirm"
+msgstr ""
+
+#: templates/admin-page.php:125
+msgid "Cancel"
+msgstr ""
+
+#: templates/api-settings-modal.php:7
+msgid "ForVoyez API Settings"
+msgstr ""
+
+#: templates/api-settings-modal.php:8
+msgid "Enter your ForVoyez API key below:"
+msgstr ""
+
+#: templates/api-settings-modal.php:11
+#: templates/configuration-tab.php:35
+msgid "Toggle API key visibility"
+msgstr ""
+
+#: templates/api-settings-modal.php:21
+#: templates/configuration-tab.php:45
+msgid "Save API Key"
+msgstr ""
+
+#: templates/api-settings-modal.php:24
+msgid "Close"
+msgstr ""
+
+#: templates/configuration-tab.php:9
+msgid "API Configuration"
+msgstr ""
+
+#: templates/configuration-tab.php:10
+msgid "Manage your ForVoyez API settings here"
+msgstr ""
+
+#: templates/configuration-tab.php:14
+msgid "About ForVoyez API"
+msgstr ""
+
+#: templates/configuration-tab.php:16
+msgid "ForVoyez API provides powerful image analysis capabilities for your WordPress site. To use this plugin, you need to obtain an API key from ForVoyez."
+msgstr ""
+
+#: templates/configuration-tab.php:19
+msgid "To get started:"
+msgstr ""
+
+#: templates/configuration-tab.php:22
+msgid "Visit the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez signup page</a> to create an account."
+msgstr ""
+
+#: templates/configuration-tab.php:23
+msgid "Once logged in, navigate to your <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez dashboard</a>."
+msgstr ""
+
+#: templates/configuration-tab.php:24
+msgid "Generate an API key in the API section of your dashboard."
+msgstr ""
+
+#: templates/configuration-tab.php:25
+msgid "Copy the API key and paste it in the field below."
+msgstr ""
+
+#: templates/configuration-tab.php:28
+msgid "For more information, please refer to the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez API documentation</a>."
+msgstr ""
+
+#: templates/configuration-tab.php:32
+msgid "API Key"
+msgstr ""
+
+#: templates/configuration-tab.php:34
+msgid "Enter your API key"
+msgstr ""
+
+#: templates/dashboard-tab.php:4
+#: templates/main-page.php:10
+msgid "Dashboard"
+msgstr ""
+
+#: templates/dashboard-tab.php:5
+msgid "Overview of your Auto Alt Text for Images"
+msgstr ""
+
+#: templates/dashboard-tab.php:10
+msgid "Total Images"
+msgstr ""
+
+#: templates/dashboard-tab.php:14
+msgid "Images Completed"
+msgstr ""
+
+#: templates/dashboard-tab.php:18
+msgid "Images Without alt / caption"
+msgstr ""
+
+#: templates/dashboard-tab.php:27
+msgid "Pre-requisites"
+msgstr ""
+
+#: templates/dashboard-tab.php:28
+msgid "Make sure you have the following before you start:"
+msgstr ""
+
+#: templates/dashboard-tab.php:32
+msgid "Go to the 'Settings' tab"
+msgstr ""
+
+#: templates/dashboard-tab.php:33
+msgid "Enter your ForVoyez API key"
+msgstr ""
+
+#: templates/dashboard-tab.php:34
+msgid "Click on 'Save API Key'"
+msgstr ""
+
+#: templates/dashboard-tab.php:40
+msgid "Quick Start"
+msgstr ""
+
+#: templates/dashboard-tab.php:41
+msgid "Follow these steps to generate alt text for your images:"
+msgstr ""
+
+#: templates/dashboard-tab.php:45
+msgid "Go to the 'Manage Images' tab"
+msgstr ""
+
+#: templates/dashboard-tab.php:46
+msgid "Select the images you want to process"
+msgstr ""
+
+#: templates/dashboard-tab.php:47
+msgid "Click on 'Generate Alt Text' to start the process"
+msgstr ""
+
+#: templates/dashboard-tab.php:48
+msgid "Review and edit the generated alt text as needed"
+msgstr ""
+
+#: templates/main-page.php:8
+msgid "Tabs"
+msgstr ""
+
+#: templates/main-page.php:13
+msgid "Manage Images"
+msgstr ""
+
+#: templates/main-page.php:16
+msgid "Configuration"
 msgstr ""
