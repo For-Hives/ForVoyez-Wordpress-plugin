@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Auto Alt Text for Images 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ForVoyez-Wordpress-plugin\n"
 "POT-Creation-Date: 2024-08-01T10:19:11+00:00\n"
-"PO-Revision-Date: 2024-08-01 16:12+0200\n"
+"PO-Revision-Date: 2024-08-01 16:17+0200\n"
 "Last-Translator: Cinquin Andy <contact@andy-cinquin.fr>\n"
 "Language-Team: ForVoyez <contact@forvoyez.com>\n"
 "Language: fr_FR\n"
@@ -18,7 +18,7 @@ msgstr ""
 #. Plugin Name of the plugin
 #: includes/class-forvoyez-admin.php:45 templates/admin-page.php:2
 msgid "Auto Alt Text for Images"
-msgstr "Texte Alt Automatique pour Images"
+msgstr "Alt Automatique pour vos images"
 
 #. Plugin URI of the plugin
 msgid "https://forvoyez.com/plugins/auto-alt-text"
@@ -338,7 +338,7 @@ msgstr "Tableau de bord"
 
 #: templates/dashboard-tab.php:5
 msgid "Overview of your Auto Alt Text for Images"
-msgstr "Aperçu de votre Texte Alt Automatique pour Images"
+msgstr "Aperçu du détail de vos metadata pour vos images"
 
 #: templates/dashboard-tab.php:10
 msgid "Total Images"
