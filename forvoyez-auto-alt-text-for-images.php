@@ -68,6 +68,15 @@ function forvoyez_init() {
 add_action('plugins_loaded', 'forvoyez_init');
 
 /**
+ * Load the plugin text domain for translation.
+ * @return void
+ */
+function forvoyez_load_textdomain() {
+    load_plugin_textdomain('forvoyez-auto-alt-text-for-images', false, dirname(plugin_basename(__FILE__)) . '/languages/');
+}
+add_action('plugins_loaded', 'forvoyez_load_textdomain');
+
+/**
  * Activate the plugin.
  *
  * Sets up necessary options when the plugin is activated.
