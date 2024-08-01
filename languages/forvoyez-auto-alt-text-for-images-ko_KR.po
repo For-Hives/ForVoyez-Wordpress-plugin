@@ -1,0 +1,409 @@
+# Copyright (C) 2024 ForVoyez
+# This file is distributed under the same license as the Auto Alt Text for Images plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Auto Alt Text for Images 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ForVoyez-Wordpress-plugin\n"
+"POT-Creation-Date: 2024-08-01T10:19:11+00:00\n"
+"PO-Revision-Date: 2024-08-01 16:15+0200\n"
+"Last-Translator: Cinquin Andy <contact@andy-cinquin.fr>\n"
+"Language-Team: ForVoyez <contact@forvoyez.com>\n"
+"Language: ko_KR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.3\n"
+"X-Domain: forvoyez-auto-alt-text-for-images\n"
+
+#. Plugin Name of the plugin
+#: includes/class-forvoyez-admin.php:45 templates/admin-page.php:2
+msgid "Auto Alt Text for Images"
+msgstr "이미지 자동 대체 텍스트"
+
+#. Plugin URI of the plugin
+msgid "https://forvoyez.com/plugins/auto-alt-text"
+msgstr "https://forvoyez.com/plugins/auto-alt-text"
+
+#. Description of the plugin
+msgid "Automatically generate alt text and SEO metadata for images using ForVoyez API."
+msgstr "ForVoyez API를 사용하여 이미지의 대체 텍스트와 SEO 메타데이터를 자동으로 생성합니다."
+
+#. Author of the plugin
+msgid "ForVoyez"
+msgstr "ForVoyez"
+
+#. Author URI of the plugin
+msgid "https://forvoyez.com"
+msgstr "https://forvoyez.com"
+
+#: includes/class-forvoyez-admin.php:46
+msgid "Auto Alt Text"
+msgstr "자동 대체 텍스트"
+
+#: includes/class-forvoyez-admin.php:138
+msgid "You do not have sufficient permissions to access this page."
+msgstr "이 페이지에 접근할 충분한 권한이 없습니다."
+
+#: includes/class-forvoyez-admin.php:151
+msgid "Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation."
+msgstr "ForVoyez API 키가 구성되지 않았습니다. 자동 대체 텍스트 생성을 활성화하려면 구성해 주세요."
+
+#: includes/class-forvoyez-admin.php:260
+msgid "No images found matching the selected criteria."
+msgstr "선택한 기준에 맞는 이미지를 찾을 수 없습니다."
+
+#: includes/class-forvoyez-admin.php:337 includes/class-forvoyez-admin.php:465
+#: includes/class-forvoyez-admin.php:521 includes/class-forvoyez-admin.php:544
+#: includes/class-forvoyez-image-processor.php:238
+#: includes/class-forvoyez-settings.php:55
+msgid "Permission denied"
+msgstr "권한이 거부되었습니다"
+
+#: includes/class-forvoyez-admin.php:379
+msgid "&laquo; Previous"
+msgstr "&laquo; 이전"
+
+#: includes/class-forvoyez-admin.php:393
+msgid "Next &raquo;"
+msgstr "다음 &raquo;"
+
+#: includes/class-forvoyez-api-manager.php:59
+msgid "API key is not set"
+msgstr "API 키가 설정되지 않았습니다"
+
+#: includes/class-forvoyez-api-manager.php:76
+msgid "API key is valid"
+msgstr "API 키가 유효합니다"
+
+#: includes/class-forvoyez-api-manager.php:78
+msgid "Invalid API key"
+msgstr "잘못된 API 키"
+
+#: includes/class-forvoyez-api-manager.php:92
+msgid "Image not found"
+msgstr "이미지를 찾을 수 없습니다"
+
+#: includes/class-forvoyez-api-manager.php:101
+msgid "Failed to read image file"
+msgstr "이미지 파일을 읽는 데 실패했습니다"
+
+#: includes/class-forvoyez-api-manager.php:144
+msgid "Failed to decode API response"
+msgstr "API 응답을 디코딩하는 데 실패했습니다"
+
+#: includes/class-forvoyez-api-manager.php:166
+#: includes/class-forvoyez-image-processor.php:93
+msgid "Analysis successful"
+msgstr "분석 성공"
+
+#: includes/class-forvoyez-image-processor.php:51
+msgid "Invalid data"
+msgstr "잘못된 데이터"
+
+#: includes/class-forvoyez-image-processor.php:56
+msgid "Metadata updated successfully"
+msgstr "메타데이터가 성공적으로 업데이트되었습니다"
+
+#: includes/class-forvoyez-image-processor.php:86
+#: includes/class-forvoyez-image-processor.php:192
+msgid "Invalid image ID"
+msgstr "잘못된 이미지 ID"
+
+#: includes/class-forvoyez-image-processor.php:99
+#: includes/class-forvoyez-image-processor.php:222
+msgid "unknown_error"
+msgstr "알 수 없는_오류"
+
+#: includes/class-forvoyez-image-processor.php:176
+msgid "No valid images selected"
+msgstr "유효한 이미지가 선택되지 않았습니다"
+
+#: includes/class-forvoyez-image-processor.php:180
+msgid "Processing started"
+msgstr "처리 시작됨"
+
+#: includes/class-forvoyez-image-processor.php:206
+msgid "No images provided"
+msgstr "제공된 이미지 없음"
+
+#: includes/class-forvoyez-image-renderer.php:83
+msgid "Title:"
+msgstr "제목:"
+
+#: includes/class-forvoyez-image-renderer.php:83
+#: includes/class-forvoyez-image-renderer.php:86
+#: includes/class-forvoyez-image-renderer.php:89
+msgid "Not set"
+msgstr "설정되지 않음"
+
+#: includes/class-forvoyez-image-renderer.php:86
+msgid "Alt Text:"
+msgstr "대체 텍스트:"
+
+#: includes/class-forvoyez-image-renderer.php:89
+msgid "Caption:"
+msgstr "캡션:"
+
+#: includes/class-forvoyez-image-renderer.php:122 templates/admin-page.php:44
+msgid "All Complete"
+msgstr "모두 완료"
+
+#: includes/class-forvoyez-image-renderer.php:141
+msgid "Missing %s"
+msgstr "%s 누락"
+
+#: includes/class-forvoyez-image-renderer.php:174
+msgid "Analyze"
+msgstr "분석"
+
+#: includes/class-forvoyez-image-renderer.php:175
+msgid "Details"
+msgstr "상세 정보"
+
+#: includes/class-forvoyez-settings.php:61
+msgid "API key cannot be empty"
+msgstr "API 키는 비워둘 수 없습니다"
+
+#: includes/class-forvoyez-settings.php:67
+msgid "API key saved successfully"
+msgstr "API 키가 성공적으로 저장되었습니다"
+
+#: includes/forvoyez-helpers.php:117
+msgid "Invalid API key format. Please enter a valid ForVoyez JWT."
+msgstr "잘못된 API 키 형식입니다. 유효한 ForVoyez JWT를 입력해 주세요."
+
+#: includes/forvoyez-helpers.php:136
+msgid "Invalid JWT format"
+msgstr "잘못된 JWT 형식"
+
+#: includes/forvoyez-helpers.php:145
+msgid "Invalid JWT payload"
+msgstr "잘못된 JWT 페이로드"
+
+#: includes/forvoyez-helpers.php:150
+msgid "Invalid JWT issuer"
+msgstr "잘못된 JWT 발급자"
+
+#: includes/forvoyez-helpers.php:155
+msgid "Invalid JWT audience"
+msgstr "잘못된 JWT 대상"
+
+#: includes/forvoyez-helpers.php:160
+msgid "JWT has expired"
+msgstr "JWT가 만료되었습니다"
+
+#: templates/admin-page.php:6
+msgid "Legend :"
+msgstr "범례 :"
+
+#: templates/admin-page.php:11
+msgid "Missing Alt Text :"
+msgstr "대체 텍스트 누락 :"
+
+#: templates/admin-page.php:13
+msgid "Missing Alt Text"
+msgstr "대체 텍스트 누락"
+
+#: templates/admin-page.php:21
+msgid "Missing title :"
+msgstr "제목 누락 :"
+
+#: templates/admin-page.php:23
+msgid "Missing Title"
+msgstr "제목 누락"
+
+#: templates/admin-page.php:32
+msgid "Missing caption :"
+msgstr "캡션 누락 :"
+
+#: templates/admin-page.php:34
+msgid "Missing Caption"
+msgstr "캡션 누락"
+
+#: templates/admin-page.php:42
+msgid "All complete :"
+msgstr "모두 완료 :"
+
+#: templates/admin-page.php:60
+msgid "Items per page:"
+msgstr "페이지당 항목 수:"
+
+#: templates/admin-page.php:66
+msgid "All"
+msgstr "모두"
+
+#: templates/admin-page.php:72
+msgid "Analyze all missing alt/caption/title images"
+msgstr "대체 텍스트/캡션/제목이 누락된 모든 이미지 분석"
+
+#: templates/admin-page.php:75
+msgid "Analyze all missing alt images"
+msgstr "대체 텍스트가 누락된 모든 이미지 분석"
+
+#: templates/admin-page.php:78
+msgid "Analyze all images"
+msgstr "모든 이미지 분석"
+
+#: templates/admin-page.php:91
+msgid "Select All"
+msgstr "모두 선택"
+
+#: templates/admin-page.php:94
+msgid "Analyze Selected Images"
+msgstr "선택한 이미지 분석"
+
+#: templates/admin-page.php:118
+msgid "Confirm Analysis"
+msgstr "분석 확인"
+
+#: templates/admin-page.php:122
+msgid "Confirm"
+msgstr "확인"
+
+#: templates/admin-page.php:125
+msgid "Cancel"
+msgstr "취소"
+
+#: templates/api-settings-modal.php:7
+msgid "ForVoyez API Settings"
+msgstr "ForVoyez API 설정"
+
+#: templates/api-settings-modal.php:8
+msgid "Enter your ForVoyez API key below:"
+msgstr "아래에 ForVoyez API 키를 입력하세요:"
+
+#: templates/api-settings-modal.php:11 templates/configuration-tab.php:35
+msgid "Toggle API key visibility"
+msgstr "API 키 가시성 전환"
+
+#: templates/api-settings-modal.php:21 templates/configuration-tab.php:45
+msgid "Save API Key"
+msgstr "API 키 저장"
+
+#: templates/api-settings-modal.php:24
+msgid "Close"
+msgstr "닫기"
+
+#: templates/configuration-tab.php:9
+msgid "API Configuration"
+msgstr "API 구성"
+
+#: templates/configuration-tab.php:10
+msgid "Manage your ForVoyez API settings here"
+msgstr "여기에서 ForVoyez API 설정을 관리하세요"
+
+#: templates/configuration-tab.php:14
+msgid "About ForVoyez API"
+msgstr "ForVoyez API 소개"
+
+#: templates/configuration-tab.php:16
+msgid "ForVoyez API provides powerful image analysis capabilities for your WordPress site. To use this plugin, you need to obtain an API key from ForVoyez."
+msgstr "ForVoyez API는 WordPress 사이트에 강력한 이미지 분석 기능을 제공합니다. 이 플러그인을 사용하려면 ForVoyez에서 API 키를 얻어야 합니다."
+
+#: templates/configuration-tab.php:19
+msgid "To get started:"
+msgstr "시작하려면:"
+
+#: templates/configuration-tab.php:22
+msgid "Visit the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez signup page</a> to create an account."
+msgstr "계정을 만들려면 <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez 가입 페이지</a>를 방문하세요."
+
+#: templates/configuration-tab.php:23
+msgid "Once logged in, navigate to your <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez dashboard</a>."
+msgstr "로그인 후 <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez 대시보드</a>로 이동하세요."
+
+#: templates/configuration-tab.php:24
+msgid "Generate an API key in the API section of your dashboard."
+msgstr "대시보드의 API 섹션에서 API 키를 생성하세요."
+
+#: templates/configuration-tab.php:25
+msgid "Copy the API key and paste it in the field below."
+msgstr "API 키를 복사하여 아래 필드에 붙여넣으세요."
+
+#: templates/configuration-tab.php:28
+msgid "For more information, please refer to the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez API documentation</a>."
+msgstr "자세한 정보는 <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez API 문서</a>를 참조하세요."
+
+#: templates/configuration-tab.php:32
+msgid "API Key"
+msgstr "API 키"
+
+#: templates/configuration-tab.php:34
+msgid "Enter your API key"
+msgstr "API 키 입력"
+
+#: templates/dashboard-tab.php:4 templates/main-page.php:10
+msgid "Dashboard"
+msgstr "대시보드"
+
+#: templates/dashboard-tab.php:5
+msgid "Overview of your Auto Alt Text for Images"
+msgstr "이미지 자동 대체 텍스트 개요"
+
+#: templates/dashboard-tab.php:10
+msgid "Total Images"
+msgstr "전체 이미지"
+
+#: templates/dashboard-tab.php:14
+msgid "Images Completed"
+msgstr "완료된 이미지"
+
+#: templates/dashboard-tab.php:18
+msgid "Images Without alt / caption"
+msgstr "대체 텍스트 / 캡션 없는 이미지"
+
+#: templates/dashboard-tab.php:27
+msgid "Pre-requisites"
+msgstr "사전 요구 사항"
+
+#: templates/dashboard-tab.php:28
+msgid "Make sure you have the following before you start:"
+msgstr "시작하기 전에 다음 사항을 확인하세요:"
+
+#: templates/dashboard-tab.php:32
+msgid "Go to the 'Settings' tab"
+msgstr "'설정' 탭으로 이동"
+
+#: templates/dashboard-tab.php:33
+msgid "Enter your ForVoyez API key"
+msgstr "ForVoyez API 키 입력"
+
+#: templates/dashboard-tab.php:34
+msgid "Click on 'Save API Key'"
+msgstr "'API 키 저장' 클릭"
+
+#: templates/dashboard-tab.php:40
+msgid "Quick Start"
+msgstr "빠른 시작"
+
+#: templates/dashboard-tab.php:41
+msgid "Follow these steps to generate alt text for your images:"
+msgstr "이미지의 대체 텍스트를 생성하려면 다음 단계를 따르세요:"
+
+#: templates/dashboard-tab.php:45
+msgid "Go to the 'Manage Images' tab"
+msgstr "'이미지 관리' 탭으로 이동"
+
+#: templates/dashboard-tab.php:46
+msgid "Select the images you want to process"
+msgstr "처리할 이미지 선택"
+
+#: templates/dashboard-tab.php:47
+msgid "Click on 'Generate Alt Text' to start the process"
+msgstr "프로세스를 시작하려면 '대체 텍스트 생성'을 클릭"
+
+#: templates/dashboard-tab.php:48
+msgid "Review and edit the generated alt text as needed"
+msgstr "필요에 따라 생성된 대체 텍스트 검토 및 편집"
+
+#: templates/main-page.php:8
+msgid "Tabs"
+msgstr "탭"
+
+#: templates/main-page.php:13
+msgid "Manage Images"
+msgstr "이미지 관리"
+
+#: templates/main-page.php:16
+msgid "Configuration"
+msgstr "구성"
