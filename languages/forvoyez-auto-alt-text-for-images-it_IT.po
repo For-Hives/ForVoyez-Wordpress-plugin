@@ -8,7 +8,7 @@ msgstr ""
 "PO-Revision-Date: 2024-08-01 16:15+0200\n"
 "Last-Translator: Cinquin Andy <contact@andy-cinquin.fr>\n"
 "Language-Team: ForVoyez <contact@forvoyez.com>\n"
-"Language: de_DE\n"
+"Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,7 +18,7 @@ msgstr ""
 #. Plugin Name of the plugin
 #: includes/class-forvoyez-admin.php:45 templates/admin-page.php:2
 msgid "Auto Alt Text for Images"
-msgstr "Automatischer Alt-Text für Bilder"
+msgstr "Testo Alt Automatico per Immagini"
 
 #. Plugin URI of the plugin
 msgid "https://forvoyez.com/plugins/auto-alt-text"
@@ -26,7 +26,7 @@ msgstr "https://forvoyez.com/plugins/auto-alt-text"
 
 #. Description of the plugin
 msgid "Automatically generate alt text and SEO metadata for images using ForVoyez API."
-msgstr "Automatische Generierung von Alt-Text und SEO-Metadaten für Bilder mit der ForVoyez API."
+msgstr "Genera automaticamente testo alternativo e metadati SEO per le immagini utilizzando l'API ForVoyez."
 
 #. Author of the plugin
 msgid "ForVoyez"
@@ -38,299 +38,299 @@ msgstr "https://forvoyez.com"
 
 #: includes/class-forvoyez-admin.php:46
 msgid "Auto Alt Text"
-msgstr "Auto Alt-Text"
+msgstr "Testo Alt Automatico"
 
 #: includes/class-forvoyez-admin.php:138
 msgid "You do not have sufficient permissions to access this page."
-msgstr "Sie haben nicht die erforderlichen Berechtigungen, um auf diese Seite zuzugreifen."
+msgstr "Non hai i permessi sufficienti per accedere a questa pagina."
 
 #: includes/class-forvoyez-admin.php:151
 msgid "Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation."
-msgstr "Ihr ForVoyez API-Schlüssel ist nicht konfiguriert. Bitte konfigurieren Sie ihn, um die automatische Alt-Text-Generierung zu aktivieren."
+msgstr "La tua chiave API ForVoyez non è configurata. Configurala per abilitare la generazione automatica del testo alternativo."
 
 #: includes/class-forvoyez-admin.php:260
 msgid "No images found matching the selected criteria."
-msgstr "Keine Bilder gefunden, die den ausgewählten Kriterien entsprechen."
+msgstr "Nessuna immagine trovata che corrisponda ai criteri selezionati."
 
 #: includes/class-forvoyez-admin.php:337 includes/class-forvoyez-admin.php:465
 #: includes/class-forvoyez-admin.php:521 includes/class-forvoyez-admin.php:544
 #: includes/class-forvoyez-image-processor.php:238
 #: includes/class-forvoyez-settings.php:55
 msgid "Permission denied"
-msgstr "Zugriff verweigert"
+msgstr "Permesso negato"
 
 #: includes/class-forvoyez-admin.php:379
 msgid "&laquo; Previous"
-msgstr "&laquo; Vorherige"
+msgstr "&laquo; Precedente"
 
 #: includes/class-forvoyez-admin.php:393
 msgid "Next &raquo;"
-msgstr "Nächste &raquo;"
+msgstr "Successivo &raquo;"
 
 #: includes/class-forvoyez-api-manager.php:59
 msgid "API key is not set"
-msgstr "API-Schlüssel ist nicht gesetzt"
+msgstr "La chiave API non è impostata"
 
 #: includes/class-forvoyez-api-manager.php:76
 msgid "API key is valid"
-msgstr "API-Schlüssel ist gültig"
+msgstr "La chiave API è valida"
 
 #: includes/class-forvoyez-api-manager.php:78
 msgid "Invalid API key"
-msgstr "Ungültiger API-Schlüssel"
+msgstr "Chiave API non valida"
 
 #: includes/class-forvoyez-api-manager.php:92
 msgid "Image not found"
-msgstr "Bild nicht gefunden"
+msgstr "Immagine non trovata"
 
 #: includes/class-forvoyez-api-manager.php:101
 msgid "Failed to read image file"
-msgstr "Fehler beim Lesen der Bilddatei"
+msgstr "Impossibile leggere il file immagine"
 
 #: includes/class-forvoyez-api-manager.php:144
 msgid "Failed to decode API response"
-msgstr "Fehler beim Dekodieren der API-Antwort"
+msgstr "Impossibile decodificare la risposta API"
 
 #: includes/class-forvoyez-api-manager.php:166
 #: includes/class-forvoyez-image-processor.php:93
 msgid "Analysis successful"
-msgstr "Analyse erfolgreich"
+msgstr "Analisi riuscita"
 
 #: includes/class-forvoyez-image-processor.php:51
 msgid "Invalid data"
-msgstr "Ungültige Daten"
+msgstr "Dati non validi"
 
 #: includes/class-forvoyez-image-processor.php:56
 msgid "Metadata updated successfully"
-msgstr "Metadaten erfolgreich aktualisiert"
+msgstr "Metadati aggiornati con successo"
 
 #: includes/class-forvoyez-image-processor.php:86
 #: includes/class-forvoyez-image-processor.php:192
 msgid "Invalid image ID"
-msgstr "Ungültige Bild-ID"
+msgstr "ID immagine non valido"
 
 #: includes/class-forvoyez-image-processor.php:99
 #: includes/class-forvoyez-image-processor.php:222
 msgid "unknown_error"
-msgstr "unbekannter_Fehler"
+msgstr "errore_sconosciuto"
 
 #: includes/class-forvoyez-image-processor.php:176
 msgid "No valid images selected"
-msgstr "Keine gültigen Bilder ausgewählt"
+msgstr "Nessuna immagine valida selezionata"
 
 #: includes/class-forvoyez-image-processor.php:180
 msgid "Processing started"
-msgstr "Verarbeitung gestartet"
+msgstr "Elaborazione avviata"
 
 #: includes/class-forvoyez-image-processor.php:206
 msgid "No images provided"
-msgstr "Keine Bilder bereitgestellt"
+msgstr "Nessuna immagine fornita"
 
 #: includes/class-forvoyez-image-renderer.php:83
 msgid "Title:"
-msgstr "Titel:"
+msgstr "Titolo:"
 
 #: includes/class-forvoyez-image-renderer.php:83
 #: includes/class-forvoyez-image-renderer.php:86
 #: includes/class-forvoyez-image-renderer.php:89
 msgid "Not set"
-msgstr "Nicht festgelegt"
+msgstr "Non impostato"
 
 #: includes/class-forvoyez-image-renderer.php:86
 msgid "Alt Text:"
-msgstr "Alt-Text:"
+msgstr "Testo Alt:"
 
 #: includes/class-forvoyez-image-renderer.php:89
 msgid "Caption:"
-msgstr "Bildunterschrift:"
+msgstr "Didascalia:"
 
 #: includes/class-forvoyez-image-renderer.php:122 templates/admin-page.php:44
 msgid "All Complete"
-msgstr "Alles vollständig"
+msgstr "Tutto Completo"
 
 #: includes/class-forvoyez-image-renderer.php:141
 msgid "Missing %s"
-msgstr "%s fehlt"
+msgstr "Manca %s"
 
 #: includes/class-forvoyez-image-renderer.php:174
 msgid "Analyze"
-msgstr "Analysieren"
+msgstr "Analizza"
 
 #: includes/class-forvoyez-image-renderer.php:175
 msgid "Details"
-msgstr "Details"
+msgstr "Dettagli"
 
 #: includes/class-forvoyez-settings.php:61
 msgid "API key cannot be empty"
-msgstr "API-Schlüssel darf nicht leer sein"
+msgstr "La chiave API non può essere vuota"
 
 #: includes/class-forvoyez-settings.php:67
 msgid "API key saved successfully"
-msgstr "API-Schlüssel erfolgreich gespeichert"
+msgstr "Chiave API salvata con successo"
 
 #: includes/forvoyez-helpers.php:117
 msgid "Invalid API key format. Please enter a valid ForVoyez JWT."
-msgstr "Ungültiges API-Schlüsselformat. Bitte geben Sie einen gültigen ForVoyez JWT ein."
+msgstr "Formato della chiave API non valido. Inserisci un JWT ForVoyez valido."
 
 #: includes/forvoyez-helpers.php:136
 msgid "Invalid JWT format"
-msgstr "Ungültiges JWT-Format"
+msgstr "Formato JWT non valido"
 
 #: includes/forvoyez-helpers.php:145
 msgid "Invalid JWT payload"
-msgstr "Ungültige JWT-Nutzlast"
+msgstr "Payload JWT non valido"
 
 #: includes/forvoyez-helpers.php:150
 msgid "Invalid JWT issuer"
-msgstr "Ungültiger JWT-Aussteller"
+msgstr "Emittente JWT non valido"
 
 #: includes/forvoyez-helpers.php:155
 msgid "Invalid JWT audience"
-msgstr "Ungültiges JWT-Publikum"
+msgstr "Pubblico JWT non valido"
 
 #: includes/forvoyez-helpers.php:160
 msgid "JWT has expired"
-msgstr "JWT ist abgelaufen"
+msgstr "JWT scaduto"
 
 #: templates/admin-page.php:6
 msgid "Legend :"
-msgstr "Legende :"
+msgstr "Legenda :"
 
 #: templates/admin-page.php:11
 msgid "Missing Alt Text :"
-msgstr "Fehlender Alt-Text :"
+msgstr "Testo Alt Mancante :"
 
 #: templates/admin-page.php:13
 msgid "Missing Alt Text"
-msgstr "Fehlender Alt-Text"
+msgstr "Testo Alt Mancante"
 
 #: templates/admin-page.php:21
 msgid "Missing title :"
-msgstr "Fehlender Titel :"
+msgstr "Titolo mancante :"
 
 #: templates/admin-page.php:23
 msgid "Missing Title"
-msgstr "Fehlender Titel"
+msgstr "Titolo Mancante"
 
 #: templates/admin-page.php:32
 msgid "Missing caption :"
-msgstr "Fehlende Bildunterschrift :"
+msgstr "Didascalia mancante :"
 
 #: templates/admin-page.php:34
 msgid "Missing Caption"
-msgstr "Fehlende Bildunterschrift"
+msgstr "Didascalia Mancante"
 
 #: templates/admin-page.php:42
 msgid "All complete :"
-msgstr "Alles vollständig :"
+msgstr "Tutto completo :"
 
 #: templates/admin-page.php:60
 msgid "Items per page:"
-msgstr "Elemente pro Seite:"
+msgstr "Elementi per pagina:"
 
 #: templates/admin-page.php:66
 msgid "All"
-msgstr "Alle"
+msgstr "Tutti"
 
 #: templates/admin-page.php:72
 msgid "Analyze all missing alt/caption/title images"
-msgstr "Alle Bilder mit fehlendem Alt-Text/Bildunterschrift/Titel analysieren"
+msgstr "Analizza tutte le immagini con alt/didascalia/titolo mancante"
 
 #: templates/admin-page.php:75
 msgid "Analyze all missing alt images"
-msgstr "Alle Bilder mit fehlendem Alt-Text analysieren"
+msgstr "Analizza tutte le immagini con alt mancante"
 
 #: templates/admin-page.php:78
 msgid "Analyze all images"
-msgstr "Alle Bilder analysieren"
+msgstr "Analizza tutte le immagini"
 
 #: templates/admin-page.php:91
 msgid "Select All"
-msgstr "Alle auswählen"
+msgstr "Seleziona Tutto"
 
 #: templates/admin-page.php:94
 msgid "Analyze Selected Images"
-msgstr "Ausgewählte Bilder analysieren"
+msgstr "Analizza Immagini Selezionate"
 
 #: templates/admin-page.php:118
 msgid "Confirm Analysis"
-msgstr "Analyse bestätigen"
+msgstr "Conferma Analisi"
 
 #: templates/admin-page.php:122
 msgid "Confirm"
-msgstr "Bestätigen"
+msgstr "Conferma"
 
 #: templates/admin-page.php:125
 msgid "Cancel"
-msgstr "Abbrechen"
+msgstr "Annulla"
 
 #: templates/api-settings-modal.php:7
 msgid "ForVoyez API Settings"
-msgstr "ForVoyez API-Einstellungen"
+msgstr "Impostazioni API ForVoyez"
 
 #: templates/api-settings-modal.php:8
 msgid "Enter your ForVoyez API key below:"
-msgstr "Geben Sie unten Ihren ForVoyez API-Schlüssel ein:"
+msgstr "Inserisci la tua chiave API ForVoyez qui sotto:"
 
 #: templates/api-settings-modal.php:11 templates/configuration-tab.php:35
 msgid "Toggle API key visibility"
-msgstr "API-Schlüsselsichtbarkeit umschalten"
+msgstr "Attiva/disattiva la visibilità della chiave API"
 
 #: templates/api-settings-modal.php:21 templates/configuration-tab.php:45
 msgid "Save API Key"
-msgstr "API-Schlüssel speichern"
+msgstr "Salva Chiave API"
 
 #: templates/api-settings-modal.php:24
 msgid "Close"
-msgstr "Schließen"
+msgstr "Chiudi"
 
 #: templates/configuration-tab.php:9
 msgid "API Configuration"
-msgstr "API-Konfiguration"
+msgstr "Configurazione API"
 
 #: templates/configuration-tab.php:10
 msgid "Manage your ForVoyez API settings here"
-msgstr "Verwalten Sie hier Ihre ForVoyez API-Einstellungen"
+msgstr "Gestisci qui le tue impostazioni API ForVoyez"
 
 #: templates/configuration-tab.php:14
 msgid "About ForVoyez API"
-msgstr "Über die ForVoyez API"
+msgstr "Informazioni sull'API ForVoyez"
 
 #: templates/configuration-tab.php:16
 msgid "ForVoyez API provides powerful image analysis capabilities for your WordPress site. To use this plugin, you need to obtain an API key from ForVoyez."
-msgstr "Die ForVoyez API bietet leistungsstarke Bildanalysefunktionen für Ihre WordPress-Website. Um dieses Plugin zu verwenden, müssen Sie einen API-Schlüssel von ForVoyez erhalten."
+msgstr "L'API ForVoyez fornisce potenti funzionalità di analisi delle immagini per il tuo sito WordPress. Per utilizzare questo plugin, devi ottenere una chiave API da ForVoyez."
 
 #: templates/configuration-tab.php:19
 msgid "To get started:"
-msgstr "Um zu beginnen:"
+msgstr "Per iniziare:"
 
 #: templates/configuration-tab.php:22
 msgid "Visit the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez signup page</a> to create an account."
-msgstr "Besuchen Sie die <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez-Anmeldeseite</a>, um ein Konto zu erstellen."
+msgstr "Visita la <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">pagina di registrazione ForVoyez</a> per creare un account."
 
 #: templates/configuration-tab.php:23
 msgid "Once logged in, navigate to your <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez dashboard</a>."
-msgstr "Nach der Anmeldung navigieren Sie zu Ihrem <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez-Dashboard</a>."
+msgstr "Una volta effettuato l'accesso, vai alla tua <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">dashboard ForVoyez</a>."
 
 #: templates/configuration-tab.php:24
 msgid "Generate an API key in the API section of your dashboard."
-msgstr "Generieren Sie einen API-Schlüssel im API-Bereich Ihres Dashboards."
+msgstr "Genera una chiave API nella sezione API della tua dashboard."
 
 #: templates/configuration-tab.php:25
 msgid "Copy the API key and paste it in the field below."
-msgstr "Kopieren Sie den API-Schlüssel und fügen Sie ihn in das unten stehende Feld ein."
+msgstr "Copia la chiave API e incollala nel campo sottostante."
 
 #: templates/configuration-tab.php:28
 msgid "For more information, please refer to the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez API documentation</a>."
-msgstr "Weitere Informationen finden Sie in der <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez API-Dokumentation</a>."
+msgstr "Per ulteriori informazioni, consulta la <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">documentazione API ForVoyez</a>."
 
 #: templates/configuration-tab.php:32
 msgid "API Key"
-msgstr "API-Schlüssel"
+msgstr "Chiave API"
 
 #: templates/configuration-tab.php:34
 msgid "Enter your API key"
-msgstr "Geben Sie Ihren API-Schlüssel ein"
+msgstr "Inserisci la tua chiave API"
 
 #: templates/dashboard-tab.php:4 templates/main-page.php:10
 msgid "Dashboard"
@@ -338,72 +338,72 @@ msgstr "Dashboard"
 
 #: templates/dashboard-tab.php:5
 msgid "Overview of your Auto Alt Text for Images"
-msgstr "Übersicht über Ihren automatischen Alt-Text für Bilder"
+msgstr "Panoramica del tuo Testo Alt Automatico per Immagini"
 
 #: templates/dashboard-tab.php:10
 msgid "Total Images"
-msgstr "Gesamtanzahl der Bilder"
+msgstr "Totale Immagini"
 
 #: templates/dashboard-tab.php:14
 msgid "Images Completed"
-msgstr "Abgeschlossene Bilder"
+msgstr "Immagini Completate"
 
 #: templates/dashboard-tab.php:18
 msgid "Images Without alt / caption"
-msgstr "Bilder ohne Alt-Text / Bildunterschrift"
+msgstr "Immagini Senza alt / didascalia"
 
 #: templates/dashboard-tab.php:27
 msgid "Pre-requisites"
-msgstr "Voraussetzungen"
+msgstr "Prerequisiti"
 
 #: templates/dashboard-tab.php:28
 msgid "Make sure you have the following before you start:"
-msgstr "Stellen Sie sicher, dass Sie Folgendes haben, bevor Sie beginnen:"
+msgstr "Assicurati di avere quanto segue prima di iniziare:"
 
 #: templates/dashboard-tab.php:32
 msgid "Go to the 'Settings' tab"
-msgstr "Gehen Sie zum 'Einstellungen' Tab"
+msgstr "Vai alla scheda 'Impostazioni'"
 
 #: templates/dashboard-tab.php:33
 msgid "Enter your ForVoyez API key"
-msgstr "Geben Sie Ihren ForVoyez API-Schlüssel ein"
+msgstr "Inserisci la tua chiave API ForVoyez"
 
 #: templates/dashboard-tab.php:34
 msgid "Click on 'Save API Key'"
-msgstr "Klicken Sie auf 'API-Schlüssel speichern'"
+msgstr "Clicca su 'Salva Chiave API'"
 
 #: templates/dashboard-tab.php:40
 msgid "Quick Start"
-msgstr "Schnellstart"
+msgstr "Avvio Rapido"
 
 #: templates/dashboard-tab.php:41
 msgid "Follow these steps to generate alt text for your images:"
-msgstr "Folgen Sie diesen Schritten, um Alt-Text für Ihre Bilder zu generieren:"
+msgstr "Segui questi passaggi per generare il testo alt per le tue immagini:"
 
 #: templates/dashboard-tab.php:45
 msgid "Go to the 'Manage Images' tab"
-msgstr "Gehen Sie zum 'Bilder verwalten' Tab"
+msgstr "Vai alla scheda 'Gestisci Immagini'"
 
 #: templates/dashboard-tab.php:46
 msgid "Select the images you want to process"
-msgstr "Wählen Sie die Bilder aus, die Sie verarbeiten möchten"
+msgstr "Seleziona le immagini che vuoi elaborare"
 
 #: templates/dashboard-tab.php:47
 msgid "Click on 'Generate Alt Text' to start the process"
-msgstr "Klicken Sie auf 'Alt-Text generieren', um den Prozess zu starten"
+msgstr "Clicca su 'Genera Testo Alt' per avviare il processo"
 
 #: templates/dashboard-tab.php:48
 msgid "Review and edit the generated alt text as needed"
-msgstr "Überprüfen und bearbeiten Sie den generierten Alt-Text nach Bedarf"
+msgstr "Rivedi e modifica il testo alt generato secondo necessità"
 
 #: templates/main-page.php:8
 msgid "Tabs"
-msgstr "Tabs"
+msgstr "Schede"
 
 #: templates/main-page.php:13
 msgid "Manage Images"
-msgstr "Bilder verwalten"
+msgstr "Gestisci Immagini"
 
 #: templates/main-page.php:16
 msgid "Configuration"
-msgstr "Konfiguration"
+msgstr "Configurazione"
