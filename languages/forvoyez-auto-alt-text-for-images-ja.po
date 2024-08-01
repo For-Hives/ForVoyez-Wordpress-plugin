@@ -8,7 +8,7 @@ msgstr ""
 "PO-Revision-Date: 2024-08-01 16:15+0200\n"
 "Last-Translator: Cinquin Andy <contact@andy-cinquin.fr>\n"
 "Language-Team: ForVoyez <contact@forvoyez.com>\n"
-"Language: es_ES\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,7 +18,7 @@ msgstr ""
 #. Plugin Name of the plugin
 #: includes/class-forvoyez-admin.php:45 templates/admin-page.php:2
 msgid "Auto Alt Text for Images"
-msgstr "Texto Alt Automático para Imágenes"
+msgstr "画像用自動代替テキスト"
 
 #. Plugin URI of the plugin
 msgid "https://forvoyez.com/plugins/auto-alt-text"
@@ -26,7 +26,7 @@ msgstr "https://forvoyez.com/plugins/auto-alt-text"
 
 #. Description of the plugin
 msgid "Automatically generate alt text and SEO metadata for images using ForVoyez API."
-msgstr "Genera automáticamente texto alternativo y metadatos SEO para imágenes utilizando la API de ForVoyez."
+msgstr "ForVoyez APIを使用して、画像の代替テキストとSEOメタデータを自動生成します。"
 
 #. Author of the plugin
 msgid "ForVoyez"
@@ -38,372 +38,372 @@ msgstr "https://forvoyez.com"
 
 #: includes/class-forvoyez-admin.php:46
 msgid "Auto Alt Text"
-msgstr "Texto Alt Automático"
+msgstr "自動代替テキスト"
 
 #: includes/class-forvoyez-admin.php:138
 msgid "You do not have sufficient permissions to access this page."
-msgstr "No tienes permisos suficientes para acceder a esta página."
+msgstr "このページにアクセスする十分な権限がありません。"
 
 #: includes/class-forvoyez-admin.php:151
 msgid "Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation."
-msgstr "Tu clave API de ForVoyez no está configurada. Por favor, configúrala para habilitar la generación automática de texto alternativo."
+msgstr "ForVoyez APIキーが設定されていません。自動代替テキスト生成を有効にするために設定してください。"
 
 #: includes/class-forvoyez-admin.php:260
 msgid "No images found matching the selected criteria."
-msgstr "No se encontraron imágenes que coincidan con los criterios seleccionados."
+msgstr "選択された条件に一致する画像が見つかりません。"
 
 #: includes/class-forvoyez-admin.php:337 includes/class-forvoyez-admin.php:465
 #: includes/class-forvoyez-admin.php:521 includes/class-forvoyez-admin.php:544
 #: includes/class-forvoyez-image-processor.php:238
 #: includes/class-forvoyez-settings.php:55
 msgid "Permission denied"
-msgstr "Permiso denegado"
+msgstr "権限がありません"
 
 #: includes/class-forvoyez-admin.php:379
 msgid "&laquo; Previous"
-msgstr "&laquo; Anterior"
+msgstr "&laquo; 前へ"
 
 #: includes/class-forvoyez-admin.php:393
 msgid "Next &raquo;"
-msgstr "Siguiente &raquo;"
+msgstr "次へ &raquo;"
 
 #: includes/class-forvoyez-api-manager.php:59
 msgid "API key is not set"
-msgstr "La clave API no está configurada"
+msgstr "APIキーが設定されていません"
 
 #: includes/class-forvoyez-api-manager.php:76
 msgid "API key is valid"
-msgstr "La clave API es válida"
+msgstr "APIキーは有効です"
 
 #: includes/class-forvoyez-api-manager.php:78
 msgid "Invalid API key"
-msgstr "Clave API inválida"
+msgstr "無効なAPIキー"
 
 #: includes/class-forvoyez-api-manager.php:92
 msgid "Image not found"
-msgstr "Imagen no encontrada"
+msgstr "画像が見つかりません"
 
 #: includes/class-forvoyez-api-manager.php:101
 msgid "Failed to read image file"
-msgstr "Error al leer el archivo de imagen"
+msgstr "画像ファイルの読み込みに失敗しました"
 
 #: includes/class-forvoyez-api-manager.php:144
 msgid "Failed to decode API response"
-msgstr "Error al decodificar la respuesta de la API"
+msgstr "APIレスポンスのデコードに失敗しました"
 
 #: includes/class-forvoyez-api-manager.php:166
 #: includes/class-forvoyez-image-processor.php:93
 msgid "Analysis successful"
-msgstr "Análisis exitoso"
+msgstr "分析成功"
 
 #: includes/class-forvoyez-image-processor.php:51
 msgid "Invalid data"
-msgstr "Datos inválidos"
+msgstr "無効なデータ"
 
 #: includes/class-forvoyez-image-processor.php:56
 msgid "Metadata updated successfully"
-msgstr "Metadatos actualizados con éxito"
+msgstr "メタデータが正常に更新されました"
 
 #: includes/class-forvoyez-image-processor.php:86
 #: includes/class-forvoyez-image-processor.php:192
 msgid "Invalid image ID"
-msgstr "ID de imagen inválido"
+msgstr "無効な画像ID"
 
 #: includes/class-forvoyez-image-processor.php:99
 #: includes/class-forvoyez-image-processor.php:222
 msgid "unknown_error"
-msgstr "error_desconocido"
+msgstr "不明なエラー"
 
 #: includes/class-forvoyez-image-processor.php:176
 msgid "No valid images selected"
-msgstr "No se seleccionaron imágenes válidas"
+msgstr "有効な画像が選択されていません"
 
 #: includes/class-forvoyez-image-processor.php:180
 msgid "Processing started"
-msgstr "Procesamiento iniciado"
+msgstr "処理を開始しました"
 
 #: includes/class-forvoyez-image-processor.php:206
 msgid "No images provided"
-msgstr "No se proporcionaron imágenes"
+msgstr "画像が提供されていません"
 
 #: includes/class-forvoyez-image-renderer.php:83
 msgid "Title:"
-msgstr "Título:"
+msgstr "タイトル："
 
 #: includes/class-forvoyez-image-renderer.php:83
 #: includes/class-forvoyez-image-renderer.php:86
 #: includes/class-forvoyez-image-renderer.php:89
 msgid "Not set"
-msgstr "No establecido"
+msgstr "未設定"
 
 #: includes/class-forvoyez-image-renderer.php:86
 msgid "Alt Text:"
-msgstr "Texto alternativo:"
+msgstr "代替テキスト："
 
 #: includes/class-forvoyez-image-renderer.php:89
 msgid "Caption:"
-msgstr "Leyenda:"
+msgstr "キャプション："
 
 #: includes/class-forvoyez-image-renderer.php:122 templates/admin-page.php:44
 msgid "All Complete"
-msgstr "Todo completo"
+msgstr "すべて完了"
 
 #: includes/class-forvoyez-image-renderer.php:141
 msgid "Missing %s"
-msgstr "Falta %s"
+msgstr "%s がありません"
 
 #: includes/class-forvoyez-image-renderer.php:174
 msgid "Analyze"
-msgstr "Analizar"
+msgstr "分析"
 
 #: includes/class-forvoyez-image-renderer.php:175
 msgid "Details"
-msgstr "Detalles"
+msgstr "詳細"
 
 #: includes/class-forvoyez-settings.php:61
 msgid "API key cannot be empty"
-msgstr "La clave API no puede estar vacía"
+msgstr "APIキーは空にできません"
 
 #: includes/class-forvoyez-settings.php:67
 msgid "API key saved successfully"
-msgstr "Clave API guardada con éxito"
+msgstr "APIキーが正常に保存されました"
 
 #: includes/forvoyez-helpers.php:117
 msgid "Invalid API key format. Please enter a valid ForVoyez JWT."
-msgstr "Formato de clave API inválido. Por favor, introduce un JWT de ForVoyez válido."
+msgstr "無効なAPIキー形式です。有効なForVoyez JWTを入力してください。"
 
 #: includes/forvoyez-helpers.php:136
 msgid "Invalid JWT format"
-msgstr "Formato JWT inválido"
+msgstr "無効なJWT形式"
 
 #: includes/forvoyez-helpers.php:145
 msgid "Invalid JWT payload"
-msgstr "Carga útil JWT inválida"
+msgstr "無効なJWTペイロード"
 
 #: includes/forvoyez-helpers.php:150
 msgid "Invalid JWT issuer"
-msgstr "Emisor JWT inválido"
+msgstr "無効なJWT発行者"
 
 #: includes/forvoyez-helpers.php:155
 msgid "Invalid JWT audience"
-msgstr "Audiencia JWT inválida"
+msgstr "無効なJWT対象者"
 
 #: includes/forvoyez-helpers.php:160
 msgid "JWT has expired"
-msgstr "El JWT ha expirado"
+msgstr "JWTの有効期限が切れています"
 
 #: templates/admin-page.php:6
 msgid "Legend :"
-msgstr "Leyenda:"
+msgstr "凡例："
 
 #: templates/admin-page.php:11
 msgid "Missing Alt Text :"
-msgstr "Falta texto alternativo:"
+msgstr "代替テキストがありません："
 
 #: templates/admin-page.php:13
 msgid "Missing Alt Text"
-msgstr "Falta texto alternativo"
+msgstr "代替テキストがありません"
 
 #: templates/admin-page.php:21
 msgid "Missing title :"
-msgstr "Falta título:"
+msgstr "タイトルがありません："
 
 #: templates/admin-page.php:23
 msgid "Missing Title"
-msgstr "Falta título"
+msgstr "タイトルがありません"
 
 #: templates/admin-page.php:32
 msgid "Missing caption :"
-msgstr "Falta leyenda:"
+msgstr "キャプションがありません："
 
 #: templates/admin-page.php:34
 msgid "Missing Caption"
-msgstr "Falta leyenda"
+msgstr "キャプションがありません"
 
 #: templates/admin-page.php:42
 msgid "All complete :"
-msgstr "Todo completo:"
+msgstr "すべて完了："
 
 #: templates/admin-page.php:60
 msgid "Items per page:"
-msgstr "Elementos por página:"
+msgstr "1ページあたりの項目数："
 
 #: templates/admin-page.php:66
 msgid "All"
-msgstr "Todos"
+msgstr "すべて"
 
 #: templates/admin-page.php:72
 msgid "Analyze all missing alt/caption/title images"
-msgstr "Analizar todas las imágenes sin alt/leyenda/título"
+msgstr "代替テキスト/キャプション/タイトルがない画像をすべて分析"
 
 #: templates/admin-page.php:75
 msgid "Analyze all missing alt images"
-msgstr "Analizar todas las imágenes sin alt"
+msgstr "代替テキストがないすべての画像を分析"
 
 #: templates/admin-page.php:78
 msgid "Analyze all images"
-msgstr "Analizar todas las imágenes"
+msgstr "すべての画像を分析"
 
 #: templates/admin-page.php:91
 msgid "Select All"
-msgstr "Seleccionar todo"
+msgstr "すべて選択"
 
 #: templates/admin-page.php:94
 msgid "Analyze Selected Images"
-msgstr "Analizar imágenes seleccionadas"
+msgstr "選択した画像を分析"
 
 #: templates/admin-page.php:118
 msgid "Confirm Analysis"
-msgstr "Confirmar análisis"
+msgstr "分析を確認"
 
 #: templates/admin-page.php:122
 msgid "Confirm"
-msgstr "Confirmar"
+msgstr "確認"
 
 #: templates/admin-page.php:125
 msgid "Cancel"
-msgstr "Cancelar"
+msgstr "キャンセル"
 
 #: templates/api-settings-modal.php:7
 msgid "ForVoyez API Settings"
-msgstr "Configuración de la API de ForVoyez"
+msgstr "ForVoyez API設定"
 
 #: templates/api-settings-modal.php:8
 msgid "Enter your ForVoyez API key below:"
-msgstr "Introduce tu clave API de ForVoyez a continuación:"
+msgstr "以下にForVoyez APIキーを入力してください："
 
 #: templates/api-settings-modal.php:11 templates/configuration-tab.php:35
 msgid "Toggle API key visibility"
-msgstr "Alternar visibilidad de la clave API"
+msgstr "APIキーの表示を切り替え"
 
 #: templates/api-settings-modal.php:21 templates/configuration-tab.php:45
 msgid "Save API Key"
-msgstr "Guardar clave API"
+msgstr "APIキーを保存"
 
 #: templates/api-settings-modal.php:24
 msgid "Close"
-msgstr "Cerrar"
+msgstr "閉じる"
 
 #: templates/configuration-tab.php:9
 msgid "API Configuration"
-msgstr "Configuración de la API"
+msgstr "API設定"
 
 #: templates/configuration-tab.php:10
 msgid "Manage your ForVoyez API settings here"
-msgstr "Gestiona aquí tu configuración de la API de ForVoyez"
+msgstr "ここでForVoyez API設定を管理します"
 
 #: templates/configuration-tab.php:14
 msgid "About ForVoyez API"
-msgstr "Acerca de la API de ForVoyez"
+msgstr "ForVoyez APIについて"
 
 #: templates/configuration-tab.php:16
 msgid "ForVoyez API provides powerful image analysis capabilities for your WordPress site. To use this plugin, you need to obtain an API key from ForVoyez."
-msgstr "La API de ForVoyez proporciona potentes capacidades de análisis de imágenes para tu sitio WordPress. Para usar este plugin, necesitas obtener una clave API de ForVoyez."
+msgstr "ForVoyez APIは、WordPressサイトに強力な画像分析機能を提供します。このプラグインを使用するには、ForVoyezからAPIキーを取得する必要があります。"
 
 #: templates/configuration-tab.php:19
 msgid "To get started:"
-msgstr "Para empezar:"
+msgstr "始めるには："
 
 #: templates/configuration-tab.php:22
 msgid "Visit the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez signup page</a> to create an account."
-msgstr "Visita la <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">página de registro de ForVoyez</a> para crear una cuenta."
+msgstr "アカウントを作成するには、<a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyezサインアップページ</a>にアクセスしてください。"
 
 #: templates/configuration-tab.php:23
 msgid "Once logged in, navigate to your <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez dashboard</a>."
-msgstr "Una vez iniciada la sesión, navega a tu <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">panel de control de ForVoyez</a>."
+msgstr "ログイン後、<a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyezダッシュボード</a>に移動してください。"
 
 #: templates/configuration-tab.php:24
 msgid "Generate an API key in the API section of your dashboard."
-msgstr "Genera una clave API en la sección API de tu panel de control."
+msgstr "ダッシュボードのAPIセクションでAPIキーを生成してください。"
 
 #: templates/configuration-tab.php:25
 msgid "Copy the API key and paste it in the field below."
-msgstr "Copia la clave API y pégala en el campo de abajo."
+msgstr "APIキーをコピーし、以下のフィールドに貼り付けてください。"
 
 #: templates/configuration-tab.php:28
 msgid "For more information, please refer to the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez API documentation</a>."
-msgstr "Para más información, consulta la <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">documentación de la API de ForVoyez</a>."
+msgstr "詳細については、<a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez APIドキュメント</a>を参照してください。"
 
 #: templates/configuration-tab.php:32
 msgid "API Key"
-msgstr "Clave API"
+msgstr "APIキー"
 
 #: templates/configuration-tab.php:34
 msgid "Enter your API key"
-msgstr "Introduce tu clave API"
+msgstr "APIキーを入力してください"
 
 #: templates/dashboard-tab.php:4 templates/main-page.php:10
 msgid "Dashboard"
-msgstr "Panel de control"
+msgstr "ダッシュボード"
 
 #: templates/dashboard-tab.php:5
 msgid "Overview of your Auto Alt Text for Images"
-msgstr "Resumen de tu Texto Alt Automático para Imágenes"
+msgstr "画像用自動代替テキストの概要"
 
 #: templates/dashboard-tab.php:10
 msgid "Total Images"
-msgstr "Total de imágenes"
+msgstr "総画像数"
 
 #: templates/dashboard-tab.php:14
 msgid "Images Completed"
-msgstr "Imágenes completadas"
+msgstr "完了した画像"
 
 #: templates/dashboard-tab.php:18
 msgid "Images Without alt / caption"
-msgstr "Imágenes sin alt / leyenda"
+msgstr "代替テキスト/キャプションのない画像"
 
 #: templates/dashboard-tab.php:27
 msgid "Pre-requisites"
-msgstr "Requisitos previos"
+msgstr "前提条件"
 
 #: templates/dashboard-tab.php:28
 msgid "Make sure you have the following before you start:"
-msgstr "Asegúrate de tener lo siguiente antes de comenzar:"
+msgstr "開始前に以下のものを確認してください："
 
 #: templates/dashboard-tab.php:32
 msgid "Go to the 'Settings' tab"
-msgstr "Ve a la pestaña 'Configuración'"
+msgstr "'設定'タブに移動してください"
 
 #: templates/dashboard-tab.php:33
 msgid "Enter your ForVoyez API key"
-msgstr "Introduce tu clave API de ForVoyez"
+msgstr "ForVoyez APIキーを入力してください"
 
 #: templates/dashboard-tab.php:34
 msgid "Click on 'Save API Key'"
-msgstr "Haz clic en 'Guardar clave API'"
+msgstr "'APIキーを保存'をクリックしてください"
 
 #: templates/dashboard-tab.php:40
 msgid "Quick Start"
-msgstr "Inicio rápido"
+msgstr "クイックスタート"
 
 #: templates/dashboard-tab.php:41
 msgid "Follow these steps to generate alt text for your images:"
-msgstr "Sigue estos pasos para generar texto alternativo para tus imágenes:"
+msgstr "画像の代替テキストを生成するには、次の手順に従ってください："
 
 #: templates/dashboard-tab.php:45
 msgid "Go to the 'Manage Images' tab"
-msgstr "Ve a la pestaña 'Gestionar imágenes'"
+msgstr "'画像管理'タブに移動してください"
 
 #: templates/dashboard-tab.php:46
 msgid "Select the images you want to process"
-msgstr "Selecciona las imágenes que quieres procesar"
+msgstr "処理したい画像を選択してください"
 
 #: templates/dashboard-tab.php:47
 msgid "Click on 'Generate Alt Text' to start the process"
-msgstr "Haz clic en 'Generar texto Alt' para iniciar el proceso"
+msgstr "処理を開始するには'代替テキストを生成'をクリックしてください"
 
 #: templates/dashboard-tab.php:48
 msgid "Review and edit the generated alt text as needed"
-msgstr "Revisa y edita el texto alternativo generado según sea necesario"
+msgstr "生成された代替テキストを必要に応じて確認・編集してください"
 
 #: templates/main-page.php:8
 msgid "Tabs"
-msgstr "Pestañas"
+msgstr "タブ"
 
 #: templates/main-page.php:13
 msgid "Manage Images"
-msgstr "Gestionar imágenes"
+msgstr "画像管理"
 
 #: templates/main-page.php:16
 msgid "Configuration"
-msgstr "Configuración"
+msgstr "設定"
