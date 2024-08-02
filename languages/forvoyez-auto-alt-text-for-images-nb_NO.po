@@ -1,0 +1,409 @@
+# Copyright (C) 2024 ForVoyez
+# This file is distributed under the same license as the Auto Alt Text for Images plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Auto Alt Text for Images 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ForVoyez-Wordpress-plugin\n"
+"POT-Creation-Date: 2024-08-01T10:19:11+00:00\n"
+"PO-Revision-Date: 2024-08-01 16:15+0200\n"
+"Last-Translator: Cinquin Andy <contact@andy-cinquin.fr>\n"
+"Language-Team: ForVoyez <contact@forvoyez.com>\n"
+"Language: nb_NO\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.3\n"
+"X-Domain: forvoyez-auto-alt-text-for-images\n"
+
+#. Plugin Name of the plugin
+#: includes/class-forvoyez-admin.php:45 templates/admin-page.php:2
+msgid "Auto Alt Text for Images"
+msgstr "Automatisk Alt-tekst for bilder"
+
+#. Plugin URI of the plugin
+msgid "https://forvoyez.com/plugins/auto-alt-text"
+msgstr "https://forvoyez.com/plugins/auto-alt-text"
+
+#. Description of the plugin
+msgid "Automatically generate alt text and SEO metadata for images using ForVoyez API."
+msgstr "Automatisk generering av alt-tekst og SEO-metadata for bilder ved hjelp av ForVoyez API."
+
+#. Author of the plugin
+msgid "ForVoyez"
+msgstr "ForVoyez"
+
+#. Author URI of the plugin
+msgid "https://forvoyez.com"
+msgstr "https://forvoyez.com"
+
+#: includes/class-forvoyez-admin.php:46
+msgid "Auto Alt Text"
+msgstr "Automatisk Alt-tekst"
+
+#: includes/class-forvoyez-admin.php:138
+msgid "You do not have sufficient permissions to access this page."
+msgstr "Du har ikke tilstrekkelige tillatelser til å få tilgang til denne siden."
+
+#: includes/class-forvoyez-admin.php:151
+msgid "Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation."
+msgstr "Din ForVoyez API-nøkkel er ikke konfigurert. Vennligst konfigurer den for å aktivere automatisk generering av alt-tekst."
+
+#: includes/class-forvoyez-admin.php:260
+msgid "No images found matching the selected criteria."
+msgstr "Ingen bilder funnet som samsvarer med de valgte kriteriene."
+
+#: includes/class-forvoyez-admin.php:337 includes/class-forvoyez-admin.php:465
+#: includes/class-forvoyez-admin.php:521 includes/class-forvoyez-admin.php:544
+#: includes/class-forvoyez-image-processor.php:238
+#: includes/class-forvoyez-settings.php:55
+msgid "Permission denied"
+msgstr "Tillatelse nektet"
+
+#: includes/class-forvoyez-admin.php:379
+msgid "&laquo; Previous"
+msgstr "&laquo; Forrige"
+
+#: includes/class-forvoyez-admin.php:393
+msgid "Next &raquo;"
+msgstr "Neste &raquo;"
+
+#: includes/class-forvoyez-api-manager.php:59
+msgid "API key is not set"
+msgstr "API-nøkkel er ikke angitt"
+
+#: includes/class-forvoyez-api-manager.php:76
+msgid "API key is valid"
+msgstr "API-nøkkel er gyldig"
+
+#: includes/class-forvoyez-api-manager.php:78
+msgid "Invalid API key"
+msgstr "Ugyldig API-nøkkel"
+
+#: includes/class-forvoyez-api-manager.php:92
+msgid "Image not found"
+msgstr "Bilde ikke funnet"
+
+#: includes/class-forvoyez-api-manager.php:101
+msgid "Failed to read image file"
+msgstr "Kunne ikke lese bildefil"
+
+#: includes/class-forvoyez-api-manager.php:144
+msgid "Failed to decode API response"
+msgstr "Kunne ikke dekode API-svar"
+
+#: includes/class-forvoyez-api-manager.php:166
+#: includes/class-forvoyez-image-processor.php:93
+msgid "Analysis successful"
+msgstr "Analyse vellykket"
+
+#: includes/class-forvoyez-image-processor.php:51
+msgid "Invalid data"
+msgstr "Ugyldige data"
+
+#: includes/class-forvoyez-image-processor.php:56
+msgid "Metadata updated successfully"
+msgstr "Metadata oppdatert vellykket"
+
+#: includes/class-forvoyez-image-processor.php:86
+#: includes/class-forvoyez-image-processor.php:192
+msgid "Invalid image ID"
+msgstr "Ugyldig bilde-ID"
+
+#: includes/class-forvoyez-image-processor.php:99
+#: includes/class-forvoyez-image-processor.php:222
+msgid "unknown_error"
+msgstr "ukjent_feil"
+
+#: includes/class-forvoyez-image-processor.php:176
+msgid "No valid images selected"
+msgstr "Ingen gyldige bilder valgt"
+
+#: includes/class-forvoyez-image-processor.php:180
+msgid "Processing started"
+msgstr "Behandling startet"
+
+#: includes/class-forvoyez-image-processor.php:206
+msgid "No images provided"
+msgstr "Ingen bilder gitt"
+
+#: includes/class-forvoyez-image-renderer.php:83
+msgid "Title:"
+msgstr "Tittel:"
+
+#: includes/class-forvoyez-image-renderer.php:83
+#: includes/class-forvoyez-image-renderer.php:86
+#: includes/class-forvoyez-image-renderer.php:89
+msgid "Not set"
+msgstr "Ikke angitt"
+
+#: includes/class-forvoyez-image-renderer.php:86
+msgid "Alt Text:"
+msgstr "Alt-tekst:"
+
+#: includes/class-forvoyez-image-renderer.php:89
+msgid "Caption:"
+msgstr "Bildetekst:"
+
+#: includes/class-forvoyez-image-renderer.php:122 templates/admin-page.php:44
+msgid "All Complete"
+msgstr "Alt fullført"
+
+#: includes/class-forvoyez-image-renderer.php:141
+msgid "Missing %s"
+msgstr "Mangler %s"
+
+#: includes/class-forvoyez-image-renderer.php:174
+msgid "Analyze"
+msgstr "Analyser"
+
+#: includes/class-forvoyez-image-renderer.php:175
+msgid "Details"
+msgstr "Detaljer"
+
+#: includes/class-forvoyez-settings.php:61
+msgid "API key cannot be empty"
+msgstr "API-nøkkel kan ikke være tom"
+
+#: includes/class-forvoyez-settings.php:67
+msgid "API key saved successfully"
+msgstr "API-nøkkel lagret vellykket"
+
+#: includes/forvoyez-helpers.php:117
+msgid "Invalid API key format. Please enter a valid ForVoyez JWT."
+msgstr "Ugyldig API-nøkkelformat. Vennligst skriv inn en gyldig ForVoyez JWT."
+
+#: includes/forvoyez-helpers.php:136
+msgid "Invalid JWT format"
+msgstr "Ugyldig JWT-format"
+
+#: includes/forvoyez-helpers.php:145
+msgid "Invalid JWT payload"
+msgstr "Ugyldig JWT-nyttelast"
+
+#: includes/forvoyez-helpers.php:150
+msgid "Invalid JWT issuer"
+msgstr "Ugyldig JWT-utsteder"
+
+#: includes/forvoyez-helpers.php:155
+msgid "Invalid JWT audience"
+msgstr "Ugyldig JWT-publikum"
+
+#: includes/forvoyez-helpers.php:160
+msgid "JWT has expired"
+msgstr "JWT har utløpt"
+
+#: templates/admin-page.php:6
+msgid "Legend :"
+msgstr "Forklaring :"
+
+#: templates/admin-page.php:11
+msgid "Missing Alt Text :"
+msgstr "Manglende Alt-tekst :"
+
+#: templates/admin-page.php:13
+msgid "Missing Alt Text"
+msgstr "Manglende Alt-tekst"
+
+#: templates/admin-page.php:21
+msgid "Missing title :"
+msgstr "Manglende tittel :"
+
+#: templates/admin-page.php:23
+msgid "Missing Title"
+msgstr "Manglende tittel"
+
+#: templates/admin-page.php:32
+msgid "Missing caption :"
+msgstr "Manglende bildetekst :"
+
+#: templates/admin-page.php:34
+msgid "Missing Caption"
+msgstr "Manglende bildetekst"
+
+#: templates/admin-page.php:42
+msgid "All complete :"
+msgstr "Alt fullført :"
+
+#: templates/admin-page.php:60
+msgid "Items per page:"
+msgstr "Elementer per side:"
+
+#: templates/admin-page.php:66
+msgid "All"
+msgstr "Alle"
+
+#: templates/admin-page.php:72
+msgid "Analyze all missing alt/caption/title images"
+msgstr "Analyser alle bilder med manglende alt/bildetekst/tittel"
+
+#: templates/admin-page.php:75
+msgid "Analyze all missing alt images"
+msgstr "Analyser alle bilder med manglende alt-tekst"
+
+#: templates/admin-page.php:78
+msgid "Analyze all images"
+msgstr "Analyser alle bilder"
+
+#: templates/admin-page.php:91
+msgid "Select All"
+msgstr "Velg alle"
+
+#: templates/admin-page.php:94
+msgid "Analyze Selected Images"
+msgstr "Analyser valgte bilder"
+
+#: templates/admin-page.php:118
+msgid "Confirm Analysis"
+msgstr "Bekreft analyse"
+
+#: templates/admin-page.php:122
+msgid "Confirm"
+msgstr "Bekreft"
+
+#: templates/admin-page.php:125
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: templates/api-settings-modal.php:7
+msgid "ForVoyez API Settings"
+msgstr "ForVoyez API-innstillinger"
+
+#: templates/api-settings-modal.php:8
+msgid "Enter your ForVoyez API key below:"
+msgstr "Skriv inn din ForVoyez API-nøkkel nedenfor:"
+
+#: templates/api-settings-modal.php:11 templates/configuration-tab.php:35
+msgid "Toggle API key visibility"
+msgstr "Bytt synlighet for API-nøkkel"
+
+#: templates/api-settings-modal.php:21 templates/configuration-tab.php:45
+msgid "Save API Key"
+msgstr "Lagre API-nøkkel"
+
+#: templates/api-settings-modal.php:24
+msgid "Close"
+msgstr "Lukk"
+
+#: templates/configuration-tab.php:9
+msgid "API Configuration"
+msgstr "API-konfigurasjon"
+
+#: templates/configuration-tab.php:10
+msgid "Manage your ForVoyez API settings here"
+msgstr "Administrer dine ForVoyez API-innstillinger her"
+
+#: templates/configuration-tab.php:14
+msgid "About ForVoyez API"
+msgstr "Om ForVoyez API"
+
+#: templates/configuration-tab.php:16
+msgid "ForVoyez API provides powerful image analysis capabilities for your WordPress site. To use this plugin, you need to obtain an API key from ForVoyez."
+msgstr "ForVoyez API gir kraftige bildeanalyseegenskaper for WordPress-nettstedet ditt. For å bruke denne utvidelsen må du skaffe en API-nøkkel fra ForVoyez."
+
+#: templates/configuration-tab.php:19
+msgid "To get started:"
+msgstr "For å komme i gang:"
+
+#: templates/configuration-tab.php:22
+msgid "Visit the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez signup page</a> to create an account."
+msgstr "Besøk <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez registreringsside</a> for å opprette en konto."
+
+#: templates/configuration-tab.php:23
+msgid "Once logged in, navigate to your <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez dashboard</a>."
+msgstr "Når du er logget inn, gå til <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez-dashbordet</a> ditt."
+
+#: templates/configuration-tab.php:24
+msgid "Generate an API key in the API section of your dashboard."
+msgstr "Generer en API-nøkkel i API-delen av dashbordet ditt."
+
+#: templates/configuration-tab.php:25
+msgid "Copy the API key and paste it in the field below."
+msgstr "Kopier API-nøkkelen og lim den inn i feltet nedenfor."
+
+#: templates/configuration-tab.php:28
+msgid "For more information, please refer to the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez API documentation</a>."
+msgstr "For mer informasjon, se <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez API-dokumentasjonen</a>."
+
+#: templates/configuration-tab.php:32
+msgid "API Key"
+msgstr "API-nøkkel"
+
+#: templates/configuration-tab.php:34
+msgid "Enter your API key"
+msgstr "Skriv inn API-nøkkelen din"
+
+#: templates/dashboard-tab.php:4 templates/main-page.php:10
+msgid "Dashboard"
+msgstr "Dashbord"
+
+#: templates/dashboard-tab.php:5
+msgid "Overview of your Auto Alt Text for Images"
+msgstr "Oversikt over din automatiske Alt-tekst for bilder"
+
+#: templates/dashboard-tab.php:10
+msgid "Total Images"
+msgstr "Totalt antall bilder"
+
+#: templates/dashboard-tab.php:14
+msgid "Images Completed"
+msgstr "Bilder fullført"
+
+#: templates/dashboard-tab.php:18
+msgid "Images Without alt / caption"
+msgstr "Bilder uten alt-tekst / bildetekst"
+
+#: templates/dashboard-tab.php:27
+msgid "Pre-requisites"
+msgstr "Forutsetninger"
+
+#: templates/dashboard-tab.php:28
+msgid "Make sure you have the following before you start:"
+msgstr "Sørg for at du har følgende før du begynner:"
+
+#: templates/dashboard-tab.php:32
+msgid "Go to the 'Settings' tab"
+msgstr "Gå til 'Innstillinger'-fanen"
+
+#: templates/dashboard-tab.php:33
+msgid "Enter your ForVoyez API key"
+msgstr "Skriv inn din ForVoyez API-nøkkel"
+
+#: templates/dashboard-tab.php:34
+msgid "Click on 'Save API Key'"
+msgstr "Klikk på 'Lagre API-nøkkel'"
+
+#: templates/dashboard-tab.php:40
+msgid "Quick Start"
+msgstr "Hurtigstart"
+
+#: templates/dashboard-tab.php:41
+msgid "Follow these steps to generate alt text for your images:"
+msgstr "Følg disse trinnene for å generere alt-tekst for bildene dine:"
+
+#: templates/dashboard-tab.php:45
+msgid "Go to the 'Manage Images' tab"
+msgstr "Gå til 'Administrer bilder'-fanen"
+
+#: templates/dashboard-tab.php:46
+msgid "Select the images you want to process"
+msgstr "Velg bildene du ønsker å behandle"
+
+#: templates/dashboard-tab.php:47
+msgid "Click on 'Generate Alt Text' to start the process"
+msgstr "Klikk på 'Generer Alt-tekst' for å starte prosessen"
+
+#: templates/dashboard-tab.php:48
+msgid "Review and edit the generated alt text as needed"
+msgstr "Gjennomgå og rediger den genererte alt-teksten etter behov"
+
+#: templates/main-page.php:8
+msgid "Tabs"
+msgstr "Faner"
+
+#: templates/main-page.php:13
+msgid "Manage Images"
+msgstr "Administrer bilder"
+
+#: templates/main-page.php:16
+msgid "Configuration"
+msgstr "Konfigurasjon"

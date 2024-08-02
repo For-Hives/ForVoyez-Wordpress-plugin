@@ -1,0 +1,409 @@
+# Copyright (C) 2024 ForVoyez
+# This file is distributed under the same license as the Auto Alt Text for Images plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Auto Alt Text for Images 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ForVoyez-Wordpress-plugin\n"
+"POT-Creation-Date: 2024-08-01T10:19:11+00:00\n"
+"PO-Revision-Date: 2024-08-01 16:15+0200\n"
+"Last-Translator: Cinquin Andy <contact@andy-cinquin.fr>\n"
+"Language-Team: ForVoyez <contact@forvoyez.com>\n"
+"Language: tr_TR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.3\n"
+"X-Domain: forvoyez-auto-alt-text-for-images\n"
+
+#. Plugin Name of the plugin
+#: includes/class-forvoyez-admin.php:45 templates/admin-page.php:2
+msgid "Auto Alt Text for Images"
+msgstr "Resimler için Otomatik Alt Metin"
+
+#. Plugin URI of the plugin
+msgid "https://forvoyez.com/plugins/auto-alt-text"
+msgstr "https://forvoyez.com/plugins/auto-alt-text"
+
+#. Description of the plugin
+msgid "Automatically generate alt text and SEO metadata for images using ForVoyez API."
+msgstr "ForVoyez API'sini kullanarak resimler için otomatik olarak alt metin ve SEO meta verileri oluşturun."
+
+#. Author of the plugin
+msgid "ForVoyez"
+msgstr "ForVoyez"
+
+#. Author URI of the plugin
+msgid "https://forvoyez.com"
+msgstr "https://forvoyez.com"
+
+#: includes/class-forvoyez-admin.php:46
+msgid "Auto Alt Text"
+msgstr "Otomatik Alt Metin"
+
+#: includes/class-forvoyez-admin.php:138
+msgid "You do not have sufficient permissions to access this page."
+msgstr "Bu sayfaya erişmek için yeterli izniniz yok."
+
+#: includes/class-forvoyez-admin.php:151
+msgid "Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation."
+msgstr "ForVoyez API anahtarınız yapılandırılmamış. Otomatik alt metin oluşturmayı etkinleştirmek için lütfen yapılandırın."
+
+#: includes/class-forvoyez-admin.php:260
+msgid "No images found matching the selected criteria."
+msgstr "Seçilen kriterlere uygun resim bulunamadı."
+
+#: includes/class-forvoyez-admin.php:337 includes/class-forvoyez-admin.php:465
+#: includes/class-forvoyez-admin.php:521 includes/class-forvoyez-admin.php:544
+#: includes/class-forvoyez-image-processor.php:238
+#: includes/class-forvoyez-settings.php:55
+msgid "Permission denied"
+msgstr "İzin reddedildi"
+
+#: includes/class-forvoyez-admin.php:379
+msgid "&laquo; Previous"
+msgstr "&laquo; Önceki"
+
+#: includes/class-forvoyez-admin.php:393
+msgid "Next &raquo;"
+msgstr "Sonraki &raquo;"
+
+#: includes/class-forvoyez-api-manager.php:59
+msgid "API key is not set"
+msgstr "API anahtarı ayarlanmamış"
+
+#: includes/class-forvoyez-api-manager.php:76
+msgid "API key is valid"
+msgstr "API anahtarı geçerli"
+
+#: includes/class-forvoyez-api-manager.php:78
+msgid "Invalid API key"
+msgstr "Geçersiz API anahtarı"
+
+#: includes/class-forvoyez-api-manager.php:92
+msgid "Image not found"
+msgstr "Resim bulunamadı"
+
+#: includes/class-forvoyez-api-manager.php:101
+msgid "Failed to read image file"
+msgstr "Resim dosyası okunamadı"
+
+#: includes/class-forvoyez-api-manager.php:144
+msgid "Failed to decode API response"
+msgstr "API yanıtı çözümlenemedi"
+
+#: includes/class-forvoyez-api-manager.php:166
+#: includes/class-forvoyez-image-processor.php:93
+msgid "Analysis successful"
+msgstr "Analiz başarılı"
+
+#: includes/class-forvoyez-image-processor.php:51
+msgid "Invalid data"
+msgstr "Geçersiz veri"
+
+#: includes/class-forvoyez-image-processor.php:56
+msgid "Metadata updated successfully"
+msgstr "Meta veriler başarıyla güncellendi"
+
+#: includes/class-forvoyez-image-processor.php:86
+#: includes/class-forvoyez-image-processor.php:192
+msgid "Invalid image ID"
+msgstr "Geçersiz resim ID'si"
+
+#: includes/class-forvoyez-image-processor.php:99
+#: includes/class-forvoyez-image-processor.php:222
+msgid "unknown_error"
+msgstr "bilinmeyen_hata"
+
+#: includes/class-forvoyez-image-processor.php:176
+msgid "No valid images selected"
+msgstr "Geçerli resim seçilmedi"
+
+#: includes/class-forvoyez-image-processor.php:180
+msgid "Processing started"
+msgstr "İşlem başladı"
+
+#: includes/class-forvoyez-image-processor.php:206
+msgid "No images provided"
+msgstr "Resim sağlanmadı"
+
+#: includes/class-forvoyez-image-renderer.php:83
+msgid "Title:"
+msgstr "Başlık:"
+
+#: includes/class-forvoyez-image-renderer.php:83
+#: includes/class-forvoyez-image-renderer.php:86
+#: includes/class-forvoyez-image-renderer.php:89
+msgid "Not set"
+msgstr "Ayarlanmamış"
+
+#: includes/class-forvoyez-image-renderer.php:86
+msgid "Alt Text:"
+msgstr "Alt Metin:"
+
+#: includes/class-forvoyez-image-renderer.php:89
+msgid "Caption:"
+msgstr "Altyazı:"
+
+#: includes/class-forvoyez-image-renderer.php:122 templates/admin-page.php:44
+msgid "All Complete"
+msgstr "Tümü Tamamlandı"
+
+#: includes/class-forvoyez-image-renderer.php:141
+msgid "Missing %s"
+msgstr "Eksik %s"
+
+#: includes/class-forvoyez-image-renderer.php:174
+msgid "Analyze"
+msgstr "Analiz Et"
+
+#: includes/class-forvoyez-image-renderer.php:175
+msgid "Details"
+msgstr "Detaylar"
+
+#: includes/class-forvoyez-settings.php:61
+msgid "API key cannot be empty"
+msgstr "API anahtarı boş olamaz"
+
+#: includes/class-forvoyez-settings.php:67
+msgid "API key saved successfully"
+msgstr "API anahtarı başarıyla kaydedildi"
+
+#: includes/forvoyez-helpers.php:117
+msgid "Invalid API key format. Please enter a valid ForVoyez JWT."
+msgstr "Geçersiz API anahtarı formatı. Lütfen geçerli bir ForVoyez JWT girin."
+
+#: includes/forvoyez-helpers.php:136
+msgid "Invalid JWT format"
+msgstr "Geçersiz JWT formatı"
+
+#: includes/forvoyez-helpers.php:145
+msgid "Invalid JWT payload"
+msgstr "Geçersiz JWT yükü"
+
+#: includes/forvoyez-helpers.php:150
+msgid "Invalid JWT issuer"
+msgstr "Geçersiz JWT yayıncısı"
+
+#: includes/forvoyez-helpers.php:155
+msgid "Invalid JWT audience"
+msgstr "Geçersiz JWT hedef kitlesi"
+
+#: includes/forvoyez-helpers.php:160
+msgid "JWT has expired"
+msgstr "JWT'nin süresi doldu"
+
+#: templates/admin-page.php:6
+msgid "Legend :"
+msgstr "Açıklama :"
+
+#: templates/admin-page.php:11
+msgid "Missing Alt Text :"
+msgstr "Eksik Alt Metin :"
+
+#: templates/admin-page.php:13
+msgid "Missing Alt Text"
+msgstr "Eksik Alt Metin"
+
+#: templates/admin-page.php:21
+msgid "Missing title :"
+msgstr "Eksik başlık :"
+
+#: templates/admin-page.php:23
+msgid "Missing Title"
+msgstr "Eksik Başlık"
+
+#: templates/admin-page.php:32
+msgid "Missing caption :"
+msgstr "Eksik altyazı :"
+
+#: templates/admin-page.php:34
+msgid "Missing Caption"
+msgstr "Eksik Altyazı"
+
+#: templates/admin-page.php:42
+msgid "All complete :"
+msgstr "Tümü tamamlandı :"
+
+#: templates/admin-page.php:60
+msgid "Items per page:"
+msgstr "Sayfa başına öğe:"
+
+#: templates/admin-page.php:66
+msgid "All"
+msgstr "Tümü"
+
+#: templates/admin-page.php:72
+msgid "Analyze all missing alt/caption/title images"
+msgstr "Eksik alt/altyazı/başlık içeren tüm resimleri analiz et"
+
+#: templates/admin-page.php:75
+msgid "Analyze all missing alt images"
+msgstr "Eksik alt metni olan tüm resimleri analiz et"
+
+#: templates/admin-page.php:78
+msgid "Analyze all images"
+msgstr "Tüm resimleri analiz et"
+
+#: templates/admin-page.php:91
+msgid "Select All"
+msgstr "Tümünü Seç"
+
+#: templates/admin-page.php:94
+msgid "Analyze Selected Images"
+msgstr "Seçili Resimleri Analiz Et"
+
+#: templates/admin-page.php:118
+msgid "Confirm Analysis"
+msgstr "Analizi Onayla"
+
+#: templates/admin-page.php:122
+msgid "Confirm"
+msgstr "Onayla"
+
+#: templates/admin-page.php:125
+msgid "Cancel"
+msgstr "İptal"
+
+#: templates/api-settings-modal.php:7
+msgid "ForVoyez API Settings"
+msgstr "ForVoyez API Ayarları"
+
+#: templates/api-settings-modal.php:8
+msgid "Enter your ForVoyez API key below:"
+msgstr "ForVoyez API anahtarınızı aşağıya girin:"
+
+#: templates/api-settings-modal.php:11 templates/configuration-tab.php:35
+msgid "Toggle API key visibility"
+msgstr "API anahtarı görünürlüğünü değiştir"
+
+#: templates/api-settings-modal.php:21 templates/configuration-tab.php:45
+msgid "Save API Key"
+msgstr "API Anahtarını Kaydet"
+
+#: templates/api-settings-modal.php:24
+msgid "Close"
+msgstr "Kapat"
+
+#: templates/configuration-tab.php:9
+msgid "API Configuration"
+msgstr "API Yapılandırması"
+
+#: templates/configuration-tab.php:10
+msgid "Manage your ForVoyez API settings here"
+msgstr "ForVoyez API ayarlarınızı buradan yönetin"
+
+#: templates/configuration-tab.php:14
+msgid "About ForVoyez API"
+msgstr "ForVoyez API Hakkında"
+
+#: templates/configuration-tab.php:16
+msgid "ForVoyez API provides powerful image analysis capabilities for your WordPress site. To use this plugin, you need to obtain an API key from ForVoyez."
+msgstr "ForVoyez API, WordPress siteniz için güçlü resim analiz özellikleri sağlar. Bu eklentiyi kullanmak için ForVoyez'den bir API anahtarı almanız gerekir."
+
+#: templates/configuration-tab.php:19
+msgid "To get started:"
+msgstr "Başlamak için:"
+
+#: templates/configuration-tab.php:22
+msgid "Visit the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez signup page</a> to create an account."
+msgstr "Bir hesap oluşturmak için <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez kayıt sayfasını</a> ziyaret edin."
+
+#: templates/configuration-tab.php:23
+msgid "Once logged in, navigate to your <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez dashboard</a>."
+msgstr "Giriş yaptıktan sonra, <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez kontrol panelinize</a> gidin."
+
+#: templates/configuration-tab.php:24
+msgid "Generate an API key in the API section of your dashboard."
+msgstr "Kontrol panelinizin API bölümünde bir API anahtarı oluşturun."
+
+#: templates/configuration-tab.php:25
+msgid "Copy the API key and paste it in the field below."
+msgstr "API anahtarını kopyalayın ve aşağıdaki alana yapıştırın."
+
+#: templates/configuration-tab.php:28
+msgid "For more information, please refer to the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez API documentation</a>."
+msgstr "Daha fazla bilgi için lütfen <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez API belgelerine</a> bakın."
+
+#: templates/configuration-tab.php:32
+msgid "API Key"
+msgstr "API Anahtarı"
+
+#: templates/configuration-tab.php:34
+msgid "Enter your API key"
+msgstr "API anahtarınızı girin"
+
+#: templates/dashboard-tab.php:4 templates/main-page.php:10
+msgid "Dashboard"
+msgstr "Kontrol Paneli"
+
+#: templates/dashboard-tab.php:5
+msgid "Overview of your Auto Alt Text for Images"
+msgstr "Resimler için Otomatik Alt Metninizin Genel Görünümü"
+
+#: templates/dashboard-tab.php:10
+msgid "Total Images"
+msgstr "Toplam Resim"
+
+#: templates/dashboard-tab.php:14
+msgid "Images Completed"
+msgstr "Tamamlanan Resimler"
+
+#: templates/dashboard-tab.php:18
+msgid "Images Without alt / caption"
+msgstr "Alt metni / altyazısı olmayan resimler"
+
+#: templates/dashboard-tab.php:27
+msgid "Pre-requisites"
+msgstr "Ön koşullar"
+
+#: templates/dashboard-tab.php:28
+msgid "Make sure you have the following before you start:"
+msgstr "Başlamadan önce aşağıdakilere sahip olduğunuzdan emin olun:"
+
+#: templates/dashboard-tab.php:32
+msgid "Go to the 'Settings' tab"
+msgstr "'Ayarlar' sekmesine gidin"
+
+#: templates/dashboard-tab.php:33
+msgid "Enter your ForVoyez API key"
+msgstr "ForVoyez API anahtarınızı girin"
+
+#: templates/dashboard-tab.php:34
+msgid "Click on 'Save API Key'"
+msgstr "'API Anahtarını Kaydet' düğmesine tıklayın"
+
+#: templates/dashboard-tab.php:40
+msgid "Quick Start"
+msgstr "Hızlı Başlangıç"
+
+#: templates/dashboard-tab.php:41
+msgid "Follow these steps to generate alt text for your images:"
+msgstr "Resimleriniz için alt metin oluşturmak için bu adımları izleyin:"
+
+#: templates/dashboard-tab.php:45
+msgid "Go to the 'Manage Images' tab"
+msgstr "'Resimleri Yönet' sekmesine gidin"
+
+#: templates/dashboard-tab.php:46
+msgid "Select the images you want to process"
+msgstr "İşlemek istediğiniz resimleri seçin"
+
+#: templates/dashboard-tab.php:47
+msgid "Click on 'Generate Alt Text' to start the process"
+msgstr "İşlemi başlatmak için 'Alt Metin Oluştur' düğmesine tıklayın"
+
+#: templates/dashboard-tab.php:48
+msgid "Review and edit the generated alt text as needed"
+msgstr "Oluşturulan alt metni gerektiği gibi inceleyin ve düzenleyin"
+
+#: templates/main-page.php:8
+msgid "Tabs"
+msgstr "Sekmeler"
+
+#: templates/main-page.php:13
+msgid "Manage Images"
+msgstr "Resimleri Yönet"
+
+#: templates/main-page.php:16
+msgid "Configuration"
+msgstr "Yapılandırma"
