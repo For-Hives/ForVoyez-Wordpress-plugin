@@ -1,0 +1,413 @@
+# Copyright (C) 2024 ForVoyez
+# This file is distributed under the same license as the Auto Alt Text for Images plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Auto Alt Text for Images 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ForVoyez-Wordpress-plugin\n"
+"POT-Creation-Date: 2024-08-01T10:19:11+00:00\n"
+"PO-Revision-Date: 2024-08-01 16:15+0200\n"
+"Last-Translator: Cinquin Andy <contact@andy-cinquin.fr>\n"
+"Language-Team: ForVoyez <contact@forvoyez.com>\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.3\n"
+"X-Domain: forvoyez-auto-alt-text-for-images\n"
+
+#. Plugin Name of the plugin
+#: includes/class-forvoyez-admin.php:45 templates/admin-page.php:2
+msgid "Auto Alt Text for Images"
+msgstr "النص البديل التلقائي للصور"
+
+#. Plugin URI of the plugin
+msgid "https://forvoyez.com/plugins/auto-alt-text"
+msgstr "https://forvoyez.com/plugins/auto-alt-text"
+
+#. Description of the plugin
+msgid "Automatically generate alt text and SEO metadata for images using ForVoyez API."
+msgstr "توليد النص البديل وبيانات SEO الوصفية للصور تلقائيًا باستخدام واجهة برمجة تطبيقات ForVoyez."
+
+#. Author of the plugin
+msgid "ForVoyez"
+msgstr "ForVoyez"
+
+#. Author URI of the plugin
+msgid "https://forvoyez.com"
+msgstr "https://forvoyez.com"
+
+#: includes/class-forvoyez-admin.php:46
+msgid "Auto Alt Text"
+msgstr "النص البديل التلقائي"
+
+#: includes/class-forvoyez-admin.php:138
+msgid "You do not have sufficient permissions to access this page."
+msgstr "ليس لديك صلاحيات كافية للوصول إلى هذه الصفحة."
+
+#: includes/class-forvoyez-admin.php:151
+msgid "Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation."
+msgstr "لم يتم تكوين مفتاح واجهة برمجة تطبيقات ForVoyez الخاص بك. يرجى تكوينه لتمكين إنشاء النص البديل التلقائي."
+
+#: includes/class-forvoyez-admin.php:260
+msgid "No images found matching the selected criteria."
+msgstr "لم يتم العثور على صور تطابق المعايير المحددة."
+
+#: includes/class-forvoyez-admin.php:337 includes/class-forvoyez-admin.php:465
+#: includes/class-forvoyez-admin.php:521 includes/class-forvoyez-admin.php:544
+#: includes/class-forvoyez-image-processor.php:238
+#: includes/class-forvoyez-settings.php:55
+msgid "Permission denied"
+msgstr "تم رفض الإذن"
+
+#: includes/class-forvoyez-admin.php:379
+msgid "&laquo; Previous"
+msgstr "&laquo; السابق"
+
+#: includes/class-forvoyez-admin.php:393
+msgid "Next &raquo;"
+msgstr "التالي &raquo;"
+
+#: includes/class-forvoyez-api-manager.php:59
+msgid "API key is not set"
+msgstr "لم يتم تعيين مفتاح واجهة برمجة التطبيقات"
+
+#: includes/class-forvoyez-api-manager.php:76
+msgid "API key is valid"
+msgstr "مفتاح واجهة برمجة التطبيقات صالح"
+
+#: includes/class-forvoyez-api-manager.php:78
+msgid "Invalid API key"
+msgstr "مفتاح واجهة برمجة التطبيقات غير صالح"
+
+#: includes/class-forvoyez-api-manager.php:92
+msgid "Image not found"
+msgstr "لم يتم العثور على الصورة"
+
+#: includes/class-forvoyez-api-manager.php:101
+msgid "Failed to read image file"
+msgstr "فشل في قراءة ملف الصورة"
+
+#: includes/class-forvoyez-api-manager.php:144
+msgid "Failed to decode API response"
+msgstr "فشل في فك تشفير استجابة واجهة برمجة التطبيقات"
+
+#: includes/class-forvoyez-api-manager.php:166
+#: includes/class-forvoyez-image-processor.php:93
+msgid "Analysis successful"
+msgstr "تم التحليل بنجاح"
+
+#: includes/class-forvoyez-image-processor.php:51
+msgid "Invalid data"
+msgstr "بيانات غير صالحة"
+
+#: includes/class-forvoyez-image-processor.php:56
+msgid "Metadata updated successfully"
+msgstr "تم تحديث البيانات الوصفية بنجاح"
+
+#: includes/class-forvoyez-image-processor.php:86
+#: includes/class-forvoyez-image-processor.php:192
+msgid "Invalid image ID"
+msgstr "معرف الصورة غير صالح"
+
+#: includes/class-forvoyez-image-processor.php:99
+#: includes/class-forvoyez-image-processor.php:222
+msgid "unknown_error"
+msgstr "خطأ_غير_معروف"
+
+#: includes/class-forvoyez-image-processor.php:176
+msgid "No valid images selected"
+msgstr "لم يتم تحديد صور صالحة"
+
+#: includes/class-forvoyez-image-processor.php:180
+msgid "Processing started"
+msgstr "بدأت المعالجة"
+
+#: includes/class-forvoyez-image-processor.php:206
+msgid "No images provided"
+msgstr "لم يتم توفير صور"
+
+#: includes/class-forvoyez-image-renderer.php:83
+msgid "Title:"
+msgstr "العنوان:"
+
+#: includes/class-forvoyez-image-renderer.php:83
+#: includes/class-forvoyez-image-renderer.php:86
+#: includes/class-forvoyez-image-renderer.php:89
+msgid "Not set"
+msgstr "غير محدد"
+
+#: includes/class-forvoyez-image-renderer.php:86
+msgid "Alt Text:"
+msgstr "النص البديل:"
+
+#: includes/class-forvoyez-image-renderer.php:89
+msgid "Caption:"
+msgstr "التسمية التوضيحية:"
+
+#: includes/class-forvoyez-image-renderer.php:122 templates/admin-page.php:44
+msgid "All Complete"
+msgstr "الكل مكتمل"
+
+#: includes/class-forvoyez-image-renderer.php:141
+msgid "Missing %s"
+msgstr "%s مفقود"
+
+#: includes/class-forvoyez-image-renderer.php:174
+msgid "Analyze"
+msgstr "تحليل"
+
+#: includes/class-forvoyez-image-renderer.php:175
+msgid "Details"
+msgstr "التفاصيل"
+
+#: includes/class-forvoyez-settings.php:61
+msgid "API key cannot be empty"
+msgstr "لا يمكن أن يكون مفتاح واجهة برمجة التطبيقات فارغًا"
+
+#: includes/class-forvoyez-settings.php:67
+msgid "API key saved successfully"
+msgstr "تم حفظ مفتاح واجهة برمجة التطبيقات بنجاح"
+
+#: includes/forvoyez-helpers.php:117
+msgid "Invalid API key format. Please enter a valid ForVoyez JWT."
+msgstr "تنسيق مفتاح واجهة برمجة التطبيقات غير صالح. الرجاء إدخال JWT ForVoyez صالح."
+
+#: includes/forvoyez-helpers.php:136
+msgid "Invalid JWT format"
+msgstr "تنسيق JWT غير صالح"
+
+#: includes/forvoyez-helpers.php:145
+msgid "Invalid JWT payload"
+msgstr "حمولة JWT غير صالحة"
+
+#: includes/forvoyez-helpers.php:150
+msgid "Invalid JWT issuer"
+msgstr "مصدر JWT غير صالح"
+
+#: includes/forvoyez-helpers.php:155
+msgid "Invalid JWT audience"
+msgstr "جمهور JWT غير صالح"
+
+#: includes/forvoyez-helpers.php:160
+msgid "JWT has expired"
+msgstr "انتهت صلاحية JWT"
+
+#: templates/admin-page.php:6
+msgid "Legend :"
+msgstr "مفتاح الخريطة :"
+
+#: templates/admin-page.php:11
+msgid "Missing Alt Text :"
+msgstr "النص البديل مفقود :"
+
+#: templates/admin-page.php:13
+msgid "Missing Alt Text"
+msgstr "النص البديل مفقود"
+
+#: templates/admin-page.php:21
+msgid "Missing title :"
+msgstr "العنوان مفقود :"
+
+#: templates/admin-page.php:23
+msgid "Missing Title"
+msgstr "العنوان مفقود"
+
+#: templates/admin-page.php:32
+msgid "Missing caption :"
+msgstr "التسمية التوضيحية مفقودة :"
+
+#: templates/admin-page.php:34
+msgid "Missing Caption"
+msgstr "التسمية التوضيحية مفقودة"
+
+#: templates/admin-page.php:42
+msgid "All complete :"
+msgstr "الكل مكتمل :"
+
+#: templates/admin-page.php:60
+msgid "Items per page:"
+msgstr "العناصر لكل صفحة:"
+
+#: templates/admin-page.php:66
+msgid "All"
+msgstr "الكل"
+
+#: templates/admin-page.php:72
+msgid "Analyze all missing alt/caption/title images"
+msgstr "تحليل جميع الصور التي تفتقد إلى النص البديل/التسمية التوضيحية/العنوان"
+
+#: templates/admin-page.php:75
+msgid "Analyze all missing alt images"
+msgstr "تحليل جميع الصور التي تفتقد إلى النص البديل"
+
+#: templates/admin-page.php:78
+msgid "Analyze all images"
+msgstr "تحليل جميع الصور"
+
+#: templates/admin-page.php:91
+msgid "Select All"
+msgstr "اختيار الكل"
+
+#: templates/admin-page.php:94
+msgid "Analyze Selected Images"
+msgstr "تحليل الصور المحددة"
+
+#: templates/admin-page.php:118
+msgid "Confirm Analysis"
+msgstr "تأكيد التحليل"
+
+#: templates/admin-page.php:122
+msgid "Confirm"
+msgstr "تأكيد"
+
+#: templates/admin-page.php:125
+msgid "Cancel"
+msgstr "إلغاء"
+
+#: templates/api-settings-modal.php:7
+msgid "ForVoyez API Settings"
+msgstr "إعدادات واجهة برمجة تطبيقات ForVoyez"
+
+#: templates/api-settings-modal.php:8
+msgid "Enter your ForVoyez API key below:"
+msgstr "أدخل مفتاح واجهة برمجة تطبيقات ForVoyez الخاص بك أدناه:"
+
+#: templates/api-settings-modal.php:11 templates/configuration-tab.php:35
+msgid "Toggle API key visibility"
+msgstr "تبديل رؤية مفتاح واجهة برمجة التطبيقات"
+
+#: templates/api-settings-modal.php:21 templates/configuration-tab.php:45
+msgid "Save API Key"
+msgstr "حفظ مفتاح واجهة برمجة التطبيقات"
+
+#: templates/api-settings-modal.php:24
+msgid "Close"
+msgstr "إغلاق"
+
+#: templates/configuration-tab.php:9
+msgid "API Configuration"
+msgstr "تكوين واجهة برمجة التطبيقات"
+
+#: templates/configuration-tab.php:10
+msgid "Manage your ForVoyez API settings here"
+msgstr "إدارة إعدادات واجهة برمجة تطبيقات ForVoyez الخاصة بك هنا"
+
+#: templates/configuration-tab.php:14
+msgid "About ForVoyez API"
+msgstr "حول واجهة برمجة تطبيقات ForVoyez"
+
+#: templates/configuration-tab.php:16
+msgid "ForVoyez API provides powerful image analysis capabilities for your WordPress site. To use this plugin, you need to obtain an API key from ForVoyez."
+msgstr "توفر واجهة برمجة تطبيقات ForVoyez قدرات قوية لتحليل الصور لموقع WordPress الخاص بك. لاستخدام هذا البرنامج المساعد، تحتاج إلى الحصول على مفتاح واجهة برمجة التطبيقات من ForVoyez."
+
+#: templates/configuration-tab.php:19
+msgid "To get started:"
+msgstr "للبدء:"
+
+#: templates/configuration-tab.php:22
+msgid "Visit the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez signup page</a> to create an account."
+msgstr "قم بزيارة <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">صفحة التسجيل في ForVoyez</a> لإنشاء حساب."
+
+#: templates/configuration-tab.php:23
+msgid "Once logged in, navigate to your <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez dashboard</a>."
+msgstr "بمجرد تسجيل الدخول، انتقل إلى <a href=\"%s\" target=\"_blank\" rel=\"noop"
+
+#: templates/configuration-tab.php:23
+msgid "Once logged in, navigate to your <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez dashboard</a>."
+msgstr "بمجرد تسجيل الدخول، انتقل إلى <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">لوحة تحكم ForVoyez</a> الخاصة بك."
+
+#: templates/configuration-tab.php:24
+msgid "Generate an API key in the API section of your dashboard."
+msgstr "قم بإنشاء مفتاح واجهة برمجة التطبيقات في قسم API من لوحة التحكم الخاصة بك."
+
+#: templates/configuration-tab.php:25
+msgid "Copy the API key and paste it in the field below."
+msgstr "انسخ مفتاح واجهة برمجة التطبيقات والصقه في الحقل أدناه."
+
+#: templates/configuration-tab.php:28
+msgid "For more information, please refer to the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez API documentation</a>."
+msgstr "لمزيد من المعلومات، يرجى الرجوع إلى <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">وثائق واجهة برمجة تطبيقات ForVoyez</a>."
+
+#: templates/configuration-tab.php:32
+msgid "API Key"
+msgstr "مفتاح واجهة برمجة التطبيقات"
+
+#: templates/configuration-tab.php:34
+msgid "Enter your API key"
+msgstr "أدخل مفتاح واجهة برمجة التطبيقات الخاص بك"
+
+#: templates/dashboard-tab.php:4 templates/main-page.php:10
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+#: templates/dashboard-tab.php:5
+msgid "Overview of your Auto Alt Text for Images"
+msgstr "نظرة عامة على النص البديل التلقائي للصور الخاص بك"
+
+#: templates/dashboard-tab.php:10
+msgid "Total Images"
+msgstr "إجمالي الصور"
+
+#: templates/dashboard-tab.php:14
+msgid "Images Completed"
+msgstr "الصور المكتملة"
+
+#: templates/dashboard-tab.php:18
+msgid "Images Without alt / caption"
+msgstr "الصور بدون نص بديل / تسمية توضيحية"
+
+#: templates/dashboard-tab.php:27
+msgid "Pre-requisites"
+msgstr "المتطلبات الأساسية"
+
+#: templates/dashboard-tab.php:28
+msgid "Make sure you have the following before you start:"
+msgstr "تأكد من توفر ما يلي قبل البدء:"
+
+#: templates/dashboard-tab.php:32
+msgid "Go to the 'Settings' tab"
+msgstr "انتقل إلى علامة التبويب 'الإعدادات'"
+
+#: templates/dashboard-tab.php:33
+msgid "Enter your ForVoyez API key"
+msgstr "أدخل مفتاح واجهة برمجة تطبيقات ForVoyez الخاص بك"
+
+#: templates/dashboard-tab.php:34
+msgid "Click on 'Save API Key'"
+msgstr "انقر على 'حفظ مفتاح واجهة برمجة التطبيقات'"
+
+#: templates/dashboard-tab.php:40
+msgid "Quick Start"
+msgstr "البدء السريع"
+
+#: templates/dashboard-tab.php:41
+msgid "Follow these steps to generate alt text for your images:"
+msgstr "اتبع هذه الخطوات لإنشاء نص بديل لصورك:"
+
+#: templates/dashboard-tab.php:45
+msgid "Go to the 'Manage Images' tab"
+msgstr "انتقل إلى علامة التبويب 'إدارة الصور'"
+
+#: templates/dashboard-tab.php:46
+msgid "Select the images you want to process"
+msgstr "حدد الصور التي تريد معالجتها"
+
+#: templates/dashboard-tab.php:47
+msgid "Click on 'Generate Alt Text' to start the process"
+msgstr "انقر على 'إنشاء نص بديل' لبدء العملية"
+
+#: templates/dashboard-tab.php:48
+msgid "Review and edit the generated alt text as needed"
+msgstr "راجع وحرر النص البديل المنشأ حسب الحاجة"
+
+#: templates/main-page.php:8
+msgid "Tabs"
+msgstr "علامات التبويب"
+
+#: templates/main-page.php:13
+msgid "Manage Images"
+msgstr "إدارة الصور"
+
+#: templates/main-page.php:16
+msgid "Configuration"
+msgstr "التكوين"
