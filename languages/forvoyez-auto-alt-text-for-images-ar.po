@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Auto Alt Text for Images 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ForVoyez-Wordpress-plugin\n"
 "POT-Creation-Date: 2024-08-01T10:19:11+00:00\n"
-"PO-Revision-Date: 2024-08-01 16:15+0200\n"
+"PO-Revision-Date: 2024-08-02 16:07+0200\n"
 "Last-Translator: Cinquin Andy <contact@andy-cinquin.fr>\n"
 "Language-Team: ForVoyez <contact@forvoyez.com>\n"
 "Language: ar\n"
@@ -307,10 +307,6 @@ msgstr "للبدء:"
 #: templates/configuration-tab.php:22
 msgid "Visit the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez signup page</a> to create an account."
 msgstr "قم بزيارة <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">صفحة التسجيل في ForVoyez</a> لإنشاء حساب."
-
-#: templates/configuration-tab.php:23
-msgid "Once logged in, navigate to your <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez dashboard</a>."
-msgstr "بمجرد تسجيل الدخول، انتقل إلى <a href=\"%s\" target=\"_blank\" rel=\"noop"
 
 #: templates/configuration-tab.php:23
 msgid "Once logged in, navigate to your <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez dashboard</a>."
