@@ -1,6 +1,6 @@
 # ForVoyez Auto Alt Text for Images
 
-![ForVoyez Logo](assets/forvoyez-logo.png)
+<img src="assets/logo.webp" width="50">
 
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-8.2%2B-purple.svg)](https://php.net/)
@@ -17,8 +17,7 @@ _A powerful WordPress plugin for the [ForVoyez](https://forvoyez.com) platform t
 - [Configuration](#configuration)
 - [Usage](#usage)
 - [Development](#development)
-  - [BrowserSync Configuration](#browsersync-configuration)
-- [License](#license)
+- [BrowserSync Configuration](#browsersync-configuration)
 
 ## Description
 
@@ -43,24 +42,24 @@ ForVoyez Auto Alt Text for Images is a WordPress plugin that leverages AI techno
 ## Installation
 
 1. Download the plugin zip file or clone the repository:
-```sh
-git clone https://github.com/forvoyez/auto-alt-text-for-images.git
-```
+   ```sh
+   git clone https://github.com/forvoyez/auto-alt-text-for-images.git
+   ```
 
 2. Navigate to the plugin directory:
-```sh
-cd auto-alt-text-for-images
-```
+   ```sh
+   cd auto-alt-text-for-images
+   ```
 
 3. Install PHP dependencies:
-```sh
-composer install
-```
+   ```sh
+   composer install
+   ```
 
 4. Install Node.js dependencies:
-```sh
-npm install
-```
+   ```sh
+   npm install
+   ```
 
 5. Activate the plugin through the WordPress admin interface.
 
@@ -88,29 +87,28 @@ After installation and configuration:
 To use BrowserSync with your WordPlate project:
 
 1. Create a `bs-config.cjs` file in the project root:
-
-```js
-module.exports = {
-    proxy: 'localhost:8000', // Replace with your PHP server port
-    files: [
-       'public/**/*.php',
-       'resources/**/*.php',
-       'public/**/*.css',
-       'public/**/*.js',
-    ],
-    notify: false,
-}
-```
+   ```js
+   module.exports = {
+       proxy: 'localhost:8000', // Replace with your PHP server port
+       files: [
+          'public/**/*.php',
+          'resources/**/*.php',
+          'public/**/*.css',
+          'public/**/*.js',
+       ],
+       notify: false,
+   }
+   ```
 
 2. Start the PHP server:
-```sh
-php -S localhost:8000 -t public
-```
+   ```sh
+   php -S localhost:8000 -t public
+   ```
 
 3. Start BrowserSync:
-```sh
-browser-sync start --config bs-config.cjs
-```
+   ```sh
+   browser-sync start --config bs-config.cjs
+   ```
 
 BrowserSync will now monitor specified files and auto-reload your browser on changes.
 
