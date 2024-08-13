@@ -1,93 +1,134 @@
-# forvoyez-auto-alt-text-for-images
+# ForVoyez Auto Alt Text for Images
 
-_this is a plugin for the [Forvoyez](https://forvoyez.com) platform_
+![ForVoyez Logo](assets/forvoyez-logo.png)
+
+[![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
+[![PHP](https://img.shields.io/badge/PHP-8.2%2B-purple.svg)](https://php.net/)
+[![License](https://img.shields.io/badge/License-GPL--2.0%2B-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
+
+_A powerful WordPress plugin for the [ForVoyez](https://forvoyez.com) platform that automatically generates SEO-optimized alt text for images._
 
 ## Table of Contents
 
 - [Description](#description)
+- [Features](#features)
+- [Requirements](#requirements)
 - [Installation](#installation)
-- [BrowserSync Configuration](#browsersync-configuration)
+- [Configuration](#configuration)
 - [Usage](#usage)
+- [Development](#development)
+  - [BrowserSync Configuration](#browsersync-configuration)
+- [License](#license)
 
 ## Description
 
-This plugin automatically generates alt text for images in your content.
-it's a wordpress plugin.
+ForVoyez Auto Alt Text for Images is a WordPress plugin that leverages AI technology to automatically generate high-quality, SEO-friendly alt text for images in your content. This plugin enhances your website's accessibility and search engine optimization effortlessly.
 
-## Installation
+## Features
 
-### Prerequisites
+- 🤖 AI-powered alt text generation
+- 🖼️ Bulk processing for existing images
+- 🔄 Automatic processing for new uploads
+- 🎨 Customizable output formats
+- 🌐 Multi-language support
+- 🧰 User-friendly WordPress admin interface
 
-- PHP >= 8.2
+## Requirements
+
+- WordPress 5.0 or higher
+- PHP 8.2 or higher
 - Composer
 - Node.js and npm
 
-### Steps
+## Installation
 
-2. **Install PHP Dependencies**:
+1. Download the plugin zip file or clone the repository:
+```sh
+git clone https://github.com/forvoyez/auto-alt-text-for-images.git
+```
 
+2. Navigate to the plugin directory:
+```sh
+cd auto-alt-text-for-images
+```
+
+3. Install PHP dependencies:
 ```sh
 composer install
 ```
 
-3. **Install Node.js Dependencies**:
-
+4. Install Node.js dependencies:
 ```sh
 npm install
 ```
 
-## BrowserSync Configuration
+5. Activate the plugin through the WordPress admin interface.
 
-To use BrowserSync with your WordPlate project, follow these steps:
+## Configuration
 
-1. **Create a BrowserSync Configuration File**:
-   Create a file named `bs-config.cjs` at the root of your project with the following content:
+1. Go to the ForVoyez Auto Alt Text settings page in your WordPress admin area.
+2. Enter your ForVoyez API key.
+3. Configure any additional settings according to your preferences.
+
+## Usage
+
+After installation and configuration:
+
+1. The plugin will automatically generate alt text for new image uploads.
+2. To process existing images:
+   - Go to Media Library
+   - Select the images you want to process
+   - Choose "Generate Alt Text" from the bulk actions dropdown
+3. You can manually edit any generated alt text as needed.
+
+## Development
+
+### BrowserSync Configuration
+
+To use BrowserSync with your WordPlate project:
+
+1. Create a `bs-config.cjs` file in the project root:
 
 ```js
 module.exports = {
-	proxy: 'localhost:8000', // Replace with your PHP server port
-	files: [
-		'public/**/*.php',
-		'resources/**/*.php',
-		'public/**/*.css',
-		'public/**/*.js',
-	],
-	notify: false,
+    proxy: 'localhost:8000', // Replace with your PHP server port
+    files: [
+       'public/**/*.php',
+       'resources/**/*.php',
+       'public/**/*.css',
+       'public/**/*.js',
+    ],
+    notify: false,
 }
 ```
 
-2. **Start the PHP Server**:
-   In your terminal, run the following command to start the PHP server:
-
+2. Start the PHP server:
 ```sh
 php -S localhost:8000 -t public
 ```
 
-3. **Start BrowserSync**:
-   In another terminal, run the following command to start BrowserSync:
-
+3. Start BrowserSync:
 ```sh
 browser-sync start --config bs-config.cjs
 ```
 
-## Usage
+BrowserSync will now monitor specified files and auto-reload your browser on changes.
 
-Once both servers are running, BrowserSync will monitor the specified files in `bs-config.cjs` and automatically reload the page in your browser when changes are detected.
-
-### Project Structure Example
-
-Your project structure should look something like this:
+### Project Structure
 
 ```
+├── assets/
+├── includes/
+├── templates/
+├── tests/
 ├── bs-config.cjs
 ├── composer.json
 ├── package.json
-├── public
-│   ├── index.php
-│   ├── wp-config.php
-│   └── ...
-├── resources
-│   ├── views
-│   └── ...
+├── forvoyez-auto-alt-text-for-images.php
+├── README.md
 └── ...
 ```
+
+---
+
+Made with ❤️ by [ForVoyez](https://forvoyez.com)
