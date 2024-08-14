@@ -1,0 +1,95 @@
+=== ForVoyez Auto Alt Text for Images ===
+Contributors: forvoyez
+Tags: seo, accessibility, images, alt text, metadata
+Requires at least: 5.0
+Tested up to: 6.4
+Stable tag: 1.0.0
+Requires PHP: 8.2
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+Automatically generate SEO-optimized alt text, titles, and captions for your images using AI technology.
+
+== Description ==
+
+ForVoyez Auto Alt Text for Images is a powerful WordPress plugin that leverages AI technology to automatically generate high-quality, SEO-friendly alt text, titles, and captions for images in your content. This plugin enhances your website's accessibility and search engine optimization effortlessly.
+
+= Key Features =
+
+* 🤖 AI-powered alt text generation
+* 🖼️ Bulk processing for existing images
+* 🔄 Automatic processing for new uploads
+* 🎨 Customizable output formats
+* 🌐 Multi-language support
+* 🧰 User-friendly WordPress admin interface
+
+Our AI-powered API makes it easy for developers and content creators to optimize images for SEO. Save time, boost SEO, and streamline your workflow with our powerful solution.
+
+== Installation ==
+
+1. Upload the plugin files to the `/wp-content/plugins/forvoyez-auto-alt-text-for-images` directory, or install the plugin through the WordPress plugins screen directly.
+2. Activate the plugin through the 'Plugins' screen in WordPress.
+3. Use the Settings -> ForVoyez Auto Alt Text screen to configure the plugin.
+4. Enter your ForVoyez API key in the settings page.
+
+= Obtaining an API Key =
+
+1. Visit the [ForVoyez signup page](https://forvoyez.com/signup) to create an account.
+2. Once logged in, navigate to your [ForVoyez dashboard](https://forvoyez.com/dashboard).
+3. Generate an API key in the API section of your dashboard.
+4. Copy the API key and paste it in the plugin's settings page.
+
+== Frequently Asked Questions ==
+
+= Do I need an API key to use this plugin? =
+
+Yes, you need a ForVoyez API key to use this plugin. You can obtain one by signing up at [https://forvoyez.com](https://forvoyez.com).
+
+= Can I customize the generated alt text? =
+
+While the plugin automatically generates alt text, you can always manually edit the generated text for each image if needed.
+
+= Does this plugin work with all image formats? =
+
+The plugin works with most common image formats supported by WordPress, including JPEG, PNG, GIF, and WebP.
+
+= Will this plugin slow down my website? =
+
+No, the plugin processes images in the background and doesn't affect your website's front-end performance.
+
+= How does the bulk processing feature work? =
+
+You can select multiple images in your media library and use the "Generate Alt Text" option from the bulk actions dropdown to process them all at once.
+
+= Is the generated content multilingual? =
+
+The AI can generate content in multiple languages. You can specify your preferred language in the plugin settings.
+
+== Screenshots ==
+
+1. API Configuration - Easy setup page for entering your ForVoyez API key.
+2. Image Management Interface - Main dashboard for managing and analyzing your WordPress media library.
+3. Results Example - Showcase of automatically generated alt text, titles, and captions for various image types.
+
+== Changelog ==
+
+= 1.0.0 =
+* Initial release
+* AI-powered generation of alt text, titles, and captions
+* Bulk processing feature
+* Integration with WordPress media library
+* Multi-language support
+* User-friendly admin interface
+
+== Upgrade Notice ==
+
+= 1.0.0 =
+This is the first release of ForVoyez Auto Alt Text for Images. Install now to start optimizing your image metadata!
+
+== Additional Information ==
+
+For more detailed documentation, please visit our [official documentation](https://doc.forvoyez.com).
+
+For support, feature requests, or to report bugs, please visit our [support forum](https://forvoyez.com/support) or [GitHub repository](https://github.com/forvoyez/auto-alt-text-for-images).
+
+This plugin is proudly powered by [ForVoyez](https://forvoyez.com), a leader in AI-driven content optimization solutions.
