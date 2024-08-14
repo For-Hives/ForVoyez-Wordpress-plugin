@@ -1,6 +1,6 @@
 === ForVoyez Auto Alt Text for Images ===
 Contributors: forvoyez
-Tags: seo, accessibility, images, alt text, ai, metadata, image optimization
+Tags: seo, accessibility, images, alt text, metadata
 Requires at least: 5.0
 Tested up to: 6.4
 Stable tag: 1.0.0

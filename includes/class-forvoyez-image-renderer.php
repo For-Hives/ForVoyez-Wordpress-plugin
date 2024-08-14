@@ -80,13 +80,13 @@ class Forvoyez_Image_Renderer {
         ?>
         <div class="hidden absolute inset-0 bg-white p-2 pt-8 overflow-y-auto details-view">
             <p class="text-sm text-gray-500 text-left">
-                <strong><?php _e('Title:', 'forvoyez-auto-alt-text-for-images'); ?></strong> <span class="title-content"><?php echo esc_html($image->post_title ?: __('Not set', 'forvoyez-auto-alt-text-for-images')); ?></span>
+                <strong><?php esc_html_e('Title:', 'forvoyez-auto-alt-text-for-images'); ?></strong> <span class="title-content"><?php echo esc_html($image->post_title ?: __('Not set', 'forvoyez-auto-alt-text-for-images')); ?></span>
             </p>
             <p class="text-sm text-gray-500 text-left">
-                <strong><?php _e('Alt Text:', 'forvoyez-auto-alt-text-for-images'); ?></strong> <span class="alt-content"><?php echo esc_html($image_alt ?: __('Not set', 'forvoyez-auto-alt-text-for-images')); ?></span>
+                <strong><?php esc_html_e('Alt Text:', 'forvoyez-auto-alt-text-for-images'); ?></strong> <span class="alt-content"><?php echo esc_html($image_alt ?: __('Not set', 'forvoyez-auto-alt-text-for-images')); ?></span>
             </p>
             <p class="text-sm text-gray-500 text-left">
-                <strong><?php _e('Caption:', 'forvoyez-auto-alt-text-for-images'); ?></strong> <span class="caption-content"><?php echo esc_html($image->post_excerpt ?: __('Not set', 'forvoyez-auto-alt-text-for-images')); ?></span>
+                <strong><?php esc_html_e('Caption:', 'forvoyez-auto-alt-text-for-images'); ?></strong> <span class="caption-content"><?php echo esc_html($image->post_excerpt ?: __('Not set', 'forvoyez-auto-alt-text-for-images')); ?></span>
             </p>
         </div>
         <?php
@@ -119,7 +119,7 @@ class Forvoyez_Image_Renderer {
             <?php self::render_metadata_icon('alt', $image_alt, 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'); ?>
             <?php self::render_metadata_icon('title', $post_title, 'M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z'); ?>
             <?php self::render_metadata_icon('caption', $post_excerpt, 'M4 6h16M4 12h16M4 18h7'); ?>
-            <span class="bg-green-500 text-white rounded-full p-1 <?php echo $all_complete ? '' : 'hidden'; ?> all-complete" title="<?php esc_attr_e('All Complete', 'forvoyez-auto-alt-text-for-images'); ?>">
+            <span class="bg-green-500 text-white rounded-full p-1 <?php echo $all_complete ? '' : 'hidden'; ?> all-complete" title="<?php esc_attresc_html_e('All Complete', 'forvoyez-auto-alt-text-for-images'); ?>">
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                 </svg>
@@ -190,7 +190,7 @@ class Forvoyez_Image_Renderer {
         ?>
         <div class="flex w-0 flex-1">
             <button class="<?php echo $type; ?>-button relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-xs text-gray-900 hover:bg-gray-50 hover:border-gray-200">
-                <span><?php echo _e($label, 'forvoyez-auto-alt-text-for-images') ?></span>
+                <span><?php echo esc_html_e($label, 'forvoyez-auto-alt-text-for-images') ?></span>
                 <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?php echo $icon_path; ?>" />
                 </svg>
