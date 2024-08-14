@@ -1,95 +1,95 @@
-=== ForVoyez Auto Alt Text for Images ===
-Contributors: forvoyez
-Tags: seo, accessibility, images, alt text, metadata
-Requires at least: 5.0
-Tested up to: 6.4
-Stable tag: 1.0.0
-Requires PHP: 8.2
-License: GPLv2 or later
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+=== ForVoyez Texte Alt Automatique pour Images ===
+Contributeurs : forvoyez
+Tags : seo, accessibilité, images, texte alt, métadonnées
+Nécessite au moins : WordPress 5.0
+Testé jusqu'à : 6.4
+Version stable : 1.0.0
+Nécessite PHP : 8.2
+Licence : GPLv2 ou ultérieure
+URL de la licence : https://www.gnu.org/licenses/gpl-2.0.html
 
-Automatically generate SEO-optimized alt text, titles, and captions for your images using AI technology.
+Générez automatiquement des textes alternatifs, des titres et des légendes optimisés pour le SEO grâce à la technologie IA.
 
 == Description ==
 
-ForVoyez Auto Alt Text for Images is a powerful WordPress plugin that leverages AI technology to automatically generate high-quality, SEO-friendly alt text, titles, and captions for images in your content. This plugin enhances your website's accessibility and search engine optimization effortlessly.
+ForVoyez Texte Alt Automatique pour Images est un puissant plugin WordPress qui utilise la technologie d'intelligence artificielle pour générer automatiquement des textes alternatifs, des titres et des légendes de haute qualité et optimisés pour le SEO pour les images de votre contenu. Ce plugin améliore sans effort l'accessibilité et l'optimisation pour les moteurs de recherche de votre site web.
 
-= Key Features =
+= Fonctionnalités clés =
 
-* 🤖 AI-powered alt text generation
-* 🖼️ Bulk processing for existing images
-* 🔄 Automatic processing for new uploads
-* 🎨 Customizable output formats
-* 🌐 Multi-language support
-* 🧰 User-friendly WordPress admin interface
+* 🤖 Génération de texte alt par IA
+* 🖼️ Traitement en masse des images existantes
+* 🔄 Traitement automatique des nouveaux téléchargements
+* 🎨 Formats de sortie personnalisables
+* 🌐 Support multilingue
+* 🧰 Interface d'administration WordPress conviviale
 
-Our AI-powered API makes it easy for developers and content creators to optimize images for SEO. Save time, boost SEO, and streamline your workflow with our powerful solution.
+Notre API alimentée par l'IA facilite l'optimisation des images pour le SEO pour les développeurs et les créateurs de contenu. Gagnez du temps, améliorez votre SEO et simplifiez votre flux de travail avec notre puissante solution.
 
 == Installation ==
 
-1. Upload the plugin files to the `/wp-content/plugins/forvoyez-auto-alt-text-for-images` directory, or install the plugin through the WordPress plugins screen directly.
-2. Activate the plugin through the 'Plugins' screen in WordPress.
-3. Use the Settings -> ForVoyez Auto Alt Text screen to configure the plugin.
-4. Enter your ForVoyez API key in the settings page.
+1. Téléchargez les fichiers du plugin dans le répertoire `/wp-content/plugins/forvoyez-auto-alt-text-for-images`, ou installez le plugin directement depuis l'écran des plugins de WordPress.
+2. Activez le plugin via l'écran 'Plugins' de WordPress.
+3. Utilisez l'écran Réglages -> ForVoyez Texte Alt Automatique pour configurer le plugin.
+4. Saisissez votre clé API ForVoyez dans la page des paramètres.
 
-= Obtaining an API Key =
+= Obtention d'une clé API =
 
-1. Visit the [ForVoyez signup page](https://forvoyez.com/signup) to create an account.
-2. Once logged in, navigate to your [ForVoyez dashboard](https://forvoyez.com/dashboard).
-3. Generate an API key in the API section of your dashboard.
-4. Copy the API key and paste it in the plugin's settings page.
+1. Visitez la [page d'inscription ForVoyez](https://forvoyez.com/signup) pour créer un compte.
+2. Une fois connecté, accédez à votre [tableau de bord ForVoyez](https://forvoyez.com/dashboard).
+3. Générez une clé API dans la section API de votre tableau de bord.
+4. Copiez la clé API et collez-la dans la page des paramètres du plugin.
 
-== Frequently Asked Questions ==
+== Foire Aux Questions ==
 
-= Do I need an API key to use this plugin? =
+= Ai-je besoin d'une clé API pour utiliser ce plugin ? =
 
-Yes, you need a ForVoyez API key to use this plugin. You can obtain one by signing up at [https://forvoyez.com](https://forvoyez.com).
+Oui, vous avez besoin d'une clé API ForVoyez pour utiliser ce plugin. Vous pouvez en obtenir une en vous inscrivant sur [https://forvoyez.com](https://forvoyez.com).
 
-= Can I customize the generated alt text? =
+= Puis-je personnaliser le texte alt généré ? =
 
-While the plugin automatically generates alt text, you can always manually edit the generated text for each image if needed.
+Bien que le plugin génère automatiquement le texte alt, vous pouvez toujours modifier manuellement le texte généré pour chaque image si nécessaire.
 
-= Does this plugin work with all image formats? =
+= Ce plugin fonctionne-t-il avec tous les formats d'image ? =
 
-The plugin works with most common image formats supported by WordPress, including JPEG, PNG, GIF, and WebP.
+Le plugin fonctionne avec la plupart des formats d'image courants pris en charge par WordPress, notamment JPEG, PNG, GIF et WebP.
 
-= Will this plugin slow down my website? =
+= Ce plugin ralentira-t-il mon site web ? =
 
-No, the plugin processes images in the background and doesn't affect your website's front-end performance.
+Non, le plugin traite les images en arrière-plan et n'affecte pas les performances frontales de votre site web.
 
-= How does the bulk processing feature work? =
+= Comment fonctionne la fonctionnalité de traitement en masse ? =
 
-You can select multiple images in your media library and use the "Generate Alt Text" option from the bulk actions dropdown to process them all at once.
+Vous pouvez sélectionner plusieurs images dans votre bibliothèque multimédia et utiliser l'option "Générer le texte Alt" dans le menu déroulant des actions en masse pour les traiter toutes en une seule fois.
 
-= Is the generated content multilingual? =
+= Le contenu généré est-il multilingue ? =
 
-The AI can generate content in multiple languages. You can specify your preferred language in the plugin settings.
+L'IA peut générer du contenu dans plusieurs langues. Vous pouvez spécifier votre langue préférée dans les paramètres du plugin.
 
-== Screenshots ==
+== Captures d'écran ==
 
-1. API Configuration - Easy setup page for entering your ForVoyez API key.
-2. Image Management Interface - Main dashboard for managing and analyzing your WordPress media library.
-3. Results Example - Showcase of automatically generated alt text, titles, and captions for various image types.
+1. Configuration de l'API - Page de configuration facile pour saisir votre clé API ForVoyez.
+2. Interface de gestion des images - Tableau de bord principal pour gérer et analyser votre bibliothèque multimédia WordPress.
+3. Exemple de résultats - Présentation des textes alt, titres et légendes générés automatiquement pour divers types d'images.
 
 == Changelog ==
 
 = 1.0.0 =
-* Initial release
-* AI-powered generation of alt text, titles, and captions
-* Bulk processing feature
-* Integration with WordPress media library
-* Multi-language support
-* User-friendly admin interface
+* Version initiale
+* Génération par IA de textes alt, titres et légendes
+* Fonctionnalité de traitement en masse
+* Intégration avec la bibliothèque multimédia WordPress
+* Support multilingue
+* Interface d'administration conviviale
 
-== Upgrade Notice ==
+== Avis de mise à jour ==
 
 = 1.0.0 =
-This is the first release of ForVoyez Auto Alt Text for Images. Install now to start optimizing your image metadata!
+Ceci est la première version de ForVoyez Texte Alt Automatique pour Images. Installez-le maintenant pour commencer à optimiser les métadonnées de vos images !
 
-== Additional Information ==
+== Informations supplémentaires ==
 
-For more detailed documentation, please visit our [official documentation](https://doc.forvoyez.com).
+Pour une documentation plus détaillée, veuillez consulter notre [documentation officielle](https://doc.forvoyez.com).
 
-For support, feature requests, or to report bugs, please visit our [support forum](https://forvoyez.com/support) or [GitHub repository](https://github.com/forvoyez/auto-alt-text-for-images).
+Pour le support, les demandes de fonctionnalités ou pour signaler des bugs, veuillez visiter notre [forum de support](https://forvoyez.com/support) ou notre [dépôt GitHub](https://github.com/forvoyez/auto-alt-text-for-images).
 
-This plugin is proudly powered by [ForVoyez](https://forvoyez.com), a leader in AI-driven content optimization solutions.
+Ce plugin est fièrement propulsé par [ForVoyez](https://forvoyez.com), un leader dans les solutions d'optimisation de contenu basées sur l'IA.
