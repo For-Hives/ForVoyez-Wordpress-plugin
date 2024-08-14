@@ -127,6 +127,20 @@ BrowserSync will now monitor specified files and auto-reload your browser on cha
 └── ...
 ```
 
+## Screenshots
+
+1. **API Configuration**
+   ![API Configuration](assets/screenshot-1.png)
+   The plugin's configuration interface allows easy setup of your ForVoyez API key. This page provides step-by-step instructions on how to obtain and configure your API key to start using the plugin.
+
+2. **Before and After Analysis**
+   ![Before and After Analysis](assets/screenshot-2.png)
+   This image demonstrates the transformation process. It shows a set of images without metadata (title, alt text, and caption not set) and the same images after ForVoyez analysis, where these fields are automatically populated with relevant, SEO-friendly descriptions.
+
+3. **Image Management Interface**
+   ![Image Management Interface](assets/screenshot-3.png)
+   The main image management dashboard of the plugin. It displays a grid view of your WordPress media library with visual indicators for missing metadata. Users can easily select and analyze images individually or in bulk.
+
 ---
 
 Made with ❤️ by [ForVoyez](https://forvoyez.com)
