@@ -43,10 +43,8 @@ Yes, you can manually edit any generated alt text as needed.
 == Screenshots ==
 
 1. API Configuration - Easy setup page for entering your ForVoyez API key.
-2. Before and After Analysis - Demonstrates how the plugin transforms images without metadata into SEO-optimized assets with full descriptions.
-3. Image Management Interface - Main dashboard for managing and analyzing your WordPress media library.
-4. Results Example - Showcase of automatically generated alt text, titles, and captions for various image types.
-5. Plugin Banner - Illustrates the plugin's capability to generate Image Alt Text and Meta Descriptions in seconds.
+2. Image Management Interface - Main dashboard for managing and analyzing your WordPress media library.
+3. Results Example - Showcase of automatically generated alt text, titles, and captions for various image types.
 
 == Changelog ==
 
