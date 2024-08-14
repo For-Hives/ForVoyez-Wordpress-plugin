@@ -101,7 +101,7 @@
 	</div>
 
 	<div class="relative">
-		<div id="forvoyez-loader" class="hidden absolute rounded pointer-event-none top-0 left-0 w-full h-full flex items-start pt-16 pb-32 justify-center z-50">
+		<div id="forvoyez-loader" class="hidden absolute rounded !pointer-events-none top-0 left-0 w-full h-full flex items-start pt-16 pb-32 justify-center z-50">
 			<div class="animate-spin rounded-full mt-16 h-16 w-16 border-b-2 border-forvoyez-primary"></div>
 		</div>
 		<div id="forvoyez-images-container">
