@@ -119,7 +119,7 @@ class Forvoyez_Image_Renderer {
             <?php self::render_metadata_icon('alt', $image_alt, 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'); ?>
             <?php self::render_metadata_icon('title', $post_title, 'M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z'); ?>
             <?php self::render_metadata_icon('caption', $post_excerpt, 'M4 6h16M4 12h16M4 18h7'); ?>
-            <span class="bg-green-500 text-white rounded-full p-1 <?php echo $all_complete ? '' : 'hidden'; ?> all-complete" title="<?php esc_attresc_html_e('All Complete', 'forvoyez-auto-alt-text-for-images'); ?>">
+            <span class="bg-green-500 text-white rounded-full p-1 <?php echo $all_complete ? '' : 'hidden'; ?> all-complete" title="<?php esc_attr_e('All Complete', 'forvoyez-auto-alt-text-for-images'); ?>">
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                 </svg>
