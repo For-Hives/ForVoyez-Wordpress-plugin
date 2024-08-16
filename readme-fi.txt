@@ -1,95 +1,95 @@
-=== ForVoyez Automatyczny Tekst Alternatywny dla Obrazów ===
-Autorzy: forvoyez
-Tagi: seo, dostępność, obrazy, tekst alternatywny, metadane
-Wymaga co najmniej: WordPress 5.0
-Testowano do: 6.4
-Stabilna wersja: 1.0.0
-Wymaga PHP: 8.2
-Licencja: GPLv2 lub nowsza
-Licencja URI: https://www.gnu.org/licenses/gpl-2.0.html
+=== ForVoyez Automaattinen Alt-teksti Kuville ===
+Tekijät: forvoyez
+Avainsanat: seo, saavutettavuus, kuvat, alt-teksti, metatiedot
+Vaatii vähintään: WordPress 5.0
+Testattu versioon: 6.4
+Vakaa versio: 1.0.0
+Vaatii PHP:n: 8.2
+Lisenssi: GPLv2 tai uudempi
+Lisenssin URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Automatycznie generuj zoptymalizowany pod kątem SEO tekst alternatywny, tytuły i podpisy dla swoich obrazów za pomocą technologii AI.
+Luo automaattisesti SEO-optimoitua alt-tekstiä, otsikoita ja kuvatekstejä kuvillesi tekoälyteknologiaa hyödyntäen.
 
-== Opis ==
+== Kuvaus ==
 
-ForVoyez Automatyczny Tekst Alternatywny dla Obrazów to potężna wtyczka WordPress, która wykorzystuje technologię sztucznej inteligencji do automatycznego generowania wysokiej jakości, przyjaznego dla SEO tekstu alternatywnego, tytułów i podpisów dla obrazów w Twojej treści. Ta wtyczka bez wysiłku poprawia dostępność i optymalizację Twojej strony pod kątem wyszukiwarek.
+ForVoyez Automaattinen Alt-teksti Kuville on tehokas WordPress-lisäosa, joka käyttää tekoälyteknologiaa luodakseen automaattisesti korkealaatuista, SEO-ystävällistä alt-tekstiä, otsikoita ja kuvatekstejä sisältösi kuville. Tämä lisäosa parantaa vaivattomasti verkkosivustosi saavutettavuutta ja hakukoneoptimointia.
 
-= Główne Funkcje =
+= Tärkeimmät ominaisuudet =
 
-* 🤖 Generowanie tekstu alternatywnego napędzane przez AI
-* 🖼️ Przetwarzanie wsadowe istniejących obrazów
-* 🔄 Automatyczne przetwarzanie nowych przesłanych plików
-* 🎨 Dostosowywalne formaty wyjściowe
-* 🌐 Wsparcie dla wielu języków
-* 🧰 Przyjazny dla użytkownika interfejs administracyjny WordPress
+* 🤖 Tekoälyllä toimiva alt-tekstin luonti
+* 🖼️ Olemassa olevien kuvien eräkäsittely
+* 🔄 Automaattinen käsittely uusille latauksille
+* 🎨 Mukautettavat tulosformaatit
+* 🌐 Monikielinen tuki
+* 🧰 Käyttäjäystävällinen WordPress-hallintaliittymä
 
-Nasze API napędzane przez AI ułatwia deweloperom i twórcom treści optymalizację obrazów pod kątem SEO. Oszczędzaj czas, popraw SEO i usprawnij swój workflow dzięki naszemu potężnemu rozwiązaniu.
+Tekoälyllä toimiva API:mme tekee kehittäjille ja sisällöntuottajille helpoksi optimoida kuvat SEO:ta varten. Säästä aikaa, paranna SEO:ta ja virtaviivaista työnkulkuasi tehokkaalla ratkaisullamme.
 
-== Instalacja ==
+== Asennus ==
 
-1. Prześlij pliki wtyczki do katalogu `/wp-content/plugins/forvoyez-auto-alt-text-for-images` lub zainstaluj wtyczkę bezpośrednio z ekranu wtyczek WordPress.
-2. Aktywuj wtyczkę przez ekran 'Wtyczki' w WordPress.
-3. Użyj ekranu Ustawienia -> ForVoyez Automatyczny Tekst Alternatywny, aby skonfigurować wtyczkę.
-4. Wprowadź swój klucz API ForVoyez na stronie ustawień.
+1. Lataa lisäosan tiedostot `/wp-content/plugins/forvoyez-auto-alt-text-for-images`-hakemistoon tai asenna lisäosa suoraan WordPressin lisäosanäytöltä.
+2. Aktivoi lisäosa WordPressin 'Lisäosat'-näytöltä.
+3. Käytä Asetukset -> ForVoyez Automaattinen Alt-teksti -näyttöä lisäosan määrittämiseen.
+4. Syötä ForVoyez API-avaimesi asetussivulle.
 
-= Uzyskiwanie klucza API =
+= API-avaimen hankkiminen =
 
-1. Odwiedź [stronę rejestracji ForVoyez](https://forvoyez.com/signup), aby utworzyć konto.
-2. Po zalogowaniu przejdź do swojego [panelu ForVoyez](https://forvoyez.com/dashboard).
-3. Wygeneruj klucz API w sekcji API swojego panelu.
-4. Skopiuj klucz API i wklej go na stronie ustawień wtyczki.
+1. Vieraile [ForVoyez rekisteröintisivulla](https://forvoyez.com/signup) luodaksesi tilin.
+2. Kun olet kirjautunut sisään, siirry [ForVoyez-hallintapaneeliin](https://forvoyez.com/dashboard).
+3. Luo API-avain hallintapaneelisi API-osiossa.
+4. Kopioi API-avain ja liitä se lisäosan asetussivulle.
 
-== Często Zadawane Pytania ==
+== Usein Kysytyt Kysymykset ==
 
-= Czy potrzebuję klucza API, aby korzystać z tej wtyczki? =
+= Tarvitsenko API-avaimen käyttääkseni tätä lisäosaa? =
 
-Tak, potrzebujesz klucza API ForVoyez, aby korzystać z tej wtyczki. Możesz go uzyskać, rejestrując się na stronie [https://forvoyez.com](https://forvoyez.com).
+Kyllä, tarvitset ForVoyez API-avaimen käyttääksesi tätä lisäosaa. Voit hankkia sellaisen rekisteröitymällä osoitteessa [https://forvoyez.com](https://forvoyez.com).
 
-= Czy mogę dostosować wygenerowany tekst alternatywny? =
+= Voinko mukauttaa luotua alt-tekstiä? =
 
-Chociaż wtyczka automatycznie generuje tekst alternatywny, zawsze możesz ręcznie edytować wygenerowany tekst dla każdego obrazu, jeśli to konieczne.
+Vaikka lisäosa luo automaattisesti alt-tekstiä, voit aina muokata manuaalisesti luotua tekstiä jokaiselle kuvalle tarvittaessa.
 
-= Czy ta wtyczka działa ze wszystkimi formatami obrazów? =
+= Toimiiko tämä lisäosa kaikkien kuvaformaattien kanssa? =
 
-Wtyczka działa z większością powszechnych formatów obrazów obsługiwanych przez WordPress, w tym JPEG, PNG, GIF i WebP.
+Lisäosa toimii useimpien yleisten WordPressin tukemien kuvaformaattien kanssa, mukaan lukien JPEG, PNG, GIF ja WebP.
 
-= Czy ta wtyczka spowolni moją stronę? =
+= Hidastaako tämä lisäosa verkkosivustoani? =
 
-Nie, wtyczka przetwarza obrazy w tle i nie wpływa na wydajność front-endu Twojej strony.
+Ei, lisäosa käsittelee kuvia taustalla eikä vaikuta verkkosivustosi etupuolen suorituskykyyn.
 
-= Jak działa funkcja przetwarzania wsadowego? =
+= Miten eräkäsittelyominaisuus toimii? =
 
-Możesz wybrać wiele obrazów w swojej bibliotece mediów i użyć opcji "Generuj Tekst Alternatywny" z menu rozwijanego akcji zbiorczych, aby przetworzyć je wszystkie na raz.
+Voit valita useita kuvia mediakirjastostasi ja käyttää "Luo Alt-teksti" -vaihtoehtoa joukkotoimintojen pudotusvalikosta käsitelläksesi ne kaikki kerralla.
 
-= Czy wygenerowana treść jest wielojęzyczna? =
+= Onko luotu sisältö monikielistä? =
 
-AI może generować treść w wielu językach. Możesz określić swój preferowany język w ustawieniach wtyczki.
+Tekoäly voi luoda sisältöä useilla kielillä. Voit määrittää haluamasi kielen lisäosan asetuksissa.
 
-== Zrzuty ekranu ==
+== Kuvakaappaukset ==
 
-1. Konfiguracja API - Łatwa strona konfiguracji do wprowadzenia klucza API ForVoyez.
-2. Interfejs Zarządzania Obrazami - Główny panel do zarządzania i analizowania biblioteki mediów WordPress.
-3. Przykład Wyników - Prezentacja automatycznie wygenerowanego tekstu alternatywnego, tytułów i podpisów dla różnych typów obrazów.
+1. API-määritys - Helppo asetussivu ForVoyez API-avaimen syöttämistä varten.
+2. Kuvien hallintaliittymä - Pääohjausnäkymä WordPress-mediakirjastosi hallintaan ja analysointiin.
+3. Tulosesimerkki - Esittely automaattisesti luoduista alt-teksteistä, otsikoista ja kuvateksteistä eri kuvatyypeille.
 
-== Dziennik zmian ==
-
-= 1.0.0 =
-* Pierwsze wydanie
-* Generowanie tekstu alternatywnego, tytułów i podpisów napędzane przez AI
-* Funkcja przetwarzania wsadowego
-* Integracja z biblioteką mediów WordPress
-* Wsparcie dla wielu języków
-* Przyjazny dla użytkownika interfejs administracyjny
-
-== Informacja o aktualizacji ==
+== Muutosloki ==
 
 = 1.0.0 =
-To jest pierwsze wydanie ForVoyez Automatycznego Tekstu Alternatywnego dla Obrazów. Zainstaluj teraz, aby zacząć optymalizować metadane swoich obrazów!
+* Ensimmäinen julkaisu
+* Tekoälyllä toimiva alt-tekstin, otsikoiden ja kuvatekstien luonti
+* Eräkäsittelyominaisuus
+* Integraatio WordPress-mediakirjaston kanssa
+* Monikielinen tuki
+* Käyttäjäystävällinen hallintaliittymä
 
-== Dodatkowe informacje ==
+== Päivitysilmoitus ==
 
-Aby uzyskać bardziej szczegółową dokumentację, odwiedź naszą [oficjalną dokumentację](https://doc.forvoyez.com).
+= 1.0.0 =
+Tämä on ForVoyez Automaattinen Alt-teksti Kuville -lisäosan ensimmäinen julkaisu. Asenna nyt aloittaaksesi kuviesi metatietojen optimoinnin!
 
-W celu uzyskania wsparcia, zgłoszenia prośby o funkcje lub zgłoszenia błędów, odwiedź nasze [forum wsparcia](https://forvoyez.com/support) lub nasze [repozytorium GitHub](https://github.com/forvoyez/auto-alt-text-for-images).
+== Lisätietoja ==
 
-Ta wtyczka jest z dumą wspierana przez [ForVoyez](https://forvoyez.com), lidera w dziedzinie rozwiązań do optymalizacji treści opartych na AI.
+Tarkempaa dokumentaatiota varten, vieraile [virallisessa dokumentaatiossamme](https://doc.forvoyez.com).
+
+Tukea, ominaisuuspyyntöjä tai virheiden raportointia varten, vieraile [tukifoorumillamme](https://forvoyez.com/support) tai [GitHub-tietovarastossamme](https://github.com/forvoyez/auto-alt-text-for-images).
+
+Tätä lisäosaa tukee ylpeänä [ForVoyez](https://forvoyez.com), joka on johtava tekoälypohjaisissa sisällön optimointiratkaisuissa.

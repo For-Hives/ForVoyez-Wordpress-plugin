@@ -1,95 +1,95 @@
-=== ForVoyez Automatischer Alt-Text für Bilder ===
-Mitwirkende: forvoyez
-Schlagwörter: seo, barrierefreiheit, bilder, alt-text, metadaten
-Benötigt mindestens: WordPress 5.0
-Getestet bis: 6.4
-Stabile Version: 1.0.0
-Benötigt PHP: 8.2
-Lizenz: GPLv2 oder neuer
-Lizenz-URI: https://www.gnu.org/licenses/gpl-2.0.html
+=== ForVoyez النص البديل التلقائي للصور ===
+المساهمون: forvoyez
+الوسوم: seo، إمكانية الوصول، الصور، النص البديل، البيانات الوصفية
+يتطلب على الأقل: وردبريس 5.0
+تم اختباره حتى: 6.4
+الإصدار المستقر: 1.0.0
+يتطلب PHP: 8.2
+الترخيص: GPLv2 أو أحدث
+رابط الترخيص: https://www.gnu.org/licenses/gpl-2.0.html
 
-Generieren Sie automatisch SEO-optimierten Alt-Text, Titel und Bildunterschriften für Ihre Bilder mit KI-Technologie.
+قم بإنشاء نص بديل وعناوين وتسميات توضيحية محسنة لمحركات البحث تلقائيًا لصورك باستخدام تقنية الذكاء الاصطناعي.
 
-== Beschreibung ==
+== الوصف ==
 
-ForVoyez Automatischer Alt-Text für Bilder ist ein leistungsstarkes WordPress-Plugin, das KI-Technologie nutzt, um automatisch hochwertigen, SEO-freundlichen Alt-Text, Titel und Bildunterschriften für Bilder in Ihrem Content zu generieren. Dieses Plugin verbessert mühelos die Barrierefreiheit und Suchmaschinenoptimierung Ihrer Website.
+ForVoyez النص البديل التلقائي للصور هو إضافة قوية لووردبريس تستخدم تقنية الذكاء الاصطناعي لإنشاء نص بديل وعناوين وتسميات توضيحية عالية الجودة ومحسنة لمحركات البحث تلقائيًا للصور في محتواك. تحسن هذه الإضافة إمكانية الوصول وتحسين محركات البحث لموقعك الإلكتروني دون جهد.
 
-= Hauptfunktionen =
+= الميزات الرئيسية =
 
-* 🤖 KI-gestützte Alt-Text-Generierung
-* 🖼️ Massenverarbeitung für vorhandene Bilder
-* 🔄 Automatische Verarbeitung für neue Uploads
-* 🎨 Anpassbare Ausgabeformate
-* 🌐 Mehrsprachige Unterstützung
-* 🧰 Benutzerfreundliche WordPress-Admin-Oberfläche
+* 🤖 إنشاء نص بديل مدعوم بالذكاء الاصطناعي
+* 🖼️ معالجة دفعية للصور الموجودة
+* 🔄 معالجة تلقائية للتحميلات الجديدة
+* 🎨 تنسيقات إخراج قابلة للتخصيص
+* 🌐 دعم متعدد اللغات
+* 🧰 واجهة إدارة ووردبريس سهلة الاستخدام
 
-Unsere KI-gestützte API macht es Entwicklern und Content-Erstellern leicht, Bilder für SEO zu optimieren. Sparen Sie Zeit, verbessern Sie SEO und optimieren Sie Ihren Workflow mit unserer leistungsstarken Lösung.
+تجعل واجهة برمجة التطبيقات (API) المدعومة بالذكاء الاصطناعي من السهل على المطورين ومنشئي المحتوى تحسين الصور لمحركات البحث. وفر الوقت، وحسن تحسين محركات البحث، وقم بتبسيط سير عملك باستخدام حلنا القوي.
 
-== Installation ==
+== التثبيت ==
 
-1. Laden Sie die Plugin-Dateien in das Verzeichnis `/wp-content/plugins/forvoyez-auto-alt-text-for-images` hoch, oder installieren Sie das Plugin direkt über den WordPress-Plugin-Bildschirm.
-2. Aktivieren Sie das Plugin über den 'Plugins'-Bildschirm in WordPress.
-3. Verwenden Sie den Bildschirm Einstellungen -> ForVoyez Automatischer Alt-Text, um das Plugin zu konfigurieren.
-4. Geben Sie Ihren ForVoyez API-Schlüssel auf der Einstellungsseite ein.
+1. قم بتحميل ملفات الإضافة إلى الدليل `/wp-content/plugins/forvoyez-auto-alt-text-for-images`، أو قم بتثبيت الإضافة مباشرة من خلال شاشة الإضافات في ووردبريس.
+2. قم بتفعيل الإضافة من خلال شاشة 'الإضافات' في ووردبريس.
+3. استخدم شاشة الإعدادات -> ForVoyez النص البديل التلقائي لتكوين الإضافة.
+4. أدخل مفتاح API الخاص بـ ForVoyez في صفحة الإعدادات.
 
-= Einen API-Schlüssel erhalten =
+= الحصول على مفتاح API =
 
-1. Besuchen Sie die [ForVoyez Anmeldeseite](https://forvoyez.com/signup), um ein Konto zu erstellen.
-2. Sobald Sie angemeldet sind, navigieren Sie zu Ihrem [ForVoyez Dashboard](https://forvoyez.com/dashboard).
-3. Generieren Sie einen API-Schlüssel im API-Bereich Ihres Dashboards.
-4. Kopieren Sie den API-Schlüssel und fügen Sie ihn in die Einstellungsseite des Plugins ein.
+1. قم بزيارة [صفحة التسجيل في ForVoyez](https://forvoyez.com/signup) لإنشاء حساب.
+2. بمجرد تسجيل الدخول، انتقل إلى [لوحة تحكم ForVoyez](https://forvoyez.com/dashboard) الخاصة بك.
+3. قم بإنشاء مفتاح API في قسم API من لوحة التحكم الخاصة بك.
+4. انسخ مفتاح API والصقه في صفحة إعدادات الإضافة.
 
-== Häufig gestellte Fragen ==
+== الأسئلة الشائعة ==
 
-= Benötige ich einen API-Schlüssel, um dieses Plugin zu nutzen? =
+= هل أحتاج إلى مفتاح API لاستخدام هذه الإضافة؟ =
 
-Ja, Sie benötigen einen ForVoyez API-Schlüssel, um dieses Plugin zu nutzen. Sie können einen erhalten, indem Sie sich auf [https://forvoyez.com](https://forvoyez.com) registrieren.
+نعم، تحتاج إلى مفتاح API من ForVoyez لاستخدام هذه الإضافة. يمكنك الحصول على واحد عن طريق التسجيل على [https://forvoyez.com](https://forvoyez.com).
 
-= Kann ich den generierten Alt-Text anpassen? =
+= هل يمكنني تخصيص النص البديل المُنشأ؟ =
 
-Während das Plugin automatisch Alt-Text generiert, können Sie den generierten Text für jedes Bild bei Bedarf manuell bearbeiten.
+بينما تقوم الإضافة بإنشاء النص البديل تلقائيًا، يمكنك دائمًا تعديل النص المُنشأ يدويًا لكل صورة إذا لزم الأمر.
 
-= Funktioniert dieses Plugin mit allen Bildformaten? =
+= هل تعمل هذه الإضافة مع جميع تنسيقات الصور؟ =
 
-Das Plugin funktioniert mit den meisten gängigen Bildformaten, die von WordPress unterstützt werden, einschließlich JPEG, PNG, GIF und WebP.
+تعمل الإضافة مع معظم تنسيقات الصور الشائعة المدعومة من ووردبريس، بما في ذلك JPEG وPNG وGIF وWebP.
 
-= Wird dieses Plugin meine Website verlangsamen? =
+= هل ستبطئ هذه الإضافة موقعي الإلكتروني؟ =
 
-Nein, das Plugin verarbeitet Bilder im Hintergrund und beeinträchtigt nicht die Frontend-Leistung Ihrer Website.
+لا، تقوم الإضافة بمعالجة الصور في الخلفية ولا تؤثر على أداء الواجهة الأمامية لموقعك الإلكتروني.
 
-= Wie funktioniert die Massenverarbeitungsfunktion? =
+= كيف تعمل ميزة المعالجة الدفعية؟ =
 
-Sie können mehrere Bilder in Ihrer Medienbibliothek auswählen und die Option "Alt-Text generieren" aus dem Dropdown-Menü für Massenaktionen verwenden, um sie alle auf einmal zu verarbeiten.
+يمكنك تحديد صور متعددة في مكتبة الوسائط الخاصة بك واستخدام خيار "إنشاء النص البديل" من القائمة المنسدلة للإجراءات الجماعية لمعالجتها جميعًا دفعة واحدة.
 
-= Ist der generierte Inhalt mehrsprachig? =
+= هل المحتوى المُنشأ متعدد اللغات؟ =
 
-Die KI kann Inhalte in mehreren Sprachen generieren. Sie können Ihre bevorzugte Sprache in den Plugin-Einstellungen angeben.
+يمكن للذكاء الاصطناعي إنشاء محتوى بلغات متعددة. يمكنك تحديد لغتك المفضلة في إعدادات الإضافة.
 
-== Screenshots ==
+== لقطات الشاشة ==
 
-1. API-Konfiguration - Einfache Einrichtungsseite zur Eingabe Ihres ForVoyez API-Schlüssels.
-2. Bildverwaltungsoberfläche - Haupt-Dashboard zur Verwaltung und Analyse Ihrer WordPress-Medienbibliothek.
-3. Ergebnisbeispiel - Präsentation von automatisch generierten Alt-Texten, Titeln und Bildunterschriften für verschiedene Bildtypen.
+1. تكوين API - صفحة إعداد سهلة لإدخال مفتاح API الخاص بـ ForVoyez.
+2. واجهة إدارة الصور - لوحة التحكم الرئيسية لإدارة وتحليل مكتبة وسائط ووردبريس الخاصة بك.
+3. مثال على النتائج - عرض للنص البديل والعناوين والتسميات التوضيحية المُنشأة تلقائيًا لأنواع مختلفة من الصور.
 
-== Changelog ==
-
-= 1.0.0 =
-* Erstveröffentlichung
-* KI-gestützte Generierung von Alt-Text, Titeln und Bildunterschriften
-* Massenverarbeitungsfunktion
-* Integration mit WordPress-Medienbibliothek
-* Mehrsprachige Unterstützung
-* Benutzerfreundliche Admin-Oberfläche
-
-== Upgrade-Hinweis ==
+== سجل التغييرات ==
 
 = 1.0.0 =
-Dies ist die erste Veröffentlichung von ForVoyez Automatischer Alt-Text für Bilder. Installieren Sie jetzt, um mit der Optimierung Ihrer Bild-Metadaten zu beginnen!
+* الإصدار الأولي
+* إنشاء النص البديل والعناوين والتسميات التوضيحية بدعم من الذكاء الاصطناعي
+* ميزة المعالجة الدفعية
+* التكامل مع مكتبة وسائط ووردبريس
+* دعم متعدد اللغات
+* واجهة إدارة سهلة الاستخدام
 
-== Zusätzliche Informationen ==
+== إشعار الترقية ==
 
-Für eine detailliertere Dokumentation besuchen Sie bitte unsere [offizielle Dokumentation](https://doc.forvoyez.com).
+= 1.0.0 =
+هذا هو الإصدار الأول من ForVoyez النص البديل التلقائي للصور. قم بالتثبيت الآن لبدء تحسين البيانات الوصفية لصورك!
 
-Für Support, Feature-Anfragen oder um Fehler zu melden, besuchen Sie bitte unser [Support-Forum](https://forvoyez.com/support) oder unser [GitHub-Repository](https://github.com/forvoyez/auto-alt-text-for-images).
+== معلومات إضافية ==
 
-Dieses Plugin wird stolz von [ForVoyez](https://forvoyez.com) betrieben, einem führenden Anbieter von KI-gestützten Content-Optimierungslösungen.
+للحصول على وثائق أكثر تفصيلاً، يرجى زيارة [الوثائق الرسمية](https://doc.forvoyez.com) الخاصة بنا.
+
+للدعم وطلبات الميزات أو للإبلاغ عن الأخطاء، يرجى زيارة [منتدى الدعم](https://forvoyez.com/support) الخاص بنا أو [مستودع GitHub](https://github.com/forvoyez/auto-alt-text-for-images) الخاص بنا.
+
+هذه الإضافة مدعومة بفخر من قبل [ForVoyez](https://forvoyez.com)، وهي شركة رائدة في حلول تحسين المحتوى المدعومة بالذكاء الاصطناعي.

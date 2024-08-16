@@ -1,95 +1,95 @@
-=== ForVoyez Automatyczny Tekst Alternatywny dla Obrazów ===
-Autorzy: forvoyez
-Tagi: seo, dostępność, obrazy, tekst alternatywny, metadane
-Wymaga co najmniej: WordPress 5.0
-Testowano do: 6.4
-Stabilna wersja: 1.0.0
-Wymaga PHP: 8.2
-Licencja: GPLv2 lub nowsza
-Licencja URI: https://www.gnu.org/licenses/gpl-2.0.html
+=== ForVoyez 画像自動ALTテキスト ===
+貢献者: forvoyez
+タグ: seo, アクセシビリティ, 画像, altテキスト, メタデータ
+必要最低限のバージョン: WordPress 5.0
+テスト済みバージョン: 6.4
+安定版バージョン: 1.0.0
+必要なPHPバージョン: 8.2
+ライセンス: GPLv2 以降
+ライセンスURI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Automatycznie generuj zoptymalizowany pod kątem SEO tekst alternatywny, tytuły i podpisy dla swoich obrazów za pomocą technologii AI.
+AI技術を使用して、画像のSEO最適化されたALTテキスト、タイトル、キャプションを自動生成します。
 
-== Opis ==
+== 説明 ==
 
-ForVoyez Automatyczny Tekst Alternatywny dla Obrazów to potężna wtyczka WordPress, która wykorzystuje technologię sztucznej inteligencji do automatycznego generowania wysokiej jakości, przyjaznego dla SEO tekstu alternatywnego, tytułów i podpisów dla obrazów w Twojej treści. Ta wtyczka bez wysiłku poprawia dostępność i optymalizację Twojej strony pod kątem wyszukiwarek.
+ForVoyez 画像自動ALTテキストは、AI技術を活用して、コンテンツ内の画像に高品質でSEOフレンドリーなALTテキスト、タイトル、キャプションを自動生成する強力なWordPressプラグインです。このプラグインは、ウェブサイトのアクセシビリティと検索エンジン最適化を簡単に向上させます。
 
-= Główne Funkcje =
+= 主な機能 =
 
-* 🤖 Generowanie tekstu alternatywnego napędzane przez AI
-* 🖼️ Przetwarzanie wsadowe istniejących obrazów
-* 🔄 Automatyczne przetwarzanie nowych przesłanych plików
-* 🎨 Dostosowywalne formaty wyjściowe
-* 🌐 Wsparcie dla wielu języków
-* 🧰 Przyjazny dla użytkownika interfejs administracyjny WordPress
+* 🤖 AI駆動のALTテキスト生成
+* 🖼️ 既存画像の一括処理
+* 🔄 新規アップロードの自動処理
+* 🎨 カスタマイズ可能な出力フォーマット
+* 🌐 多言語サポート
+* 🧰 ユーザーフレンドリーなWordPress管理インターフェース
 
-Nasze API napędzane przez AI ułatwia deweloperom i twórcom treści optymalizację obrazów pod kątem SEO. Oszczędzaj czas, popraw SEO i usprawnij swój workflow dzięki naszemu potężnemu rozwiązaniu.
+当社のAI駆動APIにより、開発者やコンテンツクリエイターはSEOのために画像を簡単に最適化できます。強力なソリューションで時間を節約し、SEOを向上させ、ワークフローを効率化します。
 
-== Instalacja ==
+== インストール ==
 
-1. Prześlij pliki wtyczki do katalogu `/wp-content/plugins/forvoyez-auto-alt-text-for-images` lub zainstaluj wtyczkę bezpośrednio z ekranu wtyczek WordPress.
-2. Aktywuj wtyczkę przez ekran 'Wtyczki' w WordPress.
-3. Użyj ekranu Ustawienia -> ForVoyez Automatyczny Tekst Alternatywny, aby skonfigurować wtyczkę.
-4. Wprowadź swój klucz API ForVoyez na stronie ustawień.
+1. プラグインファイルを `/wp-content/plugins/forvoyez-auto-alt-text-for-images` ディレクトリにアップロードするか、WordPressのプラグイン画面から直接インストールします。
+2. WordPressの「プラグイン」画面からプラグインを有効化します。
+3. 設定 -> ForVoyez 自動ALTテキスト画面を使用してプラグインを設定します。
+4. 設定ページにForVoyez APIキーを入力します。
 
-= Uzyskiwanie klucza API =
+= APIキーの取得方法 =
 
-1. Odwiedź [stronę rejestracji ForVoyez](https://forvoyez.com/signup), aby utworzyć konto.
-2. Po zalogowaniu przejdź do swojego [panelu ForVoyez](https://forvoyez.com/dashboard).
-3. Wygeneruj klucz API w sekcji API swojego panelu.
-4. Skopiuj klucz API i wklej go na stronie ustawień wtyczki.
+1. [ForVoyezサインアップページ](https://forvoyez.com/signup)にアクセスしてアカウントを作成します。
+2. ログイン後、[ForVoyezダッシュボード](https://forvoyez.com/dashboard)に移動します。
+3. ダッシュボードのAPIセクションでAPIキーを生成します。
+4. APIキーをコピーし、プラグインの設定ページに貼り付けます。
 
-== Często Zadawane Pytania ==
+== よくある質問 ==
 
-= Czy potrzebuję klucza API, aby korzystać z tej wtyczki? =
+= このプラグインを使用するにはAPIキーが必要ですか？ =
 
-Tak, potrzebujesz klucza API ForVoyez, aby korzystać z tej wtyczki. Możesz go uzyskać, rejestrując się na stronie [https://forvoyez.com](https://forvoyez.com).
+はい、このプラグインを使用するにはForVoyez APIキーが必要です。[https://forvoyez.com](https://forvoyez.com)で登録して取得できます。
 
-= Czy mogę dostosować wygenerowany tekst alternatywny? =
+= 生成されたALTテキストをカスタマイズできますか？ =
 
-Chociaż wtyczka automatycznie generuje tekst alternatywny, zawsze możesz ręcznie edytować wygenerowany tekst dla każdego obrazu, jeśli to konieczne.
+プラグインは自動的にALTテキストを生成しますが、必要に応じて各画像の生成されたテキストを手動で編集することもできます。
 
-= Czy ta wtyczka działa ze wszystkimi formatami obrazów? =
+= このプラグインはすべての画像フォーマットで動作しますか？ =
 
-Wtyczka działa z większością powszechnych formatów obrazów obsługiwanych przez WordPress, w tym JPEG, PNG, GIF i WebP.
+このプラグインは、JPEG、PNG、GIF、WebPを含む、WordPressでサポートされている一般的な画像フォーマットのほとんどで動作します。
 
-= Czy ta wtyczka spowolni moją stronę? =
+= このプラグインは私のウェブサイトを遅くしますか？ =
 
-Nie, wtyczka przetwarza obrazy w tle i nie wpływa na wydajność front-endu Twojej strony.
+いいえ、プラグインはバックグラウンドで画像を処理するため、ウェブサイトのフロントエンドパフォーマンスには影響しません。
 
-= Jak działa funkcja przetwarzania wsadowego? =
+= 一括処理機能はどのように動作しますか？ =
 
-Możesz wybrać wiele obrazów w swojej bibliotece mediów i użyć opcji "Generuj Tekst Alternatywny" z menu rozwijanego akcji zbiorczych, aby przetworzyć je wszystkie na raz.
+メディアライブラリで複数の画像を選択し、一括アクションのドロップダウンメニューから「ALTテキストを生成」オプションを使用して、一度にすべてを処理できます。
 
-= Czy wygenerowana treść jest wielojęzyczna? =
+= 生成されるコンテンツは多言語対応ですか？ =
 
-AI może generować treść w wielu językach. Możesz określić swój preferowany język w ustawieniach wtyczki.
+AIは複数の言語でコンテンツを生成できます。プラグイン設定で希望の言語を指定できます。
 
-== Zrzuty ekranu ==
+== スクリーンショット ==
 
-1. Konfiguracja API - Łatwa strona konfiguracji do wprowadzenia klucza API ForVoyez.
-2. Interfejs Zarządzania Obrazami - Główny panel do zarządzania i analizowania biblioteki mediów WordPress.
-3. Przykład Wyników - Prezentacja automatycznie wygenerowanego tekstu alternatywnego, tytułów i podpisów dla różnych typów obrazów.
+1. API設定 - ForVoyez APIキーを入力するための簡単な設定ページ。
+2. 画像管理インターフェース - WordPressメディアライブラリを管理・分析するメインダッシュボード。
+3. 結果例 - さまざまな画像タイプに対して自動生成されたALTテキスト、タイトル、キャプションのショーケース。
 
-== Dziennik zmian ==
-
-= 1.0.0 =
-* Pierwsze wydanie
-* Generowanie tekstu alternatywnego, tytułów i podpisów napędzane przez AI
-* Funkcja przetwarzania wsadowego
-* Integracja z biblioteką mediów WordPress
-* Wsparcie dla wielu języków
-* Przyjazny dla użytkownika interfejs administracyjny
-
-== Informacja o aktualizacji ==
+== 変更ログ ==
 
 = 1.0.0 =
-To jest pierwsze wydanie ForVoyez Automatycznego Tekstu Alternatywnego dla Obrazów. Zainstaluj teraz, aby zacząć optymalizować metadane swoich obrazów!
+* 初回リリース
+* AI駆動のALTテキスト、タイトル、キャプション生成
+* 一括処理機能
+* WordPressメディアライブラリとの統合
+* 多言語サポート
+* ユーザーフレンドリーな管理インターフェース
 
-== Dodatkowe informacje ==
+== アップグレード通知 ==
 
-Aby uzyskać bardziej szczegółową dokumentację, odwiedź naszą [oficjalną dokumentację](https://doc.forvoyez.com).
+= 1.0.0 =
+これはForVoyez 画像自動ALTテキストの最初のリリースです。今すぐインストールして画像メタデータの最適化を始めましょう！
 
-W celu uzyskania wsparcia, zgłoszenia prośby o funkcje lub zgłoszenia błędów, odwiedź nasze [forum wsparcia](https://forvoyez.com/support) lub nasze [repozytorium GitHub](https://github.com/forvoyez/auto-alt-text-for-images).
+== 追加情報 ==
 
-Ta wtyczka jest z dumą wspierana przez [ForVoyez](https://forvoyez.com), lidera w dziedzinie rozwiązań do optymalizacji treści opartych na AI.
+より詳細なドキュメントについては、[公式ドキュメント](https://doc.forvoyez.com)をご覧ください。
+
+サポート、機能リクエスト、またはバグ報告については、[サポートフォーラム](https://forvoyez.com/support)または[GitHubリポジトリ](https://github.com/forvoyez/auto-alt-text-for-images)をご覧ください。
+
+このプラグインは、AI駆動のコンテンツ最適化ソリューションのリーダーである[ForVoyez](https://forvoyez.com)が誇りを持ってサポートしています。

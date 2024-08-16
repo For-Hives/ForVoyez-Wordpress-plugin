@@ -1,95 +1,95 @@
-=== ForVoyez 自動圖像替代文字 ===
-貢獻者：forvoyez
-標籤：seo、無障礙、圖像、替代文字、元數據
-最低要求：WordPress 5.0
-測試至：6.4
-穩定版本：1.0.0
-需要 PHP：8.2
-授權：GPLv2 或更高版本
-授權網址：https://www.gnu.org/licenses/gpl-2.0.html
+=== ForVoyez Resimler için Otomatik Alt Metin ===
+Katkıda Bulunanlar: forvoyez
+Etiketler: seo, erişilebilirlik, resimler, alt metin, meta veriler
+En az gereksinim: WordPress 5.0
+Şuna kadar test edildi: 6.4
+Kararlı sürüm: 1.0.0
+PHP gereksinimi: 8.2
+Lisans: GPLv2 veya üstü
+Lisans URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-使用人工智能技術自動為您的圖像生成 SEO 優化的替代文字、標題和說明。
+Yapay zeka teknolojisini kullanarak resimleriniz için otomatik olarak SEO optimize edilmiş alt metin, başlıklar ve açıklamalar oluşturun.
 
-== 描述 ==
+== Açıklama ==
 
-ForVoyez 自動圖像替代文字是一個強大的 WordPress 插件，它使用人工智能技術自動為您內容中的圖像生成高質量、對搜索引擎友好的替代文字、標題和說明。這個插件可以輕鬆提高您網站的無障礙性和搜索引擎優化。
+ForVoyez Resimler için Otomatik Alt Metin, içeriğinizdeki resimler için otomatik olarak yüksek kaliteli, SEO dostu alt metin, başlıklar ve açıklamalar oluşturmak için yapay zeka teknolojisini kullanan güçlü bir WordPress eklentisidir. Bu eklenti, web sitenizin erişilebilirliğini ve arama motoru optimizasyonunu zahmetsizce iyileştirir.
 
-= 主要功能 =
+= Temel Özellikler =
 
-* 🤖 AI 驅動的替代文字生成
-* 🖼️ 批量處理現有圖像
-* 🔄 自動處理新上傳的圖像
-* 🎨 可自定義的輸出格式
-* 🌐 多語言支持
-* 🧰 用戶友好的 WordPress 管理界面
+* 🤖 Yapay zeka destekli alt metin oluşturma
+* 🖼️ Mevcut resimler için toplu işleme
+* 🔄 Yeni yüklemeler için otomatik işleme
+* 🎨 Özelleştirilebilir çıktı formatları
+* 🌐 Çoklu dil desteği
+* 🧰 Kullanıcı dostu WordPress yönetici arayüzü
 
-我們的 AI 驅動的 API 使開發人員和內容創作者能夠輕鬆優化圖像以提高 SEO。使用我們強大的解決方案節省時間、提升 SEO 並簡化您的工作流程。
+Yapay zeka destekli API'miz, geliştiricilerin ve içerik oluşturucuların resimleri SEO için optimize etmesini kolaylaştırır. Güçlü çözümümüzle zamandan tasarruf edin, SEO'nuzu artırın ve iş akışınızı optimize edin.
 
-== 安裝 ==
+== Kurulum ==
 
-1. 將插件文件上傳到 `/wp-content/plugins/forvoyez-auto-alt-text-for-images` 目錄，或直接通過 WordPress 插件屏幕安裝插件。
-2. 通過 WordPress 中的"插件"屏幕激活插件。
-3. 使用設置 -> ForVoyez 自動替代文字屏幕來配置插件。
-4. 在設置頁面輸入您的 ForVoyez API 密鑰。
+1. Eklenti dosyalarını `/wp-content/plugins/forvoyez-auto-alt-text-for-images` dizinine yükleyin veya eklentiyi doğrudan WordPress eklenti ekranından yükleyin.
+2. Eklentiyi WordPress'teki 'Eklentiler' ekranından etkinleştirin.
+3. Eklentiyi yapılandırmak için Ayarlar -> ForVoyez Otomatik Alt Metin ekranını kullanın.
+4. ForVoyez API anahtarınızı ayarlar sayfasına girin.
 
-= 獲取 API 密鑰 =
+= API Anahtarı Alma =
 
-1. 訪問 [ForVoyez 註冊頁面](https://forvoyez.com/signup) 創建一個帳戶。
-2. 登錄後，導航到您的 [ForVoyez 儀表板](https://forvoyez.com/dashboard)。
-3. 在儀表板的 API 部分生成一個 API 密鑰。
-4. 複製 API 密鑰並粘貼到插件的設置頁面。
+1. Bir hesap oluşturmak için [ForVoyez kayıt sayfasını](https://forvoyez.com/signup) ziyaret edin.
+2. Giriş yaptıktan sonra [ForVoyez kontrol panelinize](https://forvoyez.com/dashboard) gidin.
+3. Kontrol panelinizin API bölümünde bir API anahtarı oluşturun.
+4. API anahtarını kopyalayın ve eklentinin ayarlar sayfasına yapıştırın.
 
-== 常見問題 ==
+== Sıkça Sorulan Sorular ==
 
-= 我需要 API 密鑰才能使用這個插件嗎？ =
+= Bu eklentiyi kullanmak için bir API anahtarına ihtiyacım var mı? =
 
-是的，您需要 ForVoyez API 密鑰才能使用此插件。您可以通過在 [https://forvoyez.com](https://forvoyez.com) 註冊來獲取一個。
+Evet, bu eklentiyi kullanmak için bir ForVoyez API anahtarına ihtiyacınız var. [https://forvoyez.com](https://forvoyez.com) adresine kaydolarak bir tane alabilirsiniz.
 
-= 我可以自定義生成的替代文字嗎？ =
+= Oluşturulan alt metni özelleştirebilir miyim? =
 
-雖然插件會自動生成替代文字，但如果需要，您始終可以手動編輯每個圖像的生成文字。
+Eklenti otomatik olarak alt metin oluştururken, gerekirse her resim için oluşturulan metni manuel olarak düzenleyebilirsiniz.
 
-= 這個插件適用於所有圖像格式嗎？ =
+= Bu eklenti tüm resim formatlarıyla çalışır mı? =
 
-該插件適用於 WordPress 支持的大多數常見圖像格式，包括 JPEG、PNG、GIF 和 WebP。
+Eklenti, JPEG, PNG, GIF ve WebP dahil olmak üzere WordPress tarafından desteklenen çoğu yaygın resim formatıyla çalışır.
 
-= 這個插件會減慢我的網站速度嗎？ =
+= Bu eklenti web sitemi yavaşlatır mı? =
 
-不會，插件在後台處理圖像，不會影響您網站的前端性能。
+Hayır, eklenti resimleri arka planda işler ve web sitenizin ön yüz performansını etkilemez.
 
-= 批量處理功能如何工作？ =
+= Toplu işleme özelliği nasıl çalışır? =
 
-您可以在媒體庫中選擇多個圖像，並使用批量操作下拉菜單中的"生成替代文字"選項一次性處理所有圖像。
+Medya kütüphanenizde birden fazla resim seçebilir ve toplu işlemler açılır menüsünden "Alt Metin Oluştur" seçeneğini kullanarak hepsini bir kerede işleyebilirsiniz.
 
-= 生成的內容是多語言的嗎？ =
+= Oluşturulan içerik çok dilli mi? =
 
-AI 可以生成多種語言的內容。您可以在插件設置中指定您喜好的語言。
+Yapay zeka birden fazla dilde içerik oluşturabilir. Tercih ettiğiniz dili eklenti ayarlarında belirtebilirsiniz.
 
-== 截圖 ==
+== Ekran Görüntüleri ==
 
-1. API 配置 - 輸入 ForVoyez API 密鑰的簡單設置頁面。
-2. 圖像管理界面 - 管理和分析 WordPress 媒體庫的主儀表板。
-3. 結果示例 - 展示為各種圖像類型自動生成的替代文字、標題和說明。
+1. API Yapılandırması - ForVoyez API anahtarınızı girmek için kolay kurulum sayfası.
+2. Resim Yönetim Arayüzü - WordPress medya kütüphanenizi yönetmek ve analiz etmek için ana kontrol paneli.
+3. Sonuç Örneği - Çeşitli resim türleri için otomatik olarak oluşturulan alt metin, başlıklar ve açıklamaların gösterimi.
 
-== 更新日誌 ==
-
-= 1.0.0 =
-* 初始發布
-* AI 驅動的替代文字、標題和說明生成
-* 批量處理功能
-* 與 WordPress 媒體庫集成
-* 多語言支持
-* 用戶友好的管理界面
-
-== 升級通知 ==
+== Değişiklik Günlüğü ==
 
 = 1.0.0 =
-這是 ForVoyez 自動圖像替代文字的首次發布。立即安裝以開始優化您的圖像元數據！
+* İlk sürüm
+* Yapay zeka destekli alt metin, başlık ve açıklama oluşturma
+* Toplu işleme özelliği
+* WordPress medya kütüphanesi entegrasyonu
+* Çoklu dil desteği
+* Kullanıcı dostu yönetici arayüzü
 
-== 附加信息 ==
+== Yükseltme Bildirimi ==
 
-有關更詳細的文檔，請訪問我們的[官方文檔](https://doc.forvoyez.com)。
+= 1.0.0 =
+Bu, ForVoyez Resimler için Otomatik Alt Metin'in ilk sürümüdür. Resim meta verilerinizi optimize etmeye başlamak için şimdi yükleyin!
 
-如需支持、功能請求或報告錯誤，請訪問我們的[支持論壇](https://forvoyez.com/support)或我們的 [GitHub 存儲庫](https://github.com/forvoyez/auto-alt-text-for-images)。
+== Ek Bilgi ==
 
-該插件由 [ForVoyez](https://forvoyez.com) 提供支持，ForVoyez 是 AI 驅動的內容優化解決方案的領導者。
+Daha ayrıntılı dokümantasyon için lütfen [resmi dokümantasyonumuzu](https://doc.forvoyez.com) ziyaret edin.
+
+Destek, özellik istekleri veya hata bildirimleri için lütfen [destek forumumuzu](https://forvoyez.com/support) veya [GitHub deposumuzu](https://github.com/forvoyez/auto-alt-text-for-images) ziyaret edin.
+
+Bu eklenti, yapay zeka destekli içerik optimizasyon çözümlerinde lider olan [ForVoyez](https://forvoyez.com) tarafından gururla desteklenmektedir.

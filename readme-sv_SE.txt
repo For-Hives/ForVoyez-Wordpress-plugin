@@ -1,95 +1,95 @@
-=== ForVoyez Resimler için Otomatik Alt Metin ===
-Katkıda Bulunanlar: forvoyez
-Etiketler: seo, erişilebilirlik, resimler, alt metin, meta veriler
-En az gereksinim: WordPress 5.0
-Şuna kadar test edildi: 6.4
-Kararlı sürüm: 1.0.0
-PHP gereksinimi: 8.2
-Lisans: GPLv2 veya üstü
-Lisans URI: https://www.gnu.org/licenses/gpl-2.0.html
+=== ForVoyez Automatisk Alt-text för bilder ===
+Bidragsgivare: forvoyez
+Taggar: seo, tillgänglighet, bilder, alt-text, metadata
+Kräver minst: WordPress 5.0
+Testad upp till: 6.4
+Stabil version: 1.0.0
+Kräver PHP: 8.2
+Licens: GPLv2 eller senare
+Licens-URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Yapay zeka teknolojisini kullanarak resimleriniz için otomatik olarak SEO optimize edilmiş alt metin, başlıklar ve açıklamalar oluşturun.
+Generera automatiskt SEO-optimerad alt-text, titlar och bildtexter för dina bilder med hjälp av AI-teknik.
 
-== Açıklama ==
+== Beskrivning ==
 
-ForVoyez Resimler için Otomatik Alt Metin, içeriğinizdeki resimler için otomatik olarak yüksek kaliteli, SEO dostu alt metin, başlıklar ve açıklamalar oluşturmak için yapay zeka teknolojisini kullanan güçlü bir WordPress eklentisidir. Bu eklenti, web sitenizin erişilebilirliğini ve arama motoru optimizasyonunu zahmetsizce iyileştirir.
+ForVoyez Automatisk Alt-text för bilder är ett kraftfullt WordPress-tillägg som använder AI-teknik för att automatiskt generera högkvalitativ, SEO-vänlig alt-text, titlar och bildtexter för bilder i ditt innehåll. Detta tillägg förbättrar enkelt din webbplats tillgänglighet och sökmotoroptimering.
 
-= Temel Özellikler =
+= Nyckelfunktioner =
 
-* 🤖 Yapay zeka destekli alt metin oluşturma
-* 🖼️ Mevcut resimler için toplu işleme
-* 🔄 Yeni yüklemeler için otomatik işleme
-* 🎨 Özelleştirilebilir çıktı formatları
-* 🌐 Çoklu dil desteği
-* 🧰 Kullanıcı dostu WordPress yönetici arayüzü
+* 🤖 AI-driven alt-text generering
+* 🖼️ Batchbehandling av befintliga bilder
+* 🔄 Automatisk behandling av nya uppladdningar
+* 🎨 Anpassningsbara utdataformat
+* 🌐 Flerspråkigt stöd
+* 🧰 Användarvänligt WordPress admin-gränssnitt
 
-Yapay zeka destekli API'miz, geliştiricilerin ve içerik oluşturucuların resimleri SEO için optimize etmesini kolaylaştırır. Güçlü çözümümüzle zamandan tasarruf edin, SEO'nuzu artırın ve iş akışınızı optimize edin.
+Vår AI-drivna API gör det enkelt för utvecklare och innehållsskapare att optimera bilder för SEO. Spara tid, förbättra SEO och effektivisera ditt arbetsflöde med vår kraftfulla lösning.
 
-== Kurulum ==
+== Installation ==
 
-1. Eklenti dosyalarını `/wp-content/plugins/forvoyez-auto-alt-text-for-images` dizinine yükleyin veya eklentiyi doğrudan WordPress eklenti ekranından yükleyin.
-2. Eklentiyi WordPress'teki 'Eklentiler' ekranından etkinleştirin.
-3. Eklentiyi yapılandırmak için Ayarlar -> ForVoyez Otomatik Alt Metin ekranını kullanın.
-4. ForVoyez API anahtarınızı ayarlar sayfasına girin.
+1. Ladda upp tilläggsfilerna till katalogen `/wp-content/plugins/forvoyez-auto-alt-text-for-images`, eller installera tillägget direkt via WordPress tilläggsskärm.
+2. Aktivera tillägget genom 'Tillägg'-skärmen i WordPress.
+3. Använd Inställningar -> ForVoyez Automatisk Alt-text skärmen för att konfigurera tillägget.
+4. Ange din ForVoyez API-nyckel på inställningssidan.
 
-= API Anahtarı Alma =
+= Att få en API-nyckel =
 
-1. Bir hesap oluşturmak için [ForVoyez kayıt sayfasını](https://forvoyez.com/signup) ziyaret edin.
-2. Giriş yaptıktan sonra [ForVoyez kontrol panelinize](https://forvoyez.com/dashboard) gidin.
-3. Kontrol panelinizin API bölümünde bir API anahtarı oluşturun.
-4. API anahtarını kopyalayın ve eklentinin ayarlar sayfasına yapıştırın.
+1. Besök [ForVoyez registreringssidan](https://forvoyez.com/signup) för att skapa ett konto.
+2. När du är inloggad, navigera till din [ForVoyez kontrollpanel](https://forvoyez.com/dashboard).
+3. Generera en API-nyckel i API-sektionen av din kontrollpanel.
+4. Kopiera API-nyckeln och klistra in den på tilläggets inställningssida.
 
-== Sıkça Sorulan Sorular ==
+== Vanliga frågor ==
 
-= Bu eklentiyi kullanmak için bir API anahtarına ihtiyacım var mı? =
+= Behöver jag en API-nyckel för att använda detta tillägg? =
 
-Evet, bu eklentiyi kullanmak için bir ForVoyez API anahtarına ihtiyacınız var. [https://forvoyez.com](https://forvoyez.com) adresine kaydolarak bir tane alabilirsiniz.
+Ja, du behöver en ForVoyez API-nyckel för att använda detta tillägg. Du kan få en genom att registrera dig på [https://forvoyez.com](https://forvoyez.com).
 
-= Oluşturulan alt metni özelleştirebilir miyim? =
+= Kan jag anpassa den genererade alt-texten? =
 
-Eklenti otomatik olarak alt metin oluştururken, gerekirse her resim için oluşturulan metni manuel olarak düzenleyebilirsiniz.
+Medan tillägget automatiskt genererar alt-text kan du alltid manuellt redigera den genererade texten för varje bild om det behövs.
 
-= Bu eklenti tüm resim formatlarıyla çalışır mı? =
+= Fungerar detta tillägg med alla bildformat? =
 
-Eklenti, JPEG, PNG, GIF ve WebP dahil olmak üzere WordPress tarafından desteklenen çoğu yaygın resim formatıyla çalışır.
+Tillägget fungerar med de flesta vanliga bildformat som stöds av WordPress, inklusive JPEG, PNG, GIF och WebP.
 
-= Bu eklenti web sitemi yavaşlatır mı? =
+= Kommer detta tillägg att sakta ner min webbplats? =
 
-Hayır, eklenti resimleri arka planda işler ve web sitenizin ön yüz performansını etkilemez.
+Nej, tillägget behandlar bilder i bakgrunden och påverkar inte din webbplats front-end prestanda.
 
-= Toplu işleme özelliği nasıl çalışır? =
+= Hur fungerar batchbehandlingsfunktionen? =
 
-Medya kütüphanenizde birden fazla resim seçebilir ve toplu işlemler açılır menüsünden "Alt Metin Oluştur" seçeneğini kullanarak hepsini bir kerede işleyebilirsiniz.
+Du kan välja flera bilder i ditt mediebibliotek och använda alternativet "Generera Alt-text" från rullgardinsmenyn för massåtgärder för att behandla dem alla på en gång.
 
-= Oluşturulan içerik çok dilli mi? =
+= Är det genererade innehållet flerspråkigt? =
 
-Yapay zeka birden fazla dilde içerik oluşturabilir. Tercih ettiğiniz dili eklenti ayarlarında belirtebilirsiniz.
+AI:n kan generera innehåll på flera språk. Du kan ange ditt föredragna språk i tilläggets inställningar.
 
-== Ekran Görüntüleri ==
+== Skärmbilder ==
 
-1. API Yapılandırması - ForVoyez API anahtarınızı girmek için kolay kurulum sayfası.
-2. Resim Yönetim Arayüzü - WordPress medya kütüphanenizi yönetmek ve analiz etmek için ana kontrol paneli.
-3. Sonuç Örneği - Çeşitli resim türleri için otomatik olarak oluşturulan alt metin, başlıklar ve açıklamaların gösterimi.
+1. API-konfiguration - Enkel inställningssida för att ange din ForVoyez API-nyckel.
+2. Bildhanteringsgränssnitt - Huvudkontrollpanel för att hantera och analysera ditt WordPress mediebibliotek.
+3. Resultatexempel - Showcase av automatiskt genererad alt-text, titlar och bildtexter för olika bildtyper.
 
-== Değişiklik Günlüğü ==
-
-= 1.0.0 =
-* İlk sürüm
-* Yapay zeka destekli alt metin, başlık ve açıklama oluşturma
-* Toplu işleme özelliği
-* WordPress medya kütüphanesi entegrasyonu
-* Çoklu dil desteği
-* Kullanıcı dostu yönetici arayüzü
-
-== Yükseltme Bildirimi ==
+== Ändringslogg ==
 
 = 1.0.0 =
-Bu, ForVoyez Resimler için Otomatik Alt Metin'in ilk sürümüdür. Resim meta verilerinizi optimize etmeye başlamak için şimdi yükleyin!
+* Första utgåvan
+* AI-driven generering av alt-text, titlar och bildtexter
+* Batchbehandlingsfunktion
+* Integration med WordPress mediebibliotek
+* Flerspråkigt stöd
+* Användarvänligt admin-gränssnitt
 
-== Ek Bilgi ==
+== Uppgraderingsmeddelande ==
 
-Daha ayrıntılı dokümantasyon için lütfen [resmi dokümantasyonumuzu](https://doc.forvoyez.com) ziyaret edin.
+= 1.0.0 =
+Detta är den första utgåvan av ForVoyez Automatisk Alt-text för bilder. Installera nu för att börja optimera dina bildmetadata!
 
-Destek, özellik istekleri veya hata bildirimleri için lütfen [destek forumumuzu](https://forvoyez.com/support) veya [GitHub deposumuzu](https://github.com/forvoyez/auto-alt-text-for-images) ziyaret edin.
+== Ytterligare information ==
 
-Bu eklenti, yapay zeka destekli içerik optimizasyon çözümlerinde lider olan [ForVoyez](https://forvoyez.com) tarafından gururla desteklenmektedir.
+För mer detaljerad dokumentation, besök vår [officiella dokumentation](https://doc.forvoyez.com).
+
+För support, funktionsförfrågningar eller för att rapportera buggar, besök vårt [supportforum](https://forvoyez.com/support) eller vår [GitHub-repository](https://github.com/forvoyez/auto-alt-text-for-images).
+
+Detta tillägg drivs stolt av [ForVoyez](https://forvoyez.com), en ledare inom AI-drivna lösningar för innehållsoptimering.
