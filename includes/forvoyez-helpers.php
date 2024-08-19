@@ -26,60 +26,72 @@ if ( !defined( 'ABSPATH' ) ) {
 function forvoyez_count_incomplete_images() {
     global $wpdb;
 
-    $results = $wpdb->get_results(
-        $wpdb->prepare(
-            "SELECT p.ID, p.post_title, p.post_excerpt, p.guid, pm_alt.meta_value as alt_text
-            FROM {$wpdb->posts} p
-            LEFT JOIN {$wpdb->postmeta} pm_alt ON p.ID = pm_alt.post_id AND pm_alt.meta_key = %s
-            WHERE p.post_type = %s 
-            AND p.post_mime_type LIKE %s",
-            '_wp_attachment_image_alt',
-            'attachment',
-            'image/%'
-        )
-    );
+    // Define a unique cache key
+    $cache_key = 'forvoyez_incomplete_images_count';
 
-	$incomplete_count = 0;
-	$debug_info       = array();
+    // Try to get the count from cache
+    $incomplete_count = wp_cache_get($cache_key);
 
-	foreach ( $results as $image ) {
-		$is_incomplete = false;
-		$reason        = array();
+    // If the count is not in cache, calculate it
+    if (false === $incomplete_count) {
+        $results = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT p.ID, p.post_title, p.post_excerpt, p.guid, pm_alt.meta_value as alt_text
+                FROM {$wpdb->posts} p
+                LEFT JOIN {$wpdb->postmeta} pm_alt ON p.ID = pm_alt.post_id AND pm_alt.meta_key = %s
+                WHERE p.post_type = %s 
+                AND p.post_mime_type LIKE %s",
+                '_wp_attachment_image_alt',
+                'attachment',
+                'image/%'
+            )
+        );
 
-		// Check title
-		$filename = wp_basename( $image->guid );
-		if ( empty( $image->post_title ) || $image->post_title === $filename || preg_match( '/-scaled$/', $image->post_title ) ) {
-			$is_incomplete = true;
-			$reason[]      = 'title';
-		}
+        $incomplete_count = 0;
+        $debug_info = array();
 
-		// Check alt text
-		if ( empty( $image->alt_text ) ) {
-			$is_incomplete = true;
-			$reason[]      = 'alt';
-		}
+        foreach ($results as $image) {
+            $is_incomplete = false;
+            $reason = array();
 
-		// Check caption
-		if ( empty( $image->post_excerpt ) ) {
-			$is_incomplete = true;
-			$reason[]      = 'caption';
-		}
+            // Check title
+            $filename = wp_basename($image->guid);
+            if (empty($image->post_title) || $image->post_title === $filename || preg_match('/-scaled$/', $image->post_title)) {
+                $is_incomplete = true;
+                $reason[] = 'title';
+            }
 
-		if ( $is_incomplete ) {
-			++$incomplete_count;
-			$debug_info[] = array(
-				'id'       => $image->ID,
-				'title'    => $image->post_title,
-				'alt'      => $image->alt_text,
-				'caption'  => $image->post_excerpt,
-				'guid'     => $image->guid,
-				'filename' => $filename,
-				'reason'   => implode( ', ', $reason ),
-			);
-		}
-	}
+            // Check alt text
+            if (empty($image->alt_text)) {
+                $is_incomplete = true;
+                $reason[] = 'alt';
+            }
 
-	return apply_filters( 'forvoyez_incomplete_images_count', $incomplete_count );
+            // Check caption
+            if (empty($image->post_excerpt)) {
+                $is_incomplete = true;
+                $reason[] = 'caption';
+            }
+
+            if ($is_incomplete) {
+                ++$incomplete_count;
+                $debug_info[] = array(
+                    'id' => $image->ID,
+                    'title' => $image->post_title,
+                    'alt' => $image->alt_text,
+                    'caption' => $image->post_excerpt,
+                    'guid' => $image->guid,
+                    'filename' => $filename,
+                    'reason' => implode(', ', $reason),
+                );
+            }
+        }
+
+        // Cache the result for future use
+        wp_cache_set($cache_key, $incomplete_count, '', 3600); // Cache for 1 hour
+    }
+
+    return apply_filters('forvoyez_incomplete_images_count', $incomplete_count);
 }
 
 /**

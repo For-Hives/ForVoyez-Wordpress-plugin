@@ -64,8 +64,26 @@ function forvoyez_init() {
 	$api_manager->init();
 	$image_processor->init();
 	$admin->init();
+
+    add_action('add_attachment', 'forvoyez_clear_image_cache');
+    add_action('edit_attachment', 'forvoyez_clear_image_cache');
+    add_action('delete_attachment', 'forvoyez_clear_image_cache');
 }
 add_action( 'plugins_loaded', 'forvoyez_init' );
+
+/**
+ * Clear the image cache.
+ *
+ * This function clears the cache for image data.
+ *
+ * @since 1.0.0
+ */
+function forvoyez_clear_image_cache() {
+    wp_cache_delete('forvoyez_image_ids_all');
+    wp_cache_delete('forvoyez_image_ids_missing_alt');
+    wp_cache_delete('forvoyez_image_ids_missing_all');
+    wp_cache_delete('forvoyez_incomplete_images_count');
+}
 
 /**
  * Load the plugin text domain for translation.

@@ -69,7 +69,7 @@ class Forvoyez_Admin {
 		}
 
 		// Enqueue Tailwind CSS from CDN
-		wp_enqueue_script( 'tailwindcss', 'https://cdn.tailwindcss.com', array(), null );
+		wp_enqueue_script( 'tailwindcss', 'https://cdn.tailwindcss.com', array(), FORVOYEZ_VERSION, true);
 
 		// Enqueue custom scripts
 		wp_enqueue_script(
@@ -134,7 +134,7 @@ class Forvoyez_Admin {
 		add_action(
 			'admin_head',
 			function () use ( $tailwind_config, $tailwind_styles ) {
-                echo wp_kses_post( $tailwind_config . $tailwind_styles );
+                wp_kses_post( $tailwind_config . $tailwind_styles );
 			}
 		);
 	}
@@ -477,55 +477,67 @@ class Forvoyez_Admin {
 	 * @param string $type Type of images to retrieve ('all', 'missing_all', 'missing_alt').
 	 * @return array Array of image IDs.
 	 */
-    public function get_image_ids( $type = 'all' ) {
+    public function get_image_ids($type = 'all') {
         global $wpdb;
 
-        if ( $type === 'all' ) {
-            $results = $wpdb->get_col(
-                $wpdb->prepare(
-                    "SELECT ID FROM {$wpdb->posts} WHERE post_type = %s AND post_mime_type LIKE %s",
-                    'attachment',
-                    'image/%'
-                )
-            );
-        } elseif ( $type === 'missing_alt' ) {
-            $results = $wpdb->get_col(
-                $wpdb->prepare(
-                    "SELECT p.ID 
-                FROM {$wpdb->posts} p 
-                LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = %s
-                WHERE p.post_type = %s 
-                AND p.post_mime_type LIKE %s
-                AND (pm.meta_value IS NULL OR pm.meta_value = %s)",
-                    '_wp_attachment_image_alt',
-                    'attachment',
-                    'image/%',
-                    ''
-                )
-            );
-        } elseif ( $type === 'missing_all' ) {
-            $results = $wpdb->get_col(
-                $wpdb->prepare(
-                    "SELECT p.ID 
-                FROM {$wpdb->posts} p 
-                LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = %s
-                WHERE p.post_type = %s 
-                AND p.post_mime_type LIKE %s
-                AND (pm.meta_value IS NULL OR pm.meta_value = %s OR p.post_title = %s OR p.post_excerpt = %s)",
-                    '_wp_attachment_image_alt',
-                    'attachment',
-                    'image/%',
-                    '',
-                    '',
-                    ''
-                )
-            );
-        } else {
-            // Handle invalid type
-            return array();
+        // Define a unique cache key based on the type
+        $cache_key = 'forvoyez_image_ids_' . $type;
+
+        // Try to get the results from cache
+        $results = wp_cache_get($cache_key);
+
+        // If the results are not in cache, query the database
+        if (false === $results) {
+            if ($type === 'all') {
+                $results = $wpdb->get_col(
+                    $wpdb->prepare(
+                        "SELECT ID FROM {$wpdb->posts} WHERE post_type = %s AND post_mime_type LIKE %s",
+                        'attachment',
+                        'image/%'
+                    )
+                );
+            } elseif ($type === 'missing_alt') {
+                $results = $wpdb->get_col(
+                    $wpdb->prepare(
+                        "SELECT p.ID 
+                    FROM {$wpdb->posts} p 
+                    LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = %s
+                    WHERE p.post_type = %s 
+                    AND p.post_mime_type LIKE %s
+                    AND (pm.meta_value IS NULL OR pm.meta_value = %s)",
+                        '_wp_attachment_image_alt',
+                        'attachment',
+                        'image/%',
+                        ''
+                    )
+                );
+            } elseif ($type === 'missing_all') {
+                $results = $wpdb->get_col(
+                    $wpdb->prepare(
+                        "SELECT p.ID 
+                    FROM {$wpdb->posts} p 
+                    LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = %s
+                    WHERE p.post_type = %s 
+                    AND p.post_mime_type LIKE %s
+                    AND (pm.meta_value IS NULL OR pm.meta_value = %s OR p.post_title = %s OR p.post_excerpt = %s)",
+                        '_wp_attachment_image_alt',
+                        'attachment',
+                        'image/%',
+                        '',
+                        '',
+                        ''
+                    )
+                );
+            } else {
+                // Handle invalid type
+                return array();
+            }
+
+            // Cache the results for future use
+            wp_cache_set($cache_key, $results, '', 3600); // Cache for 1 hour
         }
 
-        return array_map( 'intval', $results );
+        return array_map('intval', $results);
     }
 
 	/**
