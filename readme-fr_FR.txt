@@ -1,12 +1,12 @@
-=== ForVoyez Texte Alt Automatique pour Images ===
-Contributeurs : forvoyez
-Tags : seo, accessibilité, images, texte alt, métadonnées
-Nécessite au moins : WordPress 5.0
-Testé jusqu'à : 6.4
-Version stable : 1.0.0
-Nécessite PHP : 8.2
-Licence : GPLv2 ou ultérieure
-URL de la licence : https://www.gnu.org/licenses/gpl-2.0.html
+=== ForVoyez Auto Alt Text for Images ===
+Contributors: cinquinandy
+Tags: seo, accessibility, images, alt text, metadata
+Requires at least: 5.0
+Tested up to: 6.4
+Stable tag: 1.0.0
+Requires PHP: 7.2
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Générez automatiquement des textes alternatifs, des titres et des légendes optimisés pour le SEO grâce à la technologie IA.
 

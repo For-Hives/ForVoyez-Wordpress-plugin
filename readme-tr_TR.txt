@@ -1,12 +1,12 @@
-=== ForVoyez Resimler için Otomatik Alt Metin ===
-Katkıda Bulunanlar: forvoyez
-Etiketler: seo, erişilebilirlik, resimler, alt metin, meta veriler
-En az gereksinim: WordPress 5.0
-Şuna kadar test edildi: 6.4
-Kararlı sürüm: 1.0.0
-PHP gereksinimi: 8.2
-Lisans: GPLv2 veya üstü
-Lisans URI: https://www.gnu.org/licenses/gpl-2.0.html
+=== ForVoyez Auto Alt Text for Images ===
+Contributors: cinquinandy
+Tags: seo, accessibility, images, alt text, metadata
+Requires at least: 5.0
+Tested up to: 6.4
+Stable tag: 1.0.0
+Requires PHP: 7.2
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Yapay zeka teknolojisini kullanarak resimleriniz için otomatik olarak SEO optimize edilmiş alt metin, başlıklar ve açıklamalar oluşturun.
 

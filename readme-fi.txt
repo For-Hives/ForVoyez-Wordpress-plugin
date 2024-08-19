@@ -1,12 +1,12 @@
-=== ForVoyez Automaattinen Alt-teksti Kuville ===
-Tekijät: forvoyez
-Avainsanat: seo, saavutettavuus, kuvat, alt-teksti, metatiedot
-Vaatii vähintään: WordPress 5.0
-Testattu versioon: 6.4
-Vakaa versio: 1.0.0
-Vaatii PHP:n: 8.2
-Lisenssi: GPLv2 tai uudempi
-Lisenssin URI: https://www.gnu.org/licenses/gpl-2.0.html
+=== ForVoyez Auto Alt Text for Images ===
+Contributors: cinquinandy
+Tags: seo, accessibility, images, alt text, metadata
+Requires at least: 5.0
+Tested up to: 6.4
+Stable tag: 1.0.0
+Requires PHP: 7.2
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Luo automaattisesti SEO-optimoitua alt-tekstiä, otsikoita ja kuvatekstejä kuvillesi tekoälyteknologiaa hyödyntäen.
 

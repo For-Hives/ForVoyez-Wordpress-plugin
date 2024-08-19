@@ -1,12 +1,12 @@
-=== ForVoyez 自动图像替代文本 ===
-贡献者：forvoyez
-标签：seo、无障碍、图像、替代文本、元数据
-最低要求：WordPress 5.0
-测试至：6.4
-稳定版本：1.0.0
-需要 PHP：8.2
-许可证：GPLv2 或更高版本
-许可证链接：https://www.gnu.org/licenses/gpl-2.0.html
+=== ForVoyez Auto Alt Text for Images ===
+Contributors: cinquinandy
+Tags: seo, accessibility, images, alt text, metadata
+Requires at least: 5.0
+Tested up to: 6.4
+Stable tag: 1.0.0
+Requires PHP: 7.2
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 使用人工智能技术自动为您的图像生成 SEO 优化的替代文本、标题和说明。
 

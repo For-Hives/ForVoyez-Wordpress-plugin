@@ -1,12 +1,12 @@
-=== ForVoyez 이미지 자동 대체 텍스트 ===
-기여자: forvoyez
-태그: seo, 접근성, 이미지, 대체 텍스트, 메타데이터
-최소 요구 사항: WordPress 5.0
-테스트 버전: 6.4
-안정 버전: 1.0.0
-PHP 요구 사항: 8.2
-라이선스: GPLv2 이상
-라이선스 URI: https://www.gnu.org/licenses/gpl-2.0.html
+=== ForVoyez Auto Alt Text for Images ===
+Contributors: cinquinandy
+Tags: seo, accessibility, images, alt text, metadata
+Requires at least: 5.0
+Tested up to: 6.4
+Stable tag: 1.0.0
+Requires PHP: 7.2
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 AI 기술을 사용하여 이미지에 대한 SEO 최적화된 대체 텍스트, 제목 및 설명을 자동으로 생성합니다.
 

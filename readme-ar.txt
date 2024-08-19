@@ -1,12 +1,12 @@
-=== ForVoyez النص البديل التلقائي للصور ===
-المساهمون: forvoyez
-الوسوم: seo، إمكانية الوصول، الصور، النص البديل، البيانات الوصفية
-يتطلب على الأقل: وردبريس 5.0
-تم اختباره حتى: 6.4
-الإصدار المستقر: 1.0.0
-يتطلب PHP: 8.2
-الترخيص: GPLv2 أو أحدث
-رابط الترخيص: https://www.gnu.org/licenses/gpl-2.0.html
+=== ForVoyez Auto Alt Text for Images ===
+Contributors: cinquinandy
+Tags: seo, accessibility, images, alt text, metadata
+Requires at least: 5.0
+Tested up to: 6.4
+Stable tag: 1.0.0
+Requires PHP: 7.2
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 قم بإنشاء نص بديل وعناوين وتسميات توضيحية محسنة لمحركات البحث تلقائيًا لصورك باستخدام تقنية الذكاء الاصطناعي.
 

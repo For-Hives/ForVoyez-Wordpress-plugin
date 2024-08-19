@@ -1,12 +1,12 @@
-=== ForVoyez Автоматический альтернативный текст для изображений ===
-Авторы: forvoyez
-Теги: seo, доступность, изображения, альтернативный текст, метаданные
-Требуется как минимум: WordPress 5.0
-Протестировано до: 6.4
-Стабильная версия: 1.0.0
-Требуется PHP: 8.2
-Лицензия: GPLv2 или более поздняя
-Лицензионный URI: https://www.gnu.org/licenses/gpl-2.0.html
+=== ForVoyez Auto Alt Text for Images ===
+Contributors: cinquinandy
+Tags: seo, accessibility, images, alt text, metadata
+Requires at least: 5.0
+Tested up to: 6.4
+Stable tag: 1.0.0
+Requires PHP: 7.2
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Автоматически создавайте оптимизированный для SEO альтернативный текст, заголовки и подписи для ваших изображений с помощью технологии искусственного интеллекта.
 

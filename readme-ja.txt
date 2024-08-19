@@ -1,12 +1,12 @@
-=== ForVoyez 画像自動ALTテキスト ===
-貢献者: forvoyez
-タグ: seo, アクセシビリティ, 画像, altテキスト, メタデータ
-必要最低限のバージョン: WordPress 5.0
-テスト済みバージョン: 6.4
-安定版バージョン: 1.0.0
-必要なPHPバージョン: 8.2
-ライセンス: GPLv2 以降
-ライセンスURI: https://www.gnu.org/licenses/gpl-2.0.html
+=== ForVoyez Auto Alt Text for Images ===
+Contributors: cinquinandy
+Tags: seo, accessibility, images, alt text, metadata
+Requires at least: 5.0
+Tested up to: 6.4
+Stable tag: 1.0.0
+Requires PHP: 7.2
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 AI技術を使用して、画像のSEO最適化されたALTテキスト、タイトル、キャプションを自動生成します。
 

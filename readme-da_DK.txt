@@ -1,12 +1,12 @@
-=== ForVoyez Automatisk Alt-tekst til billeder ===
-Bidragydere: forvoyez
-Tags: seo, tilgængelighed, billeder, alt-tekst, metadata
-Kræver mindst: WordPress 5.0
-Testet op til: 6.4
-Stabil version: 1.0.0
-Kræver PHP: 8.2
-Licens: GPLv2 eller nyere
-Licens URI: https://www.gnu.org/licenses/gpl-2.0.html
+=== ForVoyez Auto Alt Text for Images ===
+Contributors: cinquinandy
+Tags: seo, accessibility, images, alt text, metadata
+Requires at least: 5.0
+Tested up to: 6.4
+Stable tag: 1.0.0
+Requires PHP: 7.2
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Generer automatisk SEO-optimeret alt-tekst, titler og billedtekster til dine billeder ved hjælp af AI-teknologi.
 
