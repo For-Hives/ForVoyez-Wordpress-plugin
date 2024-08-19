@@ -29,38 +29,63 @@ class TestForvoyezAPIManager extends WP_UnitTestCase {
 		$this->assertInstanceOf( Forvoyez_API_Manager::class, $this->api_manager );
 	}
 
-	public function testAnalyzeImage(): void {
-		// Set up the mock response
-		$mock_response = array(
-			'body' => json_encode(
-				array(
-					'title'           => 'Mocked Title',
-					'alternativeText' => 'Mocked Alt Text',
-					'caption'         => 'Mocked Caption',
-				)
-			),
-			'response' => array(
-				'code' => 200,
-			),
-		);
+    public function testAnalyzeImage(): void {
+        // Create a temporary file to simulate the image
+        $temp_file = tempnam(sys_get_temp_dir(), 'test_image');
+        file_put_contents($temp_file, 'fake image data');
 
-		// Configure the mock to return our prepared response
-		$this->mock_http_client->method( 'post' )->willReturn( $mock_response );
+        // Mock the get_attached_file function
+        add_filter('get_attached_file', function($file, $attachment_id) use ($temp_file) {
+            if ($attachment_id === $this->test_image_id) {
+                return $temp_file;
+            }
+            return $file;
+        }, 10, 2);
 
-		$result = $this->api_manager->analyze_image( $this->test_image_id );
+        // Mock wp_remote_get for file reading
+        add_filter('pre_http_request', function($pre, $parsed_args, $url) use ($temp_file) {
+            if ($url === $temp_file) {
+                return array(
+                    'body' => 'fake image data',
+                    'response' => array('code' => 200),
+                );
+            }
+            return $pre;
+        }, 10, 3);
 
-		$this->assertTrue( $result['success'] );
-		$this->assertEquals( 'Analysis successful', $result['message'] );
-		$this->assertArrayHasKey( 'alt_text', $result['metadata'] );
-		$this->assertArrayHasKey( 'title', $result['metadata'] );
-		$this->assertArrayHasKey( 'caption', $result['metadata'] );
+        // Set up the mock API response
+        $mock_api_response = array(
+            'body' => wp_json_encode(
+                array(
+                    'title' => 'Mocked Title',
+                    'alternativeText' => 'Mocked Alt Text',
+                    'caption' => 'Mocked Caption',
+                )
+            ),
+            'response' => array('code' => 200),
+        );
 
-		// Check if metadata was updated with mocked values
-		$this->assertEquals( 'Mocked Alt Text', get_post_meta( $this->test_image_id, '_wp_attachment_image_alt', true ) );
-		$this->assertEquals( 'Mocked Title', get_post( $this->test_image_id )->post_title );
-		$this->assertEquals( 'Mocked Caption', get_post( $this->test_image_id )->post_excerpt );
-		$this->assertEquals( '1', get_post_meta( $this->test_image_id, '_forvoyez_analyzed', true ) );
-	}
+        $this->mock_http_client->method('post')->willReturn($mock_api_response);
+
+        $result = $this->api_manager->analyze_image($this->test_image_id);
+
+        $this->assertTrue($result['success']);
+        $this->assertEquals('Analysis successful', $result['message']);
+        $this->assertArrayHasKey('alt_text', $result['metadata']);
+        $this->assertArrayHasKey('title', $result['metadata']);
+        $this->assertArrayHasKey('caption', $result['metadata']);
+
+        // Check if metadata was updated with mocked values
+        $this->assertEquals('Mocked Alt Text', get_post_meta($this->test_image_id, '_wp_attachment_image_alt', true));
+        $this->assertEquals('Mocked Title', get_post($this->test_image_id)->post_title);
+        $this->assertEquals('Mocked Caption', get_post($this->test_image_id)->post_excerpt);
+        $this->assertEquals('1', get_post_meta($this->test_image_id, '_forvoyez_analyzed', true));
+
+        // Clean up
+        unlink($temp_file);
+        remove_all_filters('get_attached_file');
+        remove_all_filters('pre_http_request');
+    }
 
 	public function testAnalyzeImageNotFound(): void {
 		$result = $this->api_manager->analyze_image( 999999 ); // Non-existent ID

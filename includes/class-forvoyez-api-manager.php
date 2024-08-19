@@ -95,23 +95,24 @@ class Forvoyez_API_Manager {
 		$image_mime = get_post_mime_type( $image_id );
 		$image_name = basename( $image_path );
 
-		$file_data = file_get_contents( $image_path );
-		if ( $file_data === false ) {
-			return $this->format_error( 'read_error', __( 'Failed to read image file', 'forvoyez-auto-alt-text-for-images' ) );
-		}
+        $file_data = wp_remote_get( $image_path );
+        if ( is_wp_error( $file_data ) ) {
+            return $this->format_error( 'read_error', __( 'Failed to read image file', 'forvoyez-auto-alt-text-for-images' ) );
+        }
+        $file_data = wp_remote_retrieve_body( $file_data );
 
-		$data = array(
-			'data' => json_encode(
-				array(
-					'context' => '',
-					'schema'  => array(
-						'title'           => 'string',
-						'alternativeText' => 'string',
-						'caption'         => 'string',
-					),
-				)
-			),
-		);
+        $data = array(
+            'data' => wp_json_encode(
+                array(
+                    'context' => '',
+                    'schema'  => array(
+                        'title'           => 'string',
+                        'alternativeText' => 'string',
+                        'caption'         => 'string',
+                    ),
+                )
+            ),
+        );
 
 		$boundary  = wp_generate_password( 24 );
 		$delimiter = '-------------' . $boundary;
