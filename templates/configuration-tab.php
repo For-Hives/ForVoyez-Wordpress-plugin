@@ -21,8 +21,8 @@ $api_key  = $settings->get_api_key();
                 <ol class="list-decimal list-inside text-sm text-gray-600 mb-4 ml-4">
                     <li>
                         <?php
-                        /* translators: %s: URL of the ForVoyez signup page */
                         printf(
+                            // translators: %s: URL of the ForVoyez signup page
                             esc_html__( 'Visit the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez signup page</a> to create an account.', 'forvoyez-auto-alt-text-for-images' ),
                             'https://forvoyez.com/signup'
                         );
@@ -30,8 +30,8 @@ $api_key  = $settings->get_api_key();
                     </li>
                     <li>
                         <?php
-                        /* translators: %s: URL of the ForVoyez dashboard */
                         printf(
+                        // translators: %s: URL of the ForVoyez dashboard
                             esc_html__( 'Once logged in, navigate to your <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez dashboard</a>.', 'forvoyez-auto-alt-text-for-images' ),
                             'https://forvoyez.com/dashboard'
                         );
@@ -42,8 +42,8 @@ $api_key  = $settings->get_api_key();
                 </ol>
                 <p class="text-sm text-gray-600">
                     <?php
-                    /* translators: %s: URL of the ForVoyez API documentation */
                     printf(
+                    // translators: %s: URL of the ForVoyez API documentation
                         esc_html__( 'For more information, please refer to the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez API documentation</a>.', 'forvoyez-auto-alt-text-for-images' ),
                         'https://doc.forvoyez.com'
                     );
