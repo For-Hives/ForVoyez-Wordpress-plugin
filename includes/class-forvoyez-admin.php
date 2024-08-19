@@ -34,9 +34,9 @@ class Forvoyez_Admin {
 		add_action( 'wp_ajax_forvoyez_verify_api_key', array( $this, 'ajax_verify_api_key' ) );
 	}
 
-    /**
-     * Add menu item to WordPress admin.
-     */
+	/**
+	 * Add menu item to WordPress admin.
+	 */
     public function add_menu_item() {
         $page_hook = add_menu_page(
             __( 'Auto Alt Text for Images', 'forvoyez-auto-alt-text-for-images' ),
@@ -48,20 +48,16 @@ class Forvoyez_Admin {
             30
         );
 
-        add_action( "load-$page_hook", array( $this, 'add_page_nonce' ) );
+        // Add action to generate nonce
+        add_action( 'load-' . $page_hook, array( $this, 'add_admin_page_nonce' ) );
     }
 
-    /**
-     * Add nonce to the admin page URL.
-     */
-    public function add_page_nonce() {
-        $screen = get_current_screen();
-        if ( $screen->id === 'toplevel_page_forvoyez-auto-alt-text' ) {
-            $nonce_url = wp_nonce_url( admin_url( 'admin.php?page=forvoyez-auto-alt-text' ), 'forvoyez_admin_page' );
-            wp_safe_redirect( $nonce_url );
-            exit;
-        }
+    public function add_admin_page_nonce() {
+        add_filter( 'admin_body_class', function( $classes ) {
+            return $classes . ' forvoyez-admin-page';
+        });
     }
+
 	/**
 	 * Enqueue admin scripts and styles.
 	 *
@@ -151,17 +147,15 @@ class Forvoyez_Admin {
             wp_die( __( 'You do not have sufficient permissions to access this page.', 'forvoyez-auto-alt-text-for-images' ) );
         }
 
-        $nonce = isset( $_REQUEST['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ) : '';
-        if ( ! wp_verify_nonce( $nonce, 'forvoyez_admin_page' ) ) {
-            wp_die( __( 'Invalid nonce specified', 'forvoyez-auto-alt-text-for-images' ), __( 'Error', 'forvoyez-auto-alt-text-for-images' ), array(
-                'response'  => 403,
-                'back_link' => true,
-            ) );
-        }
+        // Generate nonce for this request
+        $nonce = wp_create_nonce( 'forvoyez_admin_page' );
 
         $active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'dashboard';
+
+        // Include the template file
         include FORVOYEZ_PLUGIN_DIR . 'templates/main-page.php';
     }
+
 	/**
 	 * Display API key configuration status.
 	 */
