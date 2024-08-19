@@ -4,6 +4,5 @@ composer.lock
 vendor
 .phpunit.result.cache
 tests/assets
-languages
 large_files_output.txt
 output.txt

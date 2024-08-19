@@ -92,4 +92,7 @@ Für eine detailliertere Dokumentation besuchen Sie bitte unsere [offizielle Dok
 
 Für Support, Feature-Anfragen oder um Fehler zu melden, besuchen Sie bitte unser [Support-Forum](https://forvoyez.com/support) oder unser [GitHub-Repository](https://github.com/forvoyez/auto-alt-text-for-images).
 
-Dieses Plugin wird stolz von [ForVoyez](https://forvoyez.com) betrieben, einem führenden Anbieter von KI-gestützten Content-Optimierungslösungen.
+Dieses Plugin wird stolz von [ForVoyez](https://forvoyez.com) betrieben, einem führenden Anbieter von KI-gestützten Content-Optimierungslösungen.CLAVREUIL Britney7/31/2024, 11:44 AM
+11h mercredi prochain ça vous irait ?
+je serais en congés les deux prochaines semaines donc faites sans moi 🙂
+
