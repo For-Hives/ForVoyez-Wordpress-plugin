@@ -24,17 +24,21 @@ if ( !defined( 'ABSPATH' ) ) {
  * @return int The number of images with incomplete metadata.
  */
 function forvoyez_count_incomplete_images() {
-	global $wpdb;
+    global $wpdb;
 
-	$query = "
-        SELECT p.ID, p.post_title, p.post_excerpt, p.guid, pm_alt.meta_value as alt_text
-        FROM {$wpdb->posts} p
-        LEFT JOIN {$wpdb->postmeta} pm_alt ON p.ID = pm_alt.post_id AND pm_alt.meta_key = '_wp_attachment_image_alt'
-        WHERE p.post_type = 'attachment' 
-        AND p.post_mime_type LIKE 'image/%'
-    ";
+    $results = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT p.ID, p.post_title, p.post_excerpt, p.guid, pm_alt.meta_value as alt_text
+            FROM {$wpdb->posts} p
+            LEFT JOIN {$wpdb->postmeta} pm_alt ON p.ID = pm_alt.post_id AND pm_alt.meta_key = %s
+            WHERE p.post_type = %s 
+            AND p.post_mime_type LIKE %s",
+            '_wp_attachment_image_alt',
+            'attachment',
+            'image/%'
+        )
+    );
 
-	$results          = $wpdb->get_results( $query );
 	$incomplete_count = 0;
 	$debug_info       = array();
 
