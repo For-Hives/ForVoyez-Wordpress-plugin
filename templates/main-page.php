@@ -3,7 +3,6 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'das
 ?>
 <div class="wrap">
     <h1 class="text-2xl font-bold mb-4"><?php echo esc_html( get_admin_page_title() ); ?></h1>
-    <?php wp_nonce_field( 'forvoyez_admin_page', 'forvoyez_nonce' ); ?>
 
     <div class="border-b border-gray-200 mt-10">
         <nav class="-mb-px flex" aria-label="<?php esc_attr_e( 'Tabs', 'forvoyez-auto-alt-text-for-images' ); ?>">
