@@ -22,28 +22,28 @@
  */
 
 // If this file is called directly, abort.
-if (!defined('ABSPATH')) {
-    exit('Direct access to this file is not allowed.');
+if ( !defined( 'ABSPATH' ) ) {
+	exit( 'Direct access to this file is not allowed.' );
 }
 
 // Define plugin constants
-define('FORVOYEZ_VERSION', '1.0.0');
-define('FORVOYEZ_PLUGIN_DIR', plugin_dir_path(__FILE__));
-define('FORVOYEZ_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('FORVOYEZ_PLUGIN_BASENAME', plugin_basename(__FILE__));
+define( 'FORVOYEZ_VERSION', '1.0.0' );
+define( 'FORVOYEZ_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'FORVOYEZ_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'FORVOYEZ_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
 // Include required files
-$required_files = [
-    'includes/forvoyez-helpers.php',
-    'includes/class-forvoyez-admin.php',
-    'includes/class-forvoyez-api-manager.php',
-    'includes/class-forvoyez-image-processor.php',
-    'includes/class-forvoyez-settings.php',
-    'includes/class-forvoyez-image-renderer.php'
-];
+$required_files = array(
+	'includes/forvoyez-helpers.php',
+	'includes/class-forvoyez-admin.php',
+	'includes/class-forvoyez-api-manager.php',
+	'includes/class-forvoyez-image-processor.php',
+	'includes/class-forvoyez-settings.php',
+	'includes/class-forvoyez-image-renderer.php',
+);
 
-foreach ($required_files as $file) {
-    require_once FORVOYEZ_PLUGIN_DIR . $file;
+foreach ( $required_files as $file ) {
+	require_once FORVOYEZ_PLUGIN_DIR . $file;
 }
 
 /**
@@ -55,26 +55,26 @@ foreach ($required_files as $file) {
  * @since 1.0.0
  */
 function forvoyez_init() {
-    $settings = new Forvoyez_Settings();
-    $api_manager = new Forvoyez_API_Manager(forvoyez_get_api_key());
-    $image_processor = new Forvoyez_Image_Processor($api_manager);
-    $admin = new Forvoyez_Admin($api_manager, $settings, $image_processor);
+	$settings        = new Forvoyez_Settings();
+	$api_manager     = new Forvoyez_API_Manager( forvoyez_get_api_key() );
+	$image_processor = new Forvoyez_Image_Processor( $api_manager );
+	$admin           = new Forvoyez_Admin( $api_manager, $settings, $image_processor );
 
-    $settings->init();
-    $api_manager->init();
-    $image_processor->init();
-    $admin->init();
+	$settings->init();
+	$api_manager->init();
+	$image_processor->init();
+	$admin->init();
 }
-add_action('plugins_loaded', 'forvoyez_init');
+add_action( 'plugins_loaded', 'forvoyez_init' );
 
 /**
  * Load the plugin text domain for translation.
  * @return void
  */
 function forvoyez_load_textdomain() {
-    load_plugin_textdomain('forvoyez-auto-alt-text-for-images', false, dirname(plugin_basename(__FILE__)) . '/languages/');
+	load_plugin_textdomain( 'forvoyez-auto-alt-text-for-images', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
-add_action('plugins_loaded', 'forvoyez_load_textdomain');
+add_action( 'plugins_loaded', 'forvoyez_load_textdomain' );
 
 /**
  * Activate the plugin.
@@ -84,11 +84,11 @@ add_action('plugins_loaded', 'forvoyez_load_textdomain');
  * @since 1.0.0
  */
 function forvoyez_activate() {
-    update_option('forvoyez_plugin_activated', true);
-    update_option('forvoyez_plugin_version', FORVOYEZ_VERSION);
-    update_option('forvoyez_flush_rewrite_rules', true);
+	update_option( 'forvoyez_plugin_activated', true );
+	update_option( 'forvoyez_plugin_version', FORVOYEZ_VERSION );
+	update_option( 'forvoyez_flush_rewrite_rules', true );
 }
-register_activation_hook(__FILE__, 'forvoyez_activate');
+register_activation_hook( __FILE__, 'forvoyez_activate' );
 
 /**
  * Deactivate the plugin.
@@ -98,12 +98,12 @@ register_activation_hook(__FILE__, 'forvoyez_activate');
  * @since 1.0.0
  */
 function forvoyez_deactivate() {
-    delete_option('forvoyez_plugin_activated');
-    delete_option('forvoyez_flush_rewrite_rules');
-    // Optionally, keep the version number for future reference
-    // delete_option('forvoyez_plugin_version');
+	delete_option( 'forvoyez_plugin_activated' );
+	delete_option( 'forvoyez_flush_rewrite_rules' );
+	// Optionally, keep the version number for future reference
+	// delete_option('forvoyez_plugin_version');
 }
-register_deactivation_hook(__FILE__, 'forvoyez_deactivate');
+register_deactivation_hook( __FILE__, 'forvoyez_deactivate' );
 
 /**
  * Flush rewrite rules if necessary.
@@ -114,9 +114,9 @@ register_deactivation_hook(__FILE__, 'forvoyez_deactivate');
  * @since 1.0.0
  */
 function forvoyez_maybe_flush_rewrite_rules() {
-    if (get_option('forvoyez_flush_rewrite_rules')) {
-        flush_rewrite_rules();
-        delete_option('forvoyez_flush_rewrite_rules');
-    }
+	if ( get_option( 'forvoyez_flush_rewrite_rules' ) ) {
+		flush_rewrite_rules();
+		delete_option( 'forvoyez_flush_rewrite_rules' );
+	}
 }
-add_action('init', 'forvoyez_maybe_flush_rewrite_rules');
+add_action( 'init', 'forvoyez_maybe_flush_rewrite_rules' );

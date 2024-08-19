@@ -8,142 +8,144 @@
  */
 
 class TestForvoyezImageProcessor extends WP_UnitTestCase {
-    private $image_processor;
-    private $mock_api_client;
 
-    public function setUp(): void {
-        parent::setUp();
-        $this->mock_api_client = $this->createMock(Forvoyez_API_Manager::class);
-        $this->image_processor = new Forvoyez_Image_Processor();
-        $reflection = new ReflectionClass($this->image_processor);
-        $property = $reflection->getProperty('api_client');
-        $property->setAccessible(true);
-        $property->setValue($this->image_processor, $this->mock_api_client);
-    }
+	private $image_processor;
+	private $mock_api_client;
 
-    public function test_sanitize_metadata() {
-        $raw_metadata = [
-            'alt_text' => 'Test <script>alert("XSS")</script>',
-            'title' => 'Test Title',
-            'caption' => '<p>Test <strong>Caption</strong></p>',
-            'extra_field' => 'Should be removed'
-        ];
+	public function setUp(): void {
+		parent::setUp();
+		$this->mock_api_client = $this->createMock( Forvoyez_API_Manager::class );
+		$this->image_processor = new Forvoyez_Image_Processor();
+		$reflection            = new ReflectionClass( $this->image_processor );
+		$property              = $reflection->getProperty( 'api_client' );
+		$property->setAccessible( true );
+		$property->setValue( $this->image_processor, $this->mock_api_client );
+	}
 
-        $expected = [
-            'alt_text' => 'Test',
-            'title' => 'Test Title',
-            'caption' => '<p>Test <strong>Caption</strong></p>'
-        ];
+	public function test_sanitize_metadata() {
+		$raw_metadata = array(
+			'alt_text'    => 'Test <script>alert("XSS")</script>',
+			'title'       => 'Test Title',
+			'caption'     => '<p>Test <strong>Caption</strong></p>',
+			'extra_field' => 'Should be removed',
+		);
 
-        $result = $this->call_private_method($this->image_processor, 'sanitize_metadata', [$raw_metadata]);
+		$expected = array(
+			'alt_text' => 'Test',
+			'title'    => 'Test Title',
+			'caption'  => '<p>Test <strong>Caption</strong></p>',
+		);
 
-        $this->assertEquals($expected, $result, 'Metadata was not sanitized correctly');
-    }
+		$result = $this->call_private_method( $this->image_processor, 'sanitize_metadata', array( $raw_metadata ) );
 
-    public function test_update_image_meta() {
-        $attachment_id = $this->factory->attachment->create_upload_object(__DIR__ . '/assets/test-image.webp', 0);
+		$this->assertEquals( $expected, $result, 'Metadata was not sanitized correctly' );
+	}
 
-        $metadata = [
-            'alt_text' => 'New Alt Text',
-            'title' => 'New Title',
-            'caption' => 'New Caption'
-        ];
+	public function test_update_image_meta() {
+		$attachment_id = $this->factory->attachment->create_upload_object( __DIR__ . '/assets/test-image.webp', 0 );
 
-        $this->call_private_method($this->image_processor, 'update_image_meta', [$attachment_id, $metadata]);
+		$metadata = array(
+			'alt_text' => 'New Alt Text',
+			'title'    => 'New Title',
+			'caption'  => 'New Caption',
+		);
 
-        $this->assertEquals('New Alt Text', get_post_meta($attachment_id, '_wp_attachment_image_alt', true), 'Alt text was not updated correctly');
-        $this->assertEquals('New Title', get_post($attachment_id)->post_title, 'Title was not updated correctly');
-        $this->assertEquals('New Caption', get_post($attachment_id)->post_excerpt, 'Caption was not updated correctly');
-        $this->assertEquals('1', get_post_meta($attachment_id, '_forvoyez_analyzed', true), 'Image was not marked as analyzed');
+		$this->call_private_method( $this->image_processor, 'update_image_meta', array( $attachment_id, $metadata ) );
 
-        wp_delete_attachment($attachment_id, true);
-    }
+		$this->assertEquals( 'New Alt Text', get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ), 'Alt text was not updated correctly' );
+		$this->assertEquals( 'New Title', get_post( $attachment_id )->post_title, 'Title was not updated correctly' );
+		$this->assertEquals( 'New Caption', get_post( $attachment_id )->post_excerpt, 'Caption was not updated correctly' );
+		$this->assertEquals( '1', get_post_meta( $attachment_id, '_forvoyez_analyzed', true ), 'Image was not marked as analyzed' );
 
-    public function test_get_incomplete_images() {
-        $complete_id = $this->create_test_image(true, true, true);
-        $no_alt_id = $this->create_test_image(false, true, true);
-        $no_title_id = $this->create_test_image(true, false, true);
-        $no_caption_id = $this->create_test_image(true, true, false);
+		wp_delete_attachment( $attachment_id, true );
+	}
 
-        $incomplete_images = $this->call_private_method($this->image_processor, 'get_incomplete_images', [0, 10]);
+	public function test_get_incomplete_images() {
+		$complete_id   = $this->create_test_image( true, true, true );
+		$no_alt_id     = $this->create_test_image( false, true, true );
+		$no_title_id   = $this->create_test_image( true, false, true );
+		$no_caption_id = $this->create_test_image( true, true, false );
 
-        $this->assertCount(3, $incomplete_images, 'Incorrect number of incomplete images returned');
-        $this->assertContains($no_alt_id, wp_list_pluck($incomplete_images, 'ID'), 'Image with no alt text should be included');
-        $this->assertContains($no_title_id, wp_list_pluck($incomplete_images, 'ID'), 'Image with no title should be included');
-        $this->assertContains($no_caption_id, wp_list_pluck($incomplete_images, 'ID'), 'Image with no caption should be included');
-        $this->assertNotContains($complete_id, wp_list_pluck($incomplete_images, 'ID'), 'Complete image should not be included');
+		$incomplete_images = $this->call_private_method( $this->image_processor, 'get_incomplete_images', array( 0, 10 ) );
 
-        wp_delete_attachment($complete_id, true);
-        wp_delete_attachment($no_alt_id, true);
-        wp_delete_attachment($no_title_id, true);
-        wp_delete_attachment($no_caption_id, true);
-    }
+		$this->assertCount( 3, $incomplete_images, 'Incorrect number of incomplete images returned' );
+		$this->assertContains( $no_alt_id, wp_list_pluck( $incomplete_images, 'ID' ), 'Image with no alt text should be included' );
+		$this->assertContains( $no_title_id, wp_list_pluck( $incomplete_images, 'ID' ), 'Image with no title should be included' );
+		$this->assertContains( $no_caption_id, wp_list_pluck( $incomplete_images, 'ID' ), 'Image with no caption should be included' );
+		$this->assertNotContains( $complete_id, wp_list_pluck( $incomplete_images, 'ID' ), 'Complete image should not be included' );
 
-    public function test_is_image_incomplete() {
-        $complete_id = $this->create_test_image(true, true, true);
-        $incomplete_id = $this->create_test_image(false, true, false);
+		wp_delete_attachment( $complete_id, true );
+		wp_delete_attachment( $no_alt_id, true );
+		wp_delete_attachment( $no_title_id, true );
+		wp_delete_attachment( $no_caption_id, true );
+	}
 
-        $complete_image = get_post($complete_id);
-        $incomplete_image = get_post($incomplete_id);
+	public function test_is_image_incomplete() {
+		$complete_id   = $this->create_test_image( true, true, true );
+		$incomplete_id = $this->create_test_image( false, true, false );
 
-        $this->assertFalse($this->call_private_method($this->image_processor, 'is_image_incomplete', [$complete_image]), 'Complete image should not be marked as incomplete');
-        $this->assertTrue($this->call_private_method($this->image_processor, 'is_image_incomplete', [$incomplete_image]), 'Incomplete image should be marked as incomplete');
+		$complete_image   = get_post( $complete_id );
+		$incomplete_image = get_post( $incomplete_id );
 
-        wp_delete_attachment($complete_id, true);
-        wp_delete_attachment($incomplete_id, true);
-    }
+		$this->assertFalse( $this->call_private_method( $this->image_processor, 'is_image_incomplete', array( $complete_image ) ), 'Complete image should not be marked as incomplete' );
+		$this->assertTrue( $this->call_private_method( $this->image_processor, 'is_image_incomplete', array( $incomplete_image ) ), 'Incomplete image should be marked as incomplete' );
 
-    public function test_process_images() {
-        $image_ids = [1, 2, 3];
+		wp_delete_attachment( $complete_id, true );
+		wp_delete_attachment( $incomplete_id, true );
+	}
 
-        $this->mock_api_client->expects($this->exactly(3))
-            ->method('analyze_image')
-            ->willReturnOnConsecutiveCalls(
-                ['success' => true, 'message' => 'Success 1', 'metadata' => ['alt' => 'Alt 1']],
-                ['success' => false, 'error' => ['message' => 'Error 2', 'code' => 'error_code']],
-                ['success' => true, 'message' => 'Success 3', 'metadata' => ['alt' => 'Alt 3']]
-            );
+	public function test_process_images() {
+		$image_ids = array( 1, 2, 3 );
 
-        $results = $this->call_private_method($this->image_processor, 'process_images', [$image_ids]);
+		$this->mock_api_client->expects( $this->exactly( 3 ) )
+			->method( 'analyze_image' )
+			->willReturnOnConsecutiveCalls(
+				array( 'success' => true, 'message' => 'Success 1', 'metadata' => array( 'alt' => 'Alt 1' ) ),
+				array( 'success' => false, 'error' => array( 'message' => 'Error 2', 'code' => 'error_code' ) ),
+				array( 'success' => true, 'message' => 'Success 3', 'metadata' => array( 'alt' => 'Alt 3' ) )
+			);
 
-        $this->assertCount(3, $results, 'Incorrect number of results returned');
-        $this->assertTrue($results[0]['success'], 'First result should be successful');
-        $this->assertFalse($results[1]['success'], 'Second result should be unsuccessful');
-        $this->assertTrue($results[2]['success'], 'Third result should be successful');
-    }
+		$results = $this->call_private_method( $this->image_processor, 'process_images', array( $image_ids ) );
 
-    private function call_private_method($object, $method_name, array $parameters = []) {
-        $reflection = new ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($method_name);
-        $method->setAccessible(true);
-        return $method->invokeArgs($object, $parameters);
-    }
+		$this->assertCount( 3, $results, 'Incorrect number of results returned' );
+		$this->assertTrue( $results[0]['success'], 'First result should be successful' );
+		$this->assertFalse( $results[1]['success'], 'Second result should be unsuccessful' );
+		$this->assertTrue( $results[2]['success'], 'Third result should be successful' );
+	}
 
-    private function create_test_image($has_alt, $has_title, $has_caption) {
-        $attachment_id = $this->factory->attachment->create_upload_object(__DIR__ . '/assets/test-image.webp', 0);
+	private function call_private_method( $object, $method_name, array $parameters = array() ) {
+		$reflection = new ReflectionClass( get_class( $object ) );
+		$method     = $reflection->getMethod( $method_name );
+		$method->setAccessible( true );
 
-        $post_data = ['ID' => $attachment_id];
+		return $method->invokeArgs( $object, $parameters );
+	}
 
-        if ($has_alt) {
-            update_post_meta($attachment_id, '_wp_attachment_image_alt', 'Test Alt');
-        } else {
-            delete_post_meta($attachment_id, '_wp_attachment_image_alt');
-        }
+	private function create_test_image( $has_alt, $has_title, $has_caption ) {
+		$attachment_id = $this->factory->attachment->create_upload_object( __DIR__ . '/assets/test-image.webp', 0 );
 
-        if ($has_title) {
-            $post_data['post_title'] = 'Test Title';
-        } else {
-            $post_data['post_title'] = ''; // Explicitly set an empty title
-        }
+		$post_data = array( 'ID' => $attachment_id );
 
-        if ($has_caption) {
-            $post_data['post_excerpt'] = 'Test Caption';
-        } else {
-            $post_data['post_excerpt'] = ''; // Explicitly set an empty caption
-        }
+		if ( $has_alt ) {
+			update_post_meta( $attachment_id, '_wp_attachment_image_alt', 'Test Alt' );
+		} else {
+			delete_post_meta( $attachment_id, '_wp_attachment_image_alt' );
+		}
 
-        wp_update_post($post_data);
+		if ( $has_title ) {
+			$post_data['post_title'] = 'Test Title';
+		} else {
+			$post_data['post_title'] = ''; // Explicitly set an empty title
+		}
 
-        return $attachment_id;
-    }
+		if ( $has_caption ) {
+			$post_data['post_excerpt'] = 'Test Caption';
+		} else {
+			$post_data['post_excerpt'] = ''; // Explicitly set an empty caption
+		}
+
+		wp_update_post( $post_data );
+
+		return $attachment_id;
+	}
 }

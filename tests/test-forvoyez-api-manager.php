@@ -6,128 +6,132 @@
  */
 
 class TestForvoyezAPIManager extends WP_UnitTestCase {
-    private $api_manager;
-    private $test_image_id;
-    private $mock_http_client;
 
-    public function setUp(): void {
-        parent::setUp();
-        $this->mock_http_client = $this->createMock(WP_Http::class);
-        $this->api_manager = new Forvoyez_API_Manager('test_api_key', $this->mock_http_client);
+	private $api_manager;
+	private $test_image_id;
+	private $mock_http_client;
 
-        // Create a test image attachment
-        $this->test_image_id = $this->factory->attachment->create_upload_object(__DIR__ . '/assets/test-image.webp', 0);
-    }
+	public function setUp(): void {
+		parent::setUp();
+		$this->mock_http_client = $this->createMock( WP_Http::class );
+		$this->api_manager      = new Forvoyez_API_Manager( 'test_api_key', $this->mock_http_client );
 
-    public function tearDown(): void {
-        wp_delete_attachment($this->test_image_id, true);
-        parent::tearDown();
-    }
+		// Create a test image attachment
+		$this->test_image_id = $this->factory->attachment->create_upload_object( __DIR__ . '/assets/test-image.webp', 0 );
+	}
 
-    public function testConstructor(): void {
-        $this->assertInstanceOf(Forvoyez_API_Manager::class, $this->api_manager);
-    }
+	public function tearDown(): void {
+		wp_delete_attachment( $this->test_image_id, true );
+		parent::tearDown();
+	}
 
-    public function testAnalyzeImage(): void {
-        // Set up the mock response
-        $mock_response = [
-            'body' => json_encode([
-                'title' => 'Mocked Title',
-                'alternativeText' => 'Mocked Alt Text',
-                'caption' => 'Mocked Caption'
-            ]),
-            'response' => [
-                'code' => 200
-            ]
-        ];
+	public function testConstructor(): void {
+		$this->assertInstanceOf( Forvoyez_API_Manager::class, $this->api_manager );
+	}
 
-        // Configure the mock to return our prepared response
-        $this->mock_http_client->method('post')->willReturn($mock_response);
+	public function testAnalyzeImage(): void {
+		// Set up the mock response
+		$mock_response = array(
+			'body' => json_encode(
+				array(
+					'title'           => 'Mocked Title',
+					'alternativeText' => 'Mocked Alt Text',
+					'caption'         => 'Mocked Caption',
+				)
+			),
+			'response' => array(
+				'code' => 200,
+			),
+		);
 
-        $result = $this->api_manager->analyze_image($this->test_image_id);
+		// Configure the mock to return our prepared response
+		$this->mock_http_client->method( 'post' )->willReturn( $mock_response );
 
-        $this->assertTrue($result['success']);
-        $this->assertEquals('Analysis successful', $result['message']);
-        $this->assertArrayHasKey('alt_text', $result['metadata']);
-        $this->assertArrayHasKey('title', $result['metadata']);
-        $this->assertArrayHasKey('caption', $result['metadata']);
+		$result = $this->api_manager->analyze_image( $this->test_image_id );
 
-        // Check if metadata was updated with mocked values
-        $this->assertEquals('Mocked Alt Text', get_post_meta($this->test_image_id, '_wp_attachment_image_alt', true));
-        $this->assertEquals('Mocked Title', get_post($this->test_image_id)->post_title);
-        $this->assertEquals('Mocked Caption', get_post($this->test_image_id)->post_excerpt);
-        $this->assertEquals('1', get_post_meta($this->test_image_id, '_forvoyez_analyzed', true));
-    }
+		$this->assertTrue( $result['success'] );
+		$this->assertEquals( 'Analysis successful', $result['message'] );
+		$this->assertArrayHasKey( 'alt_text', $result['metadata'] );
+		$this->assertArrayHasKey( 'title', $result['metadata'] );
+		$this->assertArrayHasKey( 'caption', $result['metadata'] );
 
-    public function testAnalyzeImageNotFound(): void {
-        $result = $this->api_manager->analyze_image(999999); // Non-existent ID
+		// Check if metadata was updated with mocked values
+		$this->assertEquals( 'Mocked Alt Text', get_post_meta( $this->test_image_id, '_wp_attachment_image_alt', true ) );
+		$this->assertEquals( 'Mocked Title', get_post( $this->test_image_id )->post_title );
+		$this->assertEquals( 'Mocked Caption', get_post( $this->test_image_id )->post_excerpt );
+		$this->assertEquals( '1', get_post_meta( $this->test_image_id, '_forvoyez_analyzed', true ) );
+	}
 
-        $this->assertFalse($result['success']);
-        $this->assertEquals('image_not_found', $result['error']['code']);
-        $this->assertEquals('Image not found', $result['error']['message']);
-    }
+	public function testAnalyzeImageNotFound(): void {
+		$result = $this->api_manager->analyze_image( 999999 ); // Non-existent ID
 
-    public function testFormatError(): void {
-        $error = $this->callPrivateMethod($this->api_manager, 'format_error', ['test_code', 'Test message']);
+		$this->assertFalse( $result['success'] );
+		$this->assertEquals( 'image_not_found', $result['error']['code'] );
+		$this->assertEquals( 'Image not found', $result['error']['message'] );
+	}
 
-        $this->assertFalse($error['success']);
-        $this->assertEquals('test_code', $error['error']['code']);
-        $this->assertEquals('Test message', $error['error']['message']);
-    }
+	public function testFormatError(): void {
+		$error = $this->callPrivateMethod( $this->api_manager, 'format_error', array( 'test_code', 'Test message' ) );
 
-    public function testFormatErrorWithDebugInfo(): void {
-        $debug_info = ['key' => 'value'];
-        $error = $this->callPrivateMethod($this->api_manager, 'format_error', ['test_code', 'Test message', $debug_info]);
+		$this->assertFalse( $error['success'] );
+		$this->assertEquals( 'test_code', $error['error']['code'] );
+		$this->assertEquals( 'Test message', $error['error']['message'] );
+	}
 
-        $this->assertFalse($error['success']);
-        $this->assertEquals('test_code', $error['error']['code']);
-        $this->assertEquals('Test message', $error['error']['message']);
-        $this->assertEquals($debug_info, $error['debug_info']);
-    }
+	public function testFormatErrorWithDebugInfo(): void {
+		$debug_info = array( 'key' => 'value' );
+		$error      = $this->callPrivateMethod( $this->api_manager, 'format_error', array( 'test_code', 'Test message', $debug_info ) );
 
-    public function testBuildDataFiles(): void {
-        $boundary = 'test_boundary';
-        $fields = ['field1' => 'value1', 'field2' => 'value2'];
-        $file_name = 'test-image.webp';
-        $file_mime = 'image/webp';
-        $file_data = 'test_file_data';
+		$this->assertFalse( $error['success'] );
+		$this->assertEquals( 'test_code', $error['error']['code'] );
+		$this->assertEquals( 'Test message', $error['error']['message'] );
+		$this->assertEquals( $debug_info, $error['debug_info'] );
+	}
 
-        $result = $this->callPrivateMethod($this->api_manager, 'build_data_files', [$boundary, $fields, $file_name, $file_mime, $file_data]);
+	public function testBuildDataFiles(): void {
+		$boundary  = 'test_boundary';
+		$fields    = array( 'field1' => 'value1', 'field2' => 'value2' );
+		$file_name = 'test-image.webp';
+		$file_mime = 'image/webp';
+		$file_data = 'test_file_data';
 
-        $this->assertStringContainsString('Content-Disposition: form-data; name="field1"', $result);
-        $this->assertStringContainsString('Content-Disposition: form-data; name="field2"', $result);
-        $this->assertStringContainsString('Content-Disposition: form-data; name="image"; filename="test-image.webp"', $result);
-        $this->assertStringContainsString('Content-Type: image/webp', $result);
-        $this->assertStringContainsString('test_file_data', $result);
-    }
+		$result = $this->callPrivateMethod( $this->api_manager, 'build_data_files', array( $boundary, $fields, $file_name, $file_mime, $file_data ) );
 
-    public function testUpdateImageMetadata(): void {
-        $metadata = [
-            'alt_text' => 'Test Alt',
-            'title' => 'Test Title',
-            'caption' => 'Test Caption'
-        ];
+		$this->assertStringContainsString( 'Content-Disposition: form-data; name="field1"', $result );
+		$this->assertStringContainsString( 'Content-Disposition: form-data; name="field2"', $result );
+		$this->assertStringContainsString( 'Content-Disposition: form-data; name="image"; filename="test-image.webp"', $result );
+		$this->assertStringContainsString( 'Content-Type: image/webp', $result );
+		$this->assertStringContainsString( 'test_file_data', $result );
+	}
 
-        $this->callPrivateMethod($this->api_manager, 'update_image_metadata', [$this->test_image_id, $metadata]);
+	public function testUpdateImageMetadata(): void {
+		$metadata = array(
+			'alt_text' => 'Test Alt',
+			'title'    => 'Test Title',
+			'caption'  => 'Test Caption',
+		);
 
-        $this->assertEquals('Test Alt', get_post_meta($this->test_image_id, '_wp_attachment_image_alt', true));
-        $this->assertEquals('Test Title', get_post($this->test_image_id)->post_title);
-        $this->assertEquals('Test Caption', get_post($this->test_image_id)->post_excerpt);
-        $this->assertEquals('1', get_post_meta($this->test_image_id, '_forvoyez_analyzed', true));
-    }
+		$this->callPrivateMethod( $this->api_manager, 'update_image_metadata', array( $this->test_image_id, $metadata ) );
 
-    /**
-     * Call a private method on an object.
-     *
-     * @param object $object The object containing the method.
-     * @param string $method_name The name of the private method.
-     * @param array $parameters The parameters to pass to the method.
-     * @return mixed The result of the method call.
-     */
-    private function callPrivateMethod($object, string $method_name, array $parameters = []): mixed {
-        $reflection = new ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($method_name);
-        $method->setAccessible(true);
-        return $method->invokeArgs($object, $parameters);
-    }
+		$this->assertEquals( 'Test Alt', get_post_meta( $this->test_image_id, '_wp_attachment_image_alt', true ) );
+		$this->assertEquals( 'Test Title', get_post( $this->test_image_id )->post_title );
+		$this->assertEquals( 'Test Caption', get_post( $this->test_image_id )->post_excerpt );
+		$this->assertEquals( '1', get_post_meta( $this->test_image_id, '_forvoyez_analyzed', true ) );
+	}
+
+	/**
+	 * Call a private method on an object.
+	 *
+	 * @param object $object The object containing the method.
+	 * @param string $method_name The name of the private method.
+	 * @param array $parameters The parameters to pass to the method.
+	 * @return mixed The result of the method call.
+	 */
+	private function callPrivateMethod( $object, string $method_name, array $parameters = array() ): mixed {
+		$reflection = new ReflectionClass( get_class( $object ) );
+		$method     = $reflection->getMethod( $method_name );
+		$method->setAccessible( true );
+
+		return $method->invokeArgs( $object, $parameters );
+	}
 }
