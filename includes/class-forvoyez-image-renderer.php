@@ -195,7 +195,7 @@ class Forvoyez_Image_Renderer {
 	private static function render_action_button( $type, $label, $icon_path ) {
 		?>
         <div class="flex w-0 flex-1">
-            <button class="<?php echo $type; ?>-button relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-xs text-gray-900 hover:bg-gray-50 hover:border-gray-200">
+            <button class="<?php echo esc_attr($type); ?>-button relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-xs text-gray-900 hover:bg-gray-50 hover:border-gray-200">
                 <span>
                     <?php
                         if ( $label === 'Analyze' ) {
@@ -206,7 +206,7 @@ class Forvoyez_Image_Renderer {
                     ?>
                 </span>
                 <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?php echo $icon_path; ?>" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?php echo esc_attr($icon_path); ?>" />
                 </svg>
             </button>
         </div>

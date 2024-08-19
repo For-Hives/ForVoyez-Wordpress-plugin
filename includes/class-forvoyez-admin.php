@@ -134,7 +134,7 @@ class Forvoyez_Admin {
 		add_action(
 			'admin_head',
 			function () use ( $tailwind_config, $tailwind_styles ) {
-				echo $tailwind_config . $tailwind_styles;
+                echo wp_kses_post( $tailwind_config . $tailwind_styles );
 			}
 		);
 	}
@@ -144,7 +144,7 @@ class Forvoyez_Admin {
      */
     public function render_admin_page() {
         if ( !current_user_can( 'manage_options' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.', 'forvoyez-auto-alt-text-for-images' ) );
+            wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'forvoyez-auto-alt-text-for-images' ) );
         }
 
         // Generate nonce for this request
@@ -162,7 +162,7 @@ class Forvoyez_Admin {
 	public static function display_status_configuration() {
 		$api_key = forvoyez_get_api_key();
 		if ( empty( $api_key ) ) {
-			echo '<p class="text-red-600 font-semibold">' . __( 'Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation.', 'forvoyez-auto-alt-text-for-images' ) . '</p>';
+            echo '<p class="text-red-600 font-semibold">' . esc_html__( 'Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation.', 'forvoyez-auto-alt-text-for-images' ) . '</p>';
 		}
 	}
 
@@ -267,7 +267,7 @@ class Forvoyez_Admin {
 					Forvoyez_Image_Renderer::render_image_item( $query_images->post );
 				}
 			} else {
-				echo '<p class="col-span-full text-center text-gray-500">' . __( 'No images found matching the selected criteria.', 'forvoyez-auto-alt-text-for-images' ) . '</p>';
+                echo '<p class="col-span-full text-center text-gray-500">' . esc_html__( 'No images found matching the selected criteria.', 'forvoyez-auto-alt-text-for-images' ) . '</p>';
 			}
 		?>
         </div>
