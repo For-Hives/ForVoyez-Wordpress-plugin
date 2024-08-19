@@ -85,21 +85,20 @@ class Forvoyez_API_Manager {
 	 * @param int $image_id The ID of the image to analyze.
 	 * @return array The analysis result.
 	 */
-	public function analyze_image( int $image_id ): array {
-		$image_path = get_attached_file( $image_id );
-		if ( !$image_path ) {
-			return $this->format_error( 'image_not_found', __( 'Image not found', 'forvoyez-auto-alt-text-for-images' ) );
-		}
+    public function analyze_image( int $image_id ): array {
+        $image_path = get_attached_file( $image_id );
+        if ( !$image_path ) {
+            return $this->format_error( 'image_not_found', __( 'Image not found', 'forvoyez-auto-alt-text-for-images' ) );
+        }
 
-		$image_url  = wp_get_attachment_url( $image_id );
-		$image_mime = get_post_mime_type( $image_id );
-		$image_name = basename( $image_path );
+        $image_url  = wp_get_attachment_url( $image_id );
+        $image_mime = get_post_mime_type( $image_id );
+        $image_name = basename( $image_path );
 
-        $file_data = wp_remote_get( $image_path );
-        if ( is_wp_error( $file_data ) ) {
+        $file_data = file_get_contents( $image_path );
+        if ( $file_data === false ) {
             return $this->format_error( 'read_error', __( 'Failed to read image file', 'forvoyez-auto-alt-text-for-images' ) );
         }
-        $file_data = wp_remote_retrieve_body( $file_data );
 
         $data = array(
             'data' => wp_json_encode(
