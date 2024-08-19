@@ -69,7 +69,7 @@ class Forvoyez_Admin {
 		}
 
 		// Enqueue Tailwind CSS from CDN
-		wp_enqueue_script( 'tailwindcss', 'https://cdn.tailwindcss.com', array(), FORVOYEZ_VERSION, true);
+		wp_enqueue_script( 'tailwindcss', 'https://cdn.tailwindcss.com', array(), FORVOYEZ_VERSION, false);
 
 		// Enqueue custom scripts
 		wp_enqueue_script(
