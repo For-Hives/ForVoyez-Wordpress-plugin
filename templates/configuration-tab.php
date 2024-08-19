@@ -19,13 +19,35 @@ $api_key  = $settings->get_api_key();
                     <?php esc_html_e( 'To get started:', 'forvoyez-auto-alt-text-for-images' ); ?>
                 </p>
                 <ol class="list-decimal list-inside text-sm text-gray-600 mb-4 ml-4">
-                    <li><?php printf( __( 'Visit the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez signup page</a> to create an account.', 'forvoyez-auto-alt-text-for-images' ), 'https://forvoyez.com/signup' ); ?></li>
-                    <li><?php printf( __( 'Once logged in, navigate to your <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez dashboard</a>.', 'forvoyez-auto-alt-text-for-images' ), 'https://forvoyez.com/dashboard' ); ?></li>
+                    <li>
+                        <?php
+                        /* translators: %s: URL of the ForVoyez signup page */
+                        printf(
+                            esc_html__( 'Visit the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez signup page</a> to create an account.', 'forvoyez-auto-alt-text-for-images' ),
+                            'https://forvoyez.com/signup'
+                        );
+                        ?>
+                    </li>
+                    <li>
+                        <?php
+                        /* translators: %s: URL of the ForVoyez dashboard */
+                        printf(
+                            esc_html__( 'Once logged in, navigate to your <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez dashboard</a>.', 'forvoyez-auto-alt-text-for-images' ),
+                            'https://forvoyez.com/dashboard'
+                        );
+                        ?>
+                    </li>
                     <li><?php esc_html_e( 'Generate an API key in the API section of your dashboard.', 'forvoyez-auto-alt-text-for-images' ); ?></li>
                     <li><?php esc_html_e( 'Copy the API key and paste it in the field below.', 'forvoyez-auto-alt-text-for-images' ); ?></li>
                 </ol>
                 <p class="text-sm text-gray-600">
-                    <?php printf( __( 'For more information, please refer to the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez API documentation</a>.', 'forvoyez-auto-alt-text-for-images' ), 'https://doc.forvoyez.com' ); ?>
+                    <?php
+                    /* translators: %s: URL of the ForVoyez API documentation */
+                    printf(
+                        esc_html__( 'For more information, please refer to the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez API documentation</a>.', 'forvoyez-auto-alt-text-for-images' ),
+                        'https://doc.forvoyez.com'
+                    );
+                    ?>
                 </p>
             </div>
             <div class="mb-4">

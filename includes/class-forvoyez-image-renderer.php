@@ -136,15 +136,21 @@ class Forvoyez_Image_Renderer {
 	 * @param string $path The SVG path for the icon.
 	 * @return void
 	 */
-	private static function render_metadata_icon( $type, $value, $path ) {
-		?>
-        <span class="bg-red-500 text-white rounded-full p-1 <?php echo empty( $value ) ? '' : 'hidden'; ?> <?php echo $type; ?>-missing" title="<?php echo esc_attr( sprintf( __( 'Missing %s', 'forvoyez-auto-alt-text-for-images' ), ucfirst( $type ) ) ); ?>">
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?php echo $path; ?>" />
-            </svg>
-        </span>
+    private static function render_metadata_icon( $type, $value, $path ) {
+        $type_label = ucfirst($type);
+        $missing_text = sprintf(
+        /* translators: %s: Metadata type (Alt, Title, or Caption) */
+            esc_html__('Missing %s', 'forvoyez-auto-alt-text-for-images'),
+            $type_label
+        );
+        ?>
+        <span class="bg-red-500 text-white rounded-full p-1 <?php echo empty( $value ) ? '' : 'hidden'; ?> <?php echo esc_attr($type); ?>-missing" title="<?php echo esc_attr($missing_text); ?>">
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?php echo esc_attr($path); ?>" />
+        </svg>
+    </span>
         <?php
-	}
+    }
 
 	/**
 	 * Render the loader for an image.
@@ -167,16 +173,16 @@ class Forvoyez_Image_Renderer {
 	 *
 	 * @return void
 	 */
-	public static function render_action_buttons() {
-		?>
+    public static function render_action_buttons() {
+        ?>
         <div>
             <div class="-mt-px flex divide-x divide-gray-200">
-                <?php self::render_action_button( 'analyze', 'Analyse', 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01' ); ?>
-                <?php self::render_action_button( 'see-more', 'Details', 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z' ); ?>
+                <?php self::render_action_button( 'analyze', __( 'Analyze', 'forvoyez-auto-alt-text-for-images' ), 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01' ); ?>
+                <?php self::render_action_button( 'see-more', __( 'Details', 'forvoyez-auto-alt-text-for-images' ), 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z' ); ?>
             </div>
         </div>
         <?php
-	}
+    }
 
 	/**
 	 * Render a single action button.
@@ -190,7 +196,15 @@ class Forvoyez_Image_Renderer {
 		?>
         <div class="flex w-0 flex-1">
             <button class="<?php echo $type; ?>-button relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-xs text-gray-900 hover:bg-gray-50 hover:border-gray-200">
-                <span><?php echo esc_html_e( $label, 'forvoyez-auto-alt-text-for-images' ); ?></span>
+                <span>
+                    <?php
+                        if ( $label === 'Analyze' ) {
+                            echo esc_html_e( 'Analyse', 'forvoyez-auto-alt-text-for-images' );
+                        } else if ( $label === 'Details' ) {
+                            echo esc_html_e( 'Analyse', 'forvoyez-auto-alt-text-for-images' );
+                        }
+                    ?>
+                </span>
                 <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?php echo $icon_path; ?>" />
                 </svg>

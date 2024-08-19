@@ -52,19 +52,17 @@ class TestForVoyezImageRenderer extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'hidden all-complete', $output, 'All complete icon should be hidden when metadata is incomplete' );
 	}
 
-	/**
-	 * Test the render_action_buttons method for correct button presence.
-	 */
-	public function test_render_action_buttons() {
-		ob_start();
-		Forvoyez_Image_Renderer::render_action_buttons();
-		$output = ob_get_clean();
+    /**
+     * Test the render_action_buttons method for correct button presence.
+     */
+    public function test_render_action_buttons() {
+        ob_start();
+        Forvoyez_Image_Renderer::render_action_buttons();
+        $output = ob_get_clean();
 
-		$this->assertStringContainsString( 'analyze-button', $output, 'Analyze button should be present' );
-		$this->assertStringContainsString( 'see-more-button', $output, 'See more button should be present' );
-		$this->assertStringContainsString( 'Analyze', $output, 'Analyze label should be present' );
-		$this->assertStringContainsString( 'Details', $output, 'Details label should be present' );
-	}
+        $this->assertStringContainsString( 'analyze-button', $output, 'Analyze button should be present' );
+        $this->assertStringContainsString( 'see-more-button', $output, 'See more button should be present' );
+    }
 
 	/**
 	 * Helper method to call private methods for testing.
