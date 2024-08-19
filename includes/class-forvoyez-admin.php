@@ -34,21 +34,34 @@ class Forvoyez_Admin {
 		add_action( 'wp_ajax_forvoyez_verify_api_key', array( $this, 'ajax_verify_api_key' ) );
 	}
 
-	/**
-	 * Add menu item to WordPress admin.
-	 */
-	public function add_menu_item() {
-		add_menu_page(
-			__( 'Auto Alt Text for Images', 'forvoyez-auto-alt-text-for-images' ),
-			__( 'Auto Alt Text', 'forvoyez-auto-alt-text-for-images' ),
-			'manage_options',
-			'forvoyez-auto-alt-text',
-			array( $this, 'render_admin_page' ),
-			'dashicons-format-image',
-			30
-		);
-	}
+    /**
+     * Add menu item to WordPress admin.
+     */
+    public function add_menu_item() {
+        $page_hook = add_menu_page(
+            __( 'Auto Alt Text for Images', 'forvoyez-auto-alt-text-for-images' ),
+            __( 'Auto Alt Text', 'forvoyez-auto-alt-text-for-images' ),
+            'manage_options',
+            'forvoyez-auto-alt-text',
+            array( $this, 'render_admin_page' ),
+            'dashicons-format-image',
+            30
+        );
 
+        add_action( "load-$page_hook", array( $this, 'add_page_nonce' ) );
+    }
+
+    /**
+     * Add nonce to the admin page URL.
+     */
+    public function add_page_nonce() {
+        $screen = get_current_screen();
+        if ( $screen->id === 'toplevel_page_forvoyez-auto-alt-text' ) {
+            $nonce_url = wp_nonce_url( admin_url( 'admin.php?page=forvoyez-auto-alt-text' ), 'forvoyez_admin_page' );
+            wp_safe_redirect( $nonce_url );
+            exit;
+        }
+    }
 	/**
 	 * Enqueue admin scripts and styles.
 	 *
@@ -130,17 +143,25 @@ class Forvoyez_Admin {
 		);
 	}
 
-	/**
-	 * Render the admin page.
-	 */
-	public function render_admin_page() {
-		if ( !current_user_can( 'manage_options' ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this page.', 'forvoyez-auto-alt-text-for-images' ) );
-		}
-		$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'dashboard';
-		include FORVOYEZ_PLUGIN_DIR . 'templates/main-page.php';
-	}
+    /**
+     * Render the admin page.
+     */
+    public function render_admin_page() {
+        if ( !current_user_can( 'manage_options' ) ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page.', 'forvoyez-auto-alt-text-for-images' ) );
+        }
 
+        $nonce = isset( $_REQUEST['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ) : '';
+        if ( ! wp_verify_nonce( $nonce, 'forvoyez_admin_page' ) ) {
+            wp_die( __( 'Invalid nonce specified', 'forvoyez-auto-alt-text-for-images' ), __( 'Error', 'forvoyez-auto-alt-text-for-images' ), array(
+                'response'  => 403,
+                'back_link' => true,
+            ) );
+        }
+
+        $active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'dashboard';
+        include FORVOYEZ_PLUGIN_DIR . 'templates/main-page.php';
+    }
 	/**
 	 * Display API key configuration status.
 	 */
@@ -466,47 +487,51 @@ class Forvoyez_Admin {
         global $wpdb;
 
         if ( $type === 'all' ) {
-            $query = $wpdb->prepare(
-                "SELECT ID FROM {$wpdb->posts} WHERE post_type = %s AND post_mime_type LIKE %s",
-                'attachment',
-                'image/%'
+            $results = $wpdb->get_col(
+                $wpdb->prepare(
+                    "SELECT ID FROM {$wpdb->posts} WHERE post_type = %s AND post_mime_type LIKE %s",
+                    'attachment',
+                    'image/%'
+                )
             );
         } elseif ( $type === 'missing_alt' ) {
-            $query = $wpdb->prepare(
-                "SELECT p.ID 
-            FROM {$wpdb->posts} p 
-            LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = %s
-            WHERE p.post_type = %s 
-            AND p.post_mime_type LIKE %s
-            AND (pm.meta_value IS NULL OR pm.meta_value = %s)",
-                '_wp_attachment_image_alt',
-                'attachment',
-                'image/%',
-                ''
+            $results = $wpdb->get_col(
+                $wpdb->prepare(
+                    "SELECT p.ID 
+                FROM {$wpdb->posts} p 
+                LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = %s
+                WHERE p.post_type = %s 
+                AND p.post_mime_type LIKE %s
+                AND (pm.meta_value IS NULL OR pm.meta_value = %s)",
+                    '_wp_attachment_image_alt',
+                    'attachment',
+                    'image/%',
+                    ''
+                )
             );
         } elseif ( $type === 'missing_all' ) {
-            $query = $wpdb->prepare(
-                "SELECT p.ID 
-            FROM {$wpdb->posts} p 
-            LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = %s
-            WHERE p.post_type = %s 
-            AND p.post_mime_type LIKE %s
-            AND (pm.meta_value IS NULL OR pm.meta_value = %s OR p.post_title = %s OR p.post_excerpt = %s)",
-                '_wp_attachment_image_alt',
-                'attachment',
-                'image/%',
-                '',
-                '',
-                ''
+            $results = $wpdb->get_col(
+                $wpdb->prepare(
+                    "SELECT p.ID 
+                FROM {$wpdb->posts} p 
+                LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = %s
+                WHERE p.post_type = %s 
+                AND p.post_mime_type LIKE %s
+                AND (pm.meta_value IS NULL OR pm.meta_value = %s OR p.post_title = %s OR p.post_excerpt = %s)",
+                    '_wp_attachment_image_alt',
+                    'attachment',
+                    'image/%',
+                    '',
+                    '',
+                    ''
+                )
             );
         } else {
             // Handle invalid type
             return array();
         }
 
-        $results = array_map( 'intval', $wpdb->get_col( $query ) );
-
-        return $results;
+        return array_map( 'intval', $results );
     }
 
 	/**
