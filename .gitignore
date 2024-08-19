@@ -6,3 +6,4 @@ vendor
 tests/assets
 large_files_output.txt
 output.txt
+release
