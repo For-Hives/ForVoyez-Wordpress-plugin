@@ -462,45 +462,52 @@ class Forvoyez_Admin {
 	 * @param string $type Type of images to retrieve ('all', 'missing_all', 'missing_alt').
 	 * @return array Array of image IDs.
 	 */
-	public function get_image_ids( $type = 'all' ) {
-		global $wpdb;
+    public function get_image_ids( $type = 'all' ) {
+        global $wpdb;
 
-		$query = "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_mime_type LIKE " . $wpdb->prepare( '%s', 'image/%' );
+        if ( $type === 'all' ) {
+            $query = $wpdb->prepare(
+                "SELECT ID FROM {$wpdb->posts} WHERE post_type = %s AND post_mime_type LIKE %s",
+                'attachment',
+                'image/%'
+            );
+        } elseif ( $type === 'missing_alt' ) {
+            $query = $wpdb->prepare(
+                "SELECT p.ID 
+            FROM {$wpdb->posts} p 
+            LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = %s
+            WHERE p.post_type = %s 
+            AND p.post_mime_type LIKE %s
+            AND (pm.meta_value IS NULL OR pm.meta_value = %s)",
+                '_wp_attachment_image_alt',
+                'attachment',
+                'image/%',
+                ''
+            );
+        } elseif ( $type === 'missing_all' ) {
+            $query = $wpdb->prepare(
+                "SELECT p.ID 
+            FROM {$wpdb->posts} p 
+            LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = %s
+            WHERE p.post_type = %s 
+            AND p.post_mime_type LIKE %s
+            AND (pm.meta_value IS NULL OR pm.meta_value = %s OR p.post_title = %s OR p.post_excerpt = %s)",
+                '_wp_attachment_image_alt',
+                'attachment',
+                'image/%',
+                '',
+                '',
+                ''
+            );
+        } else {
+            // Handle invalid type
+            return array();
+        }
 
-		if ( $type === 'missing_alt' ) {
-			$query = $wpdb->prepare(
-				"SELECT p.ID 
-              FROM {$wpdb->posts} p 
-              LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = %s
-              WHERE p.post_type = %s 
-              AND p.post_mime_type LIKE %s
-              AND (pm.meta_value IS NULL OR pm.meta_value = %s)",
-				'_wp_attachment_image_alt',
-				'attachment',
-				'image/%',
-				''
-			);
-		} elseif ( $type === 'missing_all' ) {
-			$query = $wpdb->prepare(
-				"SELECT p.ID 
-              FROM {$wpdb->posts} p 
-              LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = %s
-              WHERE p.post_type = %s 
-              AND p.post_mime_type LIKE %s
-              AND (pm.meta_value IS NULL OR pm.meta_value = %s OR p.post_title = %s OR p.post_excerpt = %s)",
-				'_wp_attachment_image_alt',
-				'attachment',
-				'image/%',
-				'',
-				'',
-				''
-			);
-		}
+        $results = array_map( 'intval', $wpdb->get_col( $query ) );
 
-		$results = array_map( 'intval', $wpdb->get_col( $query ) );
-
-		return $results;
-	}
+        return $results;
+    }
 
 	/**
 	 * AJAX handler for getting image IDs.
