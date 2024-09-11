@@ -21,8 +21,8 @@ msgid "Auto Alt Text for Images"
 msgstr "画像用自動代替テキスト"
 
 #. Plugin URI of the plugin
-msgid "https://forvoyez.com/plugins/auto-alt-text"
-msgstr "https://forvoyez.com/plugins/auto-alt-text"
+msgid "https://doc.forvoyez.com/wordpress-plugin"
+msgstr "https://doc.forvoyez.com/wordpress-plugin"
 
 #. Description of the plugin
 msgid "Automatically generate alt text and SEO metadata for images using ForVoyez API."

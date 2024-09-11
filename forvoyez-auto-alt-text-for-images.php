@@ -11,7 +11,7 @@
  *
  * @wordpress-plugin
  * Plugin Name: Auto Alt Text for Images
- * Plugin URI:  https://forvoyez.com/plugins/auto-alt-text
+ * Plugin URI:  https://doc.forvoyez.com/wordpress-plugin
  * Description: Automatically generate alt text and SEO metadata for images using ForVoyez API.
  * Version:     1.0.0
  * Author:      ForVoyez

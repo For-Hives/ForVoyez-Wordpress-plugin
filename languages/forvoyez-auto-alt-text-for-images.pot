@@ -21,7 +21,7 @@ msgid "Auto Alt Text for Images"
 msgstr ""
 
 #. Plugin URI of the plugin
-msgid "https://forvoyez.com/plugins/auto-alt-text"
+msgid "https://doc.forvoyez.com/wordpress-plugin"
 msgstr ""
 
 #. Description of the plugin
