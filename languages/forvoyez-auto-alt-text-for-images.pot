@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-08-19T08:37:51+00:00\n"
+"POT-Creation-Date: 2024-08-19T15:04:28+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: forvoyez-auto-alt-text-for-images\n"
@@ -40,32 +40,32 @@ msgstr ""
 msgid "Auto Alt Text"
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:138
+#: includes/class-forvoyez-admin.php:147
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:150
+#: includes/class-forvoyez-admin.php:165
 msgid "Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation."
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:255
+#: includes/class-forvoyez-admin.php:270
 msgid "No images found matching the selected criteria."
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:328
-#: includes/class-forvoyez-admin.php:454
-#: includes/class-forvoyez-admin.php:512
-#: includes/class-forvoyez-admin.php:536
+#: includes/class-forvoyez-admin.php:343
+#: includes/class-forvoyez-admin.php:469
+#: includes/class-forvoyez-admin.php:550
+#: includes/class-forvoyez-admin.php:574
 #: includes/class-forvoyez-image-processor.php:249
 #: includes/class-forvoyez-settings.php:60
 msgid "Permission denied"
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:371
+#: includes/class-forvoyez-admin.php:386
 msgid "&laquo; Previous"
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:385
+#: includes/class-forvoyez-admin.php:400
 msgid "Next &raquo;"
 msgstr ""
 
@@ -151,8 +151,22 @@ msgstr ""
 msgid "All Complete"
 msgstr ""
 
-#: includes/class-forvoyez-image-renderer.php:141
+#. translators: %s: Metadata type (Alt, Title, or Caption)
+#: includes/class-forvoyez-image-renderer.php:143
 msgid "Missing %s"
+msgstr ""
+
+#: includes/class-forvoyez-image-renderer.php:180
+msgid "Analyze"
+msgstr ""
+
+#: includes/class-forvoyez-image-renderer.php:181
+msgid "Details"
+msgstr ""
+
+#: includes/class-forvoyez-image-renderer.php:202
+#: includes/class-forvoyez-image-renderer.php:204
+msgid "Analyse"
 msgstr ""
 
 #: includes/class-forvoyez-settings.php:66
@@ -163,27 +177,27 @@ msgstr ""
 msgid "API key saved successfully"
 msgstr ""
 
-#: includes/forvoyez-helpers.php:117
+#: includes/forvoyez-helpers.php:133
 msgid "Invalid API key format. Please enter a valid ForVoyez JWT."
 msgstr ""
 
-#: includes/forvoyez-helpers.php:136
+#: includes/forvoyez-helpers.php:152
 msgid "Invalid JWT format"
 msgstr ""
 
-#: includes/forvoyez-helpers.php:145
+#: includes/forvoyez-helpers.php:161
 msgid "Invalid JWT payload"
 msgstr ""
 
-#: includes/forvoyez-helpers.php:150
+#: includes/forvoyez-helpers.php:166
 msgid "Invalid JWT issuer"
 msgstr ""
 
-#: includes/forvoyez-helpers.php:155
+#: includes/forvoyez-helpers.php:171
 msgid "Invalid JWT audience"
 msgstr ""
 
-#: includes/forvoyez-helpers.php:160
+#: includes/forvoyez-helpers.php:176
 msgid "JWT has expired"
 msgstr ""
 
@@ -268,12 +282,12 @@ msgid "Enter your ForVoyez API key below:"
 msgstr ""
 
 #: templates/api-settings-modal.php:11
-#: templates/configuration-tab.php:35
+#: templates/configuration-tab.php:57
 msgid "Toggle API key visibility"
 msgstr ""
 
 #: templates/api-settings-modal.php:21
-#: templates/configuration-tab.php:45
+#: templates/configuration-tab.php:67
 msgid "Save API Key"
 msgstr ""
 
@@ -301,31 +315,34 @@ msgstr ""
 msgid "To get started:"
 msgstr ""
 
-#: templates/configuration-tab.php:22
+#. translators: %s: URL of the ForVoyez signup page
+#: templates/configuration-tab.php:26
 msgid "Visit the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez signup page</a> to create an account."
 msgstr ""
 
-#: templates/configuration-tab.php:23
+#. translators: %s: URL of the ForVoyez dashboard
+#: templates/configuration-tab.php:35
 msgid "Once logged in, navigate to your <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez dashboard</a>."
 msgstr ""
 
-#: templates/configuration-tab.php:24
+#: templates/configuration-tab.php:40
 msgid "Generate an API key in the API section of your dashboard."
 msgstr ""
 
-#: templates/configuration-tab.php:25
+#: templates/configuration-tab.php:41
 msgid "Copy the API key and paste it in the field below."
 msgstr ""
 
-#: templates/configuration-tab.php:28
+#. translators: %s: URL of the ForVoyez API documentation
+#: templates/configuration-tab.php:47
 msgid "For more information, please refer to the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez API documentation</a>."
 msgstr ""
 
-#: templates/configuration-tab.php:32
+#: templates/configuration-tab.php:54
 msgid "API Key"
 msgstr ""
 
-#: templates/configuration-tab.php:34
+#: templates/configuration-tab.php:56
 msgid "Enter your API key"
 msgstr ""
 
