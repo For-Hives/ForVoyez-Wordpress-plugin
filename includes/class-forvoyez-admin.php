@@ -64,45 +64,56 @@ class Forvoyez_Admin {
 	 * @param string $hook Current admin page hook.
 	 */
 	public function enqueue_admin_scripts( $hook ) {
-		if ( 'toplevel_page_forvoyez-auto-alt-text' !== $hook ) {
-			return;
-		}
+        if ( 'toplevel_page_forvoyez-auto-alt-text' !== $hook ) {
+            return;
+        }
 
-		// Enqueue Tailwind CSS from CDN
-		wp_enqueue_script( 'tailwindcss', 'https://cdn.tailwindcss.com', array(), FORVOYEZ_VERSION, false);
+        // Enqueue Tailwind CSS from CDN
+        wp_enqueue_script( 'tailwindcss', 'https://cdn.tailwindcss.com', array(), FORVOYEZ_VERSION, false );
 
-		// Enqueue custom scripts
-		wp_enqueue_script(
-			'forvoyez-admin-script',
-			FORVOYEZ_PLUGIN_URL . 'assets/js/admin-script.js',
-			array( 'jquery' ),
-			FORVOYEZ_VERSION,
-			true
-		);
-		wp_enqueue_script(
-			'forvoyez-api-settings',
-			FORVOYEZ_PLUGIN_URL . 'assets/js/api-settings.js',
-			array( 'jquery' ),
-			FORVOYEZ_VERSION,
-			true
-		);
+        // Enqueue custom Tailwind config
+        wp_enqueue_script(
+            'forvoyez-tailwind-config',
+            FORVOYEZ_PLUGIN_URL . 'assets/js/tailwind-config.js',
+            array( 'tailwindcss' ),
+            FORVOYEZ_VERSION,
+            false
+        );
 
-		// include css style
-		wp_enqueue_style( 'forvoyez-admin-style', FORVOYEZ_PLUGIN_URL . 'assets/css/admin-style.css', array(), FORVOYEZ_VERSION );
+        // Enqueue custom Tailwind utilities
+        wp_enqueue_style(
+            'forvoyez-tailwind-utilities',
+            FORVOYEZ_PLUGIN_URL . 'assets/css/tailwind-utilities.css',
+            array(),
+            FORVOYEZ_VERSION
+        );
 
-		// Localize script
-		wp_localize_script(
-			'forvoyez-admin-script',
-			'forvoyezData',
-			array(
-				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'forvoyez_nonce' ),
-			)
-		);
+        // Enqueue custom scripts
+        wp_enqueue_script(
+            'forvoyez-admin-script',
+            FORVOYEZ_PLUGIN_URL . 'assets/js/admin-script.js',
+            array( 'jquery' ),
+            FORVOYEZ_VERSION,
+            true
+        );
+        wp_enqueue_script(
+            'forvoyez-api-settings',
+            FORVOYEZ_PLUGIN_URL . 'assets/js/api-settings.js',
+            array( 'jquery' ),
+            FORVOYEZ_VERSION,
+            true
+        );
 
-		// Add Tailwind configuration
-		$this->add_tailwind_config();
-	}
+        // Localize script
+        wp_localize_script(
+            'forvoyez-admin-script',
+            'forvoyezData',
+            array(
+                'ajaxurl' => admin_url( 'admin-ajax.php' ),
+                'nonce'   => wp_create_nonce( 'forvoyez_nonce' ),
+            )
+        );
+    }
 
 	/**
 	 * Enqueue custom scripts for the admin page.
@@ -121,21 +132,6 @@ class Forvoyez_Admin {
 			array( 'jquery' ),
 			FORVOYEZ_VERSION,
 			true
-		);
-	}
-
-	/**
-	 * Add Tailwind configuration to admin head.
-	 */
-	private function add_tailwind_config() {
-		$tailwind_config = "<script>tailwind.config = {theme: {extend: {colors: {'forvoyez-primary': '#4a90e2','forvoyez-secondary': '#50e3c2',},},},}</script>";
-		$tailwind_styles = "<style type='text/tailwindcss'>@layer utilities {.content-auto {content-visibility: auto;}}</style>";
-
-		add_action(
-			'admin_head',
-			function () use ( $tailwind_config, $tailwind_styles ) {
-                wp_kses_post( $tailwind_config . $tailwind_styles );
-			}
 		);
 	}
 
