@@ -201,7 +201,7 @@ class Forvoyez_Image_Renderer {
                         if ( $label === 'Analyze' ) {
                             echo esc_html_e( 'Analyse', 'forvoyez-auto-alt-text-for-images' );
                         } else if ( $label === 'Details' ) {
-                            echo esc_html_e( 'Analyse', 'forvoyez-auto-alt-text-for-images' );
+                            echo esc_html_e( 'Details', 'forvoyez-auto-alt-text-for-images' );
                         }
                     ?>
                 </span>
