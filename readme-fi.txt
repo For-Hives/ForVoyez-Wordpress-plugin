@@ -93,3 +93,19 @@ Tarkempaa dokumentaatiota varten, vieraile [virallisessa dokumentaatiossamme](ht
 Tukea, ominaisuuspyyntöjä tai virheiden raportointia varten, vieraile [tukifoorumillamme](https://forvoyez.com/support) tai [GitHub-tietovarastossamme](https://github.com/forvoyez/auto-alt-text-for-images).
 
 Tätä lisäosaa tukee ylpeänä [ForVoyez](https://forvoyez.com), joka on johtava tekoälypohjaisissa sisällön optimointiratkaisuissa.
+
+== Ulkoiset palvelut ==
+
+Tämä lisäosa käyttää ForVoyez API -palvelua luodakseen vaihtoehtoista tekstiä ja metatietoja kuville. Kun käytät tätä lisäosaa, kuvatiedot lähetetään ForVoyez-palvelimille käsiteltäväksi.
+
+ForVoyez API -palvelu: https://forvoyez.com
+
+Käyttämällä tätä lisäosaa hyväksyt seuraavat ForVoyez:n oikeudelliset asiakirjat:
+
+* Käyttöehdot: https://forvoyez.com/app/legals/terms
+* Tietosuojakäytäntö: https://forvoyez.com/app/legals/privacy-policy
+* Oikeudellinen huomautus: https://forvoyez.com/app/legals/legal-notice
+
+Ole hyvä ja tutustu näihin asiakirjoihin ymmärtääksesi, miten tietojasi käsitellään tätä lisäosaa käytettäessä. On tärkeää olla tietoinen näistä ehdoista, sillä ne säätelevät ForVoyez-palvelun käyttöä, joka on olennainen osa tämän lisäosan toiminnallisuutta.
+
+ForVoyez käsittelee kuvia, jotka lähetät tämän lisäosan kautta, luodakseen vaihtoehtoista tekstiä ja muita metatietoja. Tämä käsittely tapahtuu ForVoyez:n palvelimilla ja siihen sovelletaan heidän tietojenkäsittelykäytäntöjään, kuten heidän tietosuojakäytännössään on kuvattu.
