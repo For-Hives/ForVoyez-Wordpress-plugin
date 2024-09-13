@@ -93,3 +93,19 @@ Per una documentazione più dettagliata, visita la nostra [documentazione uffici
 Per supporto, richieste di funzionalità o per segnalare bug, visita il nostro [forum di supporto](https://forvoyez.com/support) o il nostro [repository GitHub](https://github.com/forvoyez/auto-alt-text-for-images).
 
 Questo plugin è orgogliosamente alimentato da [ForVoyez](https://forvoyez.com), un leader nelle soluzioni di ottimizzazione dei contenuti basate su IA.
+
+== Servizi esterni ==
+
+Questo plugin si basa sul servizio API ForVoyez per generare testo alternativo e metadati per le immagini. Quando usi questo plugin, i dati delle immagini vengono inviati ai server ForVoyez per l'elaborazione.
+
+Servizio API ForVoyez: https://forvoyez.com
+
+Utilizzando questo plugin, accetti i seguenti documenti legali di ForVoyez:
+
+* Termini di servizio: https://forvoyez.com/app/legals/terms
+* Informativa sulla privacy: https://forvoyez.com/app/legals/privacy-policy
+* Avviso legale: https://forvoyez.com/app/legals/legal-notice
+
+Si prega di esaminare questi documenti per comprendere come vengono gestiti i tuoi dati quando utilizzi questo plugin. È importante essere consapevoli di questi termini poiché regolano l'uso del servizio ForVoyez, che è parte integrante della funzionalità di questo plugin.
+
+ForVoyez elabora le immagini che invii tramite questo plugin per generare testo alternativo e altri metadati. Questa elaborazione avviene sui server di ForVoyez ed è soggetta alle loro pratiche di gestione dei dati, come descritto nella loro informativa sulla privacy.

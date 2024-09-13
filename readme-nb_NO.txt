@@ -93,3 +93,19 @@ For mer detaljert dokumentasjon, vennligst besøk vår [offisielle dokumentasjon
 For support, funksjonsforespørsler eller for å rapportere feil, vennligst besøk vårt [supportforum](https://forvoyez.com/support) eller vår [GitHub-repository](https://github.com/forvoyez/auto-alt-text-for-images).
 
 Dette tillegget er stolt støttet av [ForVoyez](https://forvoyez.com), en leder innen AI-drevne innholdsoptimaliseringsløsninger.
+
+== Eksterne tjenester ==
+
+Denne utvidelsen er avhengig av ForVoyez API-tjenesten for å generere alternativ tekst og metadata for bilder. Når du bruker denne utvidelsen, sendes bildedata til ForVoyez-servere for behandling.
+
+ForVoyez API-tjeneste: https://forvoyez.com
+
+Ved å bruke denne utvidelsen godtar du følgende juridiske dokumenter fra ForVoyez:
+
+* Vilkår for tjenesten: https://forvoyez.com/app/legals/terms
+* Personvernpolicy: https://forvoyez.com/app/legals/privacy-policy
+* Juridisk merknad: https://forvoyez.com/app/legals/legal-notice
+
+Vennligst gjennomgå disse dokumentene for å forstå hvordan dine data håndteres når du bruker denne utvidelsen. Det er viktig å være klar over disse vilkårene da de styrer bruken av ForVoyez-tjenesten, som er en integrert del av funksjonaliteten til denne utvidelsen.
+
+ForVoyez behandler bildene du sender inn gjennom denne utvidelsen for å generere alternativ tekst og annen metadata. Denne behandlingen skjer på ForVoyez sine servere og er underlagt deres praksis for datahåndtering som beskrevet i deres personvernpolicy.

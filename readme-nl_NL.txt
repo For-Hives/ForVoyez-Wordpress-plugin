@@ -93,3 +93,19 @@ Voor meer gedetailleerde documentatie, bezoek onze [officiële documentatie](htt
 Voor ondersteuning, functie-aanvragen of om bugs te melden, bezoek ons [ondersteuningsforum](https://forvoyez.com/support) of onze [GitHub repository](https://github.com/forvoyez/auto-alt-text-for-images).
 
 Deze plugin wordt met trots ondersteund door [ForVoyez](https://forvoyez.com), een leider in AI-gestuurde contentoptimalisatie-oplossingen.
+
+== Externe diensten ==
+
+Deze plugin maakt gebruik van de ForVoyez API-service om alternatieve tekst en metadata voor afbeeldingen te genereren. Wanneer u deze plugin gebruikt, worden afbeeldingsgegevens naar ForVoyez-servers verzonden voor verwerking.
+
+ForVoyez API-service: https://forvoyez.com
+
+Door deze plugin te gebruiken, gaat u akkoord met de volgende juridische documenten van ForVoyez:
+
+* Servicevoorwaarden: https://forvoyez.com/app/legals/terms
+* Privacybeleid: https://forvoyez.com/app/legals/privacy-policy
+* Juridische kennisgeving: https://forvoyez.com/app/legals/legal-notice
+
+Lees deze documenten door om te begrijpen hoe uw gegevens worden behandeld bij het gebruik van deze plugin. Het is belangrijk om op de hoogte te zijn van deze voorwaarden, aangezien ze het gebruik van de ForVoyez-service regelen, die een integraal onderdeel is van de functionaliteit van deze plugin.
+
+ForVoyez verwerkt de afbeeldingen die u via deze plugin indient om alternatieve tekst en andere metadata te genereren. Deze verwerking vindt plaats op de servers van ForVoyez en is onderworpen aan hun gegevensverwerkingspraktijken zoals beschreven in hun privacybeleid.

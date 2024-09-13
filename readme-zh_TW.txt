@@ -93,3 +93,19 @@ AI 可以生成多種語言的內容。您可以在插件設置中指定您喜�
 如需支持、功能請求或報告錯誤，請訪問我們的[支持論壇](https://forvoyez.com/support)或我們的 [GitHub 存儲庫](https://github.com/forvoyez/auto-alt-text-for-images)。
 
 該插件由 [ForVoyez](https://forvoyez.com) 提供支持，ForVoyez 是 AI 驅動的內容優化解決方案的領導者。
+
+== 外部服務 ==
+
+此插件依賴ForVoyez API服務來為圖像生成替代文字和元數據。當您使用此插件時，圖像數據會被發送到ForVoyez伺服器進行處理。
+
+ForVoyez API服務：https://forvoyez.com
+
+使用此插件即表示您同意以下ForVoyez法律文件：
+
+* 服務條款：https://forvoyez.com/app/legals/terms
+* 隱私政策：https://forvoyez.com/app/legals/privacy-policy
+* 法律聲明：https://forvoyez.com/app/legals/legal-notice
+
+請查看這些文件以了解在使用此插件時如何處理您的數據。了解這些條款很重要，因為它們規定了ForVoyez服務的使用，而這是此插件功能不可分割的一部分。
+
+ForVoyez處理您通過此插件提交的圖像以生成替代文字和其他元數據。此處理在ForVoyez的伺服器上進行，並受其隱私政策中描述的數據處理實踐的約束。

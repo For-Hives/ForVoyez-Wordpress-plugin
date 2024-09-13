@@ -93,3 +93,19 @@ AIは複数の言語でコンテンツを生成できます。プラグイン設
 サポート、機能リクエスト、またはバグ報告については、[サポートフォーラム](https://forvoyez.com/support)または[GitHubリポジトリ](https://github.com/forvoyez/auto-alt-text-for-images)をご覧ください。
 
 このプラグインは、AI駆動のコンテンツ最適化ソリューションのリーダーである[ForVoyez](https://forvoyez.com)が誇りを持ってサポートしています。
+
+== 外部サービス ==
+
+このプラグインは、画像の代替テキストとメタデータを生成するためにForVoyez APIサービスを利用しています。このプラグインを使用すると、画像データは処理のためにForVoyezのサーバーに送信されます。
+
+ForVoyez APIサービス：https://forvoyez.com
+
+このプラグインを使用することにより、以下のForVoyezの法的文書に同意したものとみなされます：
+
+* 利用規約：https://forvoyez.com/app/legals/terms
+* プライバシーポリシー：https://forvoyez.com/app/legals/privacy-policy
+* 法的通知：https://forvoyez.com/app/legals/legal-notice
+
+このプラグインを使用する際のデータの取り扱いについて理解するため、これらの文書を確認してください。これらの条件は、このプラグインの機能の不可欠な部分であるForVoyezサービスの使用を規定しているため、認識しておくことが重要です。
+
+ForVoyezは、このプラグインを通じて送信された画像を処理し、代替テキストやその他のメタデータを生成します。この処理はForVoyezのサーバーで行われ、彼らのプライバシーポリシーに記載されているデータ取り扱いの慣行に従います。

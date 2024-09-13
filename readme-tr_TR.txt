@@ -93,3 +93,19 @@ Daha ayrıntılı dokümantasyon için lütfen [resmi dokümantasyonumuzu](https
 Destek, özellik istekleri veya hata bildirimleri için lütfen [destek forumumuzu](https://forvoyez.com/support) veya [GitHub deposumuzu](https://github.com/forvoyez/auto-alt-text-for-images) ziyaret edin.
 
 Bu eklenti, yapay zeka destekli içerik optimizasyon çözümlerinde lider olan [ForVoyez](https://forvoyez.com) tarafından gururla desteklenmektedir.
+
+== Harici Hizmetler ==
+
+Bu eklenti, görüntüler için alternatif metin ve meta veri oluşturmak için ForVoyez API hizmetine bağımlıdır. Bu eklentiyi kullandığınızda, görüntü verileri işlenmek üzere ForVoyez sunucularına gönderilir.
+
+ForVoyez API hizmeti: https://forvoyez.com
+
+Bu eklentiyi kullanarak, aşağıdaki ForVoyez yasal belgelerini kabul etmiş olursunuz:
+
+* Hizmet Şartları: https://forvoyez.com/app/legals/terms
+* Gizlilik Politikası: https://forvoyez.com/app/legals/privacy-policy
+* Yasal Bildirim: https://forvoyez.com/app/legals/legal-notice
+
+Bu eklentiyi kullanırken verilerinizin nasıl işlendiğini anlamak için lütfen bu belgeleri inceleyin. Bu şartların farkında olmak önemlidir çünkü bu eklentinin işlevselliğinin ayrılmaz bir parçası olan ForVoyez hizmetinin kullanımını yönetirler.
+
+ForVoyez, bu eklenti aracılığıyla gönderdiğiniz görüntüleri alternatif metin ve diğer meta verileri oluşturmak için işler. Bu işlem ForVoyez'in sunucularında gerçekleşir ve gizlilik politikalarında açıklandığı gibi veri işleme uygulamalarına tabidir.

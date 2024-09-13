@@ -93,3 +93,19 @@ Aby uzyskać bardziej szczegółową dokumentację, odwiedź naszą [oficjalną 
 W celu uzyskania wsparcia, zgłoszenia prośby o funkcje lub zgłoszenia błędów, odwiedź nasze [forum wsparcia](https://forvoyez.com/support) lub nasze [repozytorium GitHub](https://github.com/forvoyez/auto-alt-text-for-images).
 
 Ta wtyczka jest z dumą wspierana przez [ForVoyez](https://forvoyez.com), lidera w dziedzinie rozwiązań do optymalizacji treści opartych na AI.
+
+== Usługi zewnętrzne ==
+
+Ta wtyczka korzysta z usługi API ForVoyez do generowania alternatywnego tekstu i metadanych dla obrazów. Podczas korzystania z tej wtyczki, dane obrazów są przesyłane do serwerów ForVoyez w celu przetworzenia.
+
+Usługa API ForVoyez: https://forvoyez.com
+
+Korzystając z tej wtyczki, zgadzasz się na następujące dokumenty prawne ForVoyez:
+
+* Warunki korzystania z usługi: https://forvoyez.com/app/legals/terms
+* Polityka prywatności: https://forvoyez.com/app/legals/privacy-policy
+* Nota prawna: https://forvoyez.com/app/legals/legal-notice
+
+Prosimy o zapoznanie się z tymi dokumentami, aby zrozumieć, w jaki sposób Twoje dane są przetwarzane podczas korzystania z tej wtyczki. Ważne jest, aby być świadomym tych warunków, ponieważ regulują one korzystanie z usługi ForVoyez, która jest integralną częścią funkcjonalności tej wtyczki.
+
+ForVoyez przetwarza obrazy, które przesyłasz za pośrednictwem tej wtyczki, aby wygenerować alternatywny tekst i inne metadane. To przetwarzanie odbywa się na serwerach ForVoyez i podlega ich praktykom przetwarzania danych, jak opisano w ich polityce prywatności.

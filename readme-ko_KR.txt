@@ -93,3 +93,19 @@ ForVoyez 이미지 자동 대체 텍스트의 첫 번째 릴리스입니다. 지
 지원, 기능 요청 또는 버그 신고는 [지원 포럼](https://forvoyez.com/support) 또는 [GitHub 저장소](https://github.com/forvoyez/auto-alt-text-for-images)를 방문해 주세요.
 
 이 플러그인은 AI 기반 콘텐츠 최적화 솔루션의 선도 기업인 [ForVoyez](https://forvoyez.com)에서 자랑스럽게 지원합니다.
+
+== 외부 서비스 ==
+
+이 플러그인은 이미지의 대체 텍스트와 메타데이터를 생성하기 위해 ForVoyez API 서비스를 사용합니다. 이 플러그인을 사용할 때 이미지 데이터는 처리를 위해 ForVoyez 서버로 전송됩니다.
+
+ForVoyez API 서비스: https://forvoyez.com
+
+이 플러그인을 사용함으로써 다음 ForVoyez 법률 문서에 동의하게 됩니다:
+
+* 서비스 약관: https://forvoyez.com/app/legals/terms
+* 개인정보 보호정책: https://forvoyez.com/app/legals/privacy-policy
+* 법적 고지: https://forvoyez.com/app/legals/legal-notice
+
+이 플러그인을 사용할 때 귀하의 데이터가 어떻게 처리되는지 이해하기 위해 이 문서들을 검토해 주시기 바랍니다. 이 조건들은 이 플러그인의 기능에 필수적인 ForVoyez 서비스의 사용을 규제하므로 인지하는 것이 중요합니다.
+
+ForVoyez는 이 플러그인을 통해 제출된 이미지를 처리하여 대체 텍스트와 기타 메타데이터를 생성합니다. 이 처리는 ForVoyez의 서버에서 이루어지며 그들의 개인정보 보호정책에 설명된 데이터 처리 관행을 따릅니다.
