@@ -12,79 +12,103 @@ defined( 'ABSPATH' ) || exit( 'Direct access to this file is not allowed.' );
 
 class Forvoyez_API_Manager {
 
-	/**
-	 * @var string The API key for ForVoyez service.
-	 */
-	private $api_key;
+    /**
+     * @var string The API key for ForVoyez service.
+     */
+    private $api_key;
 
-	/**
-	 * @var string The URL of the ForVoyez API endpoint.
-	 */
-	private $api_url;
+    /**
+     * @var string The URL of the ForVoyez API endpoint.
+     */
+    private $api_url;
 
-	/**
-	 * @var WP_Http The HTTP client for making requests.
-	 */
-	private $http_client;
+    /**
+     * @var WP_Http The HTTP client for making requests.
+     */
+    private $http_client;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param string $api_key The API key for ForVoyez service.
-	 */
-	public function __construct( string $api_key, $http_client = null ) {
-		$this->api_key     = $api_key;
-		$this->api_url     = 'https://forvoyez.com/api/describe';
-		$this->http_client = $http_client ?: new WP_Http();
-	}
+    /**
+     * Constructor.
+     *
+     * @param string $api_key The API key for ForVoyez service.
+     * @param WP_Http|null $http_client HTTP client for making requests.
+     */
+    public function __construct( string $api_key, $http_client = null ) {
+        $this->api_key     = $api_key;
+        $this->api_url     = 'https://forvoyez.com/api/describe';
+        $this->http_client = $http_client ?: new WP_Http();
+    }
 
-	/**
-	 * Initialize the API manager.
-	 *
-	 * @return void
-	 */
-	public function init(): void {
-		add_action( 'wp_ajax_forvoyez_verify_api_key', array( $this, 'verify_api_key' ) );
-	}
+    /**
+     * Initialize the API manager.
+     *
+     * @return void
+     */
+    public function init(): void {
+        add_action( 'wp_ajax_forvoyez_verify_api_key', array( $this, 'ajax_verify_api_key' ) );
+    }
 
-	/**
-	 * Verify the API key.
-	 */
-	public function verify_api_key() {
-		$api_key = forvoyez_get_api_key();
-		if ( empty( $api_key ) ) {
-			return array( 'success' => false, 'message' => __( 'API key is not set', 'forvoyez-auto-alt-text-for-images' ) );
-		}
+    /**
+     * AJAX handler for verifying the API key.
+     */
+    public function ajax_verify_api_key() {
+        // Check nonce for security
+        check_ajax_referer( 'forvoyez_nonce', 'nonce' );
 
-		$response = wp_remote_get(
-			$this->api_url . '/verify',
-			array(
-				'headers' => array(
-					'Authorization' => 'Bearer ' . $api_key,
-				),
-			)
-		);
+        // Check user capabilities
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( esc_html__( 'You do not have permission to perform this action.', 'forvoyez-auto-alt-text-for-images' ) );
+        }
 
-		if ( is_wp_error( $response ) ) {
-			return array( 'success' => false, 'message' => $response->get_error_message() );
-		}
+        $result = $this->verify_api_key();
 
-		$body = wp_remote_retrieve_body( $response );
-		$data = json_decode( $body, true );
+        if ( $result['success'] ) {
+            wp_send_json_success( esc_html( $result['message'] ) );
+        } else {
+            wp_send_json_error( esc_html( $result['message'] ) );
+        }
+    }
 
-		if ( wp_remote_retrieve_response_code( $response ) === 200 ) {
-			return array( 'success' => true, 'message' => __( 'API key is valid', 'forvoyez-auto-alt-text-for-images' ) );
-		} else {
-			return array( 'success' => false, 'message' => $data['error'] ?? __( 'Invalid API key', 'forvoyez-auto-alt-text-for-images' ) );
-		}
-	}
+    /**
+     * Verify the API key.
+     *
+     * @return array The verification result.
+     */
+    public function verify_api_key(): array {
+        $api_key = forvoyez_get_api_key();
+        if ( empty( $api_key ) ) {
+            return array( 'success' => false, 'message' => __( 'API key is not set', 'forvoyez-auto-alt-text-for-images' ) );
+        }
 
-	/**
-	 * Analyze an image using the ForVoyez API.
-	 *
-	 * @param int $image_id The ID of the image to analyze.
-	 * @return array The analysis result.
-	 */
+        $response = wp_remote_get(
+            $this->api_url . '/verify',
+            array(
+                'headers' => array(
+                    'Authorization' => 'Bearer ' . $api_key,
+                ),
+            )
+        );
+
+        if ( is_wp_error( $response ) ) {
+            return array( 'success' => false, 'message' => $response->get_error_message() );
+        }
+
+        $body = wp_remote_retrieve_body( $response );
+        $data = json_decode( $body, true );
+
+        if ( wp_remote_retrieve_response_code( $response ) === 200 ) {
+            return array( 'success' => true, 'message' => __( 'API key is valid', 'forvoyez-auto-alt-text-for-images' ) );
+        } else {
+            return array( 'success' => false, 'message' => $data['error'] ?? __( 'Invalid API key', 'forvoyez-auto-alt-text-for-images' ) );
+        }
+    }
+
+    /**
+     * Analyze an image using the ForVoyez API.
+     *
+     * @param int $image_id The ID of the image to analyze.
+     * @return array The analysis result.
+     */
     public function analyze_image( int $image_id ): array {
         $image_path = get_attached_file( $image_id );
         if ( !$image_path ) {
@@ -113,135 +137,135 @@ class Forvoyez_API_Manager {
             ),
         );
 
-		$boundary  = wp_generate_password( 24 );
-		$delimiter = '-------------' . $boundary;
+        $boundary  = wp_generate_password( 24 );
+        $delimiter = '-------------' . $boundary;
 
-		$post_data = $this->build_data_files( $boundary, $data, $image_name, $image_mime, $file_data );
+        $post_data = $this->build_data_files( $boundary, $data, $image_name, $image_mime, $file_data );
 
-		$args = array(
-			'method'      => 'POST',
-			'timeout'     => 30,
-			'redirection' => 5,
-			'httpversion' => '1.1',
-			'blocking'    => true,
-			'headers'     => array(
-				'Authorization'  => 'Bearer ' . $this->api_key,
-				'Content-Type'   => 'multipart/form-data; boundary=' . $delimiter,
-				'Content-Length' => strlen( $post_data ),
-			),
-			'body'        => $post_data,
-		);
+        $args = array(
+            'method'      => 'POST',
+            'timeout'     => 30,
+            'redirection' => 5,
+            'httpversion' => '1.1',
+            'blocking'    => true,
+            'headers'     => array(
+                'Authorization'  => 'Bearer ' . $this->api_key,
+                'Content-Type'   => 'multipart/form-data; boundary=' . $delimiter,
+                'Content-Length' => strlen( $post_data ),
+            ),
+            'body'        => $post_data,
+        );
 
-		$response = $this->http_client->post( $this->api_url, $args );
+        $response = $this->http_client->post( $this->api_url, $args );
 
-		if ( is_wp_error( $response ) ) {
-			return $this->format_error( 'api_request_failed', $response->get_error_message() );
-		}
+        if ( is_wp_error( $response ) ) {
+            return $this->format_error( 'api_request_failed', $response->get_error_message() );
+        }
 
-		$body = wp_remote_retrieve_body( $response );
-		$data = json_decode( $body, true );
+        $body = wp_remote_retrieve_body( $response );
+        $data = json_decode( $body, true );
 
-		if ( json_last_error() !== JSON_ERROR_NONE ) {
-			return $this->format_error(
-				'json_decode_error',
-				__( 'Failed to decode API response', 'forvoyez-auto-alt-text-for-images' ),
-				array(
-					'response_code' => wp_remote_retrieve_response_code( $response ),
-					'body'          => substr( $body, 0, 1000 ),
-					'image_url'     => $image_url,
-					'api_url'       => $this->api_url,
-				)
-			);
-		}
+        if ( json_last_error() !== JSON_ERROR_NONE ) {
+            return $this->format_error(
+                'json_decode_error',
+                __( 'Failed to decode API response', 'forvoyez-auto-alt-text-for-images' ),
+                array(
+                    'response_code' => wp_remote_retrieve_response_code( $response ),
+                    'body'          => substr( $body, 0, 1000 ),
+                    'image_url'     => $image_url,
+                    'api_url'       => $this->api_url,
+                )
+            );
+        }
 
-		if ( isset( $data['error'] ) ) {
-			return $this->format_error( 'api_error', $data['error'] );
-		}
+        if ( isset( $data['error'] ) ) {
+            return $this->format_error( 'api_error', $data['error'] );
+        }
 
-		$metadata = array(
-			'alt_text' => $data['alternativeText'] ?? '',
-			'title'    => $data['title'] ?? '',
-			'caption'  => $data['caption'] ?? '',
-		);
+        $metadata = array(
+            'alt_text' => isset($data['alternativeText']) ? sanitize_text_field($data['alternativeText']) : '',
+            'title'    => isset($data['title']) ? sanitize_text_field($data['title']) : '',
+            'caption'  => isset($data['caption']) ? wp_kses_post($data['caption']) : '',
+        );
 
-		$this->update_image_metadata( $image_id, $metadata );
+        $this->update_image_metadata( $image_id, $metadata );
 
-		return array(
-			'success'  => true,
-			'message'  => __( 'Analysis successful', 'forvoyez-auto-alt-text-for-images' ),
-			'metadata' => $metadata,
-		);
-	}
+        return array(
+            'success'  => true,
+            'message'  => __( 'Analysis successful', 'forvoyez-auto-alt-text-for-images' ),
+            'metadata' => $metadata,
+        );
+    }
 
-	/**
-	 * Update image metadata in WordPress.
-	 *
-	 * @param int $image_id The ID of the image to update.
-	 * @param array $metadata The metadata to update.
-	 * @return void
-	 */
-	private function update_image_metadata( int $image_id, array $metadata ): void {
-		update_post_meta( $image_id, '_wp_attachment_image_alt', $metadata['alt_text'] );
-		wp_update_post(
-			array(
-				'ID'           => $image_id,
-				'post_title'   => $metadata['title'],
-				'post_excerpt' => $metadata['caption'],
-			)
-		);
-		update_post_meta( $image_id, '_forvoyez_analyzed', 1 );
-	}
+    /**
+     * Update image metadata in WordPress.
+     *
+     * @param int $image_id The ID of the image to update.
+     * @param array $metadata The metadata to update.
+     * @return void
+     */
+    private function update_image_metadata( int $image_id, array $metadata ): void {
+        update_post_meta( $image_id, '_wp_attachment_image_alt', $metadata['alt_text'] );
+        wp_update_post(
+            array(
+                'ID'           => $image_id,
+                'post_title'   => $metadata['title'],
+                'post_excerpt' => $metadata['caption'],
+            )
+        );
+        update_post_meta( $image_id, '_forvoyez_analyzed', 1 );
+    }
 
-	/**
-	 * Format an error response.
-	 *
-	 * @param string $code The error code.
-	 * @param string $message The error message.
-	 * @param array|null $debug_info Optional debug information.
-	 * @return array The formatted error.
-	 */
-	private function format_error( string $code, string $message, ?array $debug_info = null ): array {
-		$error = array(
-			'success' => false,
-			'error'   => array(
-				'code'    => $code,
-				'message' => $message,
-			),
-		);
+    /**
+     * Format an error response.
+     *
+     * @param string $code The error code.
+     * @param string $message The error message.
+     * @param array|null $debug_info Optional debug information.
+     * @return array The formatted error.
+     */
+    private function format_error( string $code, string $message, ?array $debug_info = null ): array {
+        $error = array(
+            'success' => false,
+            'error'   => array(
+                'code'    => $code,
+                'message' => $message,
+            ),
+        );
 
-		if ( $debug_info ) {
-			$error['debug_info'] = $debug_info;
-		}
+        if ( $debug_info && WP_DEBUG ) {
+            $error['debug_info'] = $debug_info;
+        }
 
-		return $error;
-	}
+        return $error;
+    }
 
-	/**
-	 * Build multipart data for file upload.
-	 *
-	 * @param string $boundary The boundary string for multipart data.
-	 * @param array $fields The fields to include in the data.
-	 * @param string $file_name The name of the file.
-	 * @param string $file_mime The MIME type of the file.
-	 * @param string $file_data The file data.
-	 * @return string The built multipart data.
-	 */
-	private function build_data_files( string $boundary, array $fields, string $file_name, string $file_mime, string $file_data ): string {
-		$data      = '';
-		$delimiter = '-------------' . $boundary;
+    /**
+     * Build multipart data for file upload.
+     *
+     * @param string $boundary The boundary string for multipart data.
+     * @param array $fields The fields to include in the data.
+     * @param string $file_name The name of the file.
+     * @param string $file_mime The MIME type of the file.
+     * @param string $file_data The file data.
+     * @return string The built multipart data.
+     */
+    private function build_data_files( string $boundary, array $fields, string $file_name, string $file_mime, string $file_data ): string {
+        $data      = '';
+        $delimiter = '-------------' . $boundary;
 
-		foreach ( $fields as $name => $content ) {
-			$data .= "--{$delimiter}\r\n";
-			$data .= "Content-Disposition: form-data; name=\"{$name}\"\r\n\r\n";
-			$data .= "{$content}\r\n";
-		}
+        foreach ( $fields as $name => $content ) {
+            $data .= "--{$delimiter}\r\n";
+            $data .= "Content-Disposition: form-data; name=\"" . sanitize_key($name) . "\"\r\n\r\n";
+            $data .= "{$content}\r\n";
+        }
 
-		$data .= "--{$delimiter}\r\n";
-		$data .= "Content-Disposition: form-data; name=\"image\"; filename=\"{$file_name}\"\r\n";
-		$data .= "Content-Type: {$file_mime}\r\n\r\n";
-		$data .= $file_data . "\r\n";
-		$data .= "--{$delimiter}--\r\n";
+        $data .= "--{$delimiter}\r\n";
+        $data .= "Content-Disposition: form-data; name=\"image\"; filename=\"" . sanitize_file_name($file_name) . "\"\r\n";
+        $data .= "Content-Type: {$file_mime}\r\n\r\n";
+        $data .= $file_data . "\r\n";
+        $data .= "--{$delimiter}--\r\n";
 
-		return $data;
-	}
+        return $data;
+    }
 }
