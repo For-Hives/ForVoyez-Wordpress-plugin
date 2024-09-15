@@ -54,28 +54,23 @@ class Forvoyez_Settings {
      * AJAX callback to save the API key.
      */
     public function ajax_save_api_key() {
-	    check_ajax_referer( 'forvoyez_nonce', 'nonce' );
+        check_ajax_referer( 'forvoyez_nonce', 'nonce' );
 
-	    if ( ! current_user_can( 'manage_options' ) ) {
-	        wp_send_json_error( esc_html__( 'Permission denied', 'forvoyez-auto-alt-text-for-images' ), 403 );
-	    }
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( esc_html__( 'Permission denied', 'forvoyez-auto-alt-text-for-images' ), 403 );
+        }
 
-	    $api_key = isset( $_POST['api_key'] ) ? sanitize_text_field( wp_unslash( $_POST['api_key'] ) ) : '';
+        $api_key = isset( $_POST['api_key'] ) ? sanitize_text_field( wp_unslash( $_POST['api_key'] ) ) : '';
 
-	    if ( empty( $api_key ) ) {
-	        wp_send_json_error( esc_html__( 'API key cannot be empty', 'forvoyez-auto-alt-text-for-images' ), 400 );
-	    }
+        if ( empty( $api_key ) ) {
+            wp_send_json_error( esc_html__( 'API key cannot be empty', 'forvoyez-auto-alt-text-for-images' ), 400 );
+        }
 
-	    $is_valid = $this->verify_api_key($api_key);
-	    if (!$is_valid) {
-	        wp_send_json_error( esc_html__( 'Invalid API key', 'forvoyez-auto-alt-text-for-images' ), 400 );
-	    }
+        $encrypted_api_key = $this->encrypt( $api_key );
+        update_option( 'forvoyez_encrypted_api_key', $encrypted_api_key );
 
-	    $encrypted_api_key = $this->encrypt( $api_key );
-	    update_option( 'forvoyez_encrypted_api_key', $encrypted_api_key );
-
-	    wp_send_json_success( esc_html__( 'API key saved successfully', 'forvoyez-auto-alt-text-for-images' ) );
-	}
+        wp_send_json_success( esc_html__( 'API key saved successfully', 'forvoyez-auto-alt-text-for-images' ) );
+    }
 
     /**
      * Get the decrypted API key.
