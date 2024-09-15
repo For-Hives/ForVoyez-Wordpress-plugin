@@ -112,7 +112,7 @@ class Forvoyez_Image_Processor {
 	}
 
 	public function load_more_images() {
-		check_ajax_referer( 'forvoyez_nonce', 'nonce' );
+		check_ajax_referer( 'forvoyez_load_more_images_nonce', 'nonce' );
 
 		$page     = isset( $_POST['paged'] ) ? intval( $_POST['paged'] ) : 1;
 		$per_page = isset( $_POST['per_page'] ) ? intval( $_POST['per_page'] ) : 21;
@@ -247,7 +247,7 @@ class Forvoyez_Image_Processor {
 	 * @throws WP_Error If the request is invalid or user doesn't have permission.
 	 */
 	private function verify_ajax_request() {
-		check_ajax_referer( 'forvoyez_nonce', 'nonce' );
+		check_ajax_referer( 'forvoyez_verify_ajax_request_nonce', 'nonce' );
 
 		if ( !current_user_can( 'upload_files' ) ) {
 			wp_send_json_error( __( 'Permission denied', 'forvoyez-auto-alt-text-for-images' ) );

@@ -85,7 +85,7 @@
 				type: 'POST',
 				data: {
 					action: 'forvoyez_get_image_ids',
-					nonce: forvoyezData.nonce,
+					nonce: forvoyezData.getImageIdsNonce,
 					type: type,
 				},
 				success: function (response) {
@@ -167,7 +167,7 @@
 	function loadImages(page = currentPage) {
 		let data = {
 			action: 'forvoyez_load_images',
-			nonce: forvoyezData.nonce,
+			nonce: forvoyezData.loadImagesNonce,
 			paged: page,
 			per_page: perPage,
 			filters: $filterForm.serializeArray(),
@@ -227,7 +227,7 @@
 			data: {
 				action: 'forvoyez_save_api_key',
 				api_key: apiKey,
-				nonce: forvoyezData.nonce,
+				nonce: forvoyezData.saveApiKeyNonce,
 			},
 			success: function (response) {
 				if (response.success) {
@@ -284,7 +284,7 @@
 				data: {
 					action: 'forvoyez_analyze_image',
 					image_id: imageId,
-					nonce: forvoyezData.nonce,
+					nonce: forvoyezData.analyseImageNonce,
 				},
 				success: function (response) {
 					if (response.success) {
@@ -361,7 +361,7 @@
 					data: {
 						action: 'forvoyez_process_image_batch',
 						image_ids: batch,
-						nonce: forvoyezData.nonce,
+						nonce: forvoyezData.processImageBatchNonce,
 					},
 					success: function (response) {
 						if (response.success) {
@@ -557,7 +557,7 @@
 				type: 'POST',
 				data: {
 					action: 'forvoyez_get_image_ids',
-					nonce: forvoyezData.nonce,
+					nonce: forvoyezData.getImageIdsNonce,
 					type: type,
 				},
 				success: function (response) {

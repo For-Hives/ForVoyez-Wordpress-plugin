@@ -111,29 +111,18 @@ class Forvoyez_Admin {
             array(
                 'ajaxurl' => admin_url( 'admin-ajax.php' ),
                 'nonce'   => wp_create_nonce( 'forvoyez_nonce' ),
+                'saveApiKeyNonce'    => wp_create_nonce( 'forvoyez_save_api_key_nonce' ),
+                'loadImagesNonce'    => wp_create_nonce( 'forvoyez_load_images_nonce' ),
+                'getImageCountsNonce' => wp_create_nonce( 'forvoyez_get_image_counts_nonce' ),
+                'getImageIdsNonce'   => wp_create_nonce( 'forvoyez_get_image_ids_nonce' ),
+                'verifyApiKeyNonce'  => wp_create_nonce( 'forvoyez_verify_api_key_nonce' ),
+                'loadMoreImagesNonce' => wp_create_nonce( 'forvoyez_load_more_images_nonce' ),
+                'verifyAjaxRequestNonce' => wp_create_nonce( 'forvoyez_verify_ajax_request_nonce' ),
+                'analyseImageNonce' => wp_create_nonce( 'forvoyez_analyse_image_nonce' ),
+                'processImageBatchNonce' => wp_create_nonce( 'forvoyez_process_image_batch_nonce' ),
             )
         );
     }
-
-	/**
-	 * Enqueue custom scripts for the admin page.
-	 */
-	private function enqueue_custom_scripts() {
-		wp_enqueue_script(
-			'forvoyez-admin-script',
-			FORVOYEZ_PLUGIN_URL . 'assets/js/admin-script.js',
-			array( 'jquery' ),
-			FORVOYEZ_VERSION,
-			true
-		);
-		wp_enqueue_script(
-			'forvoyez-api-settings',
-			FORVOYEZ_PLUGIN_URL . 'assets/js/api-settings.js',
-			array( 'jquery' ),
-			FORVOYEZ_VERSION,
-			true
-		);
-	}
 
     /**
      * Render the admin page.
@@ -332,7 +321,7 @@ class Forvoyez_Admin {
 	 * AJAX handler for loading images.
 	 */
 	public function ajax_load_images() {
-		check_ajax_referer( 'forvoyez_nonce', 'nonce' );
+		check_ajax_referer( 'forvoyez_load_images_nonce', 'nonce' );
 		if ( !current_user_can( 'upload_files' ) ) {
 			wp_send_json_error( __( 'Permission denied', 'forvoyez-auto-alt-text-for-images' ), 403 );
 		}
@@ -459,7 +448,7 @@ class Forvoyez_Admin {
 	 * AJAX handler for getting image counts.
 	 */
 	public function ajax_get_image_counts() {
-		check_ajax_referer( 'forvoyez_nonce', 'nonce' );
+		check_ajax_referer( 'forvoyez_get_image_counts_nonce', 'nonce' );
 		if ( !current_user_can( 'upload_files' ) ) {
 			wp_send_json_error( __( 'Permission denied', 'forvoyez-auto-alt-text-for-images' ), 403 );
 		}
@@ -539,7 +528,7 @@ class Forvoyez_Admin {
 	 * AJAX handler for getting image IDs.
 	 */
 	public function ajax_get_image_ids() {
-		check_ajax_referer( 'forvoyez_nonce', 'nonce' );
+		check_ajax_referer( 'forvoyez_get_image_ids_nonce', 'nonce' );
 
 		if ( !current_user_can( 'upload_files' ) ) {
 			wp_send_json_error( __( 'Permission denied', 'forvoyez-auto-alt-text-for-images' ), 403 );
@@ -563,7 +552,7 @@ class Forvoyez_Admin {
 	 * AJAX handler for verifying API key.
 	 */
 	public function ajax_verify_api_key() {
-		check_ajax_referer( 'forvoyez_nonce', 'nonce' );
+		check_ajax_referer( 'forvoyez_verify_api_key_nonce', 'nonce' );
 
 		if ( !current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( __( 'Permission denied', 'forvoyez-auto-alt-text-for-images' ), 403 );

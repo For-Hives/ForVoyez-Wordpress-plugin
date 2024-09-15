@@ -54,7 +54,7 @@ class Forvoyez_Settings {
 	 * AJAX callback to save the API key.
 	 */
 	public function ajax_save_api_key() {
-		check_ajax_referer( 'forvoyez_nonce', 'nonce' );
+		check_ajax_referer( 'forvoyez_save_api_key_nonce', 'nonce' );
 
 		if ( !current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( __( 'Permission denied', 'forvoyez-auto-alt-text-for-images' ), 403 );
