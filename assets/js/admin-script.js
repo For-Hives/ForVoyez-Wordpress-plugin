@@ -80,6 +80,11 @@
 				type = 'all'
 			}
 
+			if (!isNonceValid()) {
+				showNotification('Security check failed. Please refresh the page.', 'error');
+				return;
+			}
+			
 			$.ajax({
 				url: forvoyezData.ajaxurl,
 				type: 'POST',
@@ -178,6 +183,12 @@
 			data.per_page = 999999 // Use a very large number instead of -1
 		}
 
+		if (!isNonceValid()) {
+			showNotification('Security check failed. Please refresh the page.', 'error');
+			return;
+		}
+
+
 		$.post(forvoyezData.ajaxurl, data, function (response) {
 			if (response.success) {
 				$container.html(response.data.html)
@@ -221,6 +232,11 @@
 	loadImages(currentPage)
 
 	function saveApiKey(apiKey) {
+		if (!isNonceValid()) {
+			showNotification('Security check failed. Please refresh the page.', 'error');
+			return;
+		}
+
 		$.ajax({
 			url: forvoyezData.ajaxurl,
 			type: 'POST',
@@ -276,6 +292,11 @@
 
 		$loader.removeClass('hidden')
 		showLoader()
+
+		if (!isNonceValid()) {
+			showNotification('Security check failed. Please refresh the page.', 'error');
+			return;
+		}
 
 		return new Promise(resolve => {
 			$.ajax({
@@ -354,6 +375,10 @@
 		}
 
 		function processBatch(batch) {
+			if (!isNonceValid()) {
+				showNotification('Security check failed. Please refresh the page.', 'error');
+				return;
+			}
 			return new Promise(resolve => {
 				$.ajax({
 					url: forvoyezData.ajaxurl,
@@ -552,6 +577,11 @@
 		]
 
 		types.forEach((type, index) => {
+			if (!isNonceValid()) {
+				showNotification('Security check failed. Please refresh the page.', 'error');
+				return;
+			}
+
 			$.ajax({
 				url: forvoyezData.ajaxurl,
 				type: 'POST',
@@ -624,6 +654,10 @@
 		showConfirmModal(message, function () {
 			analyzeBulkImages(imageIds)
 		})
+	}
+
+	function isNonceValid() {
+		return typeof forvoyezData !== 'undefined' && forvoyezData.nonce;
 	}
 
 	window.showNotification = showNotification
