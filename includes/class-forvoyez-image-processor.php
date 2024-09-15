@@ -200,7 +200,7 @@ class Forvoyez_Image_Processor {
 	public function analyze_single_image() {
 		$this->verify_ajax_request();
 
-		$image_id = isset( $_POST['image_id'] ) ? intval( $_POST['image_id'] ) : 0;
+		$image_id = isset( $_POST['image_id'] ) ? absint( wp_unslash( $_POST['image_id'] ) ) : 0;
 
 		if ( !$image_id ) {
 			wp_send_json_error( __( 'Invalid image ID', 'forvoyez-auto-alt-text-for-images' ) );
@@ -214,7 +214,7 @@ class Forvoyez_Image_Processor {
 	public function process_image_batch() {
 		$this->verify_ajax_request();
 
-		$image_ids = isset( $_POST['image_ids'] ) ? array_map( 'intval', $_POST['image_ids'] ) : array();
+		$image_ids = isset( $_POST['image_ids'] ) ? array_map( 'absint', wp_unslash( $_POST['image_ids'] ) ) : array();
 
 		if ( empty( $image_ids ) ) {
 			wp_send_json_error( __( 'No images provided', 'forvoyez-auto-alt-text-for-images' ) );

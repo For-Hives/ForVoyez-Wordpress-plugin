@@ -60,7 +60,7 @@ class Forvoyez_Settings {
 			wp_send_json_error( __( 'Permission denied', 'forvoyez-auto-alt-text-for-images' ), 403 );
 		}
 
-		$api_key = isset( $_POST['api_key'] ) ? sanitize_text_field( $_POST['api_key'] ) : '';
+		$api_key = isset( $_POST['api_key'] ) ? sanitize_text_field( wp_unslash( $_POST['api_key'] ) ) : '';
 
 		if ( empty( $api_key ) ) {
 			wp_send_json_error( __( 'API key cannot be empty', 'forvoyez-auto-alt-text-for-images' ), 400 );

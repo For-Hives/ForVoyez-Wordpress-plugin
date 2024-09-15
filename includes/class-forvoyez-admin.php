@@ -315,8 +315,8 @@ class Forvoyez_Admin {
 	 * @return array Sanitized filters.
 	 */
 	private function parse_and_sanitize_filters($raw_filters) {
-    $sanitized_filters = array();
-    $allowed_filters = array('alt', 'title', 'caption');
+        $sanitized_filters = array();
+        $allowed_filters = array('alt', 'title', 'caption');
 
         foreach ($raw_filters as $filter) {
             $sanitized_filter = sanitize_text_field($filter);
@@ -339,7 +339,6 @@ class Forvoyez_Admin {
 
 		$paged    = isset( $_POST['paged'] ) ? absint( wp_unslash( $_POST['paged'] ) ) : 1;
 		$per_page = isset( $_POST['per_page'] ) ? absint( wp_unslash( $_POST['per_page'] ) ) : 25;
-//		$filters  = isset( $_POST['filters'] ) ? $this->parse_and_sanitize_filters( wp_unslash( $_POST['filters'] ) ) : array();
         $raw_filters = isset($_POST['filters']) ? wp_unslash($_POST['filters']) : array();
         $filters = $this->parse_and_sanitize_filters($raw_filters);
 
