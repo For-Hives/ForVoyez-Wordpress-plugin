@@ -41,6 +41,10 @@ function forvoyez_count_incomplete_images() {
             )
         );
 
+        if (null === $results) {
+            return new WP_Error('db_query_error', esc_html__('Database query failed', 'forvoyez-auto-alt-text-for-images'));
+        }
+
         $incomplete_count = 0;
         $debug_info = array();
 
@@ -101,6 +105,10 @@ function forvoyez_get_api_key() {
     }
 
     $api_key = $forvoyez_settings->get_api_key();
+
+    if (empty($api_key)) {
+        return new WP_Error('empty_api_key', esc_html__('API key is not set', 'forvoyez-auto-alt-text-for-images'));
+    }
 
     return apply_filters( 'forvoyez_api_key', $api_key );
 }
