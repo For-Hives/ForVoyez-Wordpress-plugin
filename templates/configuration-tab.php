@@ -1,4 +1,10 @@
 <?php
+
+// If this file is called directly, abort.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 'Direct access to this file is not allowed.' );
+}
+
 $settings = new Forvoyez_Settings();
 $api_key = $settings->get_api_key();
 ?>

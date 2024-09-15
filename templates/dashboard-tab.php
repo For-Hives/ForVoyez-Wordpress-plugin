@@ -1,3 +1,9 @@
+<?php
+// If this file is called directly, abort.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 'Direct access to this file is not allowed.' );
+}
+?>
 <div class="dashboard-tab">
     <div class="bg-white shadow overflow-hidden sm:rounded-lgmb-6">
         <div class="px-4 py-5 sm:px-6">
