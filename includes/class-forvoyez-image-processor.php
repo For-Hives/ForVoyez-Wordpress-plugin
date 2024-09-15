@@ -212,18 +212,18 @@ class Forvoyez_Image_Processor {
     }
 
     public function ajax_process_image_batch() {
-	    $this->verify_ajax_request();
+        $this->verify_ajax_request();
 
-	    $image_ids = isset( $_POST['image_ids'] ) && is_array( $_POST['image_ids'] ) ? array_map( 'absint', $_POST['image_ids'] ) : array();
+        $image_ids = isset( $_POST['image_ids'] ) ? array_map( 'absint', $_POST['image_ids'] ) : array();
 
-	    if ( empty( $image_ids ) ) {
-	        wp_send_json_error( esc_html__( 'No images provided', 'forvoyez-auto-alt-text-for-images' ) );
-	    }
+        if ( empty( $image_ids ) ) {
+            wp_send_json_error( esc_html__( 'No images provided', 'forvoyez-auto-alt-text-for-images' ) );
+        }
 
-	    $results = $this->process_images( $image_ids );
+        $results = $this->process_images( $image_ids );
 
-	    wp_send_json_success( array( 'results' => $results ) );
-	}
+        wp_send_json_success( array( 'results' => $results ) );
+    }
 
     private function process_images( $image_ids ) {
         $results = array();
