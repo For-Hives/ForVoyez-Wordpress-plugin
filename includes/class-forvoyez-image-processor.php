@@ -28,26 +28,30 @@ class Forvoyez_Image_Processor {
 		add_action( 'wp_ajax_forvoyez_process_image_batch', array( $this, 'process_image_batch' ) );
 	}
 
-	private function sanitize_metadata( $metadata ) {
-		$sanitized = array();
-		if ( isset( $metadata['alt_text'] ) ) {
-			$sanitized['alt_text'] = sanitize_text_field( $metadata['alt_text'] );
-		}
-		if ( isset( $metadata['title'] ) ) {
-			$sanitized['title'] = sanitize_text_field( $metadata['title'] );
-		}
-		if ( isset( $metadata['caption'] ) ) {
-			$sanitized['caption'] = wp_kses_post( $metadata['caption'] );
-		}
+	private function sanitize_and_validate_metadata($raw_metadata) {
+	    $sanitized_metadata = array();
 
-		return $sanitized;
+	    if (isset($raw_metadata['alt_text'])) {
+	        $sanitized_metadata['alt_text'] = wp_kses_post($raw_metadata['alt_text']);
+	    }
+
+	    if (isset($raw_metadata['title'])) {
+	        $sanitized_metadata['title'] = sanitize_text_field($raw_metadata['title']);
+	    }
+
+	    if (isset($raw_metadata['caption'])) {
+	        $sanitized_metadata['caption'] = wp_kses_post($raw_metadata['caption']);
+	    }
+
+	    return $sanitized_metadata;
 	}
 
 	public function update_image_metadata() {
 		$this->verify_ajax_request();
 
 		$image_id = isset( $_POST['image_id'] ) ? absint( wp_unslash( $_POST['image_id'] ) ) : 0;
-		$metadata = isset( $_POST['metadata'] ) ? $this->sanitize_metadata( wp_unslash( $_POST['metadata'] ) ) : array();
+		$raw_metadata = isset($_POST['metadata']) ? wp_unslash($_POST['metadata']) : array();
+		$metadata = $this->sanitize_and_validate_metadata($raw_metadata);
 
 		if ( !$image_id || empty( $metadata ) ) {
 			wp_send_json_error( __( 'Invalid data', 'forvoyez-auto-alt-text-for-images' ) );

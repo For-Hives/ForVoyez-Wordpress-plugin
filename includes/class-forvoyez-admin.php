@@ -314,21 +314,19 @@ class Forvoyez_Admin {
 	 * @param array $filters Raw filters array.
 	 * @return array Sanitized filters.
 	 */
-	private function parse_and_sanitize_filters( $filters ) {
-		$sanitized       = array();
-		$allowed_filters = array( 'alt', 'title', 'caption' );
-		foreach ( $filters as $filter ) {
-			if (
-				isset( $filter['name'], $filter['value'] ) &&
-				$filter['name'] === 'filter[]' &&
-				in_array( $filter['value'], $allowed_filters, true )
-			) {
-				$sanitized[] = sanitize_text_field( $filter['value'] );
-			}
-		}
+	private function parse_and_sanitize_filters($raw_filters) {
+    $sanitized_filters = array();
+    $allowed_filters = array('alt', 'title', 'caption');
 
-		return $sanitized;
-	}
+        foreach ($raw_filters as $filter) {
+            $sanitized_filter = sanitize_text_field($filter);
+            if (in_array($sanitized_filter, $allowed_filters)) {
+                $sanitized_filters[] = $sanitized_filter;
+            }
+        }
+
+        return $sanitized_filters;
+    }
 
 	/**
 	 * AJAX handler for loading images.
@@ -341,7 +339,9 @@ class Forvoyez_Admin {
 
 		$paged    = isset( $_POST['paged'] ) ? absint( wp_unslash( $_POST['paged'] ) ) : 1;
 		$per_page = isset( $_POST['per_page'] ) ? absint( wp_unslash( $_POST['per_page'] ) ) : 25;
-		$filters  = isset( $_POST['filters'] ) ? $this->parse_and_sanitize_filters( wp_unslash( $_POST['filters'] ) ) : array();
+//		$filters  = isset( $_POST['filters'] ) ? $this->parse_and_sanitize_filters( wp_unslash( $_POST['filters'] ) ) : array();
+        $raw_filters = isset($_POST['filters']) ? wp_unslash($_POST['filters']) : array();
+        $filters = $this->parse_and_sanitize_filters($raw_filters);
 
 		$result       = $this->display_incomplete_images( $paged, $per_page, $filters );
 		$total_images = $this->count_total_images( $filters );
