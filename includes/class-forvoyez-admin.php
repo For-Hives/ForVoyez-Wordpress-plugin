@@ -128,7 +128,11 @@ class Forvoyez_Admin {
             wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'forvoyez-auto-alt-text-for-images' ) );
         }
 
-        check_admin_referer( 'forvoyez_admin_page', 'forvoyez_nonce' );
+        // Verify nonce
+        $nonce = isset( $_REQUEST['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ) : '';
+        if ( !wp_verify_nonce( $nonce, 'forvoyez_admin_page' ) ) {
+            wp_die( esc_html__( 'Invalid nonce. Please refresh the page and try again.', 'forvoyez-auto-alt-text-for-images' ) );
+        }
 
         $active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'dashboard';
 
