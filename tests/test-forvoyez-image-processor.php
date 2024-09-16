@@ -22,31 +22,27 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase {
 	}
 
 	public function test_sanitize_and_validate_metadata() {
-		$raw_metadata = array(
-			'alt_text'    => 'Test <script>alert("XSS")</script>',
-			'title'       => 'Test Title',
-			'caption'     => '<p>Test <strong>Caption</strong></p>',
-			'extra_field' => 'Should be removed',
-		);
+        $raw_metadata = array(
+            'alt_text'    => 'Test <script>alert("XSS")</script>',
+            'title'       => 'Test Title',
+            'caption'     => '<p>Test <strong>Caption</strong></p>',
+            'extra_field' => 'Should be removed',
+        );
 
-		$expected = array(
-			'alt_text' => 'Test',
-			'title'    => 'Test Title',
-			'caption'  => '<p>Test <strong>Caption</strong></p>',
-		);
+        $expected = array(
+            'alt_text' => 'Test',
+            'title'    => 'Test Title',
+            'caption'  => '<p>Test <strong>Caption</strong></p>',
+        );
 
-		$result = $this->call_private_method(
-			$this->image_processor,
-			'sanitize_and_validate_metadata',
-			array( $raw_metadata ),
-		);
+        $reflection = new ReflectionClass(Forvoyez_Image_Processor::class);
+        $method = $reflection->getMethod('sanitize_and_validate_metadata');
+        $method->setAccessible(true);
 
-		$this->assertEquals(
-			$expected,
-			$result,
-			'Metadata was not sanitized correctly',
-		);
-	}
+        $result = $method->invokeArgs($this->image_processor, array($raw_metadata));
+
+        $this->assertEquals($expected, $result, 'Metadata was not sanitized correctly');
+    }
 
 	public function test_update_image_meta() {
 		$attachment_id = $this->factory->attachment->create_upload_object(
