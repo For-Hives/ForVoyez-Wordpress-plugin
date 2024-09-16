@@ -32,7 +32,7 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase {
         $expected = array(
             'alt_text' => 'Test',
             'title'    => 'Test Title',
-            'caption'  => '<p>Test <strong>Caption</strong></p>',
+            'caption'  => '<p>Test <strong>Caption</strong></p>alert("XSS")',
         );
 
         $reflection = new ReflectionClass(Forvoyez_Image_Processor::class);
@@ -45,7 +45,7 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase {
 
         $this->assertEquals('Test', $result['alt_text'], 'Alt text was not sanitized correctly');
         $this->assertEquals('Test Title', $result['title'], 'Title was not sanitized correctly');
-        $this->assertEquals('<p>Test <strong>Caption</strong></p>', $result['caption'], 'Caption was not sanitized correctly');
+        $this->assertEquals('<p>Test <strong>Caption</strong></p>alert("XSS")', $result['caption'], 'Caption was not sanitized correctly');
         $this->assertArrayNotHasKey('extra_field', $result, 'Extra field was not removed');
     }
 
