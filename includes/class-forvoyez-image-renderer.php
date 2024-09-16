@@ -303,13 +303,11 @@ esc_attr_e(
 	private static function render_action_button( $type, $label, $icon_path ) {
 		?>
         <div class="flex w-0 flex-1">
-            <button class="
-            <?php
+            <button class="<?php
             echo esc_attr(
             	$type,
             );
-            ?>
-            -button relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-xs text-gray-900 hover:bg-gray-50 hover:border-gray-200">
+            ?>-button relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-xs text-gray-900 hover:bg-gray-50 hover:border-gray-200">
                 <span>
                     <?php
                     if ( $label === 'Analyze' ) {
