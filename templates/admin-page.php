@@ -6,8 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="wrap p-6 min-h-screen relative [&_button,a]:shadow-none [&_button,a]:outline-none">
     <h1 class="text-3xl font-bold mb-6 text-gray-800"><?php esc_html_e( 'Auto Alt Text for Images', 'forvoyez-auto-alt-text-for-images' ); ?></h1>
-
-    <div class="py-4 w-full flex justify-between items-start">
+	<div class="py-4 w-full flex justify-between items-start">
 		<div class="flex flex-col gap-2 items-center">
             <h3 class="text-start w-full font-bold">
                 <?php esc_html_e( 'Legend :', 'forvoyez-auto-alt-text-for-images' ); ?>
@@ -75,13 +74,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</label>
 				</div>
 				<div>
-                    <button type="button" id="forvoyez-analyze-missing" class="bg-gray-700 hover:bg-gray-900 cursor-not-allowed text-white font-bold py-2 px-4 rounded" disabled data-nonce="<?php echo esc_attr($get_image_ids_nonce); ?>">
+                    <button type="button" id="forvoyez-analyze-missing" class="bg-gray-700 hover:bg-gray-900 cursor-not-allowed text-white font-bold py-2 px-4 rounded" disabled>
                         <?php esc_html_e( 'Analyze all missing alt/caption/title images', 'forvoyez-auto-alt-text-for-images' ); ?> (<span id="forvoyez-missing-count">0</span>)
                     </button>
-                    <button type="button" id="forvoyez-analyze-missing-alt" class="bg-gray-700 hover:bg-gray-900 cursor-not-allowed text-white font-bold py-2 px-4 rounded" disabled data-nonce="<?php echo esc_attr($get_image_ids_nonce); ?>">
+                    <button type="button" id="forvoyez-analyze-missing-alt" class="bg-gray-700 hover:bg-gray-900 cursor-not-allowed text-white font-bold py-2 px-4 rounded" disabled>
                         <?php esc_html_e( 'Analyze all missing alt images', 'forvoyez-auto-alt-text-for-images' ); ?> (<span id="forvoyez-missing-alt-count">0</span>)
                     </button>
-                    <button type="button" id="forvoyez-analyze-all" class="bg-gray-700 hover:bg-gray-900 cursor-not-allowed text-white font-bold py-2 px-4 rounded" disabled data-nonce="<?php echo esc_attr($get_image_ids_nonce); ?>">
+                    <button type="button" id="forvoyez-analyze-all" class="bg-gray-700 hover:bg-gray-900 cursor-not-allowed text-white font-bold py-2 px-4 rounded" disabled>
                         <?php esc_html_e( 'Analyze all images', 'forvoyez-auto-alt-text-for-images' ); ?> (<span id="forvoyez-all-count">0</span>)
                     </button>
 				</div>
@@ -97,7 +96,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<input type="checkbox" id="forvoyez-select-all" class="form-checkbox h-5 w-5 text-forvoyez-primary">
                     <span class="ml-2 text-gray-700"><?php esc_html_e( 'Select All', 'forvoyez-auto-alt-text-for-images' ); ?></span>
 				</label>
-                <button id="forvoyez-bulk-analyze" class="bg-forvoyez-secondary hover:bg-forvoyez-secondary-dark text-white font-bold py-2 px-4 rounded ml-4" data-nonce="<?php echo esc_attr($bulk_analyze_nonce); ?>">
+                <button id="forvoyez-bulk-analyze" class="bg-forvoyez-secondary hover:bg-forvoyez-secondary-dark text-white font-bold py-2 px-4 rounded ml-4">
                     <?php esc_html_e( 'Analyze Selected Images', 'forvoyez-auto-alt-text-for-images' ); ?>
                 </button>
 			</div>
