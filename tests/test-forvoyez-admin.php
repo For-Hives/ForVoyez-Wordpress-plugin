@@ -13,24 +13,21 @@ class Test_Forvoyez_Admin extends WP_UnitTestCase {
 	}
 
 	public function test_parse_and_sanitize_filters() {
-		$method = new ReflectionMethod(
-			Forvoyez_Admin::class,
-			'parse_and_sanitize_filters',
-		);
-		$method->setAccessible( true );
+        $method = new ReflectionMethod(Forvoyez_Admin::class, 'parse_and_sanitize_filters');
+        $method->setAccessible(true);
 
-		$input = array(
-			array( 'name' => 'filter[]', 'value' => 'alt' ),
-			array( 'name' => 'filter[]', 'value' => 'title' ),
-			array( 'name' => 'filter[]', 'value' => 'invalid' ),
-			array( 'name' => 'not_filter', 'value' => 'caption' ),
-		);
+        $input = array(
+            array('name' => 'filter[]', 'value' => 'alt'),
+            array('name' => 'filter[]', 'value' => 'title'),
+            array('name' => 'filter[]', 'value' => 'invalid'),
+            array('name' => 'not_filter', 'value' => 'caption')
+        );
 
-		$expected = array( 'alt', 'title' );
-		$result   = $method->invoke( $this->forvoyez_admin, $input );
+        $expected = array('alt', 'title');
+        $result = $method->invoke($this->forvoyez_admin, $input);
 
-		$this->assertEquals( $expected, $result );
-	}
+        $this->assertEquals($expected, $result, 'Les filtres n\'ont pas été correctement analysés et assainis');
+    }
 
 	public function test_build_meta_query() {
 		$method = new ReflectionMethod(
