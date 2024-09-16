@@ -21,7 +21,7 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase {
 		$property->setValue( $this->image_processor, $this->mock_api_client );
 	}
 
-	public function test_sanitize_metadata() {
+	public function test_sanitize_and_validate_metadata() {
 		$raw_metadata = array(
 			'alt_text'    => 'Test <script>alert("XSS")</script>',
 			'title'       => 'Test Title',
@@ -37,7 +37,7 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase {
 
 		$result = $this->call_private_method(
 			$this->image_processor,
-			'sanitize_metadata',
+			'sanitize_and_validate_metadata',
 			array( $raw_metadata ),
 		);
 
