@@ -147,6 +147,108 @@ BrowserSync will now monitor specified files and auto-reload your browser on cha
    ![Results Example](assets/screenshot-3.png)
    This screenshot showcases the plugin's ability to generate high-quality alt text and meta descriptions. It displays examples of automatically generated titles, alt texts, and captions for a variety of image types, demonstrating the AI's versatility and accuracy.
 
+
+Certainly. Here's the README section in English:
+
+## Test Environment Setup
+
+To run the tests for this plugin, you'll need a MySQL/MariaDB database with a root user having all privileges. Here are the steps to set up your environment:
+
+### Prerequisites
+
+- MySQL or MariaDB installed
+- Composer
+- PHP 7.4 or higher
+
+### Database Configuration
+
+1. Log in to MySQL as root:
+
+   ```
+   sudo mysql -u root -p
+   ```
+
+   Enter the root password if prompted.
+
+2. Grant all privileges to the root user:
+
+   ```sql
+   GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
+   FLUSH PRIVILEGES;
+   ```
+
+3. If the above command fails, follow these troubleshooting steps:
+
+   a. Stop the MariaDB service:
+      ```
+      sudo systemctl stop mariadb
+      ```
+      
+   b. Ensure no MySQL processes are running:
+      ```
+      ps aux | grep mysql
+      ```
+      If processes are found, stop them:
+      ```
+      sudo kill -9 [PID]
+      ```
+
+   c. Start MySQL in safe mode:
+      ```
+      sudo mysqld_safe --skip-grant-tables --skip-networking &
+      ```
+
+   d. Repair the database tables:
+      ```
+      sudo mysqlcheck -u root --repair --all-databases
+      ```
+      or
+      ```
+      sudo mysqlcheck -u root --skip-password --repair --all-databases
+      ```
+
+   e. Log in to MySQL and reset the root password:
+      ```
+      mysql -u root
+      ```
+      ```sql
+      FLUSH PRIVILEGES;
+      USE mysql;
+      ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';
+      FLUSH PRIVILEGES;
+      EXIT;
+      ```
+
+   f. Restart MySQL normally and grant privileges:
+      ```
+      sudo systemctl start mariadb
+      mysql -u root -p
+      ```
+      ```sql
+      GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
+      FLUSH PRIVILEGES;
+      ```
+
+### Running the setup Tests
+
+Once the database is configured, you can run the install db tests with the following command:
+
+```
+composer run install-wp-tests
+```
+
+This command will install the WordPress test environment and run the plugin's unit tests.
+If you encounter any issues while running the tests, make sure the database connection information in the `bin/install-wp-tests.sh` file is correct.
+
+### Running the tests
+
+To run the tests, use the following command:
+
+```
+./vendor/bin/phpunit [file path].php
+```
+
+
 ---
 
 Made with ❤️ by [ForVoyez](https://forvoyez.com)
