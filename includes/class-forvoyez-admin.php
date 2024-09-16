@@ -379,25 +379,18 @@ class Forvoyez_Admin {
 	 * @param array $filters Raw filters array.
 	 * @return array Sanitized filters.
 	 */
-	private function parse_and_sanitize_filters( $raw_filters ) {
+	protected function parse_and_sanitize_filters($raw_filters) {
         $sanitized_filters = array();
-        $allowed_filters   = array( 'alt', 'title', 'caption' );
+        $allowed_filters = array('alt', 'title', 'caption');
 
-        error_log( 'Raw filters: ' . print_r( $raw_filters, true ) );
-
-        foreach ( $raw_filters as $filter ) {
-            error_log( 'Processing filter: ' . print_r( $filter, true ) );
-            $sanitized_filter = sanitize_text_field( $filter );
-            error_log( 'Sanitized filter: ' . $sanitized_filter );
-            if ( in_array( $sanitized_filter, $allowed_filters ) ) {
-                $sanitized_filters[] = $sanitized_filter;
-                error_log( 'Filter added: ' . $sanitized_filter );
-            } else {
-                error_log( 'Filter not allowed: ' . $sanitized_filter );
+        foreach ($raw_filters as $filter) {
+            if (isset($filter['name']) && $filter['name'] === 'filter[]' && isset($filter['value'])) {
+                $sanitized_filter = sanitize_text_field($filter['value']);
+                if (in_array($sanitized_filter, $allowed_filters)) {
+                    $sanitized_filters[] = $sanitized_filter;
+                }
             }
         }
-
-        error_log( 'Final sanitized filters: ' . print_r( $sanitized_filters, true ) );
 
         return $sanitized_filters;
     }

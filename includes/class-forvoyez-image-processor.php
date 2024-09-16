@@ -63,29 +63,23 @@ class Forvoyez_Image_Processor {
         );
 	}
 
-	private function sanitize_and_validate_metadata( $raw_metadata ) {
-		$sanitized_metadata = array();
+	private function sanitize_and_validate_metadata($raw_metadata) {
+        $sanitized_metadata = array();
 
-		if ( isset( $raw_metadata['alt_text'] ) ) {
-			$sanitized_metadata['alt_text'] = wp_kses_post(
-				$raw_metadata['alt_text'],
-			);
-		}
+        if (isset($raw_metadata['alt_text'])) {
+            $sanitized_metadata['alt_text'] = wp_strip_all_tags($raw_metadata['alt_text']);
+        }
 
-		if ( isset( $raw_metadata['title'] ) ) {
-			$sanitized_metadata['title'] = sanitize_text_field(
-				$raw_metadata['title'],
-			);
-		}
+        if (isset($raw_metadata['title'])) {
+            $sanitized_metadata['title'] = sanitize_text_field($raw_metadata['title']);
+        }
 
-		if ( isset( $raw_metadata['caption'] ) ) {
-			$sanitized_metadata['caption'] = wp_kses_post(
-				$raw_metadata['caption'],
-			);
-		}
+        if (isset($raw_metadata['caption'])) {
+            $sanitized_metadata['caption'] = wp_kses_post($raw_metadata['caption']);
+        }
 
-		return $sanitized_metadata;
-	}
+        return $sanitized_metadata;
+    }
 
 	public function update_image_metadata() {
 		$this->verify_ajax_request();

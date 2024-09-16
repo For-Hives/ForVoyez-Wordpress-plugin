@@ -25,7 +25,7 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase {
         $raw_metadata = array(
             'alt_text'    => 'Test <script>alert("XSS")</script>',
             'title'       => 'Test Title',
-            'caption'     => '<p>Test <strong>Caption</strong></p>',
+            'caption'     => '<p>Test <strong>Caption</strong></p><script>alert("XSS")</script>',
             'extra_field' => 'Should be removed',
         );
 
@@ -42,6 +42,11 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase {
         $result = $method->invokeArgs($this->image_processor, array($raw_metadata));
 
         $this->assertEquals($expected, $result, 'Metadata was not sanitized correctly');
+
+        $this->assertEquals('Test', $result['alt_text'], 'Alt text was not sanitized correctly');
+        $this->assertEquals('Test Title', $result['title'], 'Title was not sanitized correctly');
+        $this->assertEquals('<p>Test <strong>Caption</strong></p>', $result['caption'], 'Caption was not sanitized correctly');
+        $this->assertArrayNotHasKey('extra_field', $result, 'Extra field was not removed');
     }
 
 	public function test_update_image_meta() {
