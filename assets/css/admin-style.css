@@ -1,10 +1,10 @@
 /* change the outline on click */
 button:focus {
-    outline: none !important;
-    box-shadow: none !important;
+	outline: none !important;
+	box-shadow: none !important;
 }
 
 a:focus {
-    outline: none !important;
-    box-shadow: none !important;
+	outline: none !important;
+	box-shadow: none !important;
 }

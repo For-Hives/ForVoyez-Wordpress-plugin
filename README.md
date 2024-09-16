@@ -42,21 +42,25 @@ ForVoyez Auto Alt Text for Images is a WordPress plugin that leverages AI techno
 ## Installation
 
 1. Download the plugin zip file or clone the repository:
+
    ```sh
    git clone https://github.com/forvoyez/auto-alt-text-for-images.git
    ```
 
 2. Navigate to the plugin directory:
+
    ```sh
    cd auto-alt-text-for-images
    ```
 
 3. Install PHP dependencies:
+
    ```sh
    composer install
    ```
 
 4. Install Node.js dependencies:
+
    ```sh
    npm install
    ```
@@ -87,20 +91,22 @@ After installation and configuration:
 To use BrowserSync with your WordPlate project:
 
 1. Create a `bs-config.cjs` file in the project root:
+
    ```js
    module.exports = {
-       proxy: 'localhost:8000', // Replace with your PHP server port
-       files: [
-          'public/**/*.php',
-          'resources/**/*.php',
-          'public/**/*.css',
-          'public/**/*.js',
-       ],
-       notify: false,
+   	proxy: 'localhost:8000', // Replace with your PHP server port
+   	files: [
+   		'public/**/*.php',
+   		'resources/**/*.php',
+   		'public/**/*.css',
+   		'public/**/*.js',
+   	],
+   	notify: false,
    }
    ```
 
 2. Start the PHP server:
+
    ```sh
    php -S localhost:8000 -t public
    ```

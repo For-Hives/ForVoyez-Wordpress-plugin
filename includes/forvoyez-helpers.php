@@ -9,8 +9,8 @@
  */
 
 // If this file is called directly, abort.
-if (!defined('ABSPATH')) {
-	exit('Direct access to this file is not allowed.');
+if ( !defined( 'ABSPATH' ) ) {
+	exit( 'Direct access to this file is not allowed.' );
 }
 
 /**
@@ -23,18 +23,17 @@ if (!defined('ABSPATH')) {
  * @since 1.0.0
  * @return int The number of images with incomplete metadata.
  */
-function forvoyez_count_incomplete_images()
-{
+function forvoyez_count_incomplete_images() {
 	global $wpdb;
 
 	// Define a unique cache key
 	$cache_key = 'forvoyez_incomplete_images_count';
 
 	// Try to get the count from cache
-	$incomplete_count = wp_cache_get($cache_key);
+	$incomplete_count = wp_cache_get( $cache_key );
 
 	// If the count is not in cache, calculate it
-	if (false === $incomplete_count) {
+	if ( false === $incomplete_count ) {
 		$results = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT p.ID, p.post_title, p.post_excerpt, p.guid, pm_alt.meta_value as alt_text
@@ -44,55 +43,59 @@ function forvoyez_count_incomplete_images()
                 AND p.post_mime_type LIKE %s",
 				'_wp_attachment_image_alt',
 				'attachment',
-				'image/%'
-			)
+				'image/%',
+			),
 		);
 
 		$incomplete_count = 0;
-		$debug_info = [];
+		$debug_info       = array();
 
-		foreach ($results as $image) {
+		foreach ( $results as $image ) {
 			$is_incomplete = false;
-			$reason = [];
+			$reason        = array();
 
 			// Check title
-			$filename = wp_basename($image->guid);
-			if (empty($image->post_title) || $image->post_title === $filename || preg_match('/-scaled$/', $image->post_title)) {
+			$filename = wp_basename( $image->guid );
+			if (
+				empty( $image->post_title ) ||
+				$image->post_title === $filename ||
+				preg_match( '/-scaled$/', $image->post_title )
+			) {
 				$is_incomplete = true;
-				$reason[] = 'title';
+				$reason[]      = 'title';
 			}
 
 			// Check alt text
-			if (empty($image->alt_text)) {
+			if ( empty( $image->alt_text ) ) {
 				$is_incomplete = true;
-				$reason[] = 'alt';
+				$reason[]      = 'alt';
 			}
 
 			// Check caption
-			if (empty($image->post_excerpt)) {
+			if ( empty( $image->post_excerpt ) ) {
 				$is_incomplete = true;
-				$reason[] = 'caption';
+				$reason[]      = 'caption';
 			}
 
-			if ($is_incomplete) {
+			if ( $is_incomplete ) {
 				++$incomplete_count;
-				$debug_info[] = [
-					'id' => $image->ID,
-					'title' => $image->post_title,
-					'alt' => $image->alt_text,
-					'caption' => $image->post_excerpt,
-					'guid' => $image->guid,
+				$debug_info[] = array(
+					'id'       => $image->ID,
+					'title'    => $image->post_title,
+					'alt'      => $image->alt_text,
+					'caption'  => $image->post_excerpt,
+					'guid'     => $image->guid,
 					'filename' => $filename,
-					'reason' => implode(', ', $reason),
-				];
+					'reason'   => implode( ', ', $reason ),
+				);
 			}
 		}
 
 		// Cache the result for future use
-		wp_cache_set($cache_key, $incomplete_count, '', 3600); // Cache for 1 hour
+		wp_cache_set( $cache_key, $incomplete_count, '', 3600 ); // Cache for 1 hour
 	}
 
-	return apply_filters('forvoyez_incomplete_images_count', $incomplete_count);
+	return apply_filters( 'forvoyez_incomplete_images_count', $incomplete_count );
 }
 
 /**
@@ -104,17 +107,19 @@ function forvoyez_count_incomplete_images()
  * @since 1.0.0
  * @return string The ForVoyez API key.
  */
-function forvoyez_get_api_key()
-{
+function forvoyez_get_api_key() {
 	global $forvoyez_settings;
 
-	if (!$forvoyez_settings || !($forvoyez_settings instanceof Forvoyez_Settings)) {
+	if (
+		!$forvoyez_settings ||
+		!( $forvoyez_settings instanceof Forvoyez_Settings )
+	) {
 		$forvoyez_settings = new Forvoyez_Settings();
 	}
 
 	$api_key = $forvoyez_settings->get_api_key();
 
-	return apply_filters('forvoyez_api_key', $api_key);
+	return apply_filters( 'forvoyez_api_key', $api_key );
 }
 
 /**
@@ -126,14 +131,24 @@ function forvoyez_get_api_key()
  * @param string $jwt The JWT to sanitize and validate.
  * @return string|WP_Error The sanitized JWT or WP_Error if validation fails.
  */
-function forvoyez_sanitize_api_key($jwt)
-{
+function forvoyez_sanitize_api_key( $jwt ) {
 	// Remove any whitespace
-	$sanitized_jwt = trim($jwt);
+	$sanitized_jwt = trim( $jwt );
 
 	// Basic JWT format validation (header.payload.signature)
-	if (!preg_match('/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/', $sanitized_jwt)) {
-		return new WP_Error('invalid_api_key', __('Invalid API key format. Please enter a valid ForVoyez JWT.', 'forvoyez-auto-alt-text-for-images'));
+	if (
+		!preg_match(
+			'/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/',
+			$sanitized_jwt,
+		)
+	) {
+		return new WP_Error(
+			'invalid_api_key',
+			__(
+				'Invalid API key format. Please enter a valid ForVoyez JWT.',
+				'forvoyez-auto-alt-text-for-images',
+			),
+		);
 	}
 
 	return $sanitized_jwt;
@@ -149,35 +164,49 @@ function forvoyez_sanitize_api_key($jwt)
  * @param string $jwt The JWT to verify.
  * @return bool|WP_Error True if the JWT is valid, WP_Error otherwise.
  */
-function forvoyez_verify_jwt($jwt)
-{
-	$parts = explode('.', $jwt);
-	if (count($parts) !== 3) {
-		return new WP_Error('invalid_jwt', __('Invalid JWT format', 'forvoyez-auto-alt-text-for-images'));
+function forvoyez_verify_jwt( $jwt ) {
+	$parts = explode( '.', $jwt );
+	if ( count( $parts ) !== 3 ) {
+		return new WP_Error(
+			'invalid_jwt',
+			__( 'Invalid JWT format', 'forvoyez-auto-alt-text-for-images' ),
+		);
 	}
 
-	list($header, $payload, $signature) = $parts;
+	[$header, $payload, $signature] = $parts;
 
 	// Decode the payload
-	$payload = json_decode(base64_decode(strtr($payload, '-_', '+/')), true);
+	$payload = json_decode( base64_decode( strtr( $payload, '-_', '+/' ) ), true );
 
-	if (!$payload) {
-		return new WP_Error('invalid_payload', __('Invalid JWT payload', 'forvoyez-auto-alt-text-for-images'));
+	if ( !$payload ) {
+		return new WP_Error(
+			'invalid_payload',
+			__( 'Invalid JWT payload', 'forvoyez-auto-alt-text-for-images' ),
+		);
 	}
 
 	// Check the issuer
-	if (!isset($payload['iss']) || $payload['iss'] !== 'ForVoyez') {
-		return new WP_Error('invalid_issuer', __('Invalid JWT issuer', 'forvoyez-auto-alt-text-for-images'));
+	if ( !isset( $payload['iss'] ) || $payload['iss'] !== 'ForVoyez' ) {
+		return new WP_Error(
+			'invalid_issuer',
+			__( 'Invalid JWT issuer', 'forvoyez-auto-alt-text-for-images' ),
+		);
 	}
 
 	// Check the audience
-	if (!isset($payload['aud']) || $payload['aud'] !== 'ForVoyez') {
-		return new WP_Error('invalid_audience', __('Invalid JWT audience', 'forvoyez-auto-alt-text-for-images'));
+	if ( !isset( $payload['aud'] ) || $payload['aud'] !== 'ForVoyez' ) {
+		return new WP_Error(
+			'invalid_audience',
+			__( 'Invalid JWT audience', 'forvoyez-auto-alt-text-for-images' ),
+		);
 	}
 
 	// Check the expiration time
-	if (!isset($payload['exp']) || $payload['exp'] < time()) {
-		return new WP_Error('expired_token', __('JWT has expired', 'forvoyez-auto-alt-text-for-images'));
+	if ( !isset( $payload['exp'] ) || $payload['exp'] < time() ) {
+		return new WP_Error(
+			'expired_token',
+			__( 'JWT has expired', 'forvoyez-auto-alt-text-for-images' ),
+		);
 	}
 
 	return true;
