@@ -1,6 +1,6 @@
 <?php
 
-class Test_Forvoyez_Admin extends WP_UnitTestCase {
+class TestForvoyezAdmin extends WP_UnitTestCase {
 	private $forvoyez_admin;
 	private $api_manager_mock;
 
