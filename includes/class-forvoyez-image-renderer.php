@@ -231,34 +231,22 @@ esc_attr_e(
 	 * @return void
 	 */
 	private static function render_metadata_icon( $type, $value, $path ) {
-		$type_label   = ucfirst( $type );
-		$missing_text = sprintf(
-			/* translators: %s: Metadata type (Alt, Title, or Caption) */
-			esc_html__( 'Missing %s', 'forvoyez-auto-alt-text-for-images' ),
-			$type_label,
-		);
-		?>
-        <span class="bg-red-500 text-white rounded-full p-1 
-        <?php
-        echo empty(
-        	$value
-        )
-        	? ''
-        	: 'hidden';
-            ?>
+        $type_label   = ucfirst( $type );
+        $missing_text = sprintf(
+            /* translators: %s: Metadata type (Alt, Title, or Caption) */
+            esc_html__( 'Missing %s', 'forvoyez-auto-alt-text-for-images' ),
+            $type_label
+        );
+        ?>
+        <span class="bg-red-500 text-white rounded-full p-1
+            <?php echo empty( $value ) ? '' : 'hidden'; ?>
             <?php echo esc_attr( $type ); ?>-missing" title="<?php echo esc_attr( $missing_text ); ?>">
-        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="
-            <?php
-            echo esc_attr(
-            	$path,
-            );
-            ?>
-            " />
-        </svg>
-    </span>
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?php echo esc_attr( $path ); ?>" />
+            </svg>
+        </span>
         <?php
-	}
+    }
 
 	/**
 	 * Render the loader for an image.
