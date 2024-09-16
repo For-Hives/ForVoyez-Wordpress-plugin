@@ -26,7 +26,12 @@ class Test_Forvoyez_Admin extends WP_UnitTestCase {
         $expected = array('alt', 'title');
         $result = $method->invoke($this->forvoyez_admin, $input);
 
-        $this->assertEquals($expected, $result, 'Les filtres n\'ont pas été correctement analysés et assainis');
+        echo "Expected:\n";
+        var_dump($expected);
+        echo "Result:\n";
+        var_dump($result);
+
+        $this->assertEquals($expected, $result, 'Filters were not parsed correctly');
     }
 
 	public function test_build_meta_query() {
