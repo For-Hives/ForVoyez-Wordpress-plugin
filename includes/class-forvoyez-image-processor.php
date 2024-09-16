@@ -134,6 +134,11 @@ class Forvoyez_Image_Processor {
 	}
 
 	public function ajax_analyze_image() {
+        if (!current_user_can('upload_files')) {
+            wp_send_json_error('Permission denied (cant upload)', 403);
+            return;
+        }
+
 		$this->verify_ajax_request();
 
 		$image_id = isset( $_POST['image_id'] )
@@ -343,12 +348,22 @@ class Forvoyez_Image_Processor {
 	 * @throws WP_Error If the request is invalid or user doesn't have permission.
 	 */
 	private function verify_ajax_request() {
-		check_ajax_referer( 'forvoyez_verify_ajax_request_nonce', 'nonce' );
+        error_log('Verifying AJAX request');
+        error_log('Nonce received: ' . $_REQUEST['nonce']);
 
-		if ( !current_user_can( 'upload_files' ) ) {
-			wp_send_json_error(
-				__( 'Permission denied', 'forvoyez-auto-alt-text-for-images' ),
-			);
-		}
-	}
+        if (!check_ajax_referer('forvoyez_verify_ajax_request_nonce', 'nonce', false)) {
+            error_log('Nonce verification failed');
+            wp_send_json_error('Invalid nonce');
+            exit;
+        }
+
+        if (!current_user_can('upload_files')) {
+            error_log('Permission check failed');
+            wp_send_json_error('Permission denied');
+            exit;
+        }
+
+        error_log('AJAX request verified successfully');
+    }
+
 }
