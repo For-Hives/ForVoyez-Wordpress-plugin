@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Auto Alt Text for Images 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ForVoyez-Wordpress-plugin\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/auto-alt-text-for-images\n"
 "POT-Creation-Date: 2024-08-01T10:19:11+00:00\n"
 "PO-Revision-Date: 2024-08-01 16:52+0200\n"
 "Last-Translator: Cinquin Andy <contact@andy-cinquin.fr>\n"
