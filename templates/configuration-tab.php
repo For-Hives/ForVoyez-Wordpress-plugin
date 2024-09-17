@@ -1,12 +1,12 @@
 <?php
 
 // If this file is called directly, abort.
-if ( !defined( 'ABSPATH' ) ) {
-	exit( 'Direct access to this file is not allowed.' );
+if (!defined('ABSPATH')) {
+	exit('Direct access to this file is not allowed.');
 }
 
 $settings = new Forvoyez_Settings();
-$api_key  = $settings->get_api_key();
+$api_key = $settings->get_api_key();
 ?>
 
 <div class="configuration-tab">
@@ -61,8 +61,8 @@ esc_html_e(
 	echo wp_kses_post(
 		sprintf(
 			// translators: %s: URL of the ForVoyez signup page
-			__( 'Visit the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez signup page</a> to create an account.', 'auto-alt-text-for-images' ),
-			esc_url( 'https://forvoyez.com/signup' )
+			__('Visit the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez signup page</a> to create an account.', 'auto-alt-text-for-images'),
+			esc_url('https://forvoyez.com/signup')
 		)
 	);
 ?>
@@ -72,8 +72,8 @@ esc_html_e(
 	echo wp_kses_post(
 		sprintf(
 			// translators: %s: URL of the ForVoyez dashboard
-			__( 'Once logged in, navigate to your <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez dashboard</a>.', 'auto-alt-text-for-images' ),
-			esc_url( 'https://forvoyez.com/dashboard' )
+			__('Once logged in, navigate to your <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez dashboard</a>.', 'auto-alt-text-for-images'),
+			esc_url('https://forvoyez.com/dashboard')
 		)
 	);
 ?>
@@ -100,8 +100,8 @@ esc_html_e(
 echo wp_kses_post(
 	sprintf(
 		// translators: %s: URL of the ForVoyez API documentation
-		__( 'For more information, please refer to the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez API documentation</a>.', 'auto-alt-text-for-images' ),
-		esc_url( 'https://doc.forvoyez.com' )
+		__('For more information, please refer to the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez API documentation</a>.', 'auto-alt-text-for-images'),
+		esc_url('https://doc.forvoyez.com')
 	)
 );
 ?>
@@ -126,7 +126,7 @@ echo wp_kses_post(
 				'auto-alt-text-for-images',
 			);
 ?>
-                            " value="<?php echo esc_attr( $api_key ); ?>">
+                            " value="<?php echo esc_attr($api_key); ?>">
                     <button type="button"
                             class="forvoyez-toggle-visibility inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm"
                             aria-label="
@@ -175,14 +175,14 @@ printf(
 			'Please review the <a href="%1$s" target="_blank" rel="noopener noreferrer" class="underline">Terms of Service</a>, <a href="%2$s" target="_blank" rel="noopener noreferrer" class="underline">Privacy Policy</a>, and <a href="%3$s" target="_blank" rel="noopener noreferrer" class="underline">Legal Notice</a>.',
 			'auto-alt-text-for-images',
 		),
-		array(
-			'a' => array(
-				'href'   => array(),
-				'target' => array(),
-				'rel'    => array(),
-				'class'  => array(),
-			),
-		),
+		[
+			'a' => [
+				'href' => [],
+				'target' => [],
+				'rel' => [],
+				'class' => [],
+			],
+		],
 	),
 	'https://forvoyez.com/app/legals/terms',
 	'https://forvoyez.com/app/legals/privacy-policy',
