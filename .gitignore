@@ -6,5 +6,6 @@ vendor
 tests/assets
 large_files_output.txt
 output.txt
+large.txt
 release
 .php-cs-fixer.cache
