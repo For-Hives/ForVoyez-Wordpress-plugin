@@ -4,9 +4,7 @@ if ( !defined( 'ABSPATH' ) ) {
 	exit( 'Direct access to this file is not allowed.' );
 }
 
-$active_tab = isset( $_GET['tab'] )
-	? sanitize_text_field( $_GET['tab'] )
-	: 'dashboard';
+$active_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])) : 'dashboard';
 ?>
 <div class="wrap">
     <h1 class="text-2xl font-bold mb-4">
