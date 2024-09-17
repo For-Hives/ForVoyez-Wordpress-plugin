@@ -55,19 +55,19 @@ class Forvoyez_Admin {
 	 * Add menu item to WordPress admin.
 	 */
 	public function add_menu_item() {
-		$page_hook = add_menu_page(
-			__( 'Auto Alt Text for Images', 'auto-alt-text-for-images' ),
-			__( 'Auto Alt Text', 'auto-alt-text-for-images' ),
-			'manage_options',
-			'forvoyez-auto-alt-text',
-			array( $this, 'render_admin_page' ),
-			'dashicons-format-image',
-			30,
-		);
+        $page_hook = add_menu_page(
+            esc_html__( 'Auto Alt Text for Images', 'auto-alt-text-for-images' ),
+            esc_html__( 'Auto Alt Text', 'auto-alt-text-for-images' ),
+            'manage_options',
+            'auto-alt-text-for-images',
+            array( $this, 'render_admin_page' ),
+            'dashicons-format-image',
+            30
+        );
 
-		// Add action to generate nonce
-		add_action( 'load-' . $page_hook, array( $this, 'add_admin_page_nonce' ) );
-	}
+        // Add action to generate nonce
+        add_action( 'load-' . $page_hook, array( $this, 'add_admin_page_nonce' ) );
+    }
 
 	public function add_admin_page_nonce() {
 		add_filter(
