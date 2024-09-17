@@ -60,7 +60,7 @@ class Forvoyez_API_Manager {
 		if ( empty( $api_key ) ) {
 			return array(
 				'success' => false,
-				'message' => __(
+				'message' => esc_html__(
 					'API key is not set',
 					'auto-alt-text-for-images',
 				),
@@ -89,7 +89,7 @@ class Forvoyez_API_Manager {
 		if ( wp_remote_retrieve_response_code( $response ) === 200 ) {
 			return array(
 				'success' => true,
-				'message' => __(
+				'message' => esc_html__(
 					'API key is valid',
 					'auto-alt-text-for-images',
 				),
@@ -99,7 +99,7 @@ class Forvoyez_API_Manager {
 				'success' => false,
 				'message' =>
 					$data['error'] ??
-					__( 'Invalid API key', 'auto-alt-text-for-images' ),
+					esc_html__( 'Invalid API key', 'auto-alt-text-for-images' ),
 			);
 		}
 	}
@@ -115,7 +115,7 @@ class Forvoyez_API_Manager {
 		if ( !$image_path ) {
 			return $this->format_error(
 				'image_not_found',
-				__( 'Image not found', 'auto-alt-text-for-images' ),
+				esc_html__( 'Image not found', 'auto-alt-text-for-images' ),
 			);
 		}
 
@@ -127,7 +127,7 @@ class Forvoyez_API_Manager {
 		if ( $file_data === false ) {
 			return $this->format_error(
 				'read_error',
-				__(
+				esc_html__(
 					'Failed to read image file',
 					'auto-alt-text-for-images',
 				),
@@ -187,7 +187,7 @@ class Forvoyez_API_Manager {
 		if ( json_last_error() !== JSON_ERROR_NONE ) {
 			return $this->format_error(
 				'json_decode_error',
-				__(
+				esc_html__(
 					'Failed to decode API response',
 					'auto-alt-text-for-images',
 				),
@@ -216,7 +216,7 @@ class Forvoyez_API_Manager {
 
 		return array(
 			'success'  => true,
-			'message'  => __(
+			'message'  => esc_html__(
 				'Analysis successful',
 				'auto-alt-text-for-images',
 			),
