@@ -146,7 +146,7 @@ function forvoyez_sanitize_api_key( $jwt ) {
 			'invalid_api_key',
 			__(
 				'Invalid API key format. Please enter a valid ForVoyez JWT.',
-				'forvoyez-auto-alt-text-for-images',
+				'auto-alt-text-for-images',
 			),
 		);
 	}
@@ -169,7 +169,7 @@ function forvoyez_verify_jwt( $jwt ) {
 	if ( count( $parts ) !== 3 ) {
 		return new WP_Error(
 			'invalid_jwt',
-			__( 'Invalid JWT format', 'forvoyez-auto-alt-text-for-images' ),
+			__( 'Invalid JWT format', 'auto-alt-text-for-images' ),
 		);
 	}
 
@@ -181,7 +181,7 @@ function forvoyez_verify_jwt( $jwt ) {
 	if ( !$payload ) {
 		return new WP_Error(
 			'invalid_payload',
-			__( 'Invalid JWT payload', 'forvoyez-auto-alt-text-for-images' ),
+			__( 'Invalid JWT payload', 'auto-alt-text-for-images' ),
 		);
 	}
 
@@ -189,7 +189,7 @@ function forvoyez_verify_jwt( $jwt ) {
 	if ( !isset( $payload['iss'] ) || $payload['iss'] !== 'ForVoyez' ) {
 		return new WP_Error(
 			'invalid_issuer',
-			__( 'Invalid JWT issuer', 'forvoyez-auto-alt-text-for-images' ),
+			__( 'Invalid JWT issuer', 'auto-alt-text-for-images' ),
 		);
 	}
 
@@ -197,7 +197,7 @@ function forvoyez_verify_jwt( $jwt ) {
 	if ( !isset( $payload['aud'] ) || $payload['aud'] !== 'ForVoyez' ) {
 		return new WP_Error(
 			'invalid_audience',
-			__( 'Invalid JWT audience', 'forvoyez-auto-alt-text-for-images' ),
+			__( 'Invalid JWT audience', 'auto-alt-text-for-images' ),
 		);
 	}
 
@@ -205,7 +205,7 @@ function forvoyez_verify_jwt( $jwt ) {
 	if ( !isset( $payload['exp'] ) || $payload['exp'] < time() ) {
 		return new WP_Error(
 			'expired_token',
-			__( 'JWT has expired', 'forvoyez-auto-alt-text-for-images' ),
+			__( 'JWT has expired', 'auto-alt-text-for-images' ),
 		);
 	}
 

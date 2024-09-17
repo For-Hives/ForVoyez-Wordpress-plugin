@@ -56,8 +56,8 @@ class Forvoyez_Admin {
 	 */
 	public function add_menu_item() {
 		$page_hook = add_menu_page(
-			__( 'Auto Alt Text for Images', 'forvoyez-auto-alt-text-for-images' ),
-			__( 'Auto Alt Text', 'forvoyez-auto-alt-text-for-images' ),
+			__( 'Auto Alt Text for Images', 'auto-alt-text-for-images' ),
+			__( 'Auto Alt Text', 'auto-alt-text-for-images' ),
 			'manage_options',
 			'forvoyez-auto-alt-text',
 			array( $this, 'render_admin_page' ),
@@ -172,7 +172,7 @@ class Forvoyez_Admin {
 			wp_die(
 				esc_html__(
 					'You do not have sufficient permissions to access this page.',
-					'forvoyez-auto-alt-text-for-images',
+					'auto-alt-text-for-images',
 				),
 			);
 		}
@@ -197,7 +197,7 @@ class Forvoyez_Admin {
 			echo '<p class="text-red-600 font-semibold">' .
 				esc_html__(
 					'Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation.',
-					'forvoyez-auto-alt-text-for-images',
+					'auto-alt-text-for-images',
 				) .
 				'</p>';
 		}
@@ -319,7 +319,7 @@ class Forvoyez_Admin {
             	echo '<p class="col-span-full text-center text-gray-500">' .
             		esc_html__(
             			'No images found matching the selected criteria.',
-            			'forvoyez-auto-alt-text-for-images',
+            			'auto-alt-text-for-images',
             		) .
             		'</p>';
             }
@@ -402,7 +402,7 @@ class Forvoyez_Admin {
 		check_ajax_referer( 'forvoyez_load_images_nonce', 'nonce' );
 		if ( !current_user_can( 'upload_files' ) ) {
 			wp_send_json_error(
-				__( 'Permission denied', 'forvoyez-auto-alt-text-for-images' ),
+				__( 'Permission denied', 'auto-alt-text-for-images' ),
 				403,
 			);
 		}
@@ -465,7 +465,7 @@ class Forvoyez_Admin {
 		if ( $current_page > 1 ) {
 			$pagination .= $this->pagination_link(
 				$current_page - 1,
-				__( '&laquo; Previous', 'forvoyez-auto-alt-text-for-images' ),
+				__( '&laquo; Previous', 'auto-alt-text-for-images' ),
 			);
 		}
 
@@ -485,7 +485,7 @@ class Forvoyez_Admin {
 		if ( $current_page < $total_pages ) {
 			$pagination .= $this->pagination_link(
 				$current_page + 1,
-				__( 'Next &raquo;', 'forvoyez-auto-alt-text-for-images' ),
+				__( 'Next &raquo;', 'auto-alt-text-for-images' ),
 			);
 		}
 
@@ -566,7 +566,7 @@ class Forvoyez_Admin {
 		check_ajax_referer( 'forvoyez_get_image_counts_nonce', 'nonce' );
 		if ( !current_user_can( 'upload_files' ) ) {
 			wp_send_json_error(
-				__( 'Permission denied', 'forvoyez-auto-alt-text-for-images' ),
+				__( 'Permission denied', 'auto-alt-text-for-images' ),
 				403,
 			);
 		}
@@ -650,7 +650,7 @@ class Forvoyez_Admin {
 
 		if ( !current_user_can( 'upload_files' ) ) {
 			wp_send_json_error(
-				__( 'Permission denied', 'forvoyez-auto-alt-text-for-images' ),
+				__( 'Permission denied', 'auto-alt-text-for-images' ),
 				403,
 			);
 		}
@@ -679,7 +679,7 @@ class Forvoyez_Admin {
 
 		if ( !current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
-				__( 'Permission denied', 'forvoyez-auto-alt-text-for-images' ),
+				__( 'Permission denied', 'auto-alt-text-for-images' ),
 				403,
 			);
 		}

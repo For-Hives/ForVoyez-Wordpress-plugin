@@ -94,7 +94,7 @@ class Forvoyez_Image_Processor {
 
 		if ( !$image_id || empty( $metadata ) ) {
 			wp_send_json_error(
-				__( 'Invalid data', 'forvoyez-auto-alt-text-for-images' ),
+				__( 'Invalid data', 'auto-alt-text-for-images' ),
 			);
 		}
 
@@ -103,7 +103,7 @@ class Forvoyez_Image_Processor {
 		wp_send_json_success(
 			__(
 				'Metadata updated successfully',
-				'forvoyez-auto-alt-text-for-images',
+				'auto-alt-text-for-images',
 			),
 		);
 	}
@@ -147,7 +147,7 @@ class Forvoyez_Image_Processor {
 
 		if ( !$image_id || !wp_attachment_is_image( $image_id ) ) {
 			wp_send_json_error(
-				__( 'Invalid image ID', 'forvoyez-auto-alt-text-for-images' ),
+				__( 'Invalid image ID', 'auto-alt-text-for-images' ),
 			);
 		}
 
@@ -158,7 +158,7 @@ class Forvoyez_Image_Processor {
                 array(
 					'message'  => __(
 						'Analysis successful',
-						'forvoyez-auto-alt-text-for-images',
+						'auto-alt-text-for-images',
 					),
 					'metadata' => $result['metadata'],
                 )
@@ -172,7 +172,7 @@ class Forvoyez_Image_Processor {
 						: $result['error']['code'] ??
 							__(
 								'unknown_error',
-								'forvoyez-auto-alt-text-for-images',
+								'auto-alt-text-for-images',
 							),
                 )
             );
@@ -265,7 +265,7 @@ class Forvoyez_Image_Processor {
 			wp_send_json_error(
 				__(
 					'No valid images selected',
-					'forvoyez-auto-alt-text-for-images',
+					'auto-alt-text-for-images',
 				),
 			);
 		}
@@ -274,7 +274,7 @@ class Forvoyez_Image_Processor {
             array(
 				'message'   => __(
 					'Processing started',
-					'forvoyez-auto-alt-text-for-images',
+					'auto-alt-text-for-images',
 				),
 				'total'     => count( $image_ids ),
 				'image_ids' => $image_ids,
@@ -291,7 +291,7 @@ class Forvoyez_Image_Processor {
 
 		if ( !$image_id ) {
 			wp_send_json_error(
-				__( 'Invalid image ID', 'forvoyez-auto-alt-text-for-images' ),
+				__( 'Invalid image ID', 'auto-alt-text-for-images' ),
 			);
 		}
 
@@ -309,7 +309,7 @@ class Forvoyez_Image_Processor {
 
 		if ( empty( $image_ids ) ) {
 			wp_send_json_error(
-				__( 'No images provided', 'forvoyez-auto-alt-text-for-images' ),
+				__( 'No images provided', 'auto-alt-text-for-images' ),
 			);
 		}
 
@@ -333,7 +333,7 @@ class Forvoyez_Image_Processor {
 					: $result['error']['code'] ??
 						__(
 							'unknown_error',
-							'forvoyez-auto-alt-text-for-images',
+							'auto-alt-text-for-images',
 						),
 				'metadata' => $result['success'] ? $result['metadata'] : null,
 			);

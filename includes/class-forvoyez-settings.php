@@ -63,7 +63,7 @@ class Forvoyez_Settings {
 
 		if ( !current_user_can( 'manage_options' ) ) {
 			wp_send_json_error(
-				__( 'Permission denied', 'forvoyez-auto-alt-text-for-images' ),
+				__( 'Permission denied', 'auto-alt-text-for-images' ),
 				403,
 			);
 		}
@@ -76,7 +76,7 @@ class Forvoyez_Settings {
 			wp_send_json_error(
 				__(
 					'API key cannot be empty',
-					'forvoyez-auto-alt-text-for-images',
+					'auto-alt-text-for-images',
 				),
 				400,
 			);
@@ -88,7 +88,7 @@ class Forvoyez_Settings {
 		wp_send_json_success(
 			__(
 				'API key saved successfully',
-				'forvoyez-auto-alt-text-for-images',
+				'auto-alt-text-for-images',
 			),
 		);
 	}

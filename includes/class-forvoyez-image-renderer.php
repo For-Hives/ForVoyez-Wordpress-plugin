@@ -115,30 +115,30 @@ class Forvoyez_Image_Renderer {
                 <?php
                 esc_html_e(
                 	'Title:',
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
-                </strong> <span class="title-content"><?php echo esc_html( $image->post_title ?: __( 'Not set', 'forvoyez-auto-alt-text-for-images' ) ); ?></span>
+                </strong> <span class="title-content"><?php echo esc_html( $image->post_title ?: __( 'Not set', 'auto-alt-text-for-images' ) ); ?></span>
             </p>
             <p class="text-sm text-gray-500 text-left">
                 <strong>
                 <?php
                 esc_html_e(
                 	'Alt Text:',
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
-                </strong> <span class="alt-content"><?php echo esc_html( $image_alt ?: __( 'Not set', 'forvoyez-auto-alt-text-for-images' ) ); ?></span>
+                </strong> <span class="alt-content"><?php echo esc_html( $image_alt ?: __( 'Not set', 'auto-alt-text-for-images' ) ); ?></span>
             </p>
             <p class="text-sm text-gray-500 text-left">
                 <strong>
                 <?php
                 esc_html_e(
                 	'Caption:',
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
-                </strong> <span class="caption-content"><?php echo esc_html( $image->post_excerpt ?: __( 'Not set', 'forvoyez-auto-alt-text-for-images' ) ); ?></span>
+                </strong> <span class="caption-content"><?php echo esc_html( $image->post_excerpt ?: __( 'Not set', 'auto-alt-text-for-images' ) ); ?></span>
             </p>
         </div>
         <?php
@@ -210,7 +210,7 @@ class Forvoyez_Image_Renderer {
                 <?php
 esc_attr_e(
     'All Complete',
-    'forvoyez-auto-alt-text-for-images',
+    'auto-alt-text-for-images',
 );
 ?>
 ">
@@ -234,7 +234,7 @@ esc_attr_e(
         $type_label   = ucfirst( $type );
         $missing_text = sprintf(
             /* translators: %s: Metadata type (Alt, Title, or Caption) */
-            esc_html__( 'Missing %s', 'forvoyez-auto-alt-text-for-images' ),
+            esc_html__( 'Missing %s', 'auto-alt-text-for-images' ),
             $type_label
         );
         ?>
@@ -276,14 +276,14 @@ esc_attr_e(
                 <?php
                 self::render_action_button(
                 	'analyze',
-                	__( 'Analyze', 'forvoyez-auto-alt-text-for-images' ),
+                	__( 'Analyze', 'auto-alt-text-for-images' ),
                 	'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01',
                 );
                 ?>
                 <?php
                 self::render_action_button(
                 	'see-more',
-                	__( 'Details', 'forvoyez-auto-alt-text-for-images' ),
+                	__( 'Details', 'auto-alt-text-for-images' ),
                 	'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z',
                 );
                 ?>
@@ -313,12 +313,12 @@ esc_attr_e(
                     if ( $label === 'Analyze' ) {
                     	echo esc_html_e(
                     		'Analyse',
-                    		'forvoyez-auto-alt-text-for-images',
+                    		'auto-alt-text-for-images',
                     	);
                     } elseif ( $label === 'Details' ) {
                     	echo esc_html_e(
                     		'Details',
-                    		'forvoyez-auto-alt-text-for-images',
+                    		'auto-alt-text-for-images',
                     	);
                     }
                     ?>
