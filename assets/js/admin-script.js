@@ -361,7 +361,7 @@
 					data: {
 						action: 'forvoyez_process_image_batch',
 						image_ids: batch,
-						nonce: forvoyezData.processImageBatchNonce,
+						nonce: forvoyezData.verifyAjaxRequestNonce,
 					},
 					success: function (response) {
 						if (response.success) {

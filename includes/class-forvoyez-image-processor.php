@@ -140,7 +140,7 @@ class Forvoyez_Image_Processor {
 			return;
 		}
 
-		$this->verify_ajax_request('forvoyez_analyse_image');
+		$this->verify_ajax_request('forvoyez_verify_ajax_request_nonce');
 
 		$image_id = isset( $_POST['image_id'] )
 			? absint( wp_unslash( $_POST['image_id'] ) )
@@ -302,7 +302,7 @@ class Forvoyez_Image_Processor {
 	}
 
 	public function process_image_batch() {
-		$this->verify_ajax_request('forvoyez_process_image_batch');
+		$this->verify_ajax_request('forvoyez_verify_ajax_request_nonce');
 
 		$image_ids = isset( $_POST['image_ids'] )
 			? array_map( 'absint', wp_unslash( $_POST['image_ids'] ) )
@@ -349,25 +349,15 @@ class Forvoyez_Image_Processor {
      * @param string $action The action name.
 	 * @throws WP_Error If the request is invalid or user doesn't have permission.
 	 */
-	private function verify_ajax_request($action = 'forvoyez_verify_ajax_request') {
-        $nonce = isset($_REQUEST['nonce']) ? sanitize_text_field(wp_unslash($_REQUEST['nonce'])) : '';
-
-        if (!wp_verify_nonce($nonce, $action . '_nonce')) {
-            wp_send_json_error(array(
-                'message' => 'Invalid security token',
-                'code' => 'invalid_nonce'
-            ));
-            exit;
+	private function verify_ajax_request($action) {
+        if ( !check_ajax_referer( $action, 'nonce', false ) ) {
+           wp_send_json_error( 'Invalid nonce' );
+           exit;
         }
 
-        if (!current_user_can('upload_files')) {
-            wp_send_json_error(array(
-                'message' => 'Permission denied',
-                'code' => 'insufficient_permissions'
-            ));
-            exit;
+        if ( !current_user_can( 'upload_files' ) ) {
+           wp_send_json_error( 'Permission denied' );
+           exit;
         }
-
-        return true;
     }
 }
