@@ -200,20 +200,8 @@ class Forvoyez_Image_Renderer {
             	'M4 6h16M4 12h16M4 18h7',
             );
             ?>
-            <span class="bg-green-500 text-white rounded-full p-1 
-            <?php
-            echo $all_complete
-            	? ''
-            	: 'hidden';
-                ?>
-                all-complete" title="
-                <?php
-esc_attr_e(
-    'All Complete',
-    'auto-alt-text-for-images',
-);
-?>
-">
+            <span class="bg-green-500 text-white rounded-full p-1 <?php echo $all_complete ? '' : 'hidden'; ?> all-complete"
+                  title="<?php esc_attr_e('All Complete', 'auto-alt-text-for-images',); ?>">
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                 </svg>
@@ -232,15 +220,13 @@ esc_attr_e(
 	 */
 	private static function render_metadata_icon( $type, $value, $path ) {
         $type_label   = ucfirst( $type );
+        /* translators: %s: Metadata type (Alt, Title, or Caption) */
         $missing_text = sprintf(
-            /* translators: %s: Metadata type (Alt, Title, or Caption) */
             esc_html__( 'Missing %s', 'auto-alt-text-for-images' ),
             $type_label
         );
         ?>
-        <span class="bg-red-500 text-white rounded-full p-1
-            <?php echo empty( $value ) ? '' : 'hidden'; ?>
-            <?php echo esc_attr( $type ); ?>-missing" title="<?php echo esc_attr( $missing_text ); ?>">
+        <span class="bg-red-500 text-white rounded-full p-1 <?php echo empty( $value ) ? '' : 'hidden'; ?> <?php echo esc_attr( $type ); ?>-missing" title="<?php echo esc_attr( $missing_text ); ?>">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?php echo esc_attr( $path ); ?>" />
             </svg>
