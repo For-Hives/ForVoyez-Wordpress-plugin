@@ -16,11 +16,11 @@
 			"prettier --write ."
 		],
 		"install-wp-tests": "bash bin/install-wp-tests.sh wordpress_test wp_test_user 'votre_mot_de_passe_test' localhost latest",
-		"make-pot": " wp i18n make-pot . languages/forvoyez-auto-alt-text-for-images.pot --domain=forvoyez-auto-alt-text-for-images",
+		"make-pot": " wp i18n make-pot . languages/auto-alt-text-for-images.pot --domain=auto-alt-text-for-images",
 		"zip": [
 			"rm -rf release",
 			"mkdir release",
-			"git ls-files | grep -v -f .distignore | zip -@ release/forvoyez-auto-alt-text-for-images.zip"
+			"git ls-files | grep -v -f .distignore | zip -@ release/auto-alt-text-for-images.zip"
 		]
 	},
 	"require-dev": {

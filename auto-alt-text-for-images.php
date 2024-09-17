@@ -1,6 +1,6 @@
 <?php
 /**
- * ForVoyez Auto Alt Text for Images
+ * Auto Alt Text for Images
  *
  * This plugin automatically generates alt text and SEO metadata for images using the ForVoyez API.
  *
@@ -91,7 +91,7 @@ function forvoyez_clear_image_cache() {
  */
 function forvoyez_load_textdomain() {
 	load_plugin_textdomain(
-		'forvoyez-auto-alt-text-for-images',
+		'auto-alt-text-for-images',
 		false,
 		dirname( plugin_basename( __FILE__ ) ) . '/languages/',
 	);

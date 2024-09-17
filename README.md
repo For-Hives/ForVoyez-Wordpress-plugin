@@ -128,7 +128,7 @@ BrowserSync will now monitor specified files and auto-reload your browser on cha
 ├── bs-config.cjs
 ├── composer.json
 ├── package.json
-├── forvoyez-auto-alt-text-for-images.php
+├── auto-alt-text-for-images.php
 ├── README.md
 └── ...
 ```
