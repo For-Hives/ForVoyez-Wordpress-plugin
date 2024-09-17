@@ -1,7 +1,7 @@
 <?php
 // If this file is called directly, abort.
-if (!defined('ABSPATH')) {
-	exit('Direct access to this file is not allowed.');
+if ( !defined( 'ABSPATH' ) ) {
+	exit( 'Direct access to this file is not allowed.' );
 } ?>
 <div class="wrap p-6 min-h-screen relative [&_button,a]:shadow-none [&_button,a]:outline-none">
     <h1 class="text-3xl font-bold mb-6 text-gray-800">

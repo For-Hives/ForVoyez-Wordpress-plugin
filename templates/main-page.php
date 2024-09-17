@@ -1,10 +1,10 @@
 <?php
 // If this file is called directly, abort.
-if (!defined('ABSPATH')) {
-	exit('Direct access to this file is not allowed.');
+if ( !defined( 'ABSPATH' ) ) {
+	exit( 'Direct access to this file is not allowed.' );
 }
 
-$active_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])) : 'dashboard';
+$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'dashboard';
 ?>
 <div class="wrap">
     <h1 class="text-2xl font-bold mb-4">
@@ -26,7 +26,7 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])
         ">
             <a href="?page=auto-alt-text-for-images&tab=dashboard" class="
             <?php
-	echo $active_tab ==
+	echo $active_tab ===
 	'dashboard'
 		? 'border-blue-500 text-blue-600'
 		: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300';
@@ -41,7 +41,7 @@ esc_html_e(
             </a>
             <a href="?page=auto-alt-text-for-images&tab=manage" class="
             <?php
-			echo $active_tab ==
+			echo $active_tab ===
 			'manage'
 ? 'border-blue-500 text-blue-600'
 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300';
@@ -56,7 +56,7 @@ esc_html_e(
             </a>
             <a href="?page=auto-alt-text-for-images&tab=configuration" class="
             <?php
-			echo $active_tab ==
+			echo $active_tab ===
 			'configuration'
 ? 'border-blue-500 text-blue-600'
 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300';
@@ -74,7 +74,7 @@ esc_html_e(
 
     <div class="mt-6">
         <?php
-		switch ($active_tab) {
+		switch ( $active_tab ) {
 			case 'manage':
 				include FORVOYEZ_PLUGIN_DIR . 'templates/admin-page.php';
 

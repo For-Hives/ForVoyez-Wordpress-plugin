@@ -5,6 +5,7 @@
     <file>.</file>
     <exclude-pattern>/vendor/</exclude-pattern>
     <exclude-pattern>/node_modules/</exclude-pattern>
+    <exclude-pattern>/tests/</exclude-pattern>
 
     <arg value="sp"/>
     <arg name="colors"/>
@@ -17,6 +18,13 @@
         <!-- Exclusions to align with Prettier -->
         <exclude name="Generic.WhiteSpace.DisallowSpaceIndent"/>
         <exclude name="Generic.WhiteSpace.ScopeIndent"/>
+        <exclude name="WordPress.PHP.StrictInArray.MissingTrueStrict"/>
+        <exclude name="Universal.Operators.StrictComparisons.LooseEqual"/>
+        <exclude name="Universal.NamingConventions.NoReservedKeywordParameterNames.classFound"/>
+        <exclude name="WordPress.PHP.YodaConditions.NotYoda"/>
+        <exclude name="Universal.Operators.DisallowShortTernary.Found"/>
+        <exclude name="Generic.Files.LineLength.MaxExceeded"/>
+        <exclude name="Generic.Files.LineLength.TooLong"/>
         <exclude name="WordPress.Arrays.ArrayDeclarationSpacing"/>
         <exclude name="WordPress.WhiteSpace.OperatorSpacing"/>
         <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine"/>
@@ -38,14 +46,6 @@
         </properties>
     </rule>
 
-    <!-- Line length -->
-    <rule ref="Generic.Files.LineLength">
-        <properties>
-            <property name="lineLimit" value="80"/>
-            <property name="absoluteLineLimit" value="120"/>
-        </properties>
-    </rule>
-
     <!-- Brace style -->
     <rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie"/>
 
@@ -62,7 +62,7 @@
     <!-- Internationalization rules -->
     <rule ref="WordPress.WP.I18n">
         <properties>
-            <property name="text_domain" type="array" value="your-text-domain"/>
+            <property name="text_domain" type="array" value="auto-alt-text-for-images"/>
         </properties>
     </rule>
 

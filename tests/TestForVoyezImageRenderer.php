@@ -7,17 +7,16 @@
  * @package ForVoyez
  */
 
-class TestForVoyezImageRenderer extends WP_UnitTestCase
-{
+class TestForVoyezImageRenderer extends WP_UnitTestCase {
+
 	/**
 	 * Test the is_metadata_complete method.
 	 */
-	public function test_is_metadata_complete()
-	{
+	public function test_is_metadata_complete() {
 		$complete = $this->call_private_method(
 			Forvoyez_Image_Renderer::class,
 			'is_metadata_complete',
-			[ 'Alt Text', 'Title', 'Caption' ],
+			array( 'Alt Text', 'Title', 'Caption' ),
 		);
 		$this->assertTrue(
 			$complete,
@@ -27,7 +26,7 @@ class TestForVoyezImageRenderer extends WP_UnitTestCase
 		$incomplete_alt = $this->call_private_method(
 			Forvoyez_Image_Renderer::class,
 			'is_metadata_complete',
-			[ '', 'Title', 'Caption' ],
+			array( '', 'Title', 'Caption' ),
 		);
 		$this->assertFalse(
 			$incomplete_alt,
@@ -37,7 +36,7 @@ class TestForVoyezImageRenderer extends WP_UnitTestCase
 		$incomplete_title = $this->call_private_method(
 			Forvoyez_Image_Renderer::class,
 			'is_metadata_complete',
-			[ 'Alt Text', '', 'Caption' ],
+			array( 'Alt Text', '', 'Caption' ),
 		);
 		$this->assertFalse(
 			$incomplete_title,
@@ -47,7 +46,7 @@ class TestForVoyezImageRenderer extends WP_UnitTestCase
 		$incomplete_caption = $this->call_private_method(
 			Forvoyez_Image_Renderer::class,
 			'is_metadata_complete',
-			[ 'Alt Text', 'Title', '' ],
+			array( 'Alt Text', 'Title', '' ),
 		);
 		$this->assertFalse(
 			$incomplete_caption,
@@ -57,7 +56,7 @@ class TestForVoyezImageRenderer extends WP_UnitTestCase
 		$all_empty = $this->call_private_method(
 			Forvoyez_Image_Renderer::class,
 			'is_metadata_complete',
-			[ '', '', '' ],
+			array( '', '', '' ),
 		);
 		$this->assertFalse(
 			$all_empty,
@@ -68,8 +67,7 @@ class TestForVoyezImageRenderer extends WP_UnitTestCase
 	/**
 	 * Test the render_metadata_icons method for correct icon visibility.
 	 */
-	public function test_render_metadata_icons()
-	{
+	public function test_render_metadata_icons() {
 		ob_start();
 		Forvoyez_Image_Renderer::render_metadata_icons(
 			'Alt Text',
@@ -101,7 +99,7 @@ class TestForVoyezImageRenderer extends WP_UnitTestCase
 		);
 
 		ob_start();
-		Forvoyez_Image_Renderer::render_metadata_icons('', '', '', false);
+		Forvoyez_Image_Renderer::render_metadata_icons( '', '', '', false );
 		$output = ob_get_clean();
 
 		$this->assertStringNotContainsString(
@@ -129,8 +127,7 @@ class TestForVoyezImageRenderer extends WP_UnitTestCase
 	/**
 	 * Test the render_action_buttons method for correct button presence.
 	 */
-	public function test_render_action_buttons()
-	{
+	public function test_render_action_buttons() {
 		ob_start();
 		Forvoyez_Image_Renderer::render_action_buttons();
 		$output = ob_get_clean();
@@ -155,12 +152,11 @@ class TestForVoyezImageRenderer extends WP_UnitTestCase
 	 * @param array $args The arguments to pass to the method.
 	 * @return mixed The result of the method call.
 	 */
-	private function call_private_method($className, $methodName, array $args)
-	{
-		$class = new ReflectionClass($className);
-		$method = $class->getMethod($methodName);
-		$method->setAccessible(true);
+	private function call_private_method( $className, $methodName, array $args ) {
+		$class  = new ReflectionClass( $className );
+		$method = $class->getMethod( $methodName );
+		$method->setAccessible( true );
 
-		return $method->invokeArgs(null, $args);
+		return $method->invokeArgs( null, $args );
 	}
 }
