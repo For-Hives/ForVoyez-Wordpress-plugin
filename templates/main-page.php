@@ -24,7 +24,7 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['ta
         );
         ?>
         ">
-            <a href="?page=forvoyez-auto-alt-text&tab=dashboard" class="
+            <a href="?page=auto-alt-text-for-images&tab=dashboard" class="
             <?php
             echo $active_tab ==
             'dashboard'
@@ -39,7 +39,7 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['ta
                 );
                 ?>
             </a>
-            <a href="?page=forvoyez-auto-alt-text&tab=manage" class="
+            <a href="?page=auto-alt-text-for-images&tab=manage" class="
             <?php
             echo $active_tab ==
             'manage'
@@ -54,7 +54,7 @@ $active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['ta
                 );
                 ?>
             </a>
-            <a href="?page=forvoyez-auto-alt-text&tab=configuration" class="
+            <a href="?page=auto-alt-text-for-images&tab=configuration" class="
             <?php
             echo $active_tab ==
             'configuration'

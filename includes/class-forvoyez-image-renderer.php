@@ -201,7 +201,7 @@ class Forvoyez_Image_Renderer {
             );
             ?>
             <span class="bg-green-500 text-white rounded-full p-1 <?php echo $all_complete ? '' : 'hidden'; ?> all-complete"
-                  title="<?php esc_attr_e('All Complete', 'auto-alt-text-for-images',); ?>">
+                    title="<?php esc_attr_e( 'All Complete', 'auto-alt-text-for-images', ); ?>">
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                 </svg>
@@ -219,7 +219,7 @@ class Forvoyez_Image_Renderer {
 	 * @return void
 	 */
 	private static function render_metadata_icon( $type, $value, $path ) {
-        $type_label   = ucfirst( $type );
+        $type_label = ucfirst( $type );
         /* translators: %s: Metadata type (Alt, Title, or Caption) */
         $missing_text = sprintf(
             esc_html__( 'Missing %s', 'auto-alt-text-for-images' ),
@@ -287,39 +287,25 @@ class Forvoyez_Image_Renderer {
 	 * @return void
 	 */
 	private static function render_action_button( $type, $label, $icon_path ) {
-		?>
+        ?>
         <div class="flex w-0 flex-1">
-            <button class="<?php
-            echo esc_attr(
-            	$type,
-            );
-            ?>-button relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-xs text-gray-900 hover:bg-gray-50 hover:border-gray-200">
+            <?php // phpcs:ignore ?>
+            <button class="<?php echo esc_attr($type); ?>-button relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-xs text-gray-900 hover:bg-gray-50 hover:border-gray-200">
                 <span>
                     <?php
                     if ( $label === 'Analyze' ) {
-                    	echo esc_html_e(
-                    		'Analyse',
-                    		'auto-alt-text-for-images',
-                    	);
+                        echo esc_html__( 'Analyse', 'auto-alt-text-for-images' );
                     } elseif ( $label === 'Details' ) {
-                    	echo esc_html_e(
-                    		'Details',
-                    		'auto-alt-text-for-images',
-                    	);
+                        echo esc_html__( 'Details', 'auto-alt-text-for-images' );
                     }
                     ?>
                 </span>
                 <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="
-                    <?php
-                    echo esc_attr(
-                    	$icon_path,
-                    );
-                    ?>
-                    " />
+                    <?php // phpcs:ignore ?>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?php echo esc_attr($icon_path); ?>" />
                 </svg>
             </button>
         </div>
         <?php
-	}
+    }
 }
