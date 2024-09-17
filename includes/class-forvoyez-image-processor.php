@@ -348,22 +348,14 @@ class Forvoyez_Image_Processor {
 	 * @throws WP_Error If the request is invalid or user doesn't have permission.
 	 */
 	private function verify_ajax_request() {
-        error_log('Verifying AJAX request');
-        error_log('Nonce received: ' . $_REQUEST['nonce']);
-
         if (!check_ajax_referer('forvoyez_verify_ajax_request_nonce', wp_unslash($_REQUEST['nonce']), false)) {
-            error_log('Nonce verification failed');
             wp_send_json_error('Invalid nonce');
             exit;
         }
 
         if (!current_user_can('upload_files')) {
-            error_log('Permission check failed');
             wp_send_json_error('Permission denied');
             exit;
         }
-
-        error_log('AJAX request verified successfully');
     }
-
 }

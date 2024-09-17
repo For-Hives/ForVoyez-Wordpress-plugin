@@ -6,7 +6,7 @@
  *
  * @package     ForVoyez
  * @author      ForVoyez
- * @copyright   2023 ForVoyez
+ * @copyright   2024 ForVoyez
  * @license     GPL-2.0+
  *
  * @wordpress-plugin

@@ -297,7 +297,6 @@
 						markImageAsAnalyzed(imageId, response.data.metadata)
 						resolve(true)
 					} else {
-						console.log(response)
 						let errorMessage = response.data
 							? response.data.message
 							: 'Unknown error occurred'
@@ -312,8 +311,6 @@
 				},
 				error: function (jqXHR, textStatus) {
 					if (isNotificationActivated) {
-						console.log(jqXHR)
-						console.log(textStatus)
 						showErrorNotification(
 							'AJAX request failed: ' + textStatus,
 							'ajax_error',
