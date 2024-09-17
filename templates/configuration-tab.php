@@ -58,20 +58,20 @@ $api_key  = $settings->get_api_key();
                 <ol class="list-decimal list-inside text-sm text-gray-600 mb-4 ml-4">
                     <li>
                         <?php
-                        printf(
+                        echo wp_kses_post(sprintf(
                             // translators: %s: URL of the ForVoyez signup page
                             __('Visit the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez signup page</a> to create an account.', 'forvoyez-auto-alt-text-for-images'),
                             esc_url('https://forvoyez.com/signup')
-                        );
+                        ));
                         ?>
                     </li>
                     <li>
                         <?php
-                        printf(
-                            // translators: %s: URL of the ForVoyez dashboard
-                            __('Once logged in, navigate to your <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez dashboard</a>.', 'forvoyez-auto-alt-text-for-images'),
-                            esc_url('https://forvoyez.com/dashboard')
-                        );
+                            echo wp_kses_post(sprintf(
+                                // translators: %s: URL of the ForVoyez dashboard
+                                __('Once logged in, navigate to your <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez dashboard</a>.', 'forvoyez-auto-alt-text-for-images'),
+                                esc_url('https://forvoyez.com/dashboard')
+                            ));
                         ?>
                     </li>
                     <li>
@@ -93,11 +93,11 @@ $api_key  = $settings->get_api_key();
                 </ol>
                 <p class="text-sm text-gray-600">
                     <?php
-                    printf(
-                        // translators: %s: URL of the ForVoyez API documentation
-                        __('For more information, please refer to the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez API documentation</a>.', 'forvoyez-auto-alt-text-for-images'),
-                        esc_url('https://doc.forvoyez.com')
-                    );
+                    echo wp_kses_post(sprintf(
+                            // translators: %s: URL of the ForVoyez API documentation
+                            __('For more information, please refer to the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez API documentation</a>.', 'forvoyez-auto-alt-text-for-images'),
+                            esc_url('https://doc.forvoyez.com')
+                    ));
                     ?>
                 </p>
             </div>
