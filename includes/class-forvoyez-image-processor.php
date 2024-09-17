@@ -63,19 +63,19 @@ class Forvoyez_Image_Processor {
         );
 	}
 
-	private function sanitize_and_validate_metadata($raw_metadata) {
+	private function sanitize_and_validate_metadata( $raw_metadata ) {
         $sanitized_metadata = array();
 
-        if (isset($raw_metadata['alt_text'])) {
-            $sanitized_metadata['alt_text'] = wp_strip_all_tags($raw_metadata['alt_text']);
+        if ( isset( $raw_metadata['alt_text'] ) ) {
+            $sanitized_metadata['alt_text'] = wp_strip_all_tags( $raw_metadata['alt_text'] );
         }
 
-        if (isset($raw_metadata['title'])) {
-            $sanitized_metadata['title'] = sanitize_text_field($raw_metadata['title']);
+        if ( isset( $raw_metadata['title'] ) ) {
+            $sanitized_metadata['title'] = sanitize_text_field( $raw_metadata['title'] );
         }
 
-        if (isset($raw_metadata['caption'])) {
-            $sanitized_metadata['caption'] = wp_kses_post($raw_metadata['caption']);
+        if ( isset( $raw_metadata['caption'] ) ) {
+            $sanitized_metadata['caption'] = wp_kses_post( $raw_metadata['caption'] );
         }
 
         return $sanitized_metadata;
@@ -134,8 +134,8 @@ class Forvoyez_Image_Processor {
 	}
 
 	public function ajax_analyze_image() {
-        if (!current_user_can('upload_files')) {
-            wp_send_json_error('Permission denied (cant upload)', 403);
+        if ( !current_user_can( 'upload_files' ) ) {
+            wp_send_json_error( 'Permission denied (cant upload)', 403 );
             return;
         }
 
@@ -348,13 +348,13 @@ class Forvoyez_Image_Processor {
 	 * @throws WP_Error If the request is invalid or user doesn't have permission.
 	 */
 	private function verify_ajax_request() {
-        if (!check_ajax_referer('forvoyez_verify_ajax_request_nonce', wp_unslash($_REQUEST['nonce']), false)) {
-            wp_send_json_error('Invalid nonce');
+        if ( !check_ajax_referer( 'forvoyez_verify_ajax_request_nonce', wp_unslash( $_REQUEST['nonce'] ), false ) ) {
+            wp_send_json_error( 'Invalid nonce' );
             exit;
         }
 
-        if (!current_user_can('upload_files')) {
-            wp_send_json_error('Permission denied');
+        if ( !current_user_can( 'upload_files' ) ) {
+            wp_send_json_error( 'Permission denied' );
             exit;
         }
     }

@@ -13,32 +13,32 @@ class TestForvoyezAdmin extends WP_UnitTestCase {
 	}
 
 	public function test_parse_and_sanitize_filters() {
-        $adminMock = new class($this->createMock(Forvoyez_API_Manager::class)) extends Forvoyez_Admin {
-            public function publicParseAndSanitizeFilters($raw_filters) {
-                return $this->parse_and_sanitize_filters($raw_filters);
+        $adminMock = new class($this->createMock( Forvoyez_API_Manager::class )) extends Forvoyez_Admin {
+            public function publicParseAndSanitizeFilters( $raw_filters ) {
+                return $this->parse_and_sanitize_filters( $raw_filters );
             }
         };
 
         $input = array(
-            array('name' => 'filter[]', 'value' => 'alt'),
-            array('name' => 'filter[]', 'value' => 'title'),
-            array('name' => 'filter[]', 'value' => 'invalid'),
-            array('name' => 'not_filter', 'value' => 'caption')
+            array( 'name' => 'filter[]', 'value' => 'alt' ),
+            array( 'name' => 'filter[]', 'value' => 'title' ),
+            array( 'name' => 'filter[]', 'value' => 'invalid' ),
+            array( 'name' => 'not_filter', 'value' => 'caption' ),
         );
 
-        $expected = array('alt', 'title');
+        $expected = array( 'alt', 'title' );
 
-        $errorOutput = '';
-        $errorHandler = function($errno, $errstr) use (&$errorOutput) {
+        $errorOutput  = '';
+        $errorHandler = function ( $errno, $errstr ) use ( &$errorOutput ) {
             $errorOutput .= $errstr . "\n";
         };
-        set_error_handler($errorHandler, E_USER_NOTICE);
+        set_error_handler( $errorHandler, E_USER_NOTICE );
 
-        $result = $adminMock->publicParseAndSanitizeFilters($input);
+        $result = $adminMock->publicParseAndSanitizeFilters( $input );
 
         restore_error_handler();
 
-        $this->assertEquals($expected, $result, 'Filters were not parsed correctly');
+        $this->assertEquals( $expected, $result, 'Filters were not parsed correctly' );
     }
 
 	public function test_build_meta_query() {

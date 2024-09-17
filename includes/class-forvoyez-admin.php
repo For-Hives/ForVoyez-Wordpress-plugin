@@ -379,14 +379,14 @@ class Forvoyez_Admin {
 	 * @param array $filters Raw filters array.
 	 * @return array Sanitized filters.
 	 */
-	protected function parse_and_sanitize_filters($raw_filters) {
+	protected function parse_and_sanitize_filters( $raw_filters ) {
         $sanitized_filters = array();
-        $allowed_filters = array('alt', 'title', 'caption');
+        $allowed_filters   = array( 'alt', 'title', 'caption' );
 
-        foreach ($raw_filters as $filter) {
-            if (isset($filter['name']) && $filter['name'] === 'filter[]' && isset($filter['value'])) {
-                $sanitized_filter = sanitize_text_field($filter['value']);
-                if (in_array($sanitized_filter, $allowed_filters)) {
+        foreach ( $raw_filters as $filter ) {
+            if ( isset( $filter['name'] ) && $filter['name'] === 'filter[]' && isset( $filter['value'] ) ) {
+                $sanitized_filter = sanitize_text_field( $filter['value'] );
+                if ( in_array( $sanitized_filter, $allowed_filters ) ) {
                     $sanitized_filters[] = $sanitized_filter;
                 }
             }
