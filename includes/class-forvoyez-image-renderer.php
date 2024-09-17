@@ -8,20 +8,19 @@
  * @since 1.0.0
  */
 
-defined('ABSPATH') || exit('Direct access to this file is not allowed.');
+defined( 'ABSPATH' ) || exit( 'Direct access to this file is not allowed.' );
 
-class Forvoyez_Image_Renderer
-{
+class Forvoyez_Image_Renderer {
+
 	/**
 	 * Render an individual image item.
 	 *
 	 * @param WP_Post $image The image post object.
 	 * @return void
 	 */
-	public static function render_image_item($image)
-	{
+	public static function render_image_item( $image ) {
 		// Fetch image data
-		$image_url = wp_get_attachment_url($image->ID);
+		$image_url = wp_get_attachment_url( $image->ID );
 		$image_alt = get_post_meta(
 			$image->ID,
 			'_wp_attachment_image_alt',
@@ -29,7 +28,7 @@ class Forvoyez_Image_Renderer
 		);
 
 		// Check if all metadata is complete
-		$all_complete = self::is_metadata_complete(
+		$all_complete   = self::is_metadata_complete(
 			$image_alt,
 			$image->post_title,
 			$image->post_excerpt,
@@ -43,12 +42,12 @@ class Forvoyez_Image_Renderer
 			$disabled_class,
 		);
 		?>
-        " data-image-id="<?php echo esc_attr($image->ID); ?>">
+        " data-image-id="<?php echo esc_attr( $image->ID ); ?>">
             <div class="flex flex-1 flex-col p-2">
                 <div class="relative w-full h-48">
-                    <?php self::render_image($image_url, $image_alt); ?>
-                    <?php self::render_details_view($image, $image_alt); ?>
-                    <?php self::render_checkbox($image->ID); ?>
+                    <?php self::render_image( $image_url, $image_alt ); ?>
+                    <?php self::render_details_view( $image, $image_alt ); ?>
+                    <?php self::render_checkbox( $image->ID ); ?>
                     <?php
 					self::render_metadata_icons(
 						$image_alt,
@@ -78,9 +77,9 @@ class Forvoyez_Image_Renderer
 		$post_title,
 		$post_excerpt,
 	) {
-		return !empty($image_alt) &&
-			!empty($post_title) &&
-			!empty($post_excerpt);
+		return !empty( $image_alt ) &&
+			!empty( $post_title ) &&
+			!empty( $post_excerpt );
 	}
 
 	/**
@@ -90,17 +89,16 @@ class Forvoyez_Image_Renderer
 	 * @param string $image_alt The alt text for the image.
 	 * @return void
 	 */
-	private static function render_image($image_url, $image_alt)
-	{
+	private static function render_image( $image_url, $image_alt ) {
 		?>
         <?php // phpcs:ignore?>
         <img class="w-full h-full object-cover rounded-lg"
             src="
             <?php
 			/* translators: Image alt text */
-			echo esc_url($image_url, );
+			echo esc_url( $image_url, );
 		?>
-            " alt="<?php echo esc_attr($image_alt); ?>">
+            " alt="<?php echo esc_attr( $image_alt ); ?>">
         <?php
 	}
 
@@ -111,8 +109,7 @@ class Forvoyez_Image_Renderer
 	 * @param string $image_alt The image alt text.
 	 * @return void
 	 */
-	private static function render_details_view($image, $image_alt)
-	{
+	private static function render_details_view( $image, $image_alt ) {
 		?>
         <div class="hidden absolute inset-0 bg-white p-2 pt-8 overflow-y-auto details-view">
             <p class="text-sm text-gray-500 text-left">
@@ -124,7 +121,7 @@ class Forvoyez_Image_Renderer
 					'auto-alt-text-for-images',
 				);
 		?>
-                </strong> <span class="title-content"><?php echo esc_html($image->post_title ?: esc_html__('Not set', 'auto-alt-text-for-images')); ?></span>
+                </strong> <span class="title-content"><?php echo esc_html( $image->post_title ?: esc_html__( 'Not set', 'auto-alt-text-for-images' ) ); ?></span>
             </p>
             <p class="text-sm text-gray-500 text-left">
                 <strong>
@@ -135,7 +132,7 @@ class Forvoyez_Image_Renderer
 			'auto-alt-text-for-images',
 		);
 		?>
-                </strong> <span class="alt-content"><?php echo esc_html($image_alt ?: esc_html__('Not set', 'auto-alt-text-for-images')); ?></span>
+                </strong> <span class="alt-content"><?php echo esc_html( $image_alt ?: esc_html__( 'Not set', 'auto-alt-text-for-images' ) ); ?></span>
             </p>
             <p class="text-sm text-gray-500 text-left">
                 <strong>
@@ -150,7 +147,7 @@ class Forvoyez_Image_Renderer
                 <span class="caption-content">
                     <?php
 			/* translators: Image caption */
-			echo esc_html($image->post_excerpt ?: esc_html__('Not set', 'auto-alt-text-for-images'));
+			echo esc_html( $image->post_excerpt ?: esc_html__( 'Not set', 'auto-alt-text-for-images' ) );
 		?>
                 </span>
             </p>
@@ -164,8 +161,7 @@ class Forvoyez_Image_Renderer
 	 * @param int $image_id The ID of the image.
 	 * @return void
 	 */
-	private static function render_checkbox($image_id)
-	{
+	private static function render_checkbox( $image_id ) {
 		?>
         <input type="checkbox" class="absolute top-2 left-2 form-checkbox h-5 w-5 text-blue-600 rounded transition duration-150 ease-in-out" value="
         <?php
@@ -216,7 +212,7 @@ class Forvoyez_Image_Renderer
 		);
 		?>
             <span class="bg-green-500 text-white rounded-full p-1 <?php echo $all_complete ? '' : 'hidden'; ?> all-complete"
-                    title="<?php esc_attr_e('All Complete', 'auto-alt-text-for-images', ); ?>">
+                    title="<?php esc_attr_e( 'All Complete', 'auto-alt-text-for-images', ); ?>">
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                 </svg>
@@ -233,18 +229,17 @@ class Forvoyez_Image_Renderer
 	 * @param string $path The SVG path for the icon.
 	 * @return void
 	 */
-	private static function render_metadata_icon($type, $value, $path)
-	{
-		$type_label = ucfirst($type);
+	private static function render_metadata_icon( $type, $value, $path ) {
+		$type_label   = ucfirst( $type );
 		$missing_text = sprintf(
 			/* translators: %s: Metadata type (Alt, Title, or Caption) */
-			esc_html__('Missing %s', 'auto-alt-text-for-images'),
+			esc_html__( 'Missing %s', 'auto-alt-text-for-images' ),
 			$type_label
 		);
 		?>
-        <span class="bg-red-500 text-white rounded-full p-1 <?php echo empty($value) ? '' : 'hidden'; ?> <?php echo esc_attr($type); ?>-missing" title="<?php echo esc_attr($missing_text); ?>">
+        <span class="bg-red-500 text-white rounded-full p-1 <?php echo empty( $value ) ? '' : 'hidden'; ?> <?php echo esc_attr( $type ); ?>-missing" title="<?php echo esc_attr( $missing_text ); ?>">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?php echo esc_attr($path); ?>" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?php echo esc_attr( $path ); ?>" />
             </svg>
         </span>
         <?php
@@ -255,8 +250,7 @@ class Forvoyez_Image_Renderer
 	 *
 	 * @return void
 	 */
-	private static function render_loader()
-	{
+	private static function render_loader() {
 		?>
         <div class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 hidden loader">
             <svg class="animate-spin h-10 w-10 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -272,22 +266,21 @@ class Forvoyez_Image_Renderer
 	 *
 	 * @return void
 	 */
-	public static function render_action_buttons()
-	{
+	public static function render_action_buttons() {
 		?>
         <div>
             <div class="-mt-px flex divide-x divide-gray-200">
             <?php
 				self::render_action_button(
 					'analyze',
-					esc_html__('Analyze', 'auto-alt-text-for-images'),
+					esc_html__( 'Analyze', 'auto-alt-text-for-images' ),
 					'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01',
 				);
 		?>
             <?php
 			self::render_action_button(
 				'see-more',
-				esc_html__('Details', 'auto-alt-text-for-images'),
+				esc_html__( 'Details', 'auto-alt-text-for-images' ),
 				'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z',
 			);
 		?>
@@ -304,20 +297,19 @@ class Forvoyez_Image_Renderer
 	 * @param string $icon_path The SVG path for the button icon.
 	 * @return void
 	 */
-	private static function render_action_button($type, $label, $icon_path)
-	{
+	private static function render_action_button( $type, $label, $icon_path ) {
 		?>
         <div class="flex w-0 flex-1">
             <?php // phpcs:ignore?>
             <button class="<?php echo esc_attr($type); ?>-button relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-xs text-gray-900 hover:bg-gray-50 hover:border-gray-200">
                 <span>
                     <?php
-					if ($label === 'Analyze') {
+					if ( $label === 'Analyze' ) {
 						/* translators: Button label for analyzing an image */
-						echo esc_html__('Analyse', 'auto-alt-text-for-images');
-					} elseif ($label === 'Details') {
+						echo esc_html__( 'Analyse', 'auto-alt-text-for-images' );
+					} elseif ( $label === 'Details' ) {
 						/* translators: Button label for viewing details of an image */
-						echo esc_html__('Details', 'auto-alt-text-for-images');
+						echo esc_html__( 'Details', 'auto-alt-text-for-images' );
 					}
 		?>
                 </span>

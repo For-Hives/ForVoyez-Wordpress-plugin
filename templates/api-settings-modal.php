@@ -1,11 +1,11 @@
 <?php
 // If this file is called directly, abort.
-if (!defined('ABSPATH')) {
-	exit('Direct access to this file is not allowed.');
+if ( !defined( 'ABSPATH' ) ) {
+	exit( 'Direct access to this file is not allowed.' );
 }
 
 $settings = new Forvoyez_Settings();
-$api_key = $settings->get_api_key();
+$api_key  = $settings->get_api_key();
 ?>
 <div class="forvoyez-api-settings-modal hidden fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full" style="z-index: 1000;">
     <div class="relative top-1/2 -translate-y-1/2 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
