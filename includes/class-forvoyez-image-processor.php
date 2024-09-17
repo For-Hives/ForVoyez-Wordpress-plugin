@@ -351,7 +351,7 @@ class Forvoyez_Image_Processor {
         error_log('Verifying AJAX request');
         error_log('Nonce received: ' . $_REQUEST['nonce']);
 
-        if (!check_ajax_referer('forvoyez_verify_ajax_request_nonce', 'nonce', false)) {
+        if (!check_ajax_referer('forvoyez_verify_ajax_request_nonce', wp_unslash($_REQUEST['nonce']), false)) {
             error_log('Nonce verification failed');
             wp_send_json_error('Invalid nonce');
             exit;
