@@ -1,4 +1,4 @@
-=== ForVoyez Auto Alt Text for Images ===
+=== Auto Alt Text for Images ===
 Contributors: cinquinandy
 Tags: seo, accessibility, images, alt text, metadata
 Requires at least: 5.0
