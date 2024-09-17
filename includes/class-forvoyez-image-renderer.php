@@ -93,12 +93,10 @@ class Forvoyez_Image_Renderer {
 		?>
         <?php // phpcs:ignore?>
         <img class="w-full h-full object-cover rounded-lg"
-            src="
-            <?php
+            src="<?php
 			/* translators: Image alt text */
 			echo esc_url( $image_url, );
-		?>
-            " alt="<?php echo esc_attr( $image_alt ); ?>">
+		?>" alt="<?php echo esc_attr( $image_alt ); ?>">
         <?php
 	}
 

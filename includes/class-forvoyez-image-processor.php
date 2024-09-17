@@ -350,7 +350,7 @@ class Forvoyez_Image_Processor {
 	 * @throws WP_Error If the request is invalid or user doesn't have permission.
 	 */
 	private function verify_ajax_request() {
-		if ( !check_ajax_referer( 'forvoyez_verify_ajax_request_nonce', wp_unslash( $_REQUEST['nonce'] ), false ) ) {
+		if ( !check_ajax_referer( 'forvoyez_verify_ajax_request_nonce', 'nonce', false ) ) {
 			wp_send_json_error( 'Invalid nonce' );
 			exit;
 		}
