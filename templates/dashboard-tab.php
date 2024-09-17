@@ -10,7 +10,7 @@ if ( !defined( 'ABSPATH' ) ) {
             <?php
             esc_html_e(
             	'Dashboard',
-            	'forvoyez-auto-alt-text-for-images',
+            	'auto-alt-text-for-images',
             );
             ?>
             </h2>
@@ -18,7 +18,7 @@ if ( !defined( 'ABSPATH' ) ) {
             <?php
             esc_html_e(
             	'Overview of your Auto Alt Text for Images',
-            	'forvoyez-auto-alt-text-for-images',
+            	'auto-alt-text-for-images',
             );
             ?>
             </p>
@@ -30,7 +30,7 @@ if ( !defined( 'ABSPATH' ) ) {
                     <?php
                     esc_html_e(
                     	'Total Images',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                     </dt>
@@ -47,7 +47,7 @@ if ( !defined( 'ABSPATH' ) ) {
                     <?php
                     esc_html_e(
                     	'Images Completed',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                     </dt>
@@ -64,7 +64,7 @@ if ( !defined( 'ABSPATH' ) ) {
                     <?php
                     esc_html_e(
                     	'Images Without alt / caption',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                     </dt>
@@ -86,7 +86,7 @@ if ( !defined( 'ABSPATH' ) ) {
             <?php
             esc_html_e(
             	'Pre-requisites',
-            	'forvoyez-auto-alt-text-for-images',
+            	'auto-alt-text-for-images',
             );
             ?>
             </h3>
@@ -94,7 +94,7 @@ if ( !defined( 'ABSPATH' ) ) {
             <?php
             esc_html_e(
             	'Make sure you have the following before you start:',
-            	'forvoyez-auto-alt-text-for-images',
+            	'auto-alt-text-for-images',
             );
             ?>
             </p>
@@ -105,7 +105,7 @@ if ( !defined( 'ABSPATH' ) ) {
                 <?php
                 esc_html_e(
                 	"Go to the 'Settings' tab",
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
                 </li>
@@ -113,7 +113,7 @@ if ( !defined( 'ABSPATH' ) ) {
                 <?php
                 esc_html_e(
                 	'Enter your ForVoyez API key',
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
                 </li>
@@ -121,7 +121,7 @@ if ( !defined( 'ABSPATH' ) ) {
                 <?php
                 esc_html_e(
                 	"Click on 'Save API Key'",
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
                 </li>
@@ -134,7 +134,7 @@ if ( !defined( 'ABSPATH' ) ) {
             <?php
             esc_html_e(
             	'Quick Start',
-            	'forvoyez-auto-alt-text-for-images',
+            	'auto-alt-text-for-images',
             );
             ?>
             </h3>
@@ -142,7 +142,7 @@ if ( !defined( 'ABSPATH' ) ) {
             <?php
             esc_html_e(
             	'Follow these steps to generate alt text for your images:',
-            	'forvoyez-auto-alt-text-for-images',
+            	'auto-alt-text-for-images',
             );
             ?>
             </p>
@@ -153,7 +153,7 @@ if ( !defined( 'ABSPATH' ) ) {
                 <?php
                 esc_html_e(
                 	"Go to the 'Manage Images' tab",
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
                 </li>
@@ -161,7 +161,7 @@ if ( !defined( 'ABSPATH' ) ) {
                 <?php
                 esc_html_e(
                 	'Select the images you want to process',
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
                 </li>
@@ -169,7 +169,7 @@ if ( !defined( 'ABSPATH' ) ) {
                 <?php
                 esc_html_e(
                 	"Click on 'Generate Alt Text' to start the process",
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
                 </li>
@@ -177,7 +177,7 @@ if ( !defined( 'ABSPATH' ) ) {
                 <?php
                 esc_html_e(
                 	'Review and edit the generated alt text as needed',
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
                 </li>

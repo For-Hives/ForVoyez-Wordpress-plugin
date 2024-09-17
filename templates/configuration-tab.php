@@ -16,7 +16,7 @@ $api_key  = $settings->get_api_key();
             <?php
             esc_html_e(
             	'API Configuration',
-            	'forvoyez-auto-alt-text-for-images',
+            	'auto-alt-text-for-images',
             );
             ?>
             </h2>
@@ -24,7 +24,7 @@ $api_key  = $settings->get_api_key();
             <?php
             esc_html_e(
             	'Manage your ForVoyez API settings here',
-            	'forvoyez-auto-alt-text-for-images',
+            	'auto-alt-text-for-images',
             );
             ?>
             </p>
@@ -35,7 +35,7 @@ $api_key  = $settings->get_api_key();
                 <?php
                 esc_html_e(
                 	'About ForVoyez API',
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
                 </h3>
@@ -43,7 +43,7 @@ $api_key  = $settings->get_api_key();
                     <?php
                     esc_html_e(
                     	'ForVoyez API provides powerful image analysis capabilities for your WordPress site. To use this plugin, you need to obtain an API key from ForVoyez.',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                 </p>
@@ -51,7 +51,7 @@ $api_key  = $settings->get_api_key();
                     <?php
                     esc_html_e(
                     	'To get started:',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                 </p>
@@ -60,7 +60,7 @@ $api_key  = $settings->get_api_key();
                         <?php
                         echo wp_kses_post(sprintf(
                             // translators: %s: URL of the ForVoyez signup page
-                            __('Visit the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez signup page</a> to create an account.', 'forvoyez-auto-alt-text-for-images'),
+                            __('Visit the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez signup page</a> to create an account.', 'auto-alt-text-for-images'),
                             esc_url('https://forvoyez.com/signup')
                         ));
                         ?>
@@ -69,7 +69,7 @@ $api_key  = $settings->get_api_key();
                         <?php
                             echo wp_kses_post(sprintf(
                                 // translators: %s: URL of the ForVoyez dashboard
-                                __('Once logged in, navigate to your <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez dashboard</a>.', 'forvoyez-auto-alt-text-for-images'),
+                                __('Once logged in, navigate to your <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez dashboard</a>.', 'auto-alt-text-for-images'),
                                 esc_url('https://forvoyez.com/dashboard')
                             ));
                         ?>
@@ -78,7 +78,7 @@ $api_key  = $settings->get_api_key();
                     <?php
                     esc_html_e(
                     	'Generate an API key in the API section of your dashboard.',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                     </li>
@@ -86,7 +86,7 @@ $api_key  = $settings->get_api_key();
                     <?php
                     esc_html_e(
                     	'Copy the API key and paste it in the field below.',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                     </li>
@@ -95,7 +95,7 @@ $api_key  = $settings->get_api_key();
                     <?php
                     echo wp_kses_post(sprintf(
                             // translators: %s: URL of the ForVoyez API documentation
-                            __('For more information, please refer to the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez API documentation</a>.', 'forvoyez-auto-alt-text-for-images'),
+                            __('For more information, please refer to the <a href="%s" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ForVoyez API documentation</a>.', 'auto-alt-text-for-images'),
                             esc_url('https://doc.forvoyez.com')
                     ));
                     ?>
@@ -106,7 +106,7 @@ $api_key  = $settings->get_api_key();
                 <?php
                 esc_html_e(
                 	'API Key',
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
                 </label>
@@ -116,7 +116,7 @@ $api_key  = $settings->get_api_key();
                             placeholder="<?php
                             esc_attr_e(
                             	'Enter your API key',
-                            	'forvoyez-auto-alt-text-for-images',
+                            	'auto-alt-text-for-images',
                             );
                             ?>
                             " value="<?php echo esc_attr( $api_key ); ?>">
@@ -126,7 +126,7 @@ $api_key  = $settings->get_api_key();
                             <?php
                             esc_attr_e(
                             	'Toggle API key visibility',
-                            	'forvoyez-auto-alt-text-for-images',
+                            	'auto-alt-text-for-images',
                             );
                             ?>
                             ">
@@ -145,7 +145,7 @@ $api_key  = $settings->get_api_key();
                     <?php
                     esc_html_e(
                     	'Save API Key',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                 </button>
@@ -155,7 +155,7 @@ $api_key  = $settings->get_api_key();
                     <?php
                     esc_html_e(
                     	'This plugin uses the ForVoyez API service to generate alt text and metadata for images. By using this plugin, you agree to the ForVoyez Terms of Service and Privacy Policy.',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                 </p>
@@ -166,7 +166,7 @@ $api_key  = $settings->get_api_key();
                     		/* translators: %1$s: URL to Terms of Service, %2$s: URL to Privacy Policy, %3$s: URL to Legal Notice */
                     		__(
                     			'Please review the <a href="%1$s" target="_blank" rel="noopener noreferrer" class="underline">Terms of Service</a>, <a href="%2$s" target="_blank" rel="noopener noreferrer" class="underline">Privacy Policy</a>, and <a href="%3$s" target="_blank" rel="noopener noreferrer" class="underline">Legal Notice</a>.',
-                    			'forvoyez-auto-alt-text-for-images',
+                    			'auto-alt-text-for-images',
                     		),
                     		array(
                     			'a' => array(

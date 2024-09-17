@@ -13,7 +13,7 @@ $api_key  = $settings->get_api_key();
         <?php
         esc_html_e(
         	'ForVoyez API Settings',
-        	'forvoyez-auto-alt-text-for-images',
+        	'auto-alt-text-for-images',
         );
         ?>
         </h2>
@@ -21,7 +21,7 @@ $api_key  = $settings->get_api_key();
         <?php
         esc_html_e(
         	'Enter your ForVoyez API key below:',
-        	'forvoyez-auto-alt-text-for-images',
+        	'auto-alt-text-for-images',
         );
         ?>
         </p>
@@ -37,7 +37,7 @@ $api_key  = $settings->get_api_key();
             <?php
             esc_attr_e(
             	'Toggle API key visibility',
-            	'forvoyez-auto-alt-text-for-images',
+            	'auto-alt-text-for-images',
             );
             ?>
             ">
@@ -53,7 +53,7 @@ $api_key  = $settings->get_api_key();
                 <?php
                 esc_html_e(
                 	'Save API Key',
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
             </button>
@@ -61,7 +61,7 @@ $api_key  = $settings->get_api_key();
                 <?php
                 esc_html_e(
                 	'Close',
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
             </button>

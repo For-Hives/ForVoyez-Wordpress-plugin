@@ -8,7 +8,7 @@ if ( !defined( 'ABSPATH' ) ) {
     <?php
     esc_html_e(
     	'Auto Alt Text for Images',
-    	'forvoyez-auto-alt-text-for-images',
+    	'auto-alt-text-for-images',
     );
     ?>
     </h1>
@@ -18,7 +18,7 @@ if ( !defined( 'ABSPATH' ) ) {
                 <?php
                 esc_html_e(
                 	'Legend :',
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
             </h3>
@@ -28,7 +28,7 @@ if ( !defined( 'ABSPATH' ) ) {
                         <?php
                         esc_html_e(
                         	'Missing Alt Text :',
-                        	'forvoyez-auto-alt-text-for-images',
+                        	'auto-alt-text-for-images',
                         );
                         ?>
                     </p>
@@ -36,7 +36,7 @@ if ( !defined( 'ABSPATH' ) ) {
                     <?php
                     esc_attr_e(
                     	'Missing Alt Text',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                     ">
@@ -50,7 +50,7 @@ if ( !defined( 'ABSPATH' ) ) {
                         <?php
                         esc_html_e(
                         	'Missing title :',
-                        	'forvoyez-auto-alt-text-for-images',
+                        	'auto-alt-text-for-images',
                         );
                         ?>
                     </p>
@@ -58,7 +58,7 @@ if ( !defined( 'ABSPATH' ) ) {
                     <?php
                     esc_attr_e(
                     	'Missing Title',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                     ">
@@ -73,7 +73,7 @@ if ( !defined( 'ABSPATH' ) ) {
                         <?php
                         esc_html_e(
                         	'Missing caption :',
-                        	'forvoyez-auto-alt-text-for-images',
+                        	'auto-alt-text-for-images',
                         );
                         ?>
                     </p>
@@ -81,7 +81,7 @@ if ( !defined( 'ABSPATH' ) ) {
                     <?php
                     esc_attr_e(
                     	'Missing Caption',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                     ">
@@ -95,7 +95,7 @@ if ( !defined( 'ABSPATH' ) ) {
                         <?php
                         esc_html_e(
                         	'All complete :',
-                        	'forvoyez-auto-alt-text-for-images',
+                        	'auto-alt-text-for-images',
                         );
                         ?>
                     </p>
@@ -103,7 +103,7 @@ if ( !defined( 'ABSPATH' ) ) {
                     <?php
                     esc_attr_e(
                     	'All Complete',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                     ">
@@ -126,7 +126,7 @@ if ( !defined( 'ABSPATH' ) ) {
                         <?php
                         esc_html_e(
                         	'Items per page:',
-                        	'forvoyez-auto-alt-text-for-images',
+                        	'auto-alt-text-for-images',
                         );
                         ?>
                         </span>
@@ -139,7 +139,7 @@ if ( !defined( 'ABSPATH' ) ) {
                             <?php
                             esc_html_e(
                             	'All',
-                            	'forvoyez-auto-alt-text-for-images',
+                            	'auto-alt-text-for-images',
                             );
                             ?>
                             </option>
@@ -151,7 +151,7 @@ if ( !defined( 'ABSPATH' ) ) {
                         <?php
                         esc_html_e(
                         	'Analyze all missing alt/caption/title images',
-                        	'forvoyez-auto-alt-text-for-images',
+                        	'auto-alt-text-for-images',
                         );
                         ?>
                         (<span id="forvoyez-missing-count">0</span>)
@@ -160,7 +160,7 @@ if ( !defined( 'ABSPATH' ) ) {
                         <?php
                         esc_html_e(
                         	'Analyze all missing alt images',
-                        	'forvoyez-auto-alt-text-for-images',
+                        	'auto-alt-text-for-images',
                         );
                         ?>
                         (<span id="forvoyez-missing-alt-count">0</span>)
@@ -169,7 +169,7 @@ if ( !defined( 'ABSPATH' ) ) {
                         <?php
                         esc_html_e(
                         	'Analyze all images',
-                        	'forvoyez-auto-alt-text-for-images',
+                        	'auto-alt-text-for-images',
                         );
                         ?>
                         (<span id="forvoyez-all-count">0</span>)
@@ -189,7 +189,7 @@ if ( !defined( 'ABSPATH' ) ) {
                     <?php
                     esc_html_e(
                     	'Select All',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                     </span>
@@ -198,7 +198,7 @@ if ( !defined( 'ABSPATH' ) ) {
                     <?php
                     esc_html_e(
                     	'Analyze Selected Images',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                 </button>
@@ -228,7 +228,7 @@ if ( !defined( 'ABSPATH' ) ) {
             <?php
             esc_html_e(
             	'Confirm Analysis',
-            	'forvoyez-auto-alt-text-for-images',
+            	'auto-alt-text-for-images',
             );
             ?>
             </h2>
@@ -238,7 +238,7 @@ if ( !defined( 'ABSPATH' ) ) {
                     <?php
                     esc_html_e(
                     	'Confirm',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                 </button>
@@ -246,7 +246,7 @@ if ( !defined( 'ABSPATH' ) ) {
                     <?php
                     esc_html_e(
                     	'Cancel',
-                    	'forvoyez-auto-alt-text-for-images',
+                    	'auto-alt-text-for-images',
                     );
                     ?>
                 </button>

@@ -20,7 +20,7 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])
         <?php
         esc_attr_e(
         	'Tabs',
-        	'forvoyez-auto-alt-text-for-images',
+        	'auto-alt-text-for-images',
         );
         ?>
         ">
@@ -35,7 +35,7 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])
                 <?php
                 esc_html_e(
                 	'Dashboard',
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
             </a>
@@ -50,7 +50,7 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])
                 <?php
                 esc_html_e(
                 	'Manage Images',
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
             </a>
@@ -65,7 +65,7 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])
                 <?php
                 esc_html_e(
                 	'Configuration',
-                	'forvoyez-auto-alt-text-for-images',
+                	'auto-alt-text-for-images',
                 );
                 ?>
             </a>
