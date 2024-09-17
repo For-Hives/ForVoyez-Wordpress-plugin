@@ -16,7 +16,7 @@
  * Version:     1.0.0
  * Author:      ForVoyez
  * Author URI:  https://forvoyez.com
- * Text Domain: ForVoyez-Wordpress-plugin
+ * Text Domain: auto-alt-text-for-images
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
