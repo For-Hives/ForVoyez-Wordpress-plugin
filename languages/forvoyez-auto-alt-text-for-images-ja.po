@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.4.3\n"
-"X-Domain: forvoyez-auto-alt-text-for-images\n"
+"X-Domain: auto-alt-text-for-images\n"
 
 #. Plugin Name of the plugin
 #: includes/class-forvoyez-admin.php:45 templates/admin-page.php:2
