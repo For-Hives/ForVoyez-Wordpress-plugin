@@ -27,7 +27,7 @@ Tekoälyllä toimiva API:mme tekee kehittäjille ja sisällöntuottajille helpok
 
 == Asennus ==
 
-1. Lataa lisäosan tiedostot `/wp-content/plugins/forvoyez-auto-alt-text-for-images`-hakemistoon tai asenna lisäosa suoraan WordPressin lisäosanäytöltä.
+1. Lataa lisäosan tiedostot `/wp-content/plugins/auto-alt-text-for-images`-hakemistoon tai asenna lisäosa suoraan WordPressin lisäosanäytöltä.
 2. Aktivoi lisäosa WordPressin 'Lisäosat'-näytöltä.
 3. Käytä Asetukset -> ForVoyez Automaattinen Alt-teksti -näyttöä lisäosan määrittämiseen.
 4. Syötä ForVoyez API-avaimesi asetussivulle.

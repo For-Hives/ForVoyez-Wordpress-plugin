@@ -27,7 +27,7 @@ Yapay zeka destekli API'miz, geliştiricilerin ve içerik oluşturucuların resi
 
 == Kurulum ==
 
-1. Eklenti dosyalarını `/wp-content/plugins/forvoyez-auto-alt-text-for-images` dizinine yükleyin veya eklentiyi doğrudan WordPress eklenti ekranından yükleyin.
+1. Eklenti dosyalarını `/wp-content/plugins/auto-alt-text-for-images` dizinine yükleyin veya eklentiyi doğrudan WordPress eklenti ekranından yükleyin.
 2. Eklentiyi WordPress'teki 'Eklentiler' ekranından etkinleştirin.
 3. Eklentiyi yapılandırmak için Ayarlar -> ForVoyez Otomatik Alt Metin ekranını kullanın.
 4. ForVoyez API anahtarınızı ayarlar sayfasına girin.

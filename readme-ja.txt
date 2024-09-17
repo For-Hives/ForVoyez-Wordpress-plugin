@@ -27,7 +27,7 @@ ForVoyez 画像自動ALTテキストは、AI技術を活用して、コンテン
 
 == インストール ==
 
-1. プラグインファイルを `/wp-content/plugins/forvoyez-auto-alt-text-for-images` ディレクトリにアップロードするか、WordPressのプラグイン画面から直接インストールします。
+1. プラグインファイルを `/wp-content/plugins/auto-alt-text-for-images` ディレクトリにアップロードするか、WordPressのプラグイン画面から直接インストールします。
 2. WordPressの「プラグイン」画面からプラグインを有効化します。
 3. 設定 -> ForVoyez 自動ALTテキスト画面を使用してプラグインを設定します。
 4. 設定ページにForVoyez APIキーを入力します。

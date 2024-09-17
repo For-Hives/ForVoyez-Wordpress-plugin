@@ -27,7 +27,7 @@ ForVoyez 自動圖像替代文字是一個強大的 WordPress 插件，它使用
 
 == 安裝 ==
 
-1. 將插件文件上傳到 `/wp-content/plugins/forvoyez-auto-alt-text-for-images` 目錄，或直接通過 WordPress 插件屏幕安裝插件。
+1. 將插件文件上傳到 `/wp-content/plugins/auto-alt-text-for-images` 目錄，或直接通過 WordPress 插件屏幕安裝插件。
 2. 通過 WordPress 中的"插件"屏幕激活插件。
 3. 使用設置 -> ForVoyez 自動替代文字屏幕來配置插件。
 4. 在設置頁面輸入您的 ForVoyez API 密鑰。

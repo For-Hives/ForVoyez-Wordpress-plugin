@@ -27,7 +27,7 @@ Vår AI-drivna API gör det enkelt för utvecklare och innehållsskapare att opt
 
 == Installation ==
 
-1. Ladda upp tilläggsfilerna till katalogen `/wp-content/plugins/forvoyez-auto-alt-text-for-images`, eller installera tillägget direkt via WordPress tilläggsskärm.
+1. Ladda upp tilläggsfilerna till katalogen `/wp-content/plugins/auto-alt-text-for-images`, eller installera tillägget direkt via WordPress tilläggsskärm.
 2. Aktivera tillägget genom 'Tillägg'-skärmen i WordPress.
 3. Använd Inställningar -> ForVoyez Automatisk Alt-text skärmen för att konfigurera tillägget.
 4. Ange din ForVoyez API-nyckel på inställningssidan.

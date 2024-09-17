@@ -27,7 +27,7 @@ Onze AI-gestuurde API maakt het voor ontwikkelaars en contentmakers gemakkelijk 
 
 == Installatie ==
 
-1. Upload de plugin-bestanden naar de map `/wp-content/plugins/forvoyez-auto-alt-text-for-images`, of installeer de plugin rechtstreeks via het WordPress-pluginscherm.
+1. Upload de plugin-bestanden naar de map `/wp-content/plugins/auto-alt-text-for-images`, of installeer de plugin rechtstreeks via het WordPress-pluginscherm.
 2. Activeer de plugin via het 'Plugins' scherm in WordPress.
 3. Gebruik het scherm Instellingen -> ForVoyez Automatische Alt-Tekst om de plugin te configureren.
 4. Voer uw ForVoyez API-sleutel in op de instellingenpagina.

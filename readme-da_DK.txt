@@ -27,7 +27,7 @@ Vores AI-drevne API gør det nemt for udviklere og indholdskreatører at optimer
 
 == Installation ==
 
-1. Upload plugin-filerne til mappen `/wp-content/plugins/forvoyez-auto-alt-text-for-images`, eller installer pluginet direkte via WordPress plugin-skærmen.
+1. Upload plugin-filerne til mappen `/wp-content/plugins/auto-alt-text-for-images`, eller installer pluginet direkte via WordPress plugin-skærmen.
 2. Aktiver pluginet gennem 'Plugins' skærmen i WordPress.
 3. Brug skærmen Indstillinger -> ForVoyez Automatisk Alt-tekst til at konfigurere pluginet.
 4. Indtast din ForVoyez API-nøgle på indstillingssiden.

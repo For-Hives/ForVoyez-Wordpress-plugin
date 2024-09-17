@@ -27,7 +27,7 @@ Nasze API napędzane przez AI ułatwia deweloperom i twórcom treści optymaliza
 
 == Instalacja ==
 
-1. Prześlij pliki wtyczki do katalogu `/wp-content/plugins/forvoyez-auto-alt-text-for-images` lub zainstaluj wtyczkę bezpośrednio z ekranu wtyczek WordPress.
+1. Prześlij pliki wtyczki do katalogu `/wp-content/plugins/auto-alt-text-for-images` lub zainstaluj wtyczkę bezpośrednio z ekranu wtyczek WordPress.
 2. Aktywuj wtyczkę przez ekran 'Wtyczki' w WordPress.
 3. Użyj ekranu Ustawienia -> ForVoyez Automatyczny Tekst Alternatywny, aby skonfigurować wtyczkę.
 4. Wprowadź swój klucz API ForVoyez na stronie ustawień.

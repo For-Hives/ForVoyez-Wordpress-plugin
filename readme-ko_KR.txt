@@ -27,7 +27,7 @@ AI 기반 API를 통해 개발자와 콘텐츠 작성자가 SEO를 위해 이미
 
 == 설치 ==
 
-1. 플러그인 파일을 `/wp-content/plugins/forvoyez-auto-alt-text-for-images` 디렉토리에 업로드하거나 WordPress 플러그인 화면을 통해 직접 설치하세요.
+1. 플러그인 파일을 `/wp-content/plugins/auto-alt-text-for-images` 디렉토리에 업로드하거나 WordPress 플러그인 화면을 통해 직접 설치하세요.
 2. WordPress의 '플러그인' 화면에서 플러그인을 활성화하세요.
 3. 설정 -> ForVoyez 자동 대체 텍스트 화면을 사용하여 플러그인을 구성하세요.
 4. 설정 페이지에 ForVoyez API 키를 입력하세요.

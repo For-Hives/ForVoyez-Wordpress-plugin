@@ -27,7 +27,7 @@ A nossa API impulsionada por IA torna fácil para desenvolvedores e criadores de
 
 == Instalação ==
 
-1. Carregue os ficheiros do plugin para o diretório `/wp-content/plugins/forvoyez-auto-alt-text-for-images`, ou instale o plugin diretamente através do ecrã de plugins do WordPress.
+1. Carregue os ficheiros do plugin para o diretório `/wp-content/plugins/auto-alt-text-for-images`, ou instale o plugin diretamente através do ecrã de plugins do WordPress.
 2. Ative o plugin através do ecrã 'Plugins' no WordPress.
 3. Use o ecrã Configurações -> ForVoyez Texto Alt Automático para configurar o plugin.
 4. Insira a sua chave API ForVoyez na página de configurações.

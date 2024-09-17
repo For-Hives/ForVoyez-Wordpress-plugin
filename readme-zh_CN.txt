@@ -27,7 +27,7 @@ ForVoyez 自动图像替代文本是一个强大的 WordPress 插件，它使用
 
 == 安装 ==
 
-1. 将插件文件上传到 `/wp-content/plugins/forvoyez-auto-alt-text-for-images` 目录，或直接通过 WordPress 插件界面安装插件。
+1. 将插件文件上传到 `/wp-content/plugins/auto-alt-text-for-images` 目录，或直接通过 WordPress 插件界面安装插件。
 2. 通过 WordPress 中的"插件"界面激活插件。
 3. 使用设置 -> ForVoyez 自动替代文本界面来配置插件。
 4. 在设置页面输入您的 ForVoyez API 密钥。
