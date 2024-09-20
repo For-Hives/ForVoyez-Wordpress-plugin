@@ -9,3 +9,7 @@ output.txt
 large.txt
 release
 .php-cs-fixer.cache
+#languages
+#.txt
+#.xml
+#.sh
