@@ -132,37 +132,21 @@ class Forvoyez_Admin {
 		);
 
 		// Localize script
-		wp_localize_script(
-			'forvoyez-admin-script',
-			'forvoyezData',
-			array(
-				'ajaxurl'                => admin_url( 'admin-ajax.php' ),
-				'nonce'                  => wp_create_nonce( 'forvoyez_nonce' ),
-				'saveApiKeyNonce'        => wp_create_nonce( 'forvoyez_save_api_key_nonce' ),
-				'loadImagesNonce'        => wp_create_nonce( 'forvoyez_load_images_nonce' ),
-				'getImageCountsNonce'    => wp_create_nonce(
-					'forvoyez_get_image_counts_nonce',
-				),
-				'getImageIdsNonce'       => wp_create_nonce(
-					'forvoyez_get_image_ids_nonce',
-				),
-				'verifyApiKeyNonce'      => wp_create_nonce(
-					'forvoyez_verify_api_key_nonce',
-				),
-				'loadMoreImagesNonce'    => wp_create_nonce(
-					'forvoyez_load_more_images_nonce',
-				),
-				'verifyAjaxRequestNonce' => wp_create_nonce(
-					'forvoyez_verify_ajax_request_nonce',
-				),
-				'analyseImageNonce'      => wp_create_nonce(
-					'forvoyez_analyse_image_nonce',
-				),
-				'processImageBatchNonce' => wp_create_nonce(
-					'forvoyez_process_image_batch_nonce',
-				),
-			)
-		);
+		 wp_localize_script('forvoyez-admin-script', 'forvoyezData', array(
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('forvoyez_nonce'),
+            'saveApiKeyNonce' => wp_create_nonce('forvoyez_save_api_key_nonce'),
+            'loadImagesNonce' => wp_create_nonce('forvoyez_load_images_nonce'),
+            'getImageCountsNonce' => wp_create_nonce('forvoyez_get_image_counts_nonce'),
+            'getImageIdsNonce' => wp_create_nonce('forvoyez_get_image_ids_nonce'),
+            'verifyApiKeyNonce' => wp_create_nonce('forvoyez_verify_api_key_nonce'),
+            'loadMoreImagesNonce' => wp_create_nonce('forvoyez_load_more_images_nonce'),
+            'verifyAjaxRequestNonce' => wp_create_nonce('forvoyez_verify_ajax_request_nonce'),
+            'analyseImageNonce' => wp_create_nonce('forvoyez_analyse_image_nonce'),
+            'processImageBatchNonce' => wp_create_nonce('forvoyez_process_image_batch_nonce'),
+            'saveContextNonce' => wp_create_nonce('forvoyez_save_context_nonce'),
+            'saveLanguageNonce' => wp_create_nonce('forvoyez_save_language_nonce'),
+        ));
 	}
 
 	/**
