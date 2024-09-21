@@ -187,9 +187,6 @@ class Forvoyez_API_Manager {
 			'body'        => $post_data,
 		);
 
-		// Log post data
-		error_log(print_r($post_data, true));
-
 		$response = $this->http_client->post( $this->api_url, $args );
 
 		if ( is_wp_error( $response ) ) {
