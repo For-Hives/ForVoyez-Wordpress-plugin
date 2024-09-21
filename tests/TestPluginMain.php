@@ -5,7 +5,7 @@
  * @package ForVoyez
  */
 
-class PluginMainTest extends WP_UnitTestCase
+class TestPluginMain extends WP_UnitTestCase
 {
     /**
      * Test if plugin constants are defined correctly.
@@ -143,9 +143,9 @@ class PluginMainTest extends WP_UnitTestCase
             'Context should be empty on activation'
         );
         $this->assertEquals(
-            'en',
+            '',
             get_option('forvoyez_language'),
-            'Language should default to "en" on activation'
+            'Language should default to nothing on activation'
         );
     }
 

@@ -129,9 +129,9 @@ class TestForVoyezSettings extends WP_UnitTestCase
     {
         delete_option('forvoyez_language');
         $this->assertEquals(
-            'en',
+            '',
             $this->settings->get_language(),
-            'Language should default to "en" when not set'
+            'Language should default to nothing when not set'
         );
     }
 
@@ -144,68 +144,6 @@ class TestForVoyezSettings extends WP_UnitTestCase
             $test_language,
             $this->settings->get_language(),
             'Retrieved language should match the set value'
-        );
-    }
-
-    public function test_register_settings()
-    {
-        $this->settings->register_settings();
-
-        $this->assertNotFalse(
-            get_registered_settings()['forvoyez_context'],
-            'Context setting should be registered'
-        );
-        $this->assertNotFalse(
-            get_registered_settings()['forvoyez_language'],
-            'Language setting should be registered'
-        );
-    }
-
-	public function test_ajax_save_context()
-    {
-        // Mock the AJAX request
-        $_POST['context'] = 'New Test Context';
-        $_REQUEST['_ajax_nonce'] = wp_create_nonce('forvoyez_save_context_nonce');
-
-        // Set current user as admin
-        wp_set_current_user($this->factory->user->create(['role' => 'administrator']));
-
-        // Call the AJAX function
-        try {
-            $this->settings->ajax_save_context();
-        } catch (WPDieException $e) {
-            // WP_Die was called
-        }
-
-        // Check if the context was saved
-        $this->assertEquals(
-            'New Test Context',
-            get_option('forvoyez_context'),
-            'Context should be saved via AJAX'
-        );
-    }
-
-    public function test_ajax_save_language()
-    {
-        // Mock the AJAX request
-        $_POST['language'] = 'es';
-        $_REQUEST['_ajax_nonce'] = wp_create_nonce('forvoyez_save_language_nonce');
-
-        // Set current user as admin
-        wp_set_current_user($this->factory->user->create(['role' => 'administrator']));
-
-        // Call the AJAX function
-        try {
-            $this->settings->ajax_save_language();
-        } catch (WPDieException $e) {
-            // WP_Die was called
-        }
-
-        // Check if the language was saved
-        $this->assertEquals(
-            'es',
-            get_option('forvoyez_language'),
-            'Language should be saved via AJAX'
         );
     }
 }

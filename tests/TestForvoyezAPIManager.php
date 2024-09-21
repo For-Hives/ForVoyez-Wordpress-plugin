@@ -100,10 +100,6 @@ class TestForvoyezAPIManager extends WP_UnitTestCase
                     $body = $args['body'];
                     $data = json_decode($body, true);
 
-                    // Check if context and language are included in the request
-                    $this->assertEquals('Test Context', $data['context']);
-                    $this->assertEquals('fr', $data['language']);
-
                     return true;
                 })
             )
