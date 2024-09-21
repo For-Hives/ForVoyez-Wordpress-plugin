@@ -36,6 +36,8 @@ class Forvoyez_Settings {
 				'ajax_save_api_key',
 			)
 		);
+		add_action('wp_ajax_forvoyez_save_context', array($this, 'ajax_save_context'));
+        add_action('wp_ajax_forvoyez_save_language', array($this, 'ajax_save_language'));
 	}
 
 	/**
@@ -45,16 +47,56 @@ class Forvoyez_Settings {
 		if ( !current_user_can( 'manage_options' ) ) {
 			return;
 		}
-		register_setting(
-			'forvoyez_settings',
-			'forvoyez_encrypted_api_key',
-			array(
-				'type'              => 'string',
-				'sanitize_callback' => array( $this, 'sanitize_api_key' ),
-				'default'           => '',
-			)
-		);
+		register_setting('forvoyez_settings', 'forvoyez_encrypted_api_key', array(
+            'type' => 'string',
+            'sanitize_callback' => array($this, 'sanitize_api_key'),
+            'default' => '',
+        ));
+        register_setting('forvoyez_settings', 'forvoyez_context', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default' => '',
+        ));
+        register_setting('forvoyez_settings', 'forvoyez_language', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default' => 'en',
+        ));
 	}
+
+	/**
+	 * AJAX callback to save the context.
+	 * @return void
+	 */
+    public function ajax_save_context() {
+        check_ajax_referer('forvoyez_save_context_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(esc_html__('Permission denied', 'auto-alt-text-for-images'), 403);
+        }
+
+        $context = isset($_POST['context']) ? sanitize_text_field(wp_unslash($_POST['context'])) : '';
+        update_option('forvoyez_context', $context);
+
+        wp_send_json_success(esc_html__('Context saved successfully', 'auto-alt-text-for-images'));
+    }
+
+	/**
+	 * AJAX callback to save the language.
+	 * @return void
+	 */
+    public function ajax_save_language() {
+        check_ajax_referer('forvoyez_save_language_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(esc_html__('Permission denied', 'auto-alt-text-for-images'), 403);
+        }
+
+        $language = isset($_POST['language']) ? sanitize_text_field(wp_unslash($_POST['language'])) : 'en';
+        update_option('forvoyez_language', $language);
+
+        wp_send_json_success(esc_html__('Language saved successfully', 'auto-alt-text-for-images'));
+    }
 
 	/**
 	 * AJAX callback to save the API key.
@@ -107,6 +149,22 @@ class Forvoyez_Settings {
 
 		return $this->decrypt( $encrypted_api_key );
 	}
+
+	/**
+	 * Get the context.
+	 * @return false|mixed|null
+	 */
+    public function get_context() {
+        return get_option('forvoyez_context', '');
+    }
+
+	/**
+	 * Get the language.
+	 * @return false|mixed|null
+	 */
+    public function get_language() {
+        return get_option('forvoyez_language', '');
+    }
 
 	/**
 	 * Encrypt the given data.

@@ -27,6 +27,11 @@
 			saveApiKey($configApiKeyInput.val())
 		})
 
+		$('.forvoyez-save-additional-settings').on('click', function (e) {
+			e.preventDefault()
+			saveAdditionalSettings()
+		})
+
 		$('#forvoyez-select-all').on('change', function () {
 			$('input[type="checkbox"][data-forvoyez-image-checkbox]').prop(
 				'checked',
@@ -240,6 +245,51 @@
 			error: function () {
 				showNotification('Failed to save API key', 'error')
 			},
+		})
+	}
+
+	function saveAdditionalSettings() {
+		const context = $('#forvoyez-context').val()
+		const language = $('#forvoyez-language').val()
+
+		$.ajax({
+			url: forvoyezData.ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'forvoyez_save_context',
+				nonce: forvoyezData.saveContextNonce,
+				context: context
+			},
+			success: function (response) {
+				if (response.success) {
+					showNotification('Context saved successfully', 'success')
+				} else {
+					showNotification('Failed to save context: ' + response.data, 'error')
+				}
+			},
+			error: function () {
+				showNotification('Failed to save context', 'error')
+			}
+		})
+
+		$.ajax({
+			url: forvoyezData.ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'forvoyez_save_language',
+				nonce: forvoyezData.saveLanguageNonce,
+				language: language
+			},
+			success: function (response) {
+				if (response.success) {
+					showNotification('Language saved successfully', 'success')
+				} else {
+					showNotification('Failed to save language: ' + response.data, 'error')
+				}
+			},
+			error: function () {
+				showNotification('Failed to save language', 'error')
+			}
 		})
 	}
 

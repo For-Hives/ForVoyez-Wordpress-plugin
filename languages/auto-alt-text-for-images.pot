@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-09-17T11:36:38+00:00\n"
+"POT-Creation-Date: 2024-09-21T10:38:03+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: auto-alt-text-for-images\n"
@@ -40,59 +40,61 @@ msgstr ""
 msgid "Auto Alt Text"
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:174
+#: includes/class-forvoyez-admin.php:158
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:199
+#: includes/class-forvoyez-admin.php:183
 msgid "Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation."
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:321
+#: includes/class-forvoyez-admin.php:305
 msgid "No images found matching the selected criteria."
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:406
-#: includes/class-forvoyez-admin.php:570
-#: includes/class-forvoyez-admin.php:654
-#: includes/class-forvoyez-admin.php:683
-#: includes/class-forvoyez-settings.php:67
+#: includes/class-forvoyez-admin.php:390
+#: includes/class-forvoyez-admin.php:554
+#: includes/class-forvoyez-admin.php:638
+#: includes/class-forvoyez-admin.php:667
+#: includes/class-forvoyez-settings.php:75
+#: includes/class-forvoyez-settings.php:92
+#: includes/class-forvoyez-settings.php:109
 msgid "Permission denied"
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:469
+#: includes/class-forvoyez-admin.php:453
 msgid "&laquo; Previous"
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:489
+#: includes/class-forvoyez-admin.php:473
 msgid "Next &raquo;"
 msgstr ""
 
-#: includes/class-forvoyez-api-manager.php:64
+#: includes/class-forvoyez-api-manager.php:77
 msgid "API key is not set"
 msgstr ""
 
-#: includes/class-forvoyez-api-manager.php:93
+#: includes/class-forvoyez-api-manager.php:106
 msgid "API key is valid"
 msgstr ""
 
-#: includes/class-forvoyez-api-manager.php:103
+#: includes/class-forvoyez-api-manager.php:116
 msgid "Invalid API key"
 msgstr ""
 
-#: includes/class-forvoyez-api-manager.php:119
+#: includes/class-forvoyez-api-manager.php:132
 msgid "Image not found"
 msgstr ""
 
-#: includes/class-forvoyez-api-manager.php:131
+#: includes/class-forvoyez-api-manager.php:144
 msgid "Failed to read image file"
 msgstr ""
 
-#: includes/class-forvoyez-api-manager.php:191
+#: includes/class-forvoyez-api-manager.php:205
 msgid "Failed to decode API response"
 msgstr ""
 
-#: includes/class-forvoyez-api-manager.php:220
+#: includes/class-forvoyez-api-manager.php:234
 #: includes/class-forvoyez-image-processor.php:160
 msgid "Analysis successful"
 msgstr ""
@@ -174,11 +176,19 @@ msgstr ""
 msgid "Analyse"
 msgstr ""
 
-#: includes/class-forvoyez-settings.php:78
+#: includes/class-forvoyez-settings.php:81
+msgid "Context saved successfully"
+msgstr ""
+
+#: includes/class-forvoyez-settings.php:98
+msgid "Language saved successfully"
+msgstr ""
+
+#: includes/class-forvoyez-settings.php:120
 msgid "API key cannot be empty"
 msgstr ""
 
-#: includes/class-forvoyez-settings.php:90
+#: includes/class-forvoyez-settings.php:132
 msgid "API key saved successfully"
 msgstr ""
 
@@ -287,12 +297,12 @@ msgid "Enter your ForVoyez API key below:"
 msgstr ""
 
 #: templates/api-settings-modal.php:38
-#: templates/configuration-tab.php:134
+#: templates/configuration-tab.php:136
 msgid "Toggle API key visibility"
 msgstr ""
 
 #: templates/api-settings-modal.php:54
-#: templates/configuration-tab.php:153
+#: templates/configuration-tab.php:155
 msgid "Save API Key"
 msgstr ""
 
@@ -300,64 +310,92 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: templates/configuration-tab.php:17
+#: templates/configuration-tab.php:19
 msgid "API Configuration"
 msgstr ""
 
-#: templates/configuration-tab.php:25
+#: templates/configuration-tab.php:27
 msgid "Manage your ForVoyez API settings here"
 msgstr ""
 
-#: templates/configuration-tab.php:36
+#: templates/configuration-tab.php:38
 msgid "About ForVoyez API"
 msgstr ""
 
-#: templates/configuration-tab.php:44
+#: templates/configuration-tab.php:46
 msgid "ForVoyez API provides powerful image analysis capabilities for your WordPress site. To use this plugin, you need to obtain an API key from ForVoyez."
 msgstr ""
 
-#: templates/configuration-tab.php:52
+#: templates/configuration-tab.php:54
 msgid "To get started:"
 msgstr ""
 
 #. translators: %s: URL of the ForVoyez signup page
-#: templates/configuration-tab.php:64
+#: templates/configuration-tab.php:66
 msgid "Visit the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez signup page</a> to create an account."
 msgstr ""
 
 #. translators: %s: URL of the ForVoyez dashboard
-#: templates/configuration-tab.php:75
+#: templates/configuration-tab.php:77
 msgid "Once logged in, navigate to your <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez dashboard</a>."
 msgstr ""
 
-#: templates/configuration-tab.php:83
+#: templates/configuration-tab.php:85
 msgid "Generate an API key in the API section of your dashboard."
 msgstr ""
 
-#: templates/configuration-tab.php:91
+#: templates/configuration-tab.php:93
 msgid "Copy the API key and paste it in the field below."
 msgstr ""
 
 #. translators: %s: URL of the ForVoyez API documentation
-#: templates/configuration-tab.php:103
+#: templates/configuration-tab.php:105
 msgid "For more information, please refer to the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez API documentation</a>."
 msgstr ""
 
-#: templates/configuration-tab.php:113
+#: templates/configuration-tab.php:115
 msgid "API Key"
 msgstr ""
 
-#: templates/configuration-tab.php:124
+#: templates/configuration-tab.php:126
 msgid "Enter your API key"
 msgstr ""
 
-#: templates/configuration-tab.php:163
+#: templates/configuration-tab.php:165
 msgid "This plugin uses the ForVoyez API service to generate alt text and metadata for images. By using this plugin, you agree to the ForVoyez Terms of Service and Privacy Policy."
 msgstr ""
 
 #. translators: %1$s: URL to Terms of Service, %2$s: URL to Privacy Policy, %3$s: URL to Legal Notice
-#: templates/configuration-tab.php:174
+#: templates/configuration-tab.php:176
 msgid "Please review the <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline\">Terms of Service</a>, <a href=\"%2$s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline\">Privacy Policy</a>, and <a href=\"%3$s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline\">Legal Notice</a>."
+msgstr ""
+
+#: templates/configuration-tab.php:201
+msgid "Additional Configuration (optional)"
+msgstr ""
+
+#: templates/configuration-tab.php:204
+msgid "Configure additional settings for image analysis"
+msgstr ""
+
+#: templates/configuration-tab.php:210
+msgid "Context"
+msgstr ""
+
+#: templates/configuration-tab.php:215
+msgid "Enter context for image analysis"
+msgstr ""
+
+#: templates/configuration-tab.php:219
+msgid "Language"
+msgstr ""
+
+#: templates/configuration-tab.php:224
+msgid "Enter language for image analysis"
+msgstr ""
+
+#: templates/configuration-tab.php:229
+msgid "Save Additional Settings"
 msgstr ""
 
 #: templates/dashboard-tab.php:11

@@ -6,7 +6,9 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 $settings = new Forvoyez_Settings();
-$api_key  = $settings->get_api_key();
+$api_key = $settings->get_api_key();
+$context = $settings->get_context();
+$language = $settings->get_language();
 ?>
 
 <div class="configuration-tab">
@@ -190,6 +192,42 @@ printf(
 );
 ?>
                 </p>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg mt-6">
+        <div class="px-4 py-5 sm:px-6">
+            <h2 class="text-lg leading-6 font-medium text-gray-900">
+                <?php esc_html_e('Additional Configuration (optional)', 'auto-alt-text-for-images'); ?>
+            </h2>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                <?php esc_html_e('Configure additional settings for image analysis', 'auto-alt-text-for-images'); ?>
+            </p>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:p-6">
+            <div class="mb-4">
+                <label for="forvoyez-context" class="block text-sm font-medium text-gray-700">
+                    <?php esc_html_e('Context', 'auto-alt-text-for-images'); ?>
+                </label>
+                <input type="text" name="forvoyez_context" id="forvoyez-context"
+                    class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    value="<?php echo esc_attr($context); ?>"
+                    placeholder="<?php esc_attr_e('Enter context for image analysis', 'auto-alt-text-for-images'); ?>">
+            </div>
+            <div class="mb-4">
+                <label for="forvoyez-language" class="block text-sm font-medium text-gray-700">
+                    <?php esc_html_e('Language', 'auto-alt-text-for-images'); ?>
+                </label>
+                <input type="text" name="forvoyez_language" id="forvoyez-language"
+                    class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    value="<?php echo esc_attr($language); ?>"
+                    placeholder="<?php esc_attr_e('Enter language for image analysis', 'auto-alt-text-for-images'); ?>">
+            </div>
+            <div class="mt-4">
+                <button type="button"
+                    class="forvoyez-save-additional-settings inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <?php esc_html_e('Save Additional Settings', 'auto-alt-text-for-images'); ?>
+                </button>
             </div>
         </div>
     </div>

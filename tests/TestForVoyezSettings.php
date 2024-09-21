@@ -103,4 +103,47 @@ class TestForVoyezSettings extends WP_UnitTestCase
 
 		return $method->invokeArgs($object, $parameters);
 	}
+
+	 public function test_get_context_empty()
+    {
+        delete_option('forvoyez_context');
+        $this->assertEmpty(
+            $this->settings->get_context(),
+            'Context should be empty when not set'
+        );
+    }
+
+    public function test_get_context_set()
+    {
+        $test_context = 'Test Context';
+        update_option('forvoyez_context', $test_context);
+
+        $this->assertEquals(
+            $test_context,
+            $this->settings->get_context(),
+            'Retrieved context should match the set value'
+        );
+    }
+
+    public function test_get_language_empty()
+    {
+        delete_option('forvoyez_language');
+        $this->assertEquals(
+            '',
+            $this->settings->get_language(),
+            'Language should default to nothing when not set'
+        );
+    }
+
+    public function test_get_language_set()
+    {
+        $test_language = 'fr';
+        update_option('forvoyez_language', $test_language);
+
+        $this->assertEquals(
+            $test_language,
+            $this->settings->get_language(),
+            'Retrieved language should match the set value'
+        );
+    }
 }

@@ -3,7 +3,7 @@ Contributors: cinquinandy
 Tags: seo, accessibility, images, alt text, metadata
 Requires at least: 5.0
 Tested up to: 6.6
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -82,6 +82,16 @@ The AI can generate content in multiple languages. You can specify your preferre
 * User-friendly admin interface
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+This update adds new language and context input fields to enhance the AI-generated content. Upgrade to customize your image analysis further!
+
+New features in 1.0.1:
+* Added a language selection field to specify the desired language for generated content
+* Introduced a context input field to provide additional information for more accurate image analysis
+* Improved API integration to include language and context in image processing requests
+
+To use these new features, please visit the plugin settings page after upgrading.
 
 = 1.0.0 =
 This is the first release of ForVoyez Auto Alt Text for Images. Install now to start optimizing your image metadata!

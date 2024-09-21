@@ -7,5 +7,9 @@ tests/assets
 large_files_output.txt
 output.txt
 large.txt
-release
+#release
 .php-cs-fixer.cache
+#languages
+#.txt
+#.xml
+#.sh

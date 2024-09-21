@@ -28,14 +28,27 @@ class Forvoyez_API_Manager {
 	private $http_client;
 
 	/**
+	 * @var string The context for image analysis.
+	 */
+    private $context;
+
+	/**
+	 * @var string The language for image analysis.
+	 */
+    private $language;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param string $api_key The API key for ForVoyez service.
 	 */
 	public function __construct( string $api_key, $http_client = null ) {
-		$this->api_key     = $api_key;
-		$this->api_url     = 'https://forvoyez.com/api/describe';
-		$this->http_client = $http_client ?: new WP_Http();
+        $this->api_key = $api_key;
+        $this->api_url = 'https://forvoyez.com/api/describe';
+        $this->http_client = $http_client ?: new WP_Http();
+        $settings = new Forvoyez_Settings();
+        $this->context = $settings->get_context();
+        $this->language = $settings->get_language();
 	}
 
 	/**
@@ -136,17 +149,18 @@ class Forvoyez_API_Manager {
 		}
 
 		$data = array(
-			'data' => wp_json_encode(
-				array(
-					'context' => '',
-					'schema'  => array(
-						'title'           => 'string',
-						'alternativeText' => 'string',
-						'caption'         => 'string',
-					),
-				)
-			),
-		);
+            'data' => wp_json_encode(
+                array(
+                    'context' => $this->context,
+                    'language' => $this->language,
+                    'schema' => array(
+                        'title' => 'string',
+                        'alternativeText' => 'string',
+                        'caption' => 'string',
+                    ),
+                )
+            ),
+        );
 
 		$boundary  = wp_generate_password( 24 );
 		$delimiter = '-------------' . $boundary;
