@@ -16,7 +16,9 @@ class Forvoyez_Image_Processor {
 
 	public function __construct() {
 		$api_key          = forvoyez_get_api_key();
-		$this->api_client = new Forvoyez_API_Manager( $api_key );
+		$language         = forvoyez_get_language();
+		$context          = forvoyez_get_context();
+		$this->api_client = new Forvoyez_API_Manager( $api_key, $language, $context );
 	}
 
 	public function init() {

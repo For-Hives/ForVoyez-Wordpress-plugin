@@ -42,13 +42,12 @@ class Forvoyez_API_Manager {
 	 *
 	 * @param string $api_key The API key for ForVoyez service.
 	 */
-	public function __construct( string $api_key, $http_client = null ) {
-        $this->api_key = $api_key;
-        $this->api_url = 'https://forvoyez.com/api/describe';
+	public function __construct( string $api_key, string $language, string $context, $http_client = null ) {
+        $this->api_key     = $api_key;
+        $this->api_url     = 'https://forvoyez.com/api/describe';
         $this->http_client = $http_client ?: new WP_Http();
-        $settings = new Forvoyez_Settings();
-        $this->context = $settings->get_context();
-        $this->language = $settings->get_language();
+        $this->context     = $language;
+        $this->language    = $context;
 	}
 
 	/**
@@ -151,13 +150,8 @@ class Forvoyez_API_Manager {
 		$data = array(
             'data' => wp_json_encode(
                 array(
-                    'context' => $this->context,
+                    'context'  => $this->context,
                     'language' => $this->language,
-                    'schema' => array(
-                        'title' => 'string',
-                        'alternativeText' => 'string',
-                        'caption' => 'string',
-                    ),
                 )
             ),
         );
