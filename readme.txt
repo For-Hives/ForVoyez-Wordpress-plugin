@@ -3,7 +3,7 @@ Contributors: cinquinandy
 Tags: seo, accessibility, images, alt text, metadata
 Requires at least: 5.0
 Tested up to: 6.6
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -82,6 +82,9 @@ The AI can generate content in multiple languages. You can specify your preferre
 * User-friendly admin interface
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+This update includes bug fixes and performance improvements to enhance the plugin's functionality. Upgrade now for a better user experience!
 
 = 1.0.1 =
 This update adds new language and context input fields to enhance the AI-generated content. Upgrade to customize your image analysis further!

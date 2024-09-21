@@ -123,6 +123,54 @@ function forvoyez_get_api_key() {
 }
 
 /**
+ * Get the ForVoyez language.
+ *
+ * This function retrieves the language from the plugin settings.
+ * It ensures that the settings object is instantiated if it doesn't exist.
+ *
+ * @since 1.0.0
+ * @return mixed|null
+ */
+function forvoyez_get_language() {
+	global $forvoyez_settings;
+
+	if (
+		!$forvoyez_settings ||
+		!( $forvoyez_settings instanceof Forvoyez_Settings )
+	) {
+		$forvoyez_settings = new Forvoyez_Settings();
+	}
+
+	$language = $forvoyez_settings->get_language();
+
+	return apply_filters( 'forvoyez_language', $language );
+}
+
+/**
+ * Get the ForVoyez context.
+ *
+ * This function retrieves the context from the plugin settings.
+ * It ensures that the settings object is instantiated if it doesn't exist.
+ *
+ * @since 1.0.0
+ * @return mixed|null
+ */
+function forvoyez_get_context() {
+	global $forvoyez_settings;
+
+	if (
+		!$forvoyez_settings ||
+		!( $forvoyez_settings instanceof Forvoyez_Settings )
+	) {
+		$forvoyez_settings = new Forvoyez_Settings();
+	}
+
+	$context = $forvoyez_settings->get_context();
+
+	return apply_filters( 'forvoyez_context', $context );
+}
+
+/**
  * Sanitize and validate the ForVoyez API key (JWT).
  *
  * This function sanitizes the input and performs basic validation on the JWT.

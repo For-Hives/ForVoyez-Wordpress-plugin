@@ -30,25 +30,24 @@ class Forvoyez_API_Manager {
 	/**
 	 * @var string The context for image analysis.
 	 */
-    private $context;
+	private $context;
 
 	/**
 	 * @var string The language for image analysis.
 	 */
-    private $language;
+	private $language;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param string $api_key The API key for ForVoyez service.
 	 */
-	public function __construct( string $api_key, $http_client = null ) {
-        $this->api_key = $api_key;
-        $this->api_url = 'https://forvoyez.com/api/describe';
-        $this->http_client = $http_client ?: new WP_Http();
-        $settings = new Forvoyez_Settings();
-        $this->context = $settings->get_context();
-        $this->language = $settings->get_language();
+	public function __construct( string $api_key, string $language, string $context, $http_client = null ) {
+		$this->api_key     = $api_key;
+		$this->api_url     = 'https://forvoyez.com/api/describe';
+		$this->http_client = $http_client ?: new WP_Http();
+		$this->context     = $context;
+		$this->language    = $language;
 	}
 
 	/**
@@ -122,11 +121,12 @@ class Forvoyez_API_Manager {
 	 * Analyze an image using the ForVoyez API.
 	 *
 	 * @param int $image_id The ID of the image to analyze.
+	 *
 	 * @return array The analysis result.
 	 */
 	public function analyze_image( int $image_id ): array {
 		$image_path = get_attached_file( $image_id );
-		if ( !$image_path ) {
+		if ( ! $image_path ) {
 			return $this->format_error(
 				'image_not_found',
 				esc_html__( 'Image not found', 'auto-alt-text-for-images' ),
@@ -149,18 +149,18 @@ class Forvoyez_API_Manager {
 		}
 
 		$data = array(
-            'data' => wp_json_encode(
-                array(
-                    'context' => $this->context,
-                    'language' => $this->language,
-                    'schema' => array(
-                        'title' => 'string',
-                        'alternativeText' => 'string',
-                        'caption' => 'string',
-                    ),
-                )
-            ),
-        );
+			'data'     => wp_json_encode(
+				array(
+					'schema' => array(
+						'title'           => 'string',
+						'alternativeText' => 'string',
+						'caption'         => 'string',
+					),
+				)
+			),
+			'context'  => $this->context,
+			'language' => $this->language,
+		);
 
 		$boundary  = wp_generate_password( 24 );
 		$delimiter = '-------------' . $boundary;
@@ -244,6 +244,7 @@ class Forvoyez_API_Manager {
 	 *
 	 * @param int $image_id The ID of the image to update.
 	 * @param array $metadata The metadata to update.
+	 *
 	 * @return void
 	 */
 	private function update_image_metadata(
@@ -271,6 +272,7 @@ class Forvoyez_API_Manager {
 	 * @param string $code The error code.
 	 * @param string $message The error message.
 	 * @param array|null $debug_info Optional debug information.
+	 *
 	 * @return array The formatted error.
 	 */
 	private function format_error(
@@ -301,6 +303,7 @@ class Forvoyez_API_Manager {
 	 * @param string $file_name The name of the file.
 	 * @param string $file_mime The MIME type of the file.
 	 * @param string $file_data The file data.
+	 *
 	 * @return string The built multipart data.
 	 */
 	private function build_data_files(

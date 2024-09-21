@@ -133,6 +133,31 @@ BrowserSync will now monitor specified files and auto-reload your browser on cha
 └── ...
 ```
 
+## Debugging and Troubleshooting
+
+If you want to know what is going on, install and run the plugin.
+Then, in the code, add the following line:
+
+```php
+error_log(print_r($variable, true));
+```
+
+This will print the variable to the PHP error log. You can find the log file location in your PHP configuration.
+search for `error_log` in your `php.ini` file.
+for linux it is usually `/var/log/php/php_error.log`
+for windows it is usually `C:\php\logs\php_error.log` or `C:\wamp64\logs\php_error.log`
+you can also use `phpinfo()` to find the log file location.
+
+then to stream the log file to your terminal, use the following command:
+
+```sh
+tail -f /var/log/php/php_error.log
+```
+and for windows :
+```sh
+Get-Content C:\php\logs\php_error.log -Wait -Tail 10
+```
+
 ## Screenshots
 
 1. **API Configuration**
