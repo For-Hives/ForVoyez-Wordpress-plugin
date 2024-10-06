@@ -228,13 +228,11 @@ printf(
                     <div class="relative">
                         <?php $auto_analyze_enabled = get_option('forvoyez_auto_analyze_enabled', false); ?>
                         <input type="checkbox" id="forvoyez-auto-analyze" class="sr-only" <?php checked($auto_analyze_enabled); ?> data-enabled="<?php echo $auto_analyze_enabled==='true' ? 'true' : 'false'; ?>">
-<!--                        <div class="w-10 h-6 bg-gray-300 rounded-full shadow-inner" id="forvoyez-auto-analyze-body"></div>-->
-<!--                        <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 top-0 transition" id="forvoyez-auto-analyze-dot"></div>-->
                         <div id="forvoyez-auto-analyze-body" class="w-10 h-6 <?= $auto_analyze_enabled === 'true' ? 'bg-green-400' : 'bg-gray-300' ?> rounded-full shadow-inner"></div>
                         <div id="forvoyez-auto-analyze-dot" class="dot absolute w-6 h-6 bg-white rounded-full shadow <?= $auto_analyze_enabled === 'true' ? '-right-1' : '-left-1' ?> top-0 transition"></div>
                     </div>
                     <div class="ml-3 text-gray-700 font-medium">
-                        <?php esc_html_e('Enable automatic image analysis on upload', 'auto-alt-text-for-images'); ?>
+                        <?php esc_html_e('Enable automatic image analysis on upload (the analysis can take few seconds per image)', 'auto-alt-text-for-images'); ?>
                     </div>
                 </label>
             </div>

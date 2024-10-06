@@ -38,7 +38,8 @@ class Forvoyez_Settings {
 		);
 		add_action( 'wp_ajax_forvoyez_save_context', array( $this, 'ajax_save_context' ) );
         add_action( 'wp_ajax_forvoyez_save_language', array( $this, 'ajax_save_language' ) );
-		add_action('wp_ajax_forvoyez_toggle_auto_analyze', array($this, 'ajax_toggle_auto_analyze'));
+		add_action( 'wp_ajax_forvoyez_toggle_auto_analyze', array( $this, 'ajax_toggle_auto_analyze' ) );
+		add_filter( 'attachment_fields_to_edit', 'forvoyez_add_analyze_button', 10, 2 );
 	}
 
 	/**
@@ -76,10 +77,10 @@ class Forvoyez_Settings {
             )
         );
 		register_setting(
-	    'forvoyez_settings',
-	    'forvoyez_auto_analyze_enabled',
+            'forvoyez_settings',
+            'forvoyez_auto_analyze_enabled',
 		    array(
-		        'type' => 'boolean',
+		        'type'    => 'boolean',
 		        'default' => false,
 		    )
 		);
@@ -162,23 +163,19 @@ class Forvoyez_Settings {
 	 * @return void
 	 */
 	public function ajax_toggle_auto_analyze() {
-		error_log('AJAX toggle_auto_analyze called');
-	    error_log('Nonce: ' . $_POST['nonce']);
-	    error_log('User can manage options: ' . (current_user_can('manage_options') ? 'yes' : 'no'));
-		error_log('Enabled: ' . $_POST['enabled']);
-	    if (!check_ajax_referer('forvoyez_toggle_auto_analyze_nonce', 'nonce', false)) {
-	        wp_send_json_error(array('message' => 'Invalid nonce'), 403);
+	    if ( !check_ajax_referer( 'forvoyez_toggle_auto_analyze_nonce', 'nonce', false ) ) {
+	        wp_send_json_error( array( 'message' => 'Invalid nonce' ), 403 );
 	        return;
 	    }
 
-	    if (!current_user_can('manage_options')) {
-	        wp_send_json_error(array('message' => 'Permission denied'), 403);
+	    if ( !current_user_can( 'manage_options' ) ) {
+	        wp_send_json_error( array( 'message' => 'Permission denied' ), 403 );
 	        return;
 	    }
 
-	    update_option('forvoyez_auto_analyze_enabled', $_POST['enabled']);
+	    update_option( 'forvoyez_auto_analyze_enabled', $_POST['enabled'] );
 
-	    wp_send_json_success(array('message' => 'Automatic image analysis toggled successfully'));
+	    wp_send_json_success( array( 'message' => 'Automatic image analysis toggled successfully' ) );
 	}
 
 	/**
@@ -287,5 +284,24 @@ class Forvoyez_Settings {
 	 */
 	public function sanitize_api_key( $api_key ) {
 		return sanitize_text_field( $api_key );
+	}
+
+	/**
+	 * Add an "Analyze with ForVoyez" button to the media library.
+	 *
+	 * @param $form_fields
+	 * @param $post
+	 *
+	 * @return mixed
+	 */
+	function forvoyez_add_analyze_button($form_fields, $post) {
+	    if (wp_attachment_is_image($post->ID)) {
+	        $form_fields['forvoyez_analyze'] = array(
+	            'label' => '',
+	            'input' => 'html',
+	            'html' => '<button type="button" class="button forvoyez-analyze-button" data-image-id="' . esc_attr($post->ID) . '">Analyze with ForVoyez</button>',
+	        );
+	    }
+	    return $form_fields;
 	}
 }
