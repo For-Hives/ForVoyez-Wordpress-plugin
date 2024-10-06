@@ -223,6 +223,18 @@ printf(
                     value="<?php echo esc_attr($language); ?>"
                     placeholder="<?php esc_attr_e('Enter language for image analysis', 'auto-alt-text-for-images'); ?>">
             </div>
+            <div class="mb-4">
+                <label for="forvoyez-auto-analyze" class="flex items-center cursor-pointer">
+                    <div class="relative">
+                        <input type="checkbox" id="forvoyez-auto-analyze" class="sr-only" <?php checked(get_option('forvoyez_auto_analyze_enabled'), true); ?>>
+                        <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                        <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                    </div>
+                    <div class="ml-3 text-gray-700 font-medium">
+                        <?php esc_html_e('Enable automatic image analysis on upload', 'auto-alt-text-for-images'); ?>
+                    </div>
+                </label>
+            </div>
             <div class="mt-4">
                 <button type="button"
                     class="forvoyez-save-additional-settings inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">

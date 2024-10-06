@@ -39,6 +39,35 @@
 			)
 		})
 
+		$('#forvoyez-auto-analyze').on('change', function() {
+			$.ajax({
+				url: forvoyezData.ajaxurl,
+				type: 'POST',
+				data: {
+					action: 'forvoyez_toggle_auto_analyze',
+					enabled: this.checked,
+					nonce: forvoyezData.toggleAutoAnalyzeNonce
+				},
+				success: function(response) {
+					if (response.success) {
+						showNotification(response.data.message, 'success');
+					} else {
+						showNotification('Error: ' + response.data.message, 'error');
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.error('AJAX error:', textStatus, errorThrown);
+					showNotification('An error occurred. Please check the console for more information.', 'error');
+				}
+			});
+			// 	change the ui to reflect the new state
+			if (this.checked) {
+				$('#forvoyez-auto-analyze-label').text('Auto analyze enabled');
+			} else {
+				$('#forvoyez-auto-analyze-label').text('Auto analyze disabled');
+			}
+		});
+
 		$(document).on(
 			'change',
 			'input[type="checkbox"][data-forvoyez-image-checkbox]',

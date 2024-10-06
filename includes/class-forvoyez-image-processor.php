@@ -395,6 +395,11 @@ class Forvoyez_Image_Processor {
 	 * @param int $attachment_id The ID of the uploaded attachment.
 	 */
 	public function schedule_image_analysis($attachment_id) {
+	    // Check if automatic analysis is enabled
+	    if (!get_option('forvoyez_auto_analyze_enabled', false)) {
+	        return;
+	    }
+
 	    // Check if the uploaded file is an image
 	    if (!wp_attachment_is_image($attachment_id)) {
 	        return;

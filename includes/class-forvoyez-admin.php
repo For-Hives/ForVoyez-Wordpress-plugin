@@ -146,6 +146,7 @@ class Forvoyez_Admin {
             'processImageBatchNonce' => wp_create_nonce('forvoyez_process_image_batch_nonce'),
             'saveContextNonce' => wp_create_nonce('forvoyez_save_context_nonce'),
             'saveLanguageNonce' => wp_create_nonce('forvoyez_save_language_nonce'),
+            'toggleAutoAnalyzeNonce' => wp_create_nonce('forvoyez_toggle_auto_analyze_nonce'),
         ));
 	}
 
