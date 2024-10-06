@@ -165,6 +165,7 @@ class Forvoyez_Settings {
 		error_log('AJAX toggle_auto_analyze called');
 	    error_log('Nonce: ' . $_POST['nonce']);
 	    error_log('User can manage options: ' . (current_user_can('manage_options') ? 'yes' : 'no'));
+		error_log('Enabled: ' . $_POST['enabled']);
 	    if (!check_ajax_referer('forvoyez_toggle_auto_analyze_nonce', 'nonce', false)) {
 	        wp_send_json_error(array('message' => 'Invalid nonce'), 403);
 	        return;
@@ -175,14 +176,9 @@ class Forvoyez_Settings {
 	        return;
 	    }
 
-	    $enabled = isset($_POST['enabled']) ? (bool) $_POST['enabled'] : false;
-	    update_option('forvoyez_auto_analyze_enabled', $enabled);
+	    update_option('forvoyez_auto_analyze_enabled', $_POST['enabled']);
 
-	    wp_send_json_success(array(
-	        'message' => $enabled
-	            ? esc_html__('Automatic image analysis enabled', 'auto-alt-text-for-images')
-	            : esc_html__('Automatic image analysis disabled', 'auto-alt-text-for-images')
-	    ));
+	    wp_send_json_success(array('message' => 'Automatic image analysis toggled successfully'));
 	}
 
 	/**

@@ -40,32 +40,49 @@
 		})
 
 		$('#forvoyez-auto-analyze').on('change', function() {
+			var $toggle = $(this);
+    		var isEnabled = $toggle.data('enabled') === true;
+			console.log('isEnabled', isEnabled);
+
+			// Toggle the dot color
+			$('#forvoyez-auto-analyze-dot').toggleClass('-left-1 -right-1');
+			$('#forvoyez-auto-analyze-body').toggleClass('bg-gray-300 bg-green-400');
+
+			// Disable the toggle while the AJAX request is in progress
+			$toggle.prop('disabled', true);
+			console.log('isEnabled', isEnabled);
 			$.ajax({
 				url: forvoyezData.ajaxurl,
 				type: 'POST',
 				data: {
 					action: 'forvoyez_toggle_auto_analyze',
-					enabled: this.checked,
+					enabled: !isEnabled,
 					nonce: forvoyezData.toggleAutoAnalyzeNonce
 				},
-				success: function(response) {
+				success: function (response) {
 					if (response.success) {
+						// Update the toggle state
+						$toggle.data('enabled', !isEnabled);
+						// Show success message
 						showNotification(response.data.message, 'success');
 					} else {
-						showNotification('Error: ' + response.data.message, 'error');
+						// Revert the toggle state
+						$toggle.prop('checked', isEnabled);
+						// Show error message
+						showNotification(response.data.message, 'error');
 					}
 				},
-				error: function(jqXHR, textStatus, errorThrown) {
+				error: function (jqXHR, textStatus, errorThrown) {
 					console.error('AJAX error:', textStatus, errorThrown);
-					showNotification('An error occurred. Please check the console for more information.', 'error');
+					// Revert the toggle state
+					$toggle.prop('checked', isEnabled);
+					// Show error message
+					showNotification('An error occurred. Please try again.', 'error');
+				},
+				complete: function () {
+					$toggle.prop('disabled', false); // Re-enable the toggle
 				}
 			});
-			// 	change the ui to reflect the new state
-			if (this.checked) {
-				$('#forvoyez-auto-analyze-label').text('Auto analyze enabled');
-			} else {
-				$('#forvoyez-auto-analyze-label').text('Auto analyze disabled');
-			}
 		});
 
 		$(document).on(
