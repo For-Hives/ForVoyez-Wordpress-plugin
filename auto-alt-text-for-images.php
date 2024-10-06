@@ -68,6 +68,8 @@ function forvoyez_init() {
 	add_action( 'add_attachment', 'forvoyez_clear_image_cache' );
 	add_action( 'edit_attachment', 'forvoyez_clear_image_cache' );
 	add_action( 'delete_attachment', 'forvoyez_clear_image_cache' );
+	add_action( 'admin_enqueue_scripts', 'forvoyez_enqueue_media_scripts' );
+	add_filter( 'attachment_fields_to_edit', 'forvoyez_add_analyze_button', 10, 2 );
 }
 add_action( 'plugins_loaded', 'forvoyez_init' );
 
@@ -142,3 +144,58 @@ function forvoyez_maybe_flush_rewrite_rules() {
 	}
 }
 add_action( 'init', 'forvoyez_maybe_flush_rewrite_rules' );
+
+/**
+	 * Enqueue the media scripts.
+	 * @param $hook
+	 *
+	 * @return void
+	 */
+	function forvoyez_enqueue_media_scripts( $hook ) {
+	    if ( 'upload.php' === $hook || 'post.php' === $hook || 'post-new.php' === $hook ) {
+	        wp_enqueue_script( 'forvoyez-media-script', plugin_dir_url( __FILE__ ) . 'assets/js/media-script.js', array( 'jquery' ), '1.0', true );
+	        wp_localize_script(
+                'forvoyez-media-script',
+                'forvoyezData',
+                array(
+					'ajaxurl'                => admin_url( 'admin-ajax.php' ),
+					'verifyAjaxRequestNonce' => wp_create_nonce( 'forvoyez_verify_ajax_request_nonce' ),
+                )
+            );
+	    }
+	}
+
+	/**
+	 * Add an "Analyze with ForVoyez" button to the media library.
+	 *
+	 * @param $form_fields
+	 * @param $post
+	 *
+	 * @return mixed
+	 */
+	function forvoyez_add_analyze_button($form_fields, $post) {
+	    if (wp_attachment_is_image($post->ID)) {
+	        $form_fields['forvoyez_analyze'] = array(
+	            'label' => '',
+	            'input' => 'html',
+	            'html' => '
+	                <style>
+	                    .forvoyez-analyze-button {
+	                        background-color: #007cba;
+	                        color: #fff;
+	                        border: none;
+	                        padding: 5px 10px;
+	                        border-radius: 3px;
+	                        cursor: pointer;
+	                    }
+	                </style>
+	                <p>Click the button below to analyze this image with ForVoyez.</p>
+	                <p><strong>Note:</strong> This will overwrite the existing alt text and caption.</p>
+	                <p><strong>Warning:</strong> This action cannot be undone.</p>
+	                <p><strong>if you don\'t have configured the API key, please go to the settings page and configure it.</strong></p>
+	            <button type="button" class="button forvoyez-analyze-button" data-image-id="' . esc_attr($post->ID) . '">Analyze with ForVoyez</button>
+	            ',
+	        );
+	    }
+	    return $form_fields;
+	}

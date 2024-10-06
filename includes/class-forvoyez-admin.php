@@ -85,7 +85,7 @@ class Forvoyez_Admin {
 	 * @param string $hook Current admin page hook.
 	 */
 	public function enqueue_admin_scripts( $hook ) {
-		if ('toplevel_page_auto-alt-text-for-images' !== $hook && 'upload.php' !== $hook) {
+		if ('toplevel_page_auto-alt-text-for-images' !== $hook) {
             return;
         }
 
