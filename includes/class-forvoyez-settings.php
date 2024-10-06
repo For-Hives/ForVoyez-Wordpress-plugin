@@ -38,6 +38,7 @@ class Forvoyez_Settings {
 		);
 		add_action( 'wp_ajax_forvoyez_save_context', array( $this, 'ajax_save_context' ) );
         add_action( 'wp_ajax_forvoyez_save_language', array( $this, 'ajax_save_language' ) );
+		add_action( 'wp_ajax_forvoyez_toggle_auto_analyze', array( $this, 'ajax_toggle_auto_analyze' ) );
 	}
 
 	/**
@@ -74,6 +75,14 @@ class Forvoyez_Settings {
 				'default'           => 'en',
             )
         );
+		register_setting(
+            'forvoyez_settings',
+            'forvoyez_auto_analyze_enabled',
+		    array(
+		        'type'    => 'boolean',
+		        'default' => false,
+		    )
+		);
 	}
 
 	/**
@@ -146,6 +155,26 @@ class Forvoyez_Settings {
 				'auto-alt-text-for-images',
 			),
 		);
+	}
+
+	/**
+	 * AJAX callback to toggle automatic image analysis.
+	 * @return void
+	 */
+	public function ajax_toggle_auto_analyze() {
+	    if ( !check_ajax_referer( 'forvoyez_toggle_auto_analyze_nonce', 'nonce', false ) ) {
+	        wp_send_json_error( array( 'message' => 'Invalid nonce' ), 403 );
+	        return;
+	    }
+
+	    if ( !current_user_can( 'manage_options' ) ) {
+	        wp_send_json_error( array( 'message' => 'Permission denied' ), 403 );
+	        return;
+	    }
+
+	    update_option( 'forvoyez_auto_analyze_enabled', $_POST['enabled'] );
+
+	    wp_send_json_success( array( 'message' => 'Automatic image analysis toggled successfully' ) );
 	}
 
 	/**

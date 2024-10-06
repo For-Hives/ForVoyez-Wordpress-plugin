@@ -64,6 +64,12 @@ class Forvoyez_Image_Processor {
 				'process_image_batch',
 			)
 		);
+
+		// Hook into the WordPress upload process
+	    add_action('add_attachment', array($this, 'schedule_image_analysis'));
+
+	    // Add custom cron action
+	    add_action('forvoyez_analyze_single_image', array($this, 'cron_analyze_single_image'));
 	}
 
 	private function sanitize_and_validate_metadata( $raw_metadata ) {
@@ -85,7 +91,7 @@ class Forvoyez_Image_Processor {
 	}
 
 	public function update_image_metadata() {
-		$this->verify_ajax_request('forvoyez_update_image_metadata');
+		$this->verify_ajax_request( 'forvoyez_update_image_metadata' );
 
 		$image_id     = isset( $_POST['image_id'] )
 			? absint( wp_unslash( $_POST['image_id'] ) )
@@ -142,7 +148,7 @@ class Forvoyez_Image_Processor {
 			return;
 		}
 
-		$this->verify_ajax_request('forvoyez_verify_ajax_request_nonce');
+		$this->verify_ajax_request( 'forvoyez_verify_ajax_request_nonce' );
 
 		$image_id = isset( $_POST['image_id'] )
 			? absint( wp_unslash( $_POST['image_id'] ) )
@@ -257,7 +263,7 @@ class Forvoyez_Image_Processor {
 	}
 
 	public function bulk_analyze_images() {
-		$this->verify_ajax_request('forvoyez_bulk_analyze_images');
+		$this->verify_ajax_request( 'forvoyez_bulk_analyze_images' );
 
 		$image_ids = isset( $_POST['image_ids'] )
 			? array_map( 'absint', wp_unslash( $_POST['image_ids'] ) )
@@ -286,7 +292,7 @@ class Forvoyez_Image_Processor {
 	}
 
 	public function analyze_single_image() {
-		$this->verify_ajax_request('forvoyez_analyze_single_image');
+		$this->verify_ajax_request( 'forvoyez_analyze_single_image' );
 
 		$image_id = isset( $_POST['image_id'] )
 			? absint( wp_unslash( $_POST['image_id'] ) )
@@ -304,7 +310,7 @@ class Forvoyez_Image_Processor {
 	}
 
 	public function process_image_batch() {
-		$this->verify_ajax_request('forvoyez_verify_ajax_request_nonce');
+		$this->verify_ajax_request( 'forvoyez_verify_ajax_request_nonce' );
 
 		$image_ids = isset( $_POST['image_ids'] )
 			? array_map( 'absint', wp_unslash( $_POST['image_ids'] ) )
@@ -351,15 +357,70 @@ class Forvoyez_Image_Processor {
      * @param string $action The action name.
 	 * @throws WP_Error If the request is invalid or user doesn't have permission.
 	 */
-	private function verify_ajax_request($action) {
+	private function verify_ajax_request( $action ) {
         if ( !check_ajax_referer( $action, 'nonce', false ) ) {
-           wp_send_json_error( 'Invalid nonce' );
-           exit;
+            wp_send_json_error( 'Invalid nonce' );
+            exit;
         }
 
         if ( !current_user_can( 'upload_files' ) ) {
-           wp_send_json_error( 'Permission denied' );
-           exit;
+            wp_send_json_error( 'Permission denied' );
+            exit;
         }
     }
+
+    /**
+     * Analyze image on upload.
+     *
+     * @param int $attachment_id The ID of the uploaded attachment.
+     */
+    public function analyze_image_on_upload( $attachment_id ) {
+        // Check if the uploaded file is an image
+        if ( !wp_attachment_is_image( $attachment_id ) ) {
+            return;
+        }
+
+        // Analyze the image using the ForVoyez API
+        $result = $this->api_client->analyze_image( $attachment_id );
+
+        if ( $result['success'] ) {
+            // Update the image metadata with the analysis results
+            $this->update_image_meta( $attachment_id, $result['metadata'] );
+        }
+    }
+
+	/**
+	 * Schedule image analysis on upload.
+	 *
+	 * @param int $attachment_id The ID of the uploaded attachment.
+	 */
+	public function schedule_image_analysis($attachment_id) {
+	    // Check if automatic analysis is enabled
+	    if (!get_option('forvoyez_auto_analyze_enabled', false)) {
+	        return;
+	    }
+
+	    // Check if the uploaded file is an image
+	    if (!wp_attachment_is_image($attachment_id)) {
+	        return;
+	    }
+
+	    // Schedule the analysis to run after a short delay
+	    wp_schedule_single_event(time() + 10, 'forvoyez_analyze_single_image', array($attachment_id));
+	}
+
+	/**
+	 * Analyze a single image (for cron job).
+	 *
+	 * @param int $attachment_id The ID of the image to analyze.
+	 */
+	public function cron_analyze_single_image($attachment_id) {
+	    // Analyze the image using the ForVoyez API
+	    $result = $this->api_client->analyze_image($attachment_id);
+
+	    if ($result['success']) {
+	        // Update the image metadata with the analysis results
+	        $this->update_image_meta($attachment_id, $result['metadata']);
+	    }
+	}
 }

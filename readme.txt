@@ -3,7 +3,7 @@ Contributors: cinquinandy
 Tags: seo, accessibility, images, alt text, metadata
 Requires at least: 5.0
 Tested up to: 6.6
-Stable tag: 1.0.2
+Stable tag: 1.1.0
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -82,6 +82,10 @@ The AI can generate content in multiple languages. You can specify your preferre
 * User-friendly admin interface
 
 == Upgrade Notice ==
+= 1.1.0 =
+This update includes new features and improvements to enhance the plugin's functionality. Upgrade now for a better user experience!
+* It also include a new feature that add a new button in the media library to generate alt text for a single image.
+* New toggle button to enable or disable the automatic generation of alt text for new images. Seemlessly integrate the plugin into your workflow with this new feature.
 
 = 1.0.2 =
 This update includes bug fixes and performance improvements to enhance the plugin's functionality. Upgrade now for a better user experience!

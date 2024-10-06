@@ -1,38 +1,43 @@
 # Copyright (C) 2024 ForVoyez
-# This file is distributed under the same license as the Auto Alt Text for Images plugin.
+# This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Auto Alt Text for Images 1.0.2\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/auto-alt-text-for-images\n"
+"Project-Id-Version: Auto Alt Text for Images 1.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/forvoyez-auto-alt-text-for-images\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-09-21T18:52:20+00:00\n"
+"POT-Creation-Date: 2024-10-06T16:33:21+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.4.0\n"
+"X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: auto-alt-text-for-images\n"
 
 #. Plugin Name of the plugin
+#: auto-alt-text-for-images.php
 #: includes/class-forvoyez-admin.php:60
 #: templates/admin-page.php:9
 msgid "Auto Alt Text for Images"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: auto-alt-text-for-images.php
 msgid "https://doc.forvoyez.com/wordpress-plugin"
 msgstr ""
 
 #. Description of the plugin
+#: auto-alt-text-for-images.php
 msgid "Automatically generate alt text and SEO metadata for images using ForVoyez API."
 msgstr ""
 
 #. Author of the plugin
+#: auto-alt-text-for-images.php
 msgid "ForVoyez"
 msgstr ""
 
 #. Author URI of the plugin
+#: auto-alt-text-for-images.php
 msgid "https://forvoyez.com"
 msgstr ""
 
@@ -40,33 +45,33 @@ msgstr ""
 msgid "Auto Alt Text"
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:158
+#: includes/class-forvoyez-admin.php:159
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:183
+#: includes/class-forvoyez-admin.php:184
 msgid "Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation."
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:305
+#: includes/class-forvoyez-admin.php:306
 msgid "No images found matching the selected criteria."
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:390
-#: includes/class-forvoyez-admin.php:554
-#: includes/class-forvoyez-admin.php:638
-#: includes/class-forvoyez-admin.php:667
-#: includes/class-forvoyez-settings.php:87
-#: includes/class-forvoyez-settings.php:104
-#: includes/class-forvoyez-settings.php:121
+#: includes/class-forvoyez-admin.php:391
+#: includes/class-forvoyez-admin.php:555
+#: includes/class-forvoyez-admin.php:639
+#: includes/class-forvoyez-admin.php:668
+#: includes/class-forvoyez-settings.php:96
+#: includes/class-forvoyez-settings.php:113
+#: includes/class-forvoyez-settings.php:130
 msgid "Permission denied"
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:453
+#: includes/class-forvoyez-admin.php:454
 msgid "&laquo; Previous"
 msgstr ""
 
-#: includes/class-forvoyez-admin.php:473
+#: includes/class-forvoyez-admin.php:474
 msgid "Next &raquo;"
 msgstr ""
 
@@ -95,37 +100,37 @@ msgid "Failed to decode API response"
 msgstr ""
 
 #: includes/class-forvoyez-api-manager.php:234
-#: includes/class-forvoyez-image-processor.php:162
+#: includes/class-forvoyez-image-processor.php:168
 msgid "Analysis successful"
 msgstr ""
 
-#: includes/class-forvoyez-image-processor.php:100
+#: includes/class-forvoyez-image-processor.php:106
 msgid "Invalid data"
 msgstr ""
 
-#: includes/class-forvoyez-image-processor.php:107
+#: includes/class-forvoyez-image-processor.php:113
 msgid "Metadata updated successfully"
 msgstr ""
 
-#: includes/class-forvoyez-image-processor.php:153
-#: includes/class-forvoyez-image-processor.php:297
+#: includes/class-forvoyez-image-processor.php:159
+#: includes/class-forvoyez-image-processor.php:303
 msgid "Invalid image ID"
 msgstr ""
 
-#: includes/class-forvoyez-image-processor.php:176
-#: includes/class-forvoyez-image-processor.php:337
+#: includes/class-forvoyez-image-processor.php:182
+#: includes/class-forvoyez-image-processor.php:343
 msgid "unknown_error"
 msgstr ""
 
-#: includes/class-forvoyez-image-processor.php:269
+#: includes/class-forvoyez-image-processor.php:275
 msgid "No valid images selected"
 msgstr ""
 
-#: includes/class-forvoyez-image-processor.php:278
+#: includes/class-forvoyez-image-processor.php:284
 msgid "Processing started"
 msgstr ""
 
-#: includes/class-forvoyez-image-processor.php:315
+#: includes/class-forvoyez-image-processor.php:321
 msgid "No images provided"
 msgstr ""
 
@@ -176,19 +181,19 @@ msgstr ""
 msgid "Analyse"
 msgstr ""
 
-#: includes/class-forvoyez-settings.php:93
+#: includes/class-forvoyez-settings.php:102
 msgid "Context saved successfully"
 msgstr ""
 
-#: includes/class-forvoyez-settings.php:110
+#: includes/class-forvoyez-settings.php:119
 msgid "Language saved successfully"
 msgstr ""
 
-#: includes/class-forvoyez-settings.php:132
+#: includes/class-forvoyez-settings.php:141
 msgid "API key cannot be empty"
 msgstr ""
 
-#: includes/class-forvoyez-settings.php:144
+#: includes/class-forvoyez-settings.php:153
 msgid "API key saved successfully"
 msgstr ""
 
@@ -394,7 +399,11 @@ msgstr ""
 msgid "Enter language for image analysis"
 msgstr ""
 
-#: templates/configuration-tab.php:229
+#: templates/configuration-tab.php:235
+msgid "Enable automatic image analysis on upload (the analysis can take few seconds per image)"
+msgstr ""
+
+#: templates/configuration-tab.php:242
 msgid "Save Additional Settings"
 msgstr ""
 
@@ -419,48 +428,77 @@ msgstr ""
 msgid "Images Without alt / caption"
 msgstr ""
 
-#: templates/dashboard-tab.php:87
+#: templates/dashboard-tab.php:86
 msgid "Pre-requisites"
 msgstr ""
 
-#: templates/dashboard-tab.php:95
+#: templates/dashboard-tab.php:94
 msgid "Make sure you have the following before you start:"
 msgstr ""
 
-#: templates/dashboard-tab.php:106
+#: templates/dashboard-tab.php:105
 msgid "Go to the 'Settings' tab"
 msgstr ""
 
-#: templates/dashboard-tab.php:114
+#: templates/dashboard-tab.php:113
 msgid "Enter your ForVoyez API key"
 msgstr ""
 
-#: templates/dashboard-tab.php:122
+#: templates/dashboard-tab.php:121
 msgid "Click on 'Save API Key'"
 msgstr ""
 
-#: templates/dashboard-tab.php:135
+#: templates/dashboard-tab.php:134
 msgid "Quick Start"
 msgstr ""
 
-#: templates/dashboard-tab.php:143
+#: templates/dashboard-tab.php:142
 msgid "Follow these steps to generate alt text for your images:"
 msgstr ""
 
-#: templates/dashboard-tab.php:154
+#: templates/dashboard-tab.php:153
 msgid "Go to the 'Manage Images' tab"
 msgstr ""
 
-#: templates/dashboard-tab.php:162
+#: templates/dashboard-tab.php:161
 msgid "Select the images you want to process"
 msgstr ""
 
-#: templates/dashboard-tab.php:170
+#: templates/dashboard-tab.php:169
 msgid "Click on 'Generate Alt Text' to start the process"
 msgstr ""
 
-#: templates/dashboard-tab.php:178
+#: templates/dashboard-tab.php:177
 msgid "Review and edit the generated alt text as needed"
+msgstr ""
+
+#: templates/dashboard-tab.php:189
+msgid "Automatic Image Analysis"
+msgstr ""
+
+#: templates/dashboard-tab.php:192
+msgid "ForVoyez can automatically analyze your images upon upload."
+msgstr ""
+
+#: templates/dashboard-tab.php:199
+msgid "Status"
+msgstr ""
+
+#: templates/dashboard-tab.php:203
+msgid "Enabled"
+msgstr ""
+
+#: templates/dashboard-tab.php:204
+msgid "Disabled"
+msgstr ""
+
+#: templates/dashboard-tab.php:209
+#: templates/main-page.php:66
+msgid "Configuration"
+msgstr ""
+
+#: templates/dashboard-tab.php:212
+msgid "You can enable or disable this feature in the Configuration tab."
 msgstr ""
 
 #: templates/main-page.php:21
@@ -469,8 +507,4 @@ msgstr ""
 
 #: templates/main-page.php:51
 msgid "Manage Images"
-msgstr ""
-
-#: templates/main-page.php:66
-msgid "Configuration"
 msgstr ""

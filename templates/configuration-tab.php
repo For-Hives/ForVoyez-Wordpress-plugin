@@ -223,6 +223,19 @@ printf(
                     value="<?php echo esc_attr($language); ?>"
                     placeholder="<?php esc_attr_e('Enter language for image analysis', 'auto-alt-text-for-images'); ?>">
             </div>
+            <div class="mb-4">
+                <label for="forvoyez-auto-analyze" class="flex items-center cursor-pointer">
+                    <div class="relative">
+                        <?php $auto_analyze_enabled = get_option('forvoyez_auto_analyze_enabled', false); ?>
+                        <input type="checkbox" id="forvoyez-auto-analyze" class="sr-only" <?php checked($auto_analyze_enabled); ?> data-enabled="<?php echo $auto_analyze_enabled==='true' ? 'true' : 'false'; ?>">
+                        <div id="forvoyez-auto-analyze-body" class="w-10 h-6 <?= $auto_analyze_enabled === 'true' ? 'bg-green-400' : 'bg-gray-300' ?> rounded-full shadow-inner"></div>
+                        <div id="forvoyez-auto-analyze-dot" class="dot absolute w-6 h-6 bg-white rounded-full shadow <?= $auto_analyze_enabled === 'true' ? '-right-1' : '-left-1' ?> top-0 transition"></div>
+                    </div>
+                    <div class="ml-3 text-gray-700 font-medium">
+                        <?php esc_html_e('Enable automatic image analysis on upload (the analysis can take few seconds per image)', 'auto-alt-text-for-images'); ?>
+                    </div>
+                </label>
+            </div>
             <div class="mt-4">
                 <button type="button"
                     class="forvoyez-save-additional-settings inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
