@@ -64,6 +64,8 @@ class Forvoyez_Image_Processor {
 				'process_image_batch',
 			)
 		);
+		// Hook into the WordPress upload process
+        add_action('add_attachment', array($this, 'analyze_image_on_upload'));
 	}
 
 	private function sanitize_and_validate_metadata( $raw_metadata ) {
@@ -360,6 +362,29 @@ class Forvoyez_Image_Processor {
         if ( !current_user_can( 'upload_files' ) ) {
            wp_send_json_error( 'Permission denied' );
            exit;
+        }
+    }
+
+    /**
+     * Analyze image on upload.
+     *
+     * @param int $attachment_id The ID of the uploaded attachment.
+     */
+    public function analyze_image_on_upload($attachment_id) {
+        // Check if the uploaded file is an image
+        if (!wp_attachment_is_image($attachment_id)) {
+            return;
+        }
+
+        // Analyze the image using the ForVoyez API
+        $result = $this->api_client->analyze_image($attachment_id);
+
+        if ($result['success']) {
+            // Update the image metadata with the analysis results
+            $this->update_image_meta($attachment_id, $result['metadata']);
+        } else {
+            // Log the error for admin review
+            error_log('ForVoyez image analysis failed for attachment ID ' . $attachment_id . ': ' . $result['error']['message']);
         }
     }
 }
