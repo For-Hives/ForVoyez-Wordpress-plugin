@@ -44,7 +44,7 @@ class Forvoyez_API_Manager {
 	 */
 	public function __construct( string $api_key, string $language, string $context, $http_client = null ) {
 		$this->api_key     = $api_key;
-		$this->api_url     = 'https://633.forvoyez.com/api/describe';
+		$this->api_url     = 'https://forvoyez.com/api/describe';
 		$this->http_client = $http_client ?: new WP_Http();
 		$this->context     = $context;
 		$this->language    = $language;
