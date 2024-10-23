@@ -44,7 +44,7 @@ class Forvoyez_API_Manager {
 	 */
 	public function __construct( string $api_key, string $language, string $context, $http_client = null ) {
 		$this->api_key     = $api_key;
-		$this->api_url     = 'https://forvoyez.com/api/describe';
+		$this->api_url     = 'https://633.forvoyez.com/api/describe';
 		$this->http_client = $http_client ?: new WP_Http();
 		$this->context     = $context;
 		$this->language    = $language;
@@ -149,17 +149,8 @@ class Forvoyez_API_Manager {
 		}
 
 		$data = array(
-			'data'     => wp_json_encode(
-				array(
-					'schema' => array(
-						'title'           => 'string',
-						'alternativeText' => 'string',
-						'caption'         => 'string',
-					),
-				)
-			),
-			'context'  => $this->context,
-			'language' => $this->language,
+            'context' => $this->context,
+            'language' => $this->language,
 		);
 
 		$boundary  = wp_generate_password( 24 );
@@ -188,6 +179,8 @@ class Forvoyez_API_Manager {
 		);
 
 		$response = $this->http_client->post( $this->api_url, $args );
+
+//		error_log(print_r($response, true));
 
 		if ( is_wp_error( $response ) ) {
 			return $this->format_error(
@@ -222,10 +215,13 @@ class Forvoyez_API_Manager {
 		}
 
 		$metadata = array(
-			'alt_text' => $data['alternativeText'] ?? '',
+			'alt_text' => $data['alt_text'] ?? '',
 			'title'    => $data['title'] ?? '',
 			'caption'  => $data['caption'] ?? '',
 		);
+
+//		error_log(print_r($metadata, true));
+//		error_log(print_r($data, true));
 
 		$this->update_image_metadata( $image_id, $metadata );
 

@@ -156,6 +156,7 @@ tail -f /var/log/php/php_error.log
 and for windows :
 ```sh
 Get-Content C:\php\logs\php_error.log -Wait -Tail 10
+Get-Content C:\wamp64\logs\php_error.log -Wait -Tail 10
 ```
 
 ## Screenshots
