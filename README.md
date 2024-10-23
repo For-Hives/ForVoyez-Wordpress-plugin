@@ -274,6 +274,15 @@ To run the tests, use the following command:
 ./vendor/bin/phpunit [file path].php
 ```
 
+### Add a new version 
+- Change auto-alt-text-for-images.php "FORVOYEZ_VERSION" constant to the new version number.
+- Change the version number in the plugin header. (in auto-alt-text-for-images.php)
+- Change the version number in the package.json file.
+- Change the version number in the readme.txt file.
+- Add the changes in upgrade notice in the readme.txt file.
+- Run `composer run make-pot`
+- Run `composer run make-zip`
+
 
 ---
 
