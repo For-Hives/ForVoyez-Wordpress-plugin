@@ -3,7 +3,7 @@ Contributors: cinquinandy
 Tags: seo, accessibility, images, alt text, metadata
 Requires at least: 5.0
 Tested up to: 6.7.1
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -34,8 +34,8 @@ Our AI-powered API makes it easy for developers and content creators to optimize
 
 = Obtaining an API Key =
 
-1. Visit the [ForVoyez signup page](https://forvoyez.com/signup) to create an account.
-2. Once logged in, navigate to your [ForVoyez dashboard](https://forvoyez.com/dashboard).
+1. Visit the [ForVoyez signup page](https://forvoyez.com/sign-up) to create an account.
+2. Once logged in, navigate to your [ForVoyez dashboard](https://forvoyez.com/app/dashboard).
 3. Generate an API key in the API section of your dashboard.
 4. Copy the API key and paste it in the plugin's settings page.
 
@@ -81,9 +81,11 @@ The AI can generate content in multiple languages. You can specify your preferre
 * Multi-language support
 * User-friendly admin interface
 
-== Upgrade Notice ==
+= 1.1.3 =
+This update includes bug fixes and performance improvements to enhance the plugin's functionality. Upgrade now for a better user experience!
+
 = 1.1.2 =
-Fixes, improvements, and new features to enhance the plugin's functionality. Upgrade now for a better user experience!
+Fixes, improvements, and new features to enhance the plugin's functionality.
 
 = 1.1.1 =
 This update includes bug fixes and performance improvements to enhance the plugin's functionality. Upgrade now for a better user experience!
@@ -114,9 +116,9 @@ This is the first release of ForVoyez Auto Alt Text for Images. Install now to s
 
 For more detailed documentation, please visit our [official documentation](https://doc.forvoyez.com).
 
-For support, feature requests, or to report bugs, please visit our [support forum](https://forvoyez.com/support) or [GitHub repository](https://github.com/forvoyez/auto-alt-text-for-images).
+For support, feature requests, or to report bugs, please visit our [website](https://forvoyez.com/contact).
 
-This plugin is proudly powered by [ForVoyez](https://forvoyez.com), a leader in AI-driven content optimization solutions.
+This plugin is proudly powered by [ForVoyez](https://forvoyez.com).
 
 == External Services ==
 
@@ -126,9 +128,9 @@ ForVoyez API Service: https://forvoyez.com
 
 By using this plugin, you agree to the following ForVoyez legal documents:
 
-* Terms of Service: https://forvoyez.com/app/legals/terms
-* Privacy Policy: https://forvoyez.com/app/legals/privacy-policy
-* Legal Notice: https://forvoyez.com/app/legals/legal-notice
+* Terms of Service: [https://forvoyez.com/app/legals/terms](https://forvoyez.com/app/legals/terms)
+* Privacy Policy: [https://forvoyez.com/app/legals/privacy-policy](https://forvoyez.com/app/legals/privacy-policy)
+* Legal Notice: [https://forvoyez.com/app/legals/legal-notice](https://forvoyez.com/app/legals/legal-notice)
 
 Please review these documents to understand how your data is handled when using this plugin. It is important to be aware of these terms as they govern the use of the ForVoyez service which is integral to the functionality of this plugin.
 

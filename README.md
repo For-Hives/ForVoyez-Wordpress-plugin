@@ -281,7 +281,7 @@ To run the tests, use the following command:
 - Change the version number in the readme.txt file.
 - Add the changes in upgrade notice in the readme.txt file.
 - Run `composer run make-pot`
-- Run `composer run make-zip`
+- Run `composer run zip`
 
 
 ---
