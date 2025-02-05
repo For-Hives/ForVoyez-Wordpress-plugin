@@ -83,7 +83,7 @@ The AI can generate content in multiple languages. You can specify your preferre
 
 = 1.1.5 =
 This update includes bug fixes and performance improvements to enhance the plugin's functionality. Upgrade now for a better user experience!
-[testing]
+[testing] 2
 
 = 1.1.4 =
 updated the workflow of the plugin to make it more user-friendly and efficient. Upgrade now for a better user experience!
