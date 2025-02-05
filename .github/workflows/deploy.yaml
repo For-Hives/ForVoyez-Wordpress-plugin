@@ -22,6 +22,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install SVN
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y subversion
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -98,11 +103,17 @@ jobs:
 
       - name: Commit to SVN
         working-directory: svn
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
         run: |
           VERSION=${{ steps.get_version.outputs.version }}
           svn commit -m "Release version $VERSION" \
-            --username ${{ secrets.SVN_USERNAME }} \
-            --password ${{ secrets.SVN_PASSWORD }}
+            --username "$SVN_USERNAME" \
+            --password "$SVN_PASSWORD" \
+            --no-auth-cache \
+            --non-interactive \
+            --trust-server-cert
 
       - name: Notify on success
         if: success()
