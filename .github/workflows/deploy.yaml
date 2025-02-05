@@ -63,8 +63,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout WordPress SVN repository
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
         run: |
-          svn checkout https://plugins.svn.wordpress.org/auto-alt-text-for-images svn --username ${{ secrets.SVN_USERNAME }} --password ${{ secrets.SVN_PASSWORD }}
+          svn checkout "https://plugins.svn.wordpress.org/auto-alt-text-for-images" \
+          --username "$SVN_USERNAME" \
+          --password "$SVN_PASSWORD" \
+          --no-auth-cache \
+          --non-interactive \
+          --trust-server-cert \
+          svn
 
       - name: Prepare SVN
         working-directory: svn
