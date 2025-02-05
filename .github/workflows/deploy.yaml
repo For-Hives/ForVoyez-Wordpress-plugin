@@ -2,19 +2,22 @@ name: Deploy WordPress Plugin
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   build-and-deploy:
     name: Build and Deploy Plugin
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ github.ref }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -32,48 +35,36 @@ jobs:
           composer install --no-dev --optimize-autoloader
           npm ci
 
-      # Generate POT file for translations
       - name: Generate POT file
         run: |
           mkdir -p languages
           wp i18n make-pot . languages/auto-alt-text-for-images.pot --domain=auto-alt-text-for-images --allow-root
 
-      # Create distributable ZIP file
       - name: Create ZIP archive
         run: composer run zip
 
-      # Create GitHub Release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: release/auto-alt-text-for-images.zip
           body_path: CHANGELOG.md
           name: ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Checkout SVN repository
       - name: Checkout WordPress SVN repository
         run: |
           svn checkout https://plugins.svn.wordpress.org/auto-alt-text-for-images svn --username ${{ secrets.SVN_USERNAME }} --password ${{ secrets.SVN_PASSWORD }}
 
-      # Prepare SVN
       - name: Prepare SVN
         working-directory: svn
         run: |
-          # Get version from tag
-          VERSION=${GITHUB_REF#refs/tags/}
-          
-          # Clean and update SVN directories
-          rm -rf trunk/*
-          rm -rf tags/$VERSION
-          
-          # Copy assets
+          VERSION=${{ github.ref_name }}
+          rm -rf trunk/* tags/$VERSION
           rm -rf assets/*
           cp -r ../assets/* assets/
           svn add assets/* --force
-          
-          # Copy files to trunk
           cp -r ../includes trunk/
           cp -r ../languages trunk/
           cp -r ../templates trunk/
@@ -81,26 +72,16 @@ jobs:
           cp ../README.md trunk/
           cp ../readme.txt trunk/
           cp ../uninstall.php trunk/
-          
-          # Add new files to SVN
           svn add trunk/* --force
-          
-          # Create new version tag
           mkdir -p tags/$VERSION
           cp -r trunk/* tags/$VERSION/
           svn add tags/$VERSION --force
-          
-          # Remove deleted files
           svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@
 
-      # Commit to SVN
-      - name: Commit to WordPress.org SVN
+      - name: Commit to SVN
         working-directory: svn
         run: |
-          # Get version from tag
-          VERSION=${GITHUB_REF#refs/tags/}
-          
-          # Commit changes
+          VERSION=${{ github.ref_name }}
           svn commit -m "Release version $VERSION" \
             --username ${{ secrets.SVN_USERNAME }} \
             --password ${{ secrets.SVN_PASSWORD }}
@@ -109,4 +90,4 @@ jobs:
         if: success()
         run: |
           echo "Plugin successfully deployed to WordPress.org and GitHub!"
-          echo "Version ${GITHUB_REF#refs/tags/} is now live!"
+          echo "Version ${{ github.ref_name }} is now live!"

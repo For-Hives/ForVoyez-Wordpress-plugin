@@ -1,0 +1,74 @@
+name: Version Bump
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '.github/workflows/**'
+
+jobs:
+  version-bump:
+    name: Create New Version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      # Get current version from package.json
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Read current version
+        id: version
+        run: |
+          CURRENT_VERSION=$(grep -Po '"version": "\K[^"]*' package.json)
+          echo "current_version=${CURRENT_VERSION}" >> $GITHUB_OUTPUT
+
+      # Increment patch version
+      - name: Increment version
+        id: bump_version
+        run: |
+          # Split version into parts
+          IFS='.' read -r -a version_parts <<< "${{ steps.version.outputs.current_version }}"
+          
+          # Increment patch version
+          new_patch=$((version_parts[2] + 1))
+          NEW_VERSION="${version_parts[0]}.${version_parts[1]}.$new_patch"
+          
+          echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
+
+      # Update version in files
+      - name: Update version numbers
+        run: |
+          NEW_VERSION="${{ steps.bump_version.outputs.new_version }}"
+          
+          # Update package.json
+          sed -i "s/\"version\": \".*\"/\"version\": \"$NEW_VERSION\"/" package.json
+          
+          # Update plugin file
+          sed -i "s/Version:     .*/Version:     $NEW_VERSION/" auto-alt-text-for-images.php
+          sed -i "s/define( 'FORVOYEZ_VERSION', '.*' );/define( 'FORVOYEZ_VERSION', '$NEW_VERSION' );/" auto-alt-text-for-images.php
+          
+          # Update readme.txt
+          sed -i "s/Stable tag: .*/Stable tag: $NEW_VERSION/" readme.txt
+
+      # Commit and tag
+      - name: Commit and tag new version
+        run: |
+          NEW_VERSION="${{ steps.bump_version.outputs.new_version }}"
+          
+          # Configure git
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          
+          # Commit changes
+          git add package.json auto-alt-text-for-images.php readme.txt
+          git commit -m "Release version $NEW_VERSION [skip ci]"
+          
+          # Create and push tag
+          git tag $NEW_VERSION
+          
+          # Push changes and tag
+          git push origin main --tags
