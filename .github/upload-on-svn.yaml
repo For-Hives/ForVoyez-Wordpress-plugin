@@ -1,0 +1,96 @@
+name: Deploy WordPress Plugin
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy Plugin
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer
+
+      - name: Install dependencies
+        run: |
+          composer install --no-dev --optimize-autoloader
+          npm ci
+
+      # Generate POT file for translations
+      - name: Generate POT file
+        run: composer run make-pot
+
+      # Create distributable ZIP file
+      - name: Create ZIP archive
+        run: composer run zip
+
+      # Create GitHub Release
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: release/auto-alt-text-for-images.zip
+          body_path: CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Checkout SVN repository
+      - name: Checkout SVN repository
+        uses: actions/checkout@v4
+        with:
+          repository: wordpress/plugin-svn-repo
+          path: svn
+          token: ${{ secrets.SVN_PASSWORD }}
+
+      # Prepare SVN
+      - name: Prepare SVN
+        working-directory: svn
+        run: |
+          # Extract version from tag (remove 'v' prefix)
+          VERSION=${GITHUB_REF#refs/tags/v}
+          
+          # Copy assets
+          cp -r ../assets/* assets/
+          
+          # Copy files to trunk
+          rm -rf trunk/*
+          cp -r ../includes trunk/
+          cp -r ../languages trunk/
+          cp -r ../templates trunk/
+          cp ../auto-alt-text-for-images.php trunk/
+          cp ../README.md trunk/
+          cp ../readme.txt trunk/
+          cp ../uninstall.php trunk/
+          
+          # Create new version tag
+          svn cp trunk tags/$VERSION
+          
+          # Add all changes
+          svn add --force .
+          svn status
+
+      # Commit to SVN
+      - name: Commit to SVN
+        working-directory: svn
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          svn commit -m "Release version $VERSION" \
+            --username ${{ secrets.SVN_USERNAME }} \
+            --password ${{ secrets.SVN_PASSWORD }}
+
+      - name: Notify on success
+        if: success()
+        run: |
+          echo "Plugin successfully deployed to WordPress.org and GitHub!"
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "Version $VERSION is now live!"
