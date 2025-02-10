@@ -84,21 +84,34 @@ jobs:
         working-directory: svn
         run: |
           VERSION=${{ steps.get_version.outputs.version }}
+          # Clean directories
           rm -rf trunk/* tags/$VERSION
           rm -rf assets/*
-          cp -r ../assets/* assets/
+
+          # Copy assets to both SVN assets and trunk
+          cp -r ../assets assets/
+          cp -r ../assets trunk/
           svn add assets/* --force
+
+          # Copy other plugin files
           cp -r ../includes trunk/
           cp -r ../languages trunk/
           cp -r ../templates trunk/
+          cp -r ../assets trunk/
           cp ../auto-alt-text-for-images.php trunk/
           cp ../README.md trunk/
           cp ../readme.txt trunk/
           cp ../uninstall.php trunk/
+
+          # Add all files to SVN
           svn add trunk/* --force
+
+          # Create and populate version tag
           mkdir -p tags/$VERSION
           cp -r trunk/* tags/$VERSION/
           svn add tags/$VERSION --force
+
+          # Remove any deleted files
           svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@
 
       - name: Commit to SVN

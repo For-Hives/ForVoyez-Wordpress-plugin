@@ -73,17 +73,11 @@ The AI can generate content in multiple languages. You can specify your preferre
 
 == Changelog ==
 
-= 1.0.0 =
-* Initial release
-* AI-powered generation of alt text, titles, and captions
-* Bulk processing feature
-* Integration with WordPress media library
-* Multi-language support
-* User-friendly admin interface
+= 1.1.23 =
+Fixes some bugs, issues, improve capabilities and performance.
 
 = 1.1.5 =
 This update includes bug fixes and performance improvements to enhance the plugin's functionality. Upgrade now for a better user experience!
-[testing] 7
 
 = 1.1.4 =
 updated the workflow of the plugin to make it more user-friendly and efficient. Upgrade now for a better user experience!
@@ -118,6 +112,12 @@ To use these new features, please visit the plugin settings page after upgrading
 
 = 1.0.0 =
 This is the first release of ForVoyez Auto Alt Text for Images. Install now to start optimizing your image metadata!
+* Initial release
+* AI-powered generation of alt text, titles, and captions
+* Bulk processing feature
+* Integration with WordPress media library
+* Multi-language support
+* User-friendly admin interface
 
 == Additional Information ==
 
