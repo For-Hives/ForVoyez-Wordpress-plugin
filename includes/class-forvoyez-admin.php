@@ -7,29 +7,50 @@
 defined( 'ABSPATH' ) || exit( 'Direct access to this file is not allowed.' );
 
 class Forvoyez_Admin {
-    use Forvoyez_Ajax_Verify;
 
-    private $api_manager;
-    private $settings;
-    private $image_processor;
+	/**
+	 * @var Forvoyez_API_Manager
+	 */
+	private $api_manager;
 
-    public function __construct(Forvoyez_API_Manager $api_manager, Forvoyez_Settings $settings, Forvoyez_Image_Processor $image_processor) {
-        $this->api_manager = $api_manager;
-        $this->settings = $settings;
-        $this->image_processor = $image_processor;
-    }
+	/**
+	 * Constructor.
+	 *
+	 * @param Forvoyez_API_Manager $api_manager API manager instance.
+	 */
+	public function __construct( Forvoyez_API_Manager $api_manager ) {
+		$this->api_manager = $api_manager;
+	}
 
 	/**
 	 * Initialize admin hooks.
 	 */
-    public function init() {
-        add_action('admin_menu', array($this, 'add_menu_item'));
-        add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
-        add_action('wp_ajax_forvoyez_load_images', array($this, 'ajax_load_images'));
-        add_action('wp_ajax_forvoyez_get_image_counts', array($this, 'ajax_get_image_counts'));
-        add_action('wp_ajax_forvoyez_get_image_ids', array($this, 'ajax_get_image_ids'));
-        add_action('wp_ajax_forvoyez_verify_api_key', array($this, 'ajax_verify_api_key'));
-    }
+	public function init() {
+		add_action( 'admin_menu', array( $this, 'add_menu_item' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
+		add_action( 'wp_ajax_forvoyez_load_images', array( $this, 'ajax_load_images' ) );
+		add_action(
+			'wp_ajax_forvoyez_get_image_counts',
+			array(
+				$this,
+				'ajax_get_image_counts',
+			)
+		);
+		add_action(
+			'wp_ajax_forvoyez_get_image_ids',
+			array(
+				$this,
+				'ajax_get_image_ids',
+			)
+		);
+		add_action(
+			'wp_ajax_forvoyez_verify_api_key',
+			array(
+				$this,
+				'ajax_verify_api_key',
+			)
+		);
+	}
 
 	/**
 	 * Add menu item to WordPress admin.
@@ -64,29 +85,76 @@ class Forvoyez_Admin {
 	 * @param string $hook Current admin page hook.
 	 */
 	public function enqueue_admin_scripts( $hook ) {
-		if ( 'toplevel_page_auto-alt-text-for-images' !== $hook ) {
-			return;
-		}
+		if ('toplevel_page_auto-alt-text-for-images' !== $hook) {
+            return;
+        }
 
-		// Enqueue CSS and JS files...
-		wp_enqueue_script( 'tailwindcss', 'https://cdn.tailwindcss.com', array(), FORVOYEZ_VERSION, false );
-		wp_enqueue_script( 'forvoyez-tailwind-config', FORVOYEZ_PLUGIN_URL . 'assets/js/tailwind-config.js', array( 'tailwindcss' ), FORVOYEZ_VERSION, false );
-		wp_enqueue_style( 'forvoyez-tailwind-utilities', FORVOYEZ_PLUGIN_URL . 'assets/css/tailwind-utilities.css', array(), FORVOYEZ_VERSION );
-		wp_enqueue_script( 'forvoyez-admin-script', FORVOYEZ_PLUGIN_URL . 'assets/js/admin-script.js', array( 'jquery' ), FORVOYEZ_VERSION, true );
-		wp_enqueue_script( 'forvoyez-api-settings', FORVOYEZ_PLUGIN_URL . 'assets/js/api-settings.js', array( 'jquery' ), FORVOYEZ_VERSION, true );
+		// Enqueue Tailwind CSS from CDN
+		wp_enqueue_script(
+			'tailwindcss',
+			'https://cdn.tailwindcss.com',
+			array(),
+			FORVOYEZ_VERSION,
+			false,
+		);
 
-		// Localize script with a single nonce
-		wp_localize_script( 'forvoyez-admin-script', 'forvoyezData', array(
-			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'nonce'   => wp_create_nonce( 'forvoyez_verify_ajax_request_nonce' )
-		) );
+		// Enqueue custom Tailwind config
+		wp_enqueue_script(
+			'forvoyez-tailwind-config',
+			FORVOYEZ_PLUGIN_URL . 'assets/js/tailwind-config.js',
+			array( 'tailwindcss' ),
+			FORVOYEZ_VERSION,
+			false,
+		);
+
+		// Enqueue custom Tailwind utilities
+		wp_enqueue_style(
+			'forvoyez-tailwind-utilities',
+			FORVOYEZ_PLUGIN_URL . 'assets/css/tailwind-utilities.css',
+			array(),
+			FORVOYEZ_VERSION,
+		);
+
+		// Enqueue custom scripts
+		wp_enqueue_script(
+			'forvoyez-admin-script',
+			FORVOYEZ_PLUGIN_URL . 'assets/js/admin-script.js',
+			array( 'jquery' ),
+			FORVOYEZ_VERSION,
+			true,
+		);
+		wp_enqueue_script(
+			'forvoyez-api-settings',
+			FORVOYEZ_PLUGIN_URL . 'assets/js/api-settings.js',
+			array( 'jquery' ),
+			FORVOYEZ_VERSION,
+			true,
+		);
+
+		// Localize script
+		 wp_localize_script('forvoyez-admin-script', 'forvoyezData', array(
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('forvoyez_nonce'),
+            'saveApiKeyNonce' => wp_create_nonce('forvoyez_save_api_key_nonce'),
+            'loadImagesNonce' => wp_create_nonce('forvoyez_load_images_nonce'),
+            'getImageCountsNonce' => wp_create_nonce('forvoyez_get_image_counts_nonce'),
+            'getImageIdsNonce' => wp_create_nonce('forvoyez_get_image_ids_nonce'),
+            'verifyApiKeyNonce' => wp_create_nonce('forvoyez_verify_api_key_nonce'),
+            'loadMoreImagesNonce' => wp_create_nonce('forvoyez_load_more_images_nonce'),
+            'verifyAjaxRequestNonce' => wp_create_nonce('forvoyez_verify_ajax_request_nonce'),
+            'analyseImageNonce' => wp_create_nonce('forvoyez_analyse_image_nonce'),
+            'processImageBatchNonce' => wp_create_nonce('forvoyez_process_image_batch_nonce'),
+            'saveContextNonce' => wp_create_nonce('forvoyez_save_context_nonce'),
+            'saveLanguageNonce' => wp_create_nonce('forvoyez_save_language_nonce'),
+            'toggleAutoAnalyzeNonce' => wp_create_nonce('forvoyez_toggle_auto_analyze_nonce'),
+        ));
 	}
 
 	/**
 	 * Render the admin page.
 	 */
 	public function render_admin_page() {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( !current_user_can( 'manage_options' ) ) {
 			wp_die(
 				esc_html__(
 					'You do not have sufficient permissions to access this page.',
@@ -113,11 +181,11 @@ class Forvoyez_Admin {
 		$api_key = forvoyez_get_api_key();
 		if ( empty( $api_key ) ) {
 			echo '<p class="text-red-600 font-semibold">' .
-			     esc_html__(
-				     'Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation.',
-				     'auto-alt-text-for-images',
-			     ) .
-			     '</p>';
+				esc_html__(
+					'Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation.',
+					'auto-alt-text-for-images',
+				) .
+				'</p>';
 		}
 	}
 
@@ -127,7 +195,6 @@ class Forvoyez_Admin {
 	 * @param int $paged Current page number.
 	 * @param int $per_page Number of items per page.
 	 * @param array $filters Applied filters.
-	 *
 	 * @return array HTML content and number of displayed images.
 	 */
 	public function display_incomplete_images(
@@ -158,7 +225,6 @@ class Forvoyez_Admin {
 	 * @param int $paged Current page number.
 	 * @param int $per_page Number of items per page.
 	 * @param array $filters Applied filters.
-	 *
 	 * @return array Query arguments.
 	 */
 	private function get_query_args( $paged, $per_page, $filters ) {
@@ -170,7 +236,7 @@ class Forvoyez_Admin {
 			'paged'          => $paged,
 		);
 
-		if ( ! empty( $filters ) ) {
+		if ( !empty( $filters ) ) {
 			$args['meta_query'] = $this->build_meta_query( $filters );
 		}
 
@@ -181,7 +247,6 @@ class Forvoyez_Admin {
 	 * Build meta query based on filters.
 	 *
 	 * @param array $filters Applied filters.
-	 *
 	 * @return array Meta query.
 	 */
 	private function build_meta_query( $filters ) {
@@ -228,7 +293,7 @@ class Forvoyez_Admin {
 		);
 		?>
         ">
-			<?php
+            <?php
 			if ( $query_images->have_posts() ) {
 				while ( $query_images->have_posts() ) {
 					$query_images->the_post();
@@ -238,26 +303,25 @@ class Forvoyez_Admin {
 				}
 			} else {
 				echo '<p class="col-span-full text-center text-gray-500">' .
-				     esc_html__(
-					     'No images found matching the selected criteria.',
-					     'auto-alt-text-for-images',
-				     ) .
-				     '</p>';
+					esc_html__(
+						'No images found matching the selected criteria.',
+						'auto-alt-text-for-images',
+					) .
+					'</p>';
 			}
-			?>
+		?>
         </div>
-		<?php
+        <?php
 	}
 
 	/**
 	 * Count total images based on filters.
 	 *
 	 * @param array $filters Applied filters.
-	 *
 	 * @return int Total number of images.
 	 */
 	private function count_total_images( $filters ) {
-		$args           = $this->get_query_args( 1, - 1, $filters );
+		$args           = $this->get_query_args( 1, -1, $filters );
 		$args['fields'] = 'ids'; // Only get post IDs for efficiency
 		$query          = new WP_Query( $args );
 
@@ -278,7 +342,7 @@ class Forvoyez_Admin {
 	 */
 	private function get_processed_images_count() {
 		return $this->get_total_images_count() -
-		       $this->count_images_with_missing_data( array( 'alt' ) );
+			$this->count_images_with_missing_data( array( 'alt' ) );
 	}
 
 	/**
@@ -299,7 +363,6 @@ class Forvoyez_Admin {
 	 * Parse and sanitize filters.
 	 *
 	 * @param array $filters Raw filters array.
-	 *
 	 * @return array Sanitized filters.
 	 */
 	protected function parse_and_sanitize_filters( $raw_filters ) {
@@ -322,35 +385,44 @@ class Forvoyez_Admin {
 	 * AJAX handler for loading images.
 	 */
 	public function ajax_load_images() {
-		if ( ! $this->verify_ajax_request() ) {
-			return;
+		check_ajax_referer( 'forvoyez_load_images_nonce', 'nonce' );
+		if ( !current_user_can( 'upload_files' ) ) {
+			wp_send_json_error(
+				esc_html__( 'Permission denied', 'auto-alt-text-for-images' ),
+				403,
+			);
 		}
 
-		$paged       = isset( $_POST['paged'] ) ? absint( wp_unslash( $_POST['paged'] ) ) : 1;
-		$per_page    = isset( $_POST['per_page'] ) ? absint( wp_unslash( $_POST['per_page'] ) ) : 25;
-		$raw_filters = isset( $_POST['filters'] ) ? wp_unslash( $_POST['filters'] ) : array();
+		$paged       = isset( $_POST['paged'] )
+			? absint( wp_unslash( $_POST['paged'] ) )
+			: 1;
+		$per_page    = isset( $_POST['per_page'] )
+			? absint( wp_unslash( $_POST['per_page'] ) )
+			: 25;
+		$raw_filters = isset( $_POST['filters'] )
+			? wp_unslash( $_POST['filters'] )
+			: array();
 		$filters     = $this->parse_and_sanitize_filters( $raw_filters );
 
-		$result          = $this->display_incomplete_images( $paged, $per_page, $filters );
-		$total_images    = $this->count_total_images( $filters );
-		$pagination_html = $this->display_pagination( $total_images, $paged, $per_page );
+		$result       = $this->display_incomplete_images( $paged, $per_page, $filters );
+		$total_images = $this->count_total_images( $filters );
 
-		wp_send_json_success( array(
-			'html'             => $result['html'],
-			'total_images'     => $total_images,
-			'displayed_images' => $result['displayed_images'],
-			'current_page'     => $paged,
-			'per_page'         => $per_page,
-			'pagination_html'  => $pagination_html,
-		) );
-	}
+		$pagination_html = $this->display_pagination(
+			$total_images,
+			$paged,
+			$per_page,
+		);
 
-	public function ajax_get_image_counts() {
-		if ( ! $this->verify_ajax_request() ) {
-			return;
-		}
-
-		wp_send_json_success( $this->get_image_counts() );
+		wp_send_json_success(
+			array(
+				'html'             => $result['html'],
+				'total_images'     => $total_images,
+				'displayed_images' => $result['displayed_images'],
+				'current_page'     => $paged,
+				'per_page'         => $per_page,
+				'pagination_html'  => $pagination_html,
+			)
+		);
 	}
 
 	/**
@@ -359,7 +431,6 @@ class Forvoyez_Admin {
 	 * @param int $total_images Total number of images.
 	 * @param int $current_page Current page number.
 	 * @param int $per_page Number of items per page.
-	 *
 	 * @return string Pagination HTML.
 	 */
 	private function display_pagination(
@@ -388,12 +459,12 @@ class Forvoyez_Admin {
 		$start_page = max( 1, $current_page - 2 );
 		$end_page   = min( $total_pages, $current_page + 2 );
 
-		for ( $i = $start_page; $i <= $end_page; $i ++ ) {
+		for ( $i = $start_page; $i <= $end_page; $i++ ) {
 			$active_class =
 				$i == $current_page
 					? 'bg-blue-500 text-white'
 					: 'bg-white text-blue-500 hover:bg-blue-100';
-			$pagination   .= $this->pagination_link( $i, $i, $active_class );
+			$pagination  .= $this->pagination_link( $i, $i, $active_class );
 		}
 
 		// Next page
@@ -415,7 +486,6 @@ class Forvoyez_Admin {
 	 * @param int $page Page number.
 	 * @param string $text Link text.
 	 * @param string $class Additional CSS classes.
-	 *
 	 * @return string Pagination link HTML.
 	 */
 	private function pagination_link(
@@ -458,7 +528,6 @@ class Forvoyez_Admin {
 	 * Count images with missing data.
 	 *
 	 * @param array $missing_fields Fields to check for missing data.
-	 *
 	 * @return int Number of images with missing data.
 	 */
 	private function count_images_with_missing_data( $missing_fields ) {
@@ -466,7 +535,7 @@ class Forvoyez_Admin {
 			'post_type'      => 'attachment',
 			'post_mime_type' => 'image',
 			'post_status'    => 'inherit',
-			'posts_per_page' => - 1,
+			'posts_per_page' => -1,
 			'fields'         => 'ids',
 			'meta_query'     => $this->build_meta_query( $missing_fields ),
 		);
@@ -477,10 +546,23 @@ class Forvoyez_Admin {
 	}
 
 	/**
+	 * AJAX handler for getting image counts.
+	 */
+	public function ajax_get_image_counts() {
+		check_ajax_referer( 'forvoyez_get_image_counts_nonce', 'nonce' );
+		if ( !current_user_can( 'upload_files' ) ) {
+			wp_send_json_error(
+				esc_html__( 'Permission denied', 'auto-alt-text-for-images' ),
+				403,
+			);
+		}
+		wp_send_json_success( $this->get_image_counts() );
+	}
+
+	/**
 	 * Get image IDs based on type.
 	 *
 	 * @param string $type Type of images to retrieve ('all', 'missing_all', 'missing_alt').
-	 *
 	 * @return array Array of image IDs.
 	 */
 	public function get_image_ids( $type = 'all' ) {
@@ -550,36 +632,50 @@ class Forvoyez_Admin {
 	 * AJAX handler for getting image IDs.
 	 */
 	public function ajax_get_image_ids() {
-		if ( ! $this->verify_ajax_request() ) {
-			return;
+		check_ajax_referer( 'forvoyez_get_image_ids_nonce', 'nonce' );
+
+		if ( !current_user_can( 'upload_files' ) ) {
+			wp_send_json_error(
+				esc_html__( 'Permission denied', 'auto-alt-text-for-images' ),
+				403,
+			);
 		}
 
 		$allowed_types = array( 'all', 'missing_all', 'missing_alt' );
-		$type          = isset( $_POST['type'] ) ? sanitize_text_field( wp_unslash( $_POST['type'] ) ) : 'all';
+		$type          = isset( $_POST['type'] )
+			? sanitize_text_field( wp_unslash( $_POST['type'] ) )
+			: 'all';
 		$type          = in_array( $type, $allowed_types, true ) ? $type : 'all';
 
 		$image_ids = $this->get_image_ids( $type );
 
-		wp_send_json_success( array(
-			'image_ids' => $image_ids,
-			'count'     => count( $image_ids )
-		) );
+		wp_send_json_success(
+			array(
+				'image_ids' => $image_ids,
+				'count'     => count( $image_ids ),
+			)
+		);
 	}
 
 	/**
 	 * AJAX handler for verifying API key.
 	 */
 	public function ajax_verify_api_key() {
-		if ( ! $this->verify_ajax_request() ) {
-			return;
+		check_ajax_referer( 'forvoyez_verify_api_key_nonce', 'nonce' );
+
+		if ( !current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				esc_html__( 'Permission denied', 'auto-alt-text-for-images' ),
+				403,
+			);
 		}
 
 		$result = $this->api_manager->verify_api_key();
 
 		if ( $result['success'] ) {
-			wp_send_json_success( array( 'message' => $result['message'] ) );
+			wp_send_json_success( $result['message'] );
 		} else {
-			wp_send_json_error( array( 'message' => $result['message'] ) );
+			wp_send_json_error( $result['message'] );
 		}
 	}
 }

@@ -11,21 +11,44 @@
 defined( 'ABSPATH' ) || exit( 'Direct access to this file is not allowed.' );
 
 class Forvoyez_API_Manager {
-    use Forvoyez_Ajax_Verify;
 
-    private $api_key;
-    private $api_url;
-    private $http_client;
-    private $context;
-    private $language;
+	/**
+	 * @var string The API key for ForVoyez service.
+	 */
+	private $api_key;
 
-    public function __construct( string $api_key, string $language, string $context, $http_client = null ) {
-        $this->api_key     = $api_key;
-        $this->api_url     = 'https://forvoyez.com/api/describe';
-        $this->http_client = $http_client ?: new WP_Http();
-        $this->context     = $context;
-        $this->language    = $language;
-    }
+	/**
+	 * @var string The URL of the ForVoyez API endpoint.
+	 */
+	private $api_url;
+
+	/**
+	 * @var WP_Http The HTTP client for making requests.
+	 */
+	private $http_client;
+
+	/**
+	 * @var string The context for image analysis.
+	 */
+	private $context;
+
+	/**
+	 * @var string The language for image analysis.
+	 */
+	private $language;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param string $api_key The API key for ForVoyez service.
+	 */
+	public function __construct( string $api_key, string $language, string $context, $http_client = null ) {
+		$this->api_key     = $api_key;
+		$this->api_url     = 'https://forvoyez.com/api/describe';
+		$this->http_client = $http_client ?: new WP_Http();
+		$this->context     = $context;
+		$this->language    = $language;
+	}
 
 	/**
 	 * Initialize the API manager.
@@ -33,29 +56,13 @@ class Forvoyez_API_Manager {
 	 * @return void
 	 */
 	public function init(): void {
-	    add_action( 'wp_ajax_forvoyez_verify_api_key', array( $this, 'ajax_verify_api_key' ) );
-	}
-
-	public function ajax_verify_api_key() {
-		if ( ! $this->verify_ajax_request() ) {
-			return;
-		}
-
-		$result = $this->verify_api_key();
-
-		if ( $result['success'] ) {
-			wp_send_json_success(
-				array(
-					'message' => $result['message'],
-				)
-			);
-		} else {
-			wp_send_json_error(
-				array(
-					'message' => $result['message'],
-				)
-			);
-		}
+		add_action(
+			'wp_ajax_forvoyez_verify_api_key',
+			array(
+				$this,
+				'verify_api_key',
+			)
+		);
 	}
 
 	/**
@@ -66,7 +73,10 @@ class Forvoyez_API_Manager {
 		if ( empty( $api_key ) ) {
 			return array(
 				'success' => false,
-				'message' => esc_html__( 'API key is not set', 'auto-alt-text-for-images' ),
+				'message' => esc_html__(
+					'API key is not set',
+					'auto-alt-text-for-images',
+				),
 			);
 		}
 
@@ -92,12 +102,17 @@ class Forvoyez_API_Manager {
 		if ( wp_remote_retrieve_response_code( $response ) === 200 ) {
 			return array(
 				'success' => true,
-				'message' => esc_html__( 'API key is valid', 'auto-alt-text-for-images' ),
+				'message' => esc_html__(
+					'API key is valid',
+					'auto-alt-text-for-images',
+				),
 			);
 		} else {
 			return array(
 				'success' => false,
-				'message' => $data['error'] ?? esc_html__( 'Invalid API key', 'auto-alt-text-for-images' ),
+				'message' =>
+					$data['error'] ??
+					esc_html__( 'Invalid API key', 'auto-alt-text-for-images' ),
 			);
 		}
 	}
@@ -114,10 +129,11 @@ class Forvoyez_API_Manager {
 		if ( ! $image_path ) {
 			return $this->format_error(
 				'image_not_found',
-				esc_html__( 'Image not found', 'auto-alt-text-for-images' )
+				esc_html__( 'Image not found', 'auto-alt-text-for-images' ),
 			);
 		}
 
+		$image_url  = wp_get_attachment_url( $image_id );
 		$image_mime = get_post_mime_type( $image_id );
 		$image_name = basename( $image_path );
 
@@ -125,13 +141,16 @@ class Forvoyez_API_Manager {
 		if ( $file_data === false ) {
 			return $this->format_error(
 				'read_error',
-				esc_html__( 'Failed to read image file', 'auto-alt-text-for-images' )
+				esc_html__(
+					'Failed to read image file',
+					'auto-alt-text-for-images',
+				),
 			);
 		}
 
 		$data = array(
-			'context'  => $this->context,
-			'language' => $this->language,
+            'context' => $this->context,
+            'language' => $this->language,
 		);
 
 		$boundary  = wp_generate_password( 24 );
@@ -142,7 +161,7 @@ class Forvoyez_API_Manager {
 			$data,
 			$image_name,
 			$image_mime,
-			$file_data
+			$file_data,
 		);
 
 		$args = array(
@@ -161,10 +180,12 @@ class Forvoyez_API_Manager {
 
 		$response = $this->http_client->post( $this->api_url, $args );
 
+//		error_log(print_r($response, true));
+
 		if ( is_wp_error( $response ) ) {
 			return $this->format_error(
 				'api_request_failed',
-				$response->get_error_message()
+				$response->get_error_message(),
 			);
 		}
 
@@ -174,12 +195,18 @@ class Forvoyez_API_Manager {
 		if ( json_last_error() !== JSON_ERROR_NONE ) {
 			return $this->format_error(
 				'json_decode_error',
-				esc_html__( 'Failed to decode API response', 'auto-alt-text-for-images' ),
+				esc_html__(
+					'Failed to decode API response',
+					'auto-alt-text-for-images',
+				),
 				array(
-					'response_code' => wp_remote_retrieve_response_code( $response ),
+					'response_code' => wp_remote_retrieve_response_code(
+						$response,
+					),
 					'body'          => substr( $body, 0, 1000 ),
+					'image_url'     => $image_url,
 					'api_url'       => $this->api_url,
-				)
+				),
 			);
 		}
 
@@ -193,11 +220,17 @@ class Forvoyez_API_Manager {
 			'caption'  => $data['caption'] ?? '',
 		);
 
+//		error_log(print_r($metadata, true));
+//		error_log(print_r($data, true));
+
 		$this->update_image_metadata( $image_id, $metadata );
 
 		return array(
 			'success'  => true,
-			'message'  => esc_html__( 'Analysis successful', 'auto-alt-text-for-images' ),
+			'message'  => esc_html__(
+				'Analysis successful',
+				'auto-alt-text-for-images',
+			),
 			'metadata' => $metadata,
 		);
 	}
@@ -210,8 +243,15 @@ class Forvoyez_API_Manager {
 	 *
 	 * @return void
 	 */
-	private function update_image_metadata( int $image_id, array $metadata ): void {
-		update_post_meta( $image_id, '_wp_attachment_image_alt', $metadata['alt_text'] );
+	private function update_image_metadata(
+		int $image_id,
+		array $metadata,
+	): void {
+		update_post_meta(
+			$image_id,
+			'_wp_attachment_image_alt',
+			$metadata['alt_text'],
+		);
 		wp_update_post(
 			array(
 				'ID'           => $image_id,
@@ -231,7 +271,11 @@ class Forvoyez_API_Manager {
 	 *
 	 * @return array The formatted error.
 	 */
-	private function format_error( string $code, string $message, ?array $debug_info = null ): array {
+	private function format_error(
+		string $code,
+		string $message,
+		?array $debug_info = null,
+	): array {
 		$error = array(
 			'success' => false,
 			'error'   => array(
@@ -263,7 +307,7 @@ class Forvoyez_API_Manager {
 		array $fields,
 		string $file_name,
 		string $file_mime,
-		string $file_data
+		string $file_data,
 	): string {
 		$data      = '';
 		$delimiter = '-------------' . $boundary;

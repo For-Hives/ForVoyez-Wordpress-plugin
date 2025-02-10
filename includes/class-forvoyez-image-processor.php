@@ -3,56 +3,74 @@
  * Class Forvoyez_Image_Processor
  *
  * Handles image processing and metadata management for the Forvoyez plugin.
+ *
+ * @package ForVoyez
+ * @since 1.0.0
  */
 
-defined('ABSPATH') || exit('Direct access to this file is not allowed.');
+defined( 'ABSPATH' ) || exit( 'Direct access to this file is not allowed.' );
 
 class Forvoyez_Image_Processor {
-    use Forvoyez_Ajax_Verify;
 
-    private $api_client;
+	private $api_client;
 
-    public function __construct() {
-        $api_key = forvoyez_get_api_key();
-        $language = forvoyez_get_language();
-        $context = forvoyez_get_context();
-        $this->api_client = new Forvoyez_API_Manager($api_key, $language, $context);
-    }
+	public function __construct() {
+		$api_key          = forvoyez_get_api_key();
+		$language         = forvoyez_get_language();
+		$context          = forvoyez_get_context();
+		$this->api_client = new Forvoyez_API_Manager( $api_key, $language, $context );
+	}
 
-    public function init() {
-        add_action('wp_ajax_forvoyez_analyze_image', array($this, 'ajax_analyze_image'));
-        add_action('wp_ajax_forvoyez_update_image_metadata', array($this, 'update_image_metadata'));
-        add_action('wp_ajax_forvoyez_load_more_images', array($this, 'load_more_images'));
-        add_action('wp_ajax_forvoyez_bulk_analyze_images', array($this, 'bulk_analyze_images'));
-        add_action('wp_ajax_forvoyez_analyze_single_image', array($this, 'analyze_single_image'));
-        add_action('wp_ajax_forvoyez_process_image_batch', array($this, 'process_image_batch'));
+	public function init() {
+		add_action(
+			'wp_ajax_forvoyez_analyze_image',
+			array(
+				$this,
+				'ajax_analyze_image',
+			)
+		);
+		add_action(
+			'wp_ajax_forvoyez_update_image_metadata',
+			array(
+				$this,
+				'update_image_metadata',
+			)
+		);
+		add_action(
+			'wp_ajax_forvoyez_load_more_images',
+			array(
+				$this,
+				'load_more_images',
+			)
+		);
+		add_action(
+			'wp_ajax_forvoyez_bulk_analyze_images',
+			array(
+				$this,
+				'bulk_analyze_images',
+			)
+		);
+		add_action(
+			'wp_ajax_forvoyez_analyze_single_image',
+			array(
+				$this,
+				'analyze_single_image',
+			)
+		);
+		add_action(
+			'wp_ajax_forvoyez_process_image_batch',
+			array(
+				$this,
+				'process_image_batch',
+			)
+		);
 
-        // Hook into the WordPress upload process
-        add_action('add_attachment', array($this, 'schedule_image_analysis'));
-        add_action('forvoyez_analyze_single_image', array($this, 'cron_analyze_single_image'));
-    }
+		// Hook into the WordPress upload process
+	    add_action('add_attachment', array($this, 'schedule_image_analysis'));
 
-	public function update_image_metadata() {
-        if (!$this->verify_ajax_request()) {
-            return;
-        }
-
-        $image_id = isset($_POST['image_id']) ? absint(wp_unslash($_POST['image_id'])) : 0;
-        $raw_metadata = isset($_POST['metadata']) ? wp_unslash($_POST['metadata']) : array();
-        $metadata = $this->sanitize_and_validate_metadata($raw_metadata);
-
-        if (!$image_id || empty($metadata)) {
-            wp_send_json_error(array(
-                'message' => esc_html__('Invalid data', 'auto-alt-text-for-images')
-            ));
-        }
-
-        $this->update_image_meta($image_id, $metadata);
-
-        wp_send_json_success(array(
-            'message' => esc_html__('Metadata updated successfully', 'auto-alt-text-for-images')
-        ));
-    }
+	    // Add custom cron action
+	    add_action('forvoyez_analyze_single_image', array($this, 'cron_analyze_single_image'));
+	}
 
 	private function sanitize_and_validate_metadata( $raw_metadata ) {
 		$sanitized_metadata = array();
@@ -70,6 +88,33 @@ class Forvoyez_Image_Processor {
 		}
 
 		return $sanitized_metadata;
+	}
+
+	public function update_image_metadata() {
+		$this->verify_ajax_request( 'forvoyez_update_image_metadata' );
+
+		$image_id     = isset( $_POST['image_id'] )
+			? absint( wp_unslash( $_POST['image_id'] ) )
+			: 0;
+		$raw_metadata = isset( $_POST['metadata'] )
+			? wp_unslash( $_POST['metadata'] )
+			: array();
+		$metadata     = $this->sanitize_and_validate_metadata( $raw_metadata );
+
+		if ( !$image_id || empty( $metadata ) ) {
+			wp_send_json_error(
+				esc_html__( 'Invalid data', 'auto-alt-text-for-images' ),
+			);
+		}
+
+		$this->update_image_meta( $image_id, $metadata );
+
+		wp_send_json_success(
+			esc_html__(
+				'Metadata updated successfully',
+				'auto-alt-text-for-images',
+			),
+		);
 	}
 
 	private function update_image_meta( $image_id, $metadata ) {
@@ -98,64 +143,83 @@ class Forvoyez_Image_Processor {
 	}
 
 	public function ajax_analyze_image() {
-        if (!$this->verify_ajax_request()) {
-            return;
-        }
+		if ( !current_user_can( 'upload_files' ) ) {
+			wp_send_json_error( 'Permission denied (cant upload)', 403 );
+			return;
+		}
 
-        $image_id = isset($_POST['image_id']) ? absint(wp_unslash($_POST['image_id'])) : 0;
+		$this->verify_ajax_request( 'forvoyez_verify_ajax_request_nonce' );
 
-        if (!$image_id || !wp_attachment_is_image($image_id)) {
-            wp_send_json_error(array(
-                'message' => esc_html__('Invalid image ID', 'auto-alt-text-for-images')
-            ));
-        }
+		$image_id = isset( $_POST['image_id'] )
+			? absint( wp_unslash( $_POST['image_id'] ) )
+			: 0;
 
-        $result = $this->api_client->analyze_image($image_id);
+		if ( !$image_id || !wp_attachment_is_image( $image_id ) ) {
+			wp_send_json_error(
+				esc_html__( 'Invalid image ID', 'auto-alt-text-for-images' ),
+			);
+		}
 
-        if ($result['success']) {
-            wp_send_json_success(array(
-                'message' => esc_html__('Analysis successful', 'auto-alt-text-for-images'),
-                'metadata' => $result['metadata']
-            ));
-        } else {
-            wp_send_json_error(array(
-                'message' => $result['error']['message'],
-                'code' => $result['error']['code'] ?? 'unknown_error'
-            ));
-        }
-    }
+		$result = $this->api_client->analyze_image( $image_id );
+
+		if ( $result['success'] ) {
+			wp_send_json_success(
+				array(
+					'message'  => esc_html__(
+						'Analysis successful',
+						'auto-alt-text-for-images',
+					),
+					'metadata' => $result['metadata'],
+				)
+			);
+		} else {
+			wp_send_json_error(
+				array(
+					'message' => $result['error']['message'],
+					'code'    => $result['success']
+						? null
+						: $result['error']['code'] ??
+							esc_html__(
+								'unknown_error',
+								'auto-alt-text-for-images',
+							),
+				)
+			);
+		}
+	}
 
 	public function load_more_images() {
-        if (!$this->verify_ajax_request()) {
-            return;
-        }
+		check_ajax_referer( 'forvoyez_load_more_images_nonce', 'nonce' );
 
-        $page = isset($_POST['paged']) ? intval($_POST['paged']) : 1;
-        $per_page = isset($_POST['per_page']) ? intval($_POST['per_page']) : 21;
+		$page     = isset( $_POST['paged'] ) ? intval( $_POST['paged'] ) : 1;
+		$per_page = isset( $_POST['per_page'] ) ? intval( $_POST['per_page'] ) : 21;
 
-        if ($per_page > 1000) {
-            $per_page = -1;
-        }
+		// If per_page is very large (e.g., 999999), consider it as "All"
+		if ( $per_page > 1000 ) {
+			$per_page = -1; // This will get all images in WordPress
+		}
 
-        $images = $this->get_incomplete_images(0, $per_page);
+		$images = $this->get_incomplete_images( 0, $per_page );
 
-        ob_start();
-        foreach ($images as $image) {
-            Forvoyez_Image_Renderer::render_image_item($image);
-        }
-        $html = ob_get_clean();
+		ob_start();
+		foreach ( $images as $image ) {
+			Forvoyez_Image_Renderer::render_image_item( $image );
+		}
+		$html = ob_get_clean();
 
-        $total_images = forvoyez_count_incomplete_images();
+		$total_images = forvoyez_count_incomplete_images();
 
-        wp_send_json_success(array(
-            'html' => $html,
-            'count' => count($images),
-            'total' => $total_images,
-            'displayed_images' => count($images),
-            'total_images' => $total_images,
-            'current_page' => $page
-        ));
-    }
+		wp_send_json_success(
+			array(
+				'html'             => $html,
+				'count'            => count( $images ),
+				'total'            => $total_images,
+				'displayed_images' => count( $images ),
+				'total_images'     => $total_images,
+				'current_page'     => $page,
+			)
+		);
+	}
 
 	private function get_incomplete_images( $offset, $limit ) {
 		$args = array(
@@ -199,59 +263,69 @@ class Forvoyez_Image_Processor {
 	}
 
 	public function bulk_analyze_images() {
-        if (!$this->verify_ajax_request()) {
-            return;
-        }
+		$this->verify_ajax_request( 'forvoyez_bulk_analyze_images' );
 
-        $image_ids = isset($_POST['image_ids']) ? array_map('absint', wp_unslash($_POST['image_ids'])) : array();
-        $image_ids = array_filter($image_ids, 'wp_attachment_is_image');
+		$image_ids = isset( $_POST['image_ids'] )
+			? array_map( 'absint', wp_unslash( $_POST['image_ids'] ) )
+			: array();
+		$image_ids = array_filter( $image_ids, 'wp_attachment_is_image' );
 
-        if (empty($image_ids)) {
-            wp_send_json_error(array(
-                'message' => esc_html__('No valid images selected', 'auto-alt-text-for-images')
-            ));
-        }
+		if ( empty( $image_ids ) ) {
+			wp_send_json_error(
+				esc_html__(
+					'No valid images selected',
+					'auto-alt-text-for-images',
+				),
+			);
+		}
 
-        wp_send_json_success(array(
-            'message' => esc_html__('Processing started', 'auto-alt-text-for-images'),
-            'total' => count($image_ids),
-            'image_ids' => $image_ids
-        ));
-    }
+		wp_send_json_success(
+			array(
+				'message'   => esc_html__(
+					'Processing started',
+					'auto-alt-text-for-images',
+				),
+				'total'     => count( $image_ids ),
+				'image_ids' => $image_ids,
+			)
+		);
+	}
 
 	public function analyze_single_image() {
-        if (!$this->verify_ajax_request()) {
-            return;
-        }
+		$this->verify_ajax_request( 'forvoyez_analyze_single_image' );
 
-        $image_id = isset($_POST['image_id']) ? absint(wp_unslash($_POST['image_id'])) : 0;
+		$image_id = isset( $_POST['image_id'] )
+			? absint( wp_unslash( $_POST['image_id'] ) )
+			: 0;
 
-        if (!$image_id) {
-            wp_send_json_error(array(
-                'message' => esc_html__('Invalid image ID', 'auto-alt-text-for-images')
-            ));
-        }
+		if ( !$image_id ) {
+			wp_send_json_error(
+				esc_html__( 'Invalid image ID', 'auto-alt-text-for-images' ),
+			);
+		}
 
-        $result = $this->api_client->analyze_image($image_id);
-        wp_send_json_success($result);
-    }
+		$result = $this->api_client->analyze_image( $image_id );
+
+		wp_send_json_success( $result );
+	}
 
 	public function process_image_batch() {
-        if (!$this->verify_ajax_request()) {
-            return;
-        }
+		$this->verify_ajax_request( 'forvoyez_verify_ajax_request_nonce' );
 
-        $image_ids = isset($_POST['image_ids']) ? array_map('absint', wp_unslash($_POST['image_ids'])) : array();
+		$image_ids = isset( $_POST['image_ids'] )
+			? array_map( 'absint', wp_unslash( $_POST['image_ids'] ) )
+			: array();
 
-        if (empty($image_ids)) {
-            wp_send_json_error(array(
-                'message' => esc_html__('No images provided', 'auto-alt-text-for-images')
-            ));
-        }
+		if ( empty( $image_ids ) ) {
+			wp_send_json_error(
+				esc_html__( 'No images provided', 'auto-alt-text-for-images' ),
+			);
+		}
 
-        $results = $this->process_images($image_ids);
-        wp_send_json_success(array('results' => $results));
-    }
+		$results = $this->process_images( $image_ids );
+
+		wp_send_json_success( array( 'results' => $results ) );
+	}
 
 	private function process_images( $image_ids ) {
 		$results = array();
@@ -276,6 +350,24 @@ class Forvoyez_Image_Processor {
 
 		return $results;
 	}
+
+	/**
+	 * Verify AJAX request.
+	 *
+     * @param string $action The action name.
+	 * @throws WP_Error If the request is invalid or user doesn't have permission.
+	 */
+	private function verify_ajax_request( $action ) {
+        if ( !check_ajax_referer( $action, 'nonce', false ) ) {
+            wp_send_json_error( 'Invalid nonce' );
+            exit;
+        }
+
+        if ( !current_user_can( 'upload_files' ) ) {
+            wp_send_json_error( 'Permission denied' );
+            exit;
+        }
+    }
 
     /**
      * Analyze image on upload.
@@ -303,17 +395,19 @@ class Forvoyez_Image_Processor {
 	 * @param int $attachment_id The ID of the uploaded attachment.
 	 */
 	public function schedule_image_analysis($attachment_id) {
-        if (!get_option('forvoyez_auto_analyze_enabled', false)) {
-            return;
-        }
+	    // Check if automatic analysis is enabled
+	    if (!get_option('forvoyez_auto_analyze_enabled', false)) {
+	        return;
+	    }
 
-        if (!wp_attachment_is_image($attachment_id)) {
-            return;
-        }
+	    // Check if the uploaded file is an image
+	    if (!wp_attachment_is_image($attachment_id)) {
+	        return;
+	    }
 
-        wp_schedule_single_event(time() + 10, 'forvoyez_analyze_single_image', array($attachment_id));
-    }
-
+	    // Schedule the analysis to run after a short delay
+	    wp_schedule_single_event(time() + 10, 'forvoyez_analyze_single_image', array($attachment_id));
+	}
 
 	/**
 	 * Analyze a single image (for cron job).
@@ -321,10 +415,12 @@ class Forvoyez_Image_Processor {
 	 * @param int $attachment_id The ID of the image to analyze.
 	 */
 	public function cron_analyze_single_image($attachment_id) {
-        $result = $this->api_client->analyze_image($attachment_id);
+	    // Analyze the image using the ForVoyez API
+	    $result = $this->api_client->analyze_image($attachment_id);
 
-        if ($result['success']) {
-            $this->update_image_meta($attachment_id, $result['metadata']);
-        }
-    }
+	    if ($result['success']) {
+	        // Update the image metadata with the analysis results
+	        $this->update_image_meta($attachment_id, $result['metadata']);
+	    }
+	}
 }
