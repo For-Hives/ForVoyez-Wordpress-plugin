@@ -227,7 +227,7 @@ printf(
                 <label for="forvoyez-auto-analyze" class="flex items-center cursor-pointer">
                     <div class="relative">
                         <?php $auto_analyze_enabled = get_option('forvoyez_auto_analyze_enabled', false); ?>
-                        <input type="checkbox" id="forvoyez-auto-analyze" class="sr-only" <?php checked($auto_analyze_enabled); ?> data-enabled="<?php echo $auto_analyze_enabled==='true' ? 'true' : 'false'; ?>">
+                        <input type="checkbox" id="forvoyez-auto-analyze" class="sr-only" <?php checked(get_option('forvoyez_auto_analyze_enabled') === 'true'); ?> data-enabled="<?php echo $auto_analyze_enabled==='true' ? 'true' : 'false'; ?>">
                         <div id="forvoyez-auto-analyze-body" class="w-10 h-6 <?= $auto_analyze_enabled === 'true' ? 'bg-green-400' : 'bg-gray-300' ?> rounded-full shadow-inner"></div>
                         <div id="forvoyez-auto-analyze-dot" class="dot absolute w-6 h-6 bg-white rounded-full shadow <?= $auto_analyze_enabled === 'true' ? '-right-1' : '-left-1' ?> top-0 transition"></div>
                     </div>
