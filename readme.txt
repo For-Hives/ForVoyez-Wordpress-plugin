@@ -72,6 +72,8 @@ The AI can generate content in multiple languages. You can specify your preferre
 3. Results Example - Showcase of automatically generated alt text, titles, and captions for various image types.
 
 == Changelog ==
+= 1.1.30 =
+Enhance the performances of the plugin.
 
 = 1.1.23 =
 Fixes some bugs, issues, improve capabilities and performance.
