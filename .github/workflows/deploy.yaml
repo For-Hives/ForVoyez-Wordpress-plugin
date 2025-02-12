@@ -92,7 +92,7 @@ jobs:
           mkdir -p assets
           mkdir -p trunk/assets
           mkdir -p tags/$VERSION/assets
-          <
+          
           # Copy images to SVN assets directory (only images)
           cp -r ../assets/*.{jpg,jpeg,png,gif,svg,webp} assets/ 2>/dev/null || true
           svn add assets/* --force
@@ -114,8 +114,7 @@ jobs:
           # Add all trunk files to SVN
           svn add trunk/* --force
           
-          # Create and populate version tag with the same structure as trunk
-          mkdir -p tags/$VERSION
+          # Create and populate version tag
           cp -r trunk/* tags/$VERSION/
           svn add tags/$VERSION --force
           
