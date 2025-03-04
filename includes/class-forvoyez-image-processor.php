@@ -21,9 +21,6 @@ class Forvoyez_Image_Processor {
 		$this->api_client = new Forvoyez_API_Manager( $api_key, $language, $context );
 	}
 
-	/**
-	 * Ajouter ces hooks dans le fichier class-forvoyez-image-processor.php à la fonction init()
-	 */
 	public function init() {
 		add_action(
 			'wp_ajax_forvoyez_analyze_image',
@@ -68,13 +65,19 @@ class Forvoyez_Image_Processor {
 			)
 		);
 
+		// Add AJAX handler for media library direct update
+		add_action('wp_ajax_forvoyez_analyze_media_image', [$this, 'analyze_and_update_media_image']);
+
+		// Add AJAX handler for bulk image analysis
+		add_action('wp_ajax_forvoyez_bulk_analyze_media_images', [$this, 'bulk_analyze_media_images']);
+
 		// Hook into the WordPress upload process
 		add_action('add_attachment', array($this, 'schedule_image_analysis'));
 
 		// Add custom cron action
 		add_action('forvoyez_analyze_single_image', array($this, 'cron_analyze_single_image'));
 
-		// Nouveaux hooks pour la synchronisation des crédits
+		// New hooks for credit updates
 		add_action('forvoyez_image_analyzed', array($this, 'trigger_credits_update'));
 		add_action('forvoyez_batch_completed', array($this, 'trigger_credits_update_batch'));
 	}
@@ -214,6 +217,58 @@ class Forvoyez_Image_Processor {
 							),
 				)
 			);
+		}
+	}
+
+	/**
+	 * AJAX handler for analyzing and updating single image in media library
+	 * Add this to class-forvoyez-image-processor.php
+	 */
+	public function analyze_and_update_media_image() {
+		// Verify the request
+		$this->verify_ajax_request('forvoyez_verify_ajax_request_nonce');
+
+		// Get image ID
+		$image_id = isset($_POST['image_id']) ? absint($_POST['image_id']) : 0;
+
+		if (!$image_id || !wp_attachment_is_image($image_id)) {
+			wp_send_json_error([
+				'message' => __('Invalid image ID', 'auto-alt-text-for-images')
+			]);
+		}
+
+		// Perform analysis
+		$result = $this->api_client->analyze_image($image_id);
+
+		if ($result['success']) {
+			// Update image metadata
+			$this->update_image_meta($image_id, $result['metadata']);
+
+			// Get updated image details for UI update
+			$image = get_post($image_id);
+			$alt_text = get_post_meta($image_id, '_wp_attachment_image_alt', true);
+
+			// Prepare response with full metadata for UI update
+			$response_data = [
+				'message' => __('Analysis successful', 'auto-alt-text-for-images'),
+				'metadata' => $result['metadata'],
+				'updated_image' => [
+					'id' => $image_id,
+					'title' => $image->post_title,
+					'alt_text' => $alt_text,
+					'caption' => $image->post_excerpt
+				]
+			];
+
+			// Trigger action for plugins/themes to hook into
+			do_action('forvoyez_image_analyzed', $image_id, $result['metadata']);
+
+			wp_send_json_success($response_data);
+		} else {
+			wp_send_json_error([
+				'message' => $result['error']['message'],
+				'code' => $result['success'] ? null : ($result['error']['code'] ?? __('unknown_error', 'auto-alt-text-for-images'))
+			]);
 		}
 	}
 
@@ -451,5 +506,56 @@ class Forvoyez_Image_Processor {
 	        // Update the image metadata with the analysis results
 	        $this->update_image_meta($attachment_id, $result['metadata']);
 	    }
+	}
+
+	/**
+	 * AJAX handler for analyzing and updating multiple images in the Media Library
+	 * Add this to class-forvoyez-image-processor.php
+	 */
+	public function bulk_analyze_media_images() {
+		// Verify the request
+		$this->verify_ajax_request('forvoyez_verify_ajax_request_nonce');
+
+		// Get image IDs
+		$image_ids = isset($_POST['image_ids']) ? array_map('absint', wp_unslash($_POST['image_ids'])) : [];
+
+		if (empty($image_ids)) {
+			wp_send_json_error([
+				'message' => __('No images provided', 'auto-alt-text-for-images')
+			]);
+		}
+
+		// Process images in batches
+		$batch_size = 5;
+		$results = [];
+		$success_count = 0;
+		$error_count = 0;
+
+		// Split image IDs into batches to avoid timeouts
+		$batches = array_chunk($image_ids, $batch_size);
+
+		foreach ($batches as $batch) {
+			$batch_results = $this->process_images($batch);
+
+			foreach ($batch_results as $result) {
+				if ($result['success']) {
+					$success_count++;
+				} else {
+					$error_count++;
+				}
+				$results[] = $result;
+			}
+		}
+
+		// Get updated credit information
+		$token_info = forvoyez_get_token_info();
+		$credits = isset($token_info['success']) && $token_info['success'] ? $token_info['user']['credits'] : null;
+
+		wp_send_json_success([
+			'results' => $results,
+			'success_count' => $success_count,
+			'error_count' => $error_count,
+			'credits' => $credits
+		]);
 	}
 }
