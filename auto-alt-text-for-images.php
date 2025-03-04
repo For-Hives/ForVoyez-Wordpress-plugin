@@ -553,18 +553,18 @@ function forvoyez_add_analyze_button($form_fields, $post) {
 			}
 		}
 
-		// Generate status indicators
+		// Generate status indicators with text labels
 		$alt_status = $has_alt_text
-			? '<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;" title="Has alt text"></span>'
-			: '<span class="dashicons dashicons-warning" style="color: #FF9800;" title="Missing alt text"></span>';
+			? '<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;" title="Has alt text"></span> <span class="status-label">Alt text</span>'
+			: '<span class="dashicons dashicons-warning" style="color: #FF9800;" title="Missing alt text"></span> <span class="status-label">Alt text</span>';
 
 		$title_status = $has_title
-			? '<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;" title="Has title"></span>'
-			: '<span class="dashicons dashicons-warning" style="color: #FF9800;" title="Missing title"></span>';
+			? '<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;" title="Has title"></span> <span class="status-label">Title</span>'
+			: '<span class="dashicons dashicons-warning" style="color: #FF9800;" title="Missing title"></span> <span class="status-label">Title</span>';
 
 		$caption_status = $has_caption
-			? '<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;" title="Has caption"></span>'
-			: '<span class="dashicons dashicons-warning" style="color: #FF9800;" title="Missing caption"></span>';
+			? '<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;" title="Has caption"></span> <span class="status-label">Caption</span>'
+			: '<span class="dashicons dashicons-warning" style="color: #FF9800;" title="Missing caption"></span> <span class="status-label">Caption</span>';
 
 		$form_fields['forvoyez_analyze'] = array(
 			'label' => '',
@@ -602,13 +602,15 @@ function forvoyez_add_analyze_button($form_fields, $post) {
                     }
                     .forvoyez-metadata-status {
                         display: flex;
-                        gap: 8px;
+                        flex-wrap: wrap;
+                        gap: 12px;
                         align-items: center;
                         margin-bottom: 8px;
                     }
                     .forvoyez-metadata-item {
                         display: inline-flex;
                         align-items: center;
+                        gap: 4px;
                     }
                     .forvoyez-credit-count {
                         padding: 1px 6px;
@@ -628,6 +630,16 @@ function forvoyez_add_analyze_button($form_fields, $post) {
                     .credits-danger {
                         background-color: #f8d7da;
                         color: #721c24;
+                    }
+                    .status-label {
+                        font-size: 11px;
+                        color: #666;
+                    }
+                    .forvoyez-description {
+                        font-size: 12px;
+                        color: #666;
+                        margin: 8px 0;
+                        line-height: 1.4;
                     }
                     @keyframes forvoyez-spin {
                         from { transform: rotate(0deg); }
@@ -652,16 +664,27 @@ function forvoyez_add_analyze_button($form_fields, $post) {
                     .forvoyez-animate-pulse {
                         animation: forvoyez-pulse 1.5s infinite ease-in-out;
                     }
+                    .forvoyez-row {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 8px;
+                    }
                 </style>
                 <div class="forvoyez-button-container">
+                    <div class="forvoyez-row">
+                        <h4 style="margin: 0 0 8px 0;">Image Metadata Status:</h4>
+                        <div class="forvoyez-metadata-item">
+                            ForVoyez Credits: <span class="forvoyez-credit-count ' . $credit_class . '">' . esc_html($credits) . '</span>
+                        </div>
+                    </div>
                     <div class="forvoyez-metadata-status" data-image-id="' . esc_attr($post->ID) . '">
                         <div class="forvoyez-metadata-item alt-status" title="Alt Text Status">' . $alt_status . '</div>
                         <div class="forvoyez-metadata-item title-status" title="Title Status">' . $title_status . '</div>
                         <div class="forvoyez-metadata-item caption-status" title="Caption Status">' . $caption_status . '</div>
-                        <div style="flex-grow: 1;"></div>
-                        <div class="forvoyez-metadata-item">
-                            ForVoyez Credits: <span class="forvoyez-credit-count ' . $credit_class . '">' . esc_html($credits) . '</span>
-                        </div>
+                    </div>
+                    <div class="forvoyez-description">
+                        This tool uses AI to analyze your image and generate optimized metadata like alt text, title, and caption. Click the button below to automatically generate SEO-friendly metadata for this image.
                     </div>
                     <button type="button" class="button forvoyez-analyze-button" data-image-id="' . esc_attr($post->ID) . '">Analyze with ForVoyez</button>
                     <div class="forvoyez-status"></div>
