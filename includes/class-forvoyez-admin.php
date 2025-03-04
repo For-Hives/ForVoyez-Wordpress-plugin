@@ -120,6 +120,15 @@ class Forvoyez_Admin {
 			true,
 		);
 
+		// Nouvel ajout: script de gestion des crédits
+		wp_enqueue_script(
+			'forvoyez-credits-manager',
+			FORVOYEZ_PLUGIN_URL . 'assets/js/credits-manager.js',
+			['jquery', 'forvoyez-admin-script'],
+			FORVOYEZ_VERSION,
+			true,
+		);
+
 		// Localize script
 		wp_localize_script('forvoyez-admin-script', 'forvoyezData', [
 			'ajaxurl' => admin_url('admin-ajax.php'),
@@ -722,25 +731,40 @@ class Forvoyez_Admin {
 		check_ajax_referer('forvoyez_verify_ajax_request_nonce', 'nonce');
 
 		if (!current_user_can('upload_files')) {
-			wp_send_json_error('Permission denied', 403);
+			wp_send_json_error([
+				'message' => __('Permission denied', 'auto-alt-text-for-images')
+			], 403);
 			return;
 		}
 
+		// Récupérer les infos du token avec une mise en cache minimale
 		$token_info = forvoyez_get_token_info();
+
 		if ($token_info['success']) {
+			// Récupérer les valeurs
+			$credits = $token_info['user']['credits'];
+			$is_subscribed = $token_info['subscription']['isSubscribed'] ?? false;
+			$plan_name = $is_subscribed ? $token_info['subscription']['plan']['name'] : '';
+			$status = $token_info['subscription']['statusFormatted'] ?? '';
+			$renews_at = $token_info['subscription']['renewsAt'] ?? '';
+
+			// Renvoyer les données complètes
 			wp_send_json_success([
-				'credits' => $token_info['user']['credits'],
-				'is_subscribed' =>
-					$token_info['subscription']['isSubscribed'] ?? false,
-				'plan_name' => $token_info['subscription']['isSubscribed']
-					? $token_info['subscription']['plan']['name']
-					: '',
+				'credits' => $credits,
+				'is_subscribed' => $is_subscribed,
+				'plan_name' => $plan_name,
+				'status' => $status,
+				'renews_at' => $renews_at,
+				'has_low_credits' => $credits < 10,
+				'token_ok' => true
 			]);
 		} else {
 			wp_send_json_error([
-				'message' =>
-					$token_info['error']['message'] ??
-					'Could not retrieve credit information',
+				'message' => $token_info['error']['message'] ??
+				             __('Could not retrieve credit information', 'auto-alt-text-for-images'),
+				'token_ok' => false,
+				'credits' => 0,
+				'is_subscribed' => false
 			]);
 		}
 	}

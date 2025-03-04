@@ -7,28 +7,7 @@ if (!defined('ABSPATH')) {
 $token_info = forvoyez_get_token_info();
 if ($token_info['success']):
 	$credits = $token_info['user']['credits']; ?>
-<div class="mb-4 flex items-center">
-    <span class="text-sm font-medium text-gray-700 mr-2"><?php esc_html_e(
-    	'Available Credits:',
-    	'auto-alt-text-for-images',
-    ); ?></span>
-    <span class="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full
-        <?php echo $credits > 20
-        	? 'bg-green-100 text-green-800'
-        	: ($credits > 5
-        		? 'bg-yellow-100 text-yellow-800'
-        		: 'bg-red-100 text-red-800'); ?>">
-        <?php echo esc_html($credits); ?>
-    </span>
-    <?php if ($credits < 10): ?>
-    <span class="ml-2 text-xs text-red-600">
-        <?php esc_html_e(
-        	'Low credits! Please recharge.',
-        	'auto-alt-text-for-images',
-        ); ?>
-    </span>
-    <?php endif; ?>
-</div>
+
 <?php
 endif;
 ?>

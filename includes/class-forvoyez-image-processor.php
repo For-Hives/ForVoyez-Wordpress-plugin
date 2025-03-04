@@ -21,6 +21,9 @@ class Forvoyez_Image_Processor {
 		$this->api_client = new Forvoyez_API_Manager( $api_key, $language, $context );
 	}
 
+	/**
+	 * Ajouter ces hooks dans le fichier class-forvoyez-image-processor.php à la fonction init()
+	 */
 	public function init() {
 		add_action(
 			'wp_ajax_forvoyez_analyze_image',
@@ -66,10 +69,36 @@ class Forvoyez_Image_Processor {
 		);
 
 		// Hook into the WordPress upload process
-	    add_action('add_attachment', array($this, 'schedule_image_analysis'));
+		add_action('add_attachment', array($this, 'schedule_image_analysis'));
 
-	    // Add custom cron action
-	    add_action('forvoyez_analyze_single_image', array($this, 'cron_analyze_single_image'));
+		// Add custom cron action
+		add_action('forvoyez_analyze_single_image', array($this, 'cron_analyze_single_image'));
+
+		// Nouveaux hooks pour la synchronisation des crédits
+		add_action('forvoyez_image_analyzed', array($this, 'trigger_credits_update'));
+		add_action('forvoyez_batch_completed', array($this, 'trigger_credits_update_batch'));
+	}
+
+	/**
+	 * Déclencher une mise à jour des crédits après l'analyse d'une image.
+	 *
+	 * @param int $image_id ID de l'image analysée
+	 */
+	public function trigger_credits_update($image_id) {
+		// Cette fonction sert principalement à dire au frontend de rafraîchir les crédits
+		// Le hook JavaScript 'forvoyez:image-analyzed' s'occupera de la mise à jour côté client
+		do_action('forvoyez_credits_updated');
+	}
+
+	/**
+	 * Déclencher une mise à jour des crédits après l'analyse d'un lot d'images.
+	 *
+	 * @param int $count Nombre d'images traitées
+	 */
+	public function trigger_credits_update_batch($count) {
+		// Cette fonction sert principalement à dire au frontend de rafraîchir les crédits
+		// Le hook JavaScript 'forvoyez:batch-completed' s'occupera de la mise à jour côté client
+		do_action('forvoyez_credits_updated');
 	}
 
 	private function sanitize_and_validate_metadata( $raw_metadata ) {

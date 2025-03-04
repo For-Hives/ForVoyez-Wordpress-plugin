@@ -4,6 +4,18 @@
 	'use strict'
 
 	let $configApiKeyInput
+	/**
+	 * Credit management functions for ForVoyez admin
+	 */
+
+	// Add to existing global variables
+	let creditsInfo = {
+		credits: null,
+		isSubscribed: false,
+		planName: '',
+		lowCreditsThreshold: 10,
+		isLoading: true,
+	}
 
 	$(document).ready(function () {
 		$configApiKeyInput = $('#forvoyez-api-key')
@@ -156,9 +168,32 @@
 		initializeEventListeners()
 	})
 
+	/**
+	 * Initialize credit display elements with loading state
+	 */
+	function initCreditDisplay() {
+		// Initialize loading placeholders
+		$('.forvoyez-credit-count').each(function () {
+			if ($(this).text() === '' || $(this).text() === '0') {
+				$(this).html('<span class="animate-pulse">...</span>')
+				$(this).addClass('bg-gray-200 text-gray-600')
+			}
+		})
+
+		$('.forvoyez-credits-status').each(function () {
+			if ($(this).text() === '' || $(this).html() === '') {
+				$(this).html(
+					'<span class="inline-flex items-center text-gray-500"><span class="animate-pulse">Loading subscription status...</span></span>'
+				)
+			}
+		})
+	}
+
 	function initializeEventListeners() {
 		// Initial load
 		loadImages()
+
+		refreshCredits()
 
 		$('#forvoyez-filter-form')
 			.find('input[type="checkbox"]')
@@ -166,6 +201,10 @@
 				currentPage = 1
 				loadImages()
 			})
+
+		if ($('body').hasClass('forvoyez-admin-page')) {
+			createCreditsWidget()
+		}
 
 		// Filter form submission
 		$('#forvoyez-filter-form').on('submit', function (e) {
@@ -214,6 +253,31 @@
 	let $filterForm = $('#forvoyez-filter-form')
 	let currentPage = 1
 	let perPage = 25
+
+	/**
+	 * Create floating credits widget
+	 */
+	function createCreditsWidget() {
+		// Only create if it doesn't already exist
+		if ($('.forvoyez-credits-widget').length === 0) {
+			const widget = $(`
+            <div class="forvoyez-credits-widget fixed bottom-4 right-4 bg-white p-3 pb-2 rounded-lg shadow-lg border border-gray-200 z-50">
+                <div class="flex items-center space-x-2">
+                    <div class="text-gray-700 font-medium">ForVoyez Credits:</div>
+                    <span class="forvoyez-credit-count px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-gray-200 text-gray-600"><span class="animate-pulse">...</span></span>
+                </div>
+                <div class="mt-1 text-xs text-gray-500 forvoyez-credits-status">
+                    <span class="animate-pulse">Loading subscription status...</span>
+                </div>
+                <div class="mt-1 text-xs text-red-600 forvoyez-credit-warning hidden">
+                    Low credits! Please <a href="https://forvoyez.com/app/plans" target="_blank" class="underline hover:text-red-800">recharge now</a>.
+                </div>
+            </div>
+        `)
+
+			$('body').append(widget)
+		}
+	}
 
 	function loadImages(page = currentPage) {
 		let data = {
@@ -391,6 +455,9 @@
 							)
 						}
 						markImageAsAnalyzed(imageId, response.data.metadata)
+						// Add these lines to update credits
+						refreshCredits()
+						$(document).trigger('forvoyez:image-analyzed')
 						resolve(true)
 					} else {
 						let errorMessage = response.data
@@ -417,6 +484,7 @@
 				},
 				complete: function () {
 					$loader.addClass('hidden')
+					refreshCredits()
 					hideLoader()
 				},
 			})
@@ -440,6 +508,8 @@
 				'info',
 				0
 			)
+
+			refreshCredits()
 
 			// Update progress bar
 			$('#forvoyez-progress-container').removeClass('hidden')
@@ -481,6 +551,7 @@
 							})
 						}
 						updateProgress()
+						refreshCredits()
 						resolve()
 					},
 					error: function () {
@@ -493,6 +564,7 @@
 							)
 						})
 						updateProgress()
+						refreshCredits()
 						resolve()
 					},
 				})
@@ -514,6 +586,8 @@
 			$('#forvoyez-progress-container').addClass('hidden')
 			$('#forvoyez-progress-bar-count').addClass('hidden')
 			updateImageCounts()
+			refreshCredits()
+			$(document).trigger('forvoyez:batch-completed')
 			hideLoader()
 		}
 
@@ -693,9 +767,192 @@
 			})
 	}
 
+	/**
+	 * Refresh credits from server
+	 */
+	function refreshCredits() {
+		// Set loading state
+		creditsInfo.isLoading = true
+		updateCreditsDisplay()
+
+		$.ajax({
+			url: forvoyezData.ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'forvoyez_get_credits',
+				nonce: forvoyezData.verifyAjaxRequestNonce,
+			},
+			success: function (response) {
+				if (response.success) {
+					creditsInfo = {
+						credits: response.data.credits,
+						isSubscribed: response.data.is_subscribed,
+						planName: response.data.plan_name || '',
+						status: response.data.status || '',
+						hasLowCredits: response.data.has_low_credits || false,
+						isLoading: false,
+					}
+				} else {
+					creditsInfo.isLoading = false
+					creditsInfo.hasError = true
+					creditsInfo.errorMessage =
+						response.data.message || 'Failed to load credits'
+					console.error(
+						'Failed to get credits information:',
+						response.data.message
+					)
+				}
+				updateCreditsDisplay()
+			},
+			error: function (xhr, status, error) {
+				creditsInfo.isLoading = false
+				creditsInfo.hasError = true
+				creditsInfo.errorMessage = 'Server error: ' + status
+				console.error('AJAX error:', error)
+				updateCreditsDisplay()
+			},
+		})
+	}
+
+	/**
+	 * Update all credit display elements based on current state
+	 */
+	function updateCreditsDisplay() {
+		// Handle loading state
+		if (creditsInfo.isLoading) {
+			$('.forvoyez-credit-count').each(function () {
+				$(this).html('<span class="animate-pulse">...</span>')
+				$(this)
+					.removeClass(
+						'bg-green-100 bg-yellow-100 bg-red-100 text-green-800 text-yellow-800 text-red-800'
+					)
+					.addClass('bg-gray-200 text-gray-600')
+			})
+
+			$('.forvoyez-credits-status').each(function () {
+				$(this).html(
+					'<span class="inline-flex items-center text-gray-500"><span class="animate-pulse">Loading subscription status...</span></span>'
+				)
+			})
+
+			$('.forvoyez-credit-warning').addClass('hidden')
+			return
+		}
+
+		// Handle error state
+		if (creditsInfo.hasError) {
+			$('.forvoyez-credit-count').each(function () {
+				$(this).text('?')
+				$(this)
+					.removeClass(
+						'bg-green-100 bg-yellow-100 bg-gray-200 text-green-800 text-yellow-800 text-gray-600'
+					)
+					.addClass('bg-red-100 text-red-800')
+			})
+
+			$('.forvoyez-credits-status').each(function () {
+				$(this).html(
+					'<span class="inline-flex items-center text-red-500">Error loading data</span>'
+				)
+			})
+
+			$('.forvoyez-credit-warning')
+				.removeClass('hidden')
+				.html(
+					'Unable to load credit information. Please refresh the page or check your API key configuration.'
+				)
+			return
+		}
+
+		// Normal state - update credit count
+		$('.forvoyez-credit-count').text(creditsInfo.credits)
+
+		// Update styling based on credit level
+		if (creditsInfo.credits > 20) {
+			$('.forvoyez-credit-count')
+				.removeClass(
+					'bg-yellow-100 bg-red-100 bg-gray-200 text-yellow-800 text-red-800 text-gray-600'
+				)
+				.addClass('bg-green-100 text-green-800')
+		} else if (creditsInfo.credits > 5) {
+			$('.forvoyez-credit-count')
+				.removeClass(
+					'bg-green-100 bg-red-100 bg-gray-200 text-green-800 text-red-800 text-gray-600'
+				)
+				.addClass('bg-yellow-100 text-yellow-800')
+		} else {
+			$('.forvoyez-credit-count')
+				.removeClass(
+					'bg-green-100 bg-yellow-100 bg-gray-200 text-green-800 text-yellow-800 text-gray-600'
+				)
+				.addClass('bg-red-100 text-red-800')
+		}
+
+		// Update subscription status
+		if ($('.forvoyez-credits-status').length) {
+			let statusHtml = ''
+			if (creditsInfo.isSubscribed) {
+				statusHtml =
+					'<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>'
+				if (creditsInfo.planName) {
+					statusHtml += ' - ' + creditsInfo.planName
+				}
+			}
+			$('.forvoyez-credits-status').html(statusHtml)
+		}
+
+		// Show/hide low credits warning
+		if (creditsInfo.credits < 10) {
+			$('.forvoyez-credit-warning')
+				.removeClass('hidden')
+				.html(
+					'Low credits! Please <a href="https://forvoyez.com/app/plans" target="_blank" class="underline hover:text-red-800">recharge now</a>.'
+				)
+		} else {
+			$('.forvoyez-credit-warning').addClass('hidden')
+		}
+	}
+
 	function confirmAndAnalyze(type, imageIds) {
 		const count = imageIds.length
 		let message, actionDescription
+
+		// Définir le type d'action
+		switch (type) {
+			case 'selected':
+				actionDescription = `analyze ${count} selected image(s)`
+				break
+			case 'missing_all':
+				actionDescription = `analyze ${count} image(s) with missing alt text, title, or caption`
+				break
+			case 'missing_alt':
+				actionDescription = `analyze ${count} image(s) with missing alt text`
+				break
+			case 'all':
+				actionDescription = `analyze all ${count} image(s)`
+				break
+		}
+
+		if (creditsInfo.credits !== undefined) {
+			let creditsWarning = ''
+			if (count > creditsInfo.credits) {
+				creditsWarning = `<p class="mt-2 text-xs text-red-500 font-bold">Warning: You only have ${creditsInfo.credits} credits, but this operation requires ${count} credits.</p>`
+			}
+
+			message = `
+            <p>Are you sure you want to ${actionDescription}?</p>
+            <p class="mt-2 text-xs text-gray-500 italic">Cost: ${count} ForVoyez credit${count !== 1 ? 's' : ''}</p>
+            <p class="text-xs text-gray-500 italic">You currently have ${creditsInfo.credits} credit${creditsInfo.credits !== 1 ? 's' : ''} remaining.</p>
+            ${creditsWarning}
+        `
+
+			showConfirmModal(message, function () {
+				analyzeBulkImages(imageIds)
+			})
+			// Also refresh credits in case they're stale
+			refreshCredits()
+			return
+		}
 
 		// Get current token info
 		$.ajax({
