@@ -147,20 +147,26 @@ add_action( 'init', 'forvoyez_maybe_flush_rewrite_rules' );
 
 /**
  * Enqueue the media scripts.
- * @param $hook
  *
+ * @param string $hook Current admin page hook.
  * @return void
  */
 function forvoyez_enqueue_media_scripts($hook) {
-	if ('upload.php' === $hook || 'post.php' === $hook || 'post-new.php' === $hook) {
+	// Include media scripts on all admin pages that might include the media modal
+	$media_pages = array('upload.php', 'post.php', 'post-new.php', 'page.php', 'page-new.php');
+	$is_media_page = in_array($hook, $media_pages);
+
+	if ($is_media_page || wp_script_is('media-editor')) {
+		// Enqueue script
 		wp_enqueue_script(
 			'forvoyez-media-script',
 			plugin_dir_url(__FILE__) . 'assets/js/media-script.js',
-			array('jquery'),
+			array('jquery', 'wp-backbone', 'media-editor', 'media-views'),
 			FORVOYEZ_VERSION,
 			true
 		);
 
+		// Localize script with all necessary data
 		wp_localize_script(
 			'forvoyez-media-script',
 			'forvoyezData',
@@ -175,7 +181,7 @@ function forvoyez_enqueue_media_scripts($hook) {
 					'lowCredits' => __('Warning: Low credits!', 'auto-alt-text-for-images'),
 					'noCredits' => __('Warning: No credits left!', 'auto-alt-text-for-images')
 				),
-				'mediaPage' => true
+				'mediaPage' => $is_media_page
 			)
 		);
 
@@ -226,7 +232,89 @@ function forvoyez_enqueue_media_scripts($hook) {
             .wp_attachment_details .compat-field-_forvoyez_analysis td.field {
                 width: 100%;
             }
+            @keyframes forvoyez-pulse {
+                0% { opacity: 0.6; }
+                50% { opacity: 1; }
+                100% { opacity: 0.6; }
+            }
+            .forvoyez-animate-pulse {
+                animation: forvoyez-pulse 1.5s infinite ease-in-out;
+            }
         ');
+
+		// Support for the media modal
+		if (wp_script_is('media-views')) {
+			wp_add_inline_script('forvoyez-media-script', '
+                jQuery(document).ready(function($) {
+                    // Add ForVoyez button to the media modal attachment details
+                    if (wp.media && wp.media.frame) {
+                        // Listen for attachment selection changes
+                        wp.media.frame.on("select", function() {
+                            // Short delay to ensure the sidebar is rendered
+                            setTimeout(function() {
+                                addForVoyezButtonToMediaModal();
+                            }, 100);
+                        });
+                        
+                        // Listen for media modal opening
+                        wp.media.frame.on("open", function() {
+                            // Short delay to ensure the sidebar is rendered
+                            setTimeout(function() {
+                                addForVoyezButtonToMediaModal();
+                            }, 100);
+                        });
+                        
+                        // Add button when attachment is selected
+                        function addForVoyezButtonToMediaModal() {
+                            // Check if the button already exists
+                            if ($(".media-sidebar .forvoyez-analyze-button").length === 0) {
+                                // Get the attachment
+                                var selection = wp.media.frame.state().get("selection");
+                                var attachment = selection.first();
+                                
+                                if (attachment) {
+                                    // Get token info for credits display
+                                    $.ajax({
+                                        url: forvoyezData.ajaxurl,
+                                        type: "POST",
+                                        data: {
+                                            action: "forvoyez_get_credits",
+                                            nonce: forvoyezData.verifyAjaxRequestNonce
+                                        },
+                                        success: function(response) {
+                                            var credits = "?";
+                                            var creditClass = "credits-normal";
+                                            
+                                            if (response.success) {
+                                                credits = response.data.credits;
+                                                
+                                                if (credits <= 5) {
+                                                    creditClass = "credits-danger";
+                                                } else if (credits <= 20) {
+                                                    creditClass = "credits-warning";
+                                                }
+                                            }
+                                            
+                                            // Create the analyze button and add it to the sidebar
+                                            var buttonHtml = \'<div class="forvoyez-analyze-container attachment-compat" style="padding: 0 16px 16px 16px;">\' +
+                                                \'<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">\' +
+                                                \'<h2 style="margin: 0; font-size: 12px; font-weight: bold;">ForVoyez Analysis</h2>\' +
+                                                \'<div style="font-size: 11px;">Credits: <span class="forvoyez-credit-count \' + creditClass + \'">\' + credits + \'</span></div>\' +
+                                                \'</div>\' +
+                                                \'<button type="button" class="button forvoyez-analyze-button" data-image-id="\' + attachment.id + \'">Analyze with ForVoyez</button>\' +
+                                                \'<div class="forvoyez-status" style="margin-top: 5px;"></div>\' +
+                                                \'</div>\';
+                                            
+                                            $(".media-sidebar").append(buttonHtml);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                });
+            ');
+		}
 	}
 }
 

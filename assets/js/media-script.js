@@ -33,8 +33,15 @@
 				.removeClass('success error')
 
 			// Analyze the image
-			analyzeImage(imageId)
-				.then(function (response) {
+			$.ajax({
+				url: forvoyezData.ajaxurl,
+				type: 'POST',
+				data: {
+					action: 'forvoyez_analyze_media_image', // Important: Use the correct action
+					image_id: imageId,
+					nonce: forvoyezData.verifyAjaxRequestNonce,
+				},
+				success: function (response) {
 					// Re-enable button
 					$button
 						.prop('disabled', false)
@@ -60,13 +67,13 @@
 						$statusArea
 							.html(
 								'<span class="dashicons dashicons-warning"></span> Error: ' +
-									response.data.message
+									(response.data ? response.data.message : 'Unknown error')
 							)
 							.addClass('error')
 							.removeClass('loading success')
 					}
-				})
-				.catch(function (error) {
+				},
+				error: function (xhr, status, error) {
 					// Re-enable button
 					$button
 						.prop('disabled', false)
@@ -81,7 +88,14 @@
 						)
 						.addClass('error')
 						.removeClass('loading success')
-				})
+				},
+			})
+		})
+
+		// Handle media modal - when media modal is opened
+		$(document).on('click', '.media-modal .attachment', function () {
+			// Make sure we update credits on attachment selection too
+			setTimeout(refreshCredits, 500)
 		})
 	})
 
@@ -163,66 +177,148 @@
 	}
 
 	/**
-	 * Analyze image with ForVoyez API
-	 * @param {number} imageId - ID of the image to analyze
-	 * @returns {Promise} - Promise that resolves with the analysis result
-	 */
-	function analyzeImage(imageId) {
-		return new Promise(function (resolve, reject) {
-			$.ajax({
-				url: forvoyezData.ajaxurl,
-				type: 'POST',
-				data: {
-					action: 'forvoyez_analyze_image',
-					image_id: imageId,
-					nonce: forvoyezData.verifyAjaxRequestNonce,
-				},
-				success: function (response) {
-					resolve(response)
-				},
-				error: function (xhr, status, error) {
-					reject(error)
-				},
-			})
-		})
-	}
-
-	/**
 	 * Update image metadata in the media library UI
 	 * @param {number} imageId - ID of the image
 	 * @param {object} metadata - New metadata for the image
 	 */
 	function updateImageMetadataUI(imageId, metadata) {
-		// Update alt text field if present
-		const $altTextField = $(
-			'#attachment-details-alt-text, .compat-field-_wp_attachment_image_alt input'
+		// Log for debugging
+		console.log(
+			'Updating UI for image ID:',
+			imageId,
+			'with metadata:',
+			metadata
 		)
+
+		// Different selectors for different contexts
+		updateAttachmentEditorFields(metadata)
+		updateMediaModalFields(metadata)
+		updateMediaGridFields(imageId, metadata)
+		updateMediaEditFields(imageId, metadata)
+		updateStatusIndicators(imageId, metadata)
+
+		// Trigger WordPress media library refresh (without page reload)
+		if (wp && wp.media && wp.media.frame) {
+			try {
+				// Try to refresh the media library frame if it exists
+				wp.media.frame.content
+					.get()
+					.collection.props.set({ ignore: +new Date() })
+			} catch (e) {
+				console.log('Could not refresh media library:', e)
+			}
+		}
+	}
+
+	/**
+	 * Update fields in the attachment editor (sidebar)
+	 */
+	function updateAttachmentEditorFields(metadata) {
+		// Update alt text field
+		const $altTextField = $('#attachment-details-alt-text')
 		if ($altTextField.length) {
 			$altTextField.val(metadata.alt_text)
+			console.log('Updated attachment editor alt text field')
 		}
 
-		// Update title field if present
-		const $titleField = $('#attachment-details-title, input[name="post_title"]')
+		// Update title field
+		const $titleField = $('#attachment-details-title')
 		if ($titleField.length) {
 			$titleField.val(metadata.title)
+			console.log('Updated attachment editor title field')
 		}
 
-		// Update caption field if present
-		const $captionField = $(
-			'#attachment-details-caption, textarea[name="excerpt"]'
-		)
+		// Update caption field
+		const $captionField = $('#attachment-details-caption')
 		if ($captionField.length) {
 			$captionField.val(metadata.caption)
+			console.log('Updated attachment editor caption field')
+		}
+	}
+
+	/**
+	 * Update fields in media modal (popup)
+	 */
+	function updateMediaModalFields(metadata) {
+		// Media modal alt text
+		const $modalAltText = $(
+			'.media-sidebar .setting[data-setting="alt"] input, .compat-field-_wp_attachment_image_alt input'
+		)
+		if ($modalAltText.length) {
+			$modalAltText.val(metadata.alt_text).trigger('change')
+			console.log('Updated media modal alt text field')
 		}
 
-		// Update status indicators if present
-		const $statusIndicators = $(
-			`.forvoyez-metadata-item[data-image-id="${imageId}"]`
+		// Media modal title
+		const $modalTitle = $(
+			'.media-sidebar .setting[data-setting="title"] input, .media-sidebar input[name="post_title"]'
 		)
-		if ($statusIndicators.length) {
+		if ($modalTitle.length) {
+			$modalTitle.val(metadata.title).trigger('change')
+			console.log('Updated media modal title field')
+		}
+
+		// Media modal caption
+		const $modalCaption = $(
+			'.media-sidebar .setting[data-setting="caption"] textarea, .media-sidebar textarea[name="excerpt"]'
+		)
+		if ($modalCaption.length) {
+			$modalCaption.val(metadata.caption).trigger('change')
+			console.log('Updated media modal caption field')
+		}
+	}
+
+	/**
+	 * Update fields in media grid
+	 */
+	function updateMediaGridFields(imageId, metadata) {
+		// Find the specific attachment in grid view
+		const $gridItem = $(`.attachment[data-id="${imageId}"]`)
+		if ($gridItem.length) {
+			// Update title if visible
+			$gridItem.find('.filename').text(metadata.title)
+			console.log('Updated grid item for image ID:', imageId)
+		}
+	}
+
+	/**
+	 * Update fields in media edit screen
+	 */
+	function updateMediaEditFields(imageId, metadata) {
+		// Media edit screen (post.php?post=X&action=edit)
+		if (
+			window.location.href.includes('post.php') &&
+			window.location.href.includes('action=edit')
+		) {
+			// Edit screen title
+			const $editTitle = $('#title')
+			if ($editTitle.length) {
+				$editTitle.val(metadata.title)
+				console.log('Updated edit screen title field')
+			}
+
+			// Edit screen excerpt/caption
+			const $editCaption = $('#excerpt')
+			if ($editCaption.length) {
+				$editCaption.val(metadata.caption)
+				console.log('Updated edit screen caption field')
+			}
+		}
+	}
+
+	/**
+	 * Update status indicators
+	 */
+	function updateStatusIndicators(imageId, metadata) {
+		// First, try to find the status container by data-image-id
+		const $statusContainer = $(
+			`.forvoyez-metadata-status[data-image-id="${imageId}"]`
+		)
+
+		if ($statusContainer.length) {
 			// Alt text status
 			if (metadata.alt_text) {
-				$statusIndicators
+				$statusContainer
 					.find('.alt-status')
 					.html(
 						'<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;"></span>'
@@ -232,7 +328,7 @@
 
 			// Title status
 			if (metadata.title) {
-				$statusIndicators
+				$statusContainer
 					.find('.title-status')
 					.html(
 						'<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;"></span>'
@@ -242,13 +338,15 @@
 
 			// Caption status
 			if (metadata.caption) {
-				$statusIndicators
+				$statusContainer
 					.find('.caption-status')
 					.html(
 						'<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;"></span>'
 					)
 					.attr('title', 'Has caption')
 			}
+
+			console.log('Updated status indicators for image ID:', imageId)
 		}
 	}
 })(jQuery)

@@ -222,7 +222,6 @@ class Forvoyez_Image_Processor {
 
 	/**
 	 * AJAX handler for analyzing and updating single image in media library
-	 * Add this to class-forvoyez-image-processor.php
 	 */
 	public function analyze_and_update_media_image() {
 		// Verify the request
@@ -267,7 +266,7 @@ class Forvoyez_Image_Processor {
 		} else {
 			wp_send_json_error([
 				'message' => $result['error']['message'],
-				'code' => $result['success'] ? null : ($result['error']['code'] ?? __('unknown_error', 'auto-alt-text-for-images'))
+				'code' => isset($result['error']['code']) ? $result['error']['code'] : 'unknown_error'
 			]);
 		}
 	}
