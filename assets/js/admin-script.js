@@ -39,51 +39,51 @@
 			)
 		})
 
-		$('#forvoyez-auto-analyze').on('change', function() {
-			var $toggle = $(this);
-    		var isEnabled = $toggle.data('enabled') === true;
-			console.log('isEnabled', isEnabled);
+		$('#forvoyez-auto-analyze').on('change', function () {
+			var $toggle = $(this)
+			var isEnabled = $toggle.data('enabled') === true
+			console.log('isEnabled', isEnabled)
 
 			// Toggle the dot color
-			$('#forvoyez-auto-analyze-dot').toggleClass('-left-1 -right-1');
-			$('#forvoyez-auto-analyze-body').toggleClass('bg-gray-300 bg-green-400');
+			$('#forvoyez-auto-analyze-dot').toggleClass('-left-1 -right-1')
+			$('#forvoyez-auto-analyze-body').toggleClass('bg-gray-300 bg-green-400')
 
 			// Disable the toggle while the AJAX request is in progress
-			$toggle.prop('disabled', true);
-			console.log('isEnabled', isEnabled);
+			$toggle.prop('disabled', true)
+			console.log('isEnabled', isEnabled)
 			$.ajax({
 				url: forvoyezData.ajaxurl,
 				type: 'POST',
 				data: {
 					action: 'forvoyez_toggle_auto_analyze',
 					enabled: !isEnabled,
-					nonce: forvoyezData.toggleAutoAnalyzeNonce
+					nonce: forvoyezData.toggleAutoAnalyzeNonce,
 				},
 				success: function (response) {
 					if (response.success) {
 						// Update the toggle state
-						$toggle.data('enabled', !isEnabled);
+						$toggle.data('enabled', !isEnabled)
 						// Show success message
-						showNotification(response.data.message, 'success');
+						showNotification(response.data.message, 'success')
 					} else {
 						// Revert the toggle state
-						$toggle.prop('checked', isEnabled);
+						$toggle.prop('checked', isEnabled)
 						// Show error message
-						showNotification(response.data.message, 'error');
+						showNotification(response.data.message, 'error')
 					}
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
-					console.error('AJAX error:', textStatus, errorThrown);
+					console.error('AJAX error:', textStatus, errorThrown)
 					// Revert the toggle state
-					$toggle.prop('checked', isEnabled);
+					$toggle.prop('checked', isEnabled)
 					// Show error message
-					showNotification('An error occurred. Please try again.', 'error');
+					showNotification('An error occurred. Please try again.', 'error')
 				},
 				complete: function () {
-					$toggle.prop('disabled', false); // Re-enable the toggle
-				}
-			});
-		});
+					$toggle.prop('disabled', false) // Re-enable the toggle
+				},
+			})
+		})
 
 		$(document).on(
 			'change',
@@ -304,7 +304,7 @@
 			data: {
 				action: 'forvoyez_save_context',
 				nonce: forvoyezData.saveContextNonce,
-				context: context
+				context: context,
 			},
 			success: function (response) {
 				if (response.success) {
@@ -315,7 +315,7 @@
 			},
 			error: function () {
 				showNotification('Failed to save context', 'error')
-			}
+			},
 		})
 
 		$.ajax({
@@ -324,7 +324,7 @@
 			data: {
 				action: 'forvoyez_save_language',
 				nonce: forvoyezData.saveLanguageNonce,
-				language: language
+				language: language,
 			},
 			success: function (response) {
 				if (response.success) {
@@ -335,7 +335,7 @@
 			},
 			error: function () {
 				showNotification('Failed to save language', 'error')
-			}
+			},
 		})
 	}
 
@@ -697,28 +697,103 @@
 		const count = imageIds.length
 		let message, actionDescription
 
-		switch (type) {
-			case 'selected':
-				actionDescription = `analyze ${count} selected image(s)`
-				break
-			case 'missing_all':
-				actionDescription = `analyze ${count} image(s) with missing alt text, title, or caption`
-				break
-			case 'missing_alt':
-				actionDescription = `analyze ${count} image(s) with missing alt text`
-				break
-			case 'all':
-				actionDescription = `analyze all ${count} image(s)`
-				break
-		}
+		// Get current token info
+		$.ajax({
+			url: forvoyezData.ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'forvoyez_get_credits',
+				nonce: forvoyezData.verifyAjaxRequestNonce,
+			},
+			success: function (response) {
+				if (response.success) {
+					const credits = response.data.credits
 
-		message = `
-		<p>Are you sure you want to ${actionDescription}?</p>
-		<p class="mt-2 text-xs text-gray-500 italic">Cost: ${count} ForVoyez credit${count !== 1 ? 's' : ''}</p>
-			`
+					switch (type) {
+						case 'selected':
+							actionDescription = `analyze ${count} selected image(s)`
+							break
+						case 'missing_all':
+							actionDescription = `analyze ${count} image(s) with missing alt text, title, or caption`
+							break
+						case 'missing_alt':
+							actionDescription = `analyze ${count} image(s) with missing alt text`
+							break
+						case 'all':
+							actionDescription = `analyze all ${count} image(s)`
+							break
+					}
 
-		showConfirmModal(message, function () {
-			analyzeBulkImages(imageIds)
+					let creditsWarning = ''
+					if (count > credits) {
+						creditsWarning = `<p class="mt-2 text-xs text-red-500 font-bold">Warning: You only have ${credits} credits, but this operation requires ${count} credits.</p>`
+					}
+
+					message = `
+					<p>Are you sure you want to ${actionDescription}?</p>
+					<p class="mt-2 text-xs text-gray-500 italic">Cost: ${count} ForVoyez credit${count !== 1 ? 's' : ''}</p>
+					<p class="text-xs text-gray-500 italic">You currently have ${credits} credit${credits !== 1 ? 's' : ''} remaining.</p>
+					${creditsWarning}
+					`
+
+					showConfirmModal(message, function () {
+						analyzeBulkImages(imageIds)
+					})
+				} else {
+					// Fallback to original confirmation if we can't get credits
+					let actionDescription
+					switch (type) {
+						case 'selected':
+							actionDescription = `analyze ${count} selected image(s)`
+							break
+						case 'missing_all':
+							actionDescription = `analyze ${count} image(s) with missing alt text, title, or caption`
+							break
+						case 'missing_alt':
+							actionDescription = `analyze ${count} image(s) with missing alt text`
+							break
+						case 'all':
+							actionDescription = `analyze all ${count} image(s)`
+							break
+					}
+
+					message = `
+					<p>Are you sure you want to ${actionDescription}?</p>
+					<p class="mt-2 text-xs text-gray-500 italic">Cost: ${count} ForVoyez credit${count !== 1 ? 's' : ''}</p>
+					`
+
+					showConfirmModal(message, function () {
+						analyzeBulkImages(imageIds)
+					})
+				}
+			},
+			error: function () {
+				// Fallback to original confirmation if error
+				let actionDescription
+				switch (type) {
+					case 'selected':
+						actionDescription = `analyze ${count} selected image(s)`
+						break
+					case 'missing_all':
+						actionDescription = `analyze ${count} image(s) with missing alt text, title, or caption`
+						break
+					case 'missing_alt':
+						actionDescription = `analyze ${count} image(s) with missing alt text`
+						break
+					case 'all':
+						actionDescription = `analyze all ${count} image(s)`
+						break
+				}
+
+				message = `
+				<p>Are you sure you want to ${actionDescription}?</p>
+				<p class="mt-2 text-xs text-gray-500 italic">Cost: ${count} ForVoyez credit${count !== 1 ? 's' : ''}</p>
+				`
+
+				showConfirmModal(message, function () {
+					analyzeBulkImages(imageIds)
+				})
+			},
 		})
 	}
 
