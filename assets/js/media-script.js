@@ -13,8 +13,18 @@
 		isLoading: true,
 	}
 
+	// Detect current page context
+	const isPostPage = window.location.href.includes('post.php')
+	const isUploadPage = window.location.href.includes('upload.php')
+	const isMediaModal = false // Will be set to true if detected
+
 	// Initialize on document ready
 	$(document).ready(function () {
+		console.log('ForVoyez Media Script initialized. Context:', {
+			isPostPage: isPostPage,
+			isUploadPage: isUploadPage,
+		})
+
 		// Initialize and load credits info
 		refreshCredits()
 
@@ -24,6 +34,8 @@
 			const imageId = $(this).data('image-id')
 			const $button = $(this)
 			const $statusArea = $button.siblings('.forvoyez-status')
+
+			console.log('Analyze button clicked for image ID:', imageId)
 
 			// Disable button and show loading state
 			$button.prop('disabled', true).text('Analyzing...').addClass('opacity-50')
@@ -42,6 +54,8 @@
 					nonce: forvoyezData.verifyAjaxRequestNonce,
 				},
 				success: function (response) {
+					console.log('Analysis response:', response)
+
 					// Re-enable button
 					$button
 						.prop('disabled', false)
@@ -74,6 +88,8 @@
 					}
 				},
 				error: function (xhr, status, error) {
+					console.error('AJAX error:', error)
+
 					// Re-enable button
 					$button
 						.prop('disabled', false)
@@ -93,10 +109,12 @@
 		})
 
 		// Handle media modal - when media modal is opened
-		$(document).on('click', '.media-modal .attachment', function () {
-			// Make sure we update credits on attachment selection too
-			setTimeout(refreshCredits, 500)
-		})
+		if (wp && wp.media && wp.media.frame) {
+			$(document).on('click', '.media-modal .attachment', function () {
+				// Make sure we update credits on attachment selection too
+				setTimeout(refreshCredits, 500)
+			})
+		}
 	})
 
 	/**
@@ -190,23 +208,32 @@
 			metadata
 		)
 
-		// Different selectors for different contexts
-		updateAttachmentEditorFields(metadata)
-		updateMediaModalFields(metadata)
-		updateMediaGridFields(imageId, metadata)
-		updateMediaEditFields(imageId, metadata)
+		// For post.php page (attachment edit page), use different logic
+		if (isPostPage) {
+			updatePostPageFields(metadata)
+		} else {
+			// Different selectors for different contexts
+			updateAttachmentEditorFields(metadata)
+			updateMediaModalFields(metadata)
+			updateMediaGridFields(imageId, metadata)
+		}
+
+		// Always update status indicators
 		updateStatusIndicators(imageId, metadata)
 
 		// Force update specific fields in all contexts
 		forceUpdateSpecificFields(metadata)
 
-		// Trigger WordPress media library refresh (without page reload)
-		if (wp && wp.media && wp.media.frame) {
+		// Only try to refresh media library if we're in the right context
+		if (!isPostPage && wp && wp.media && wp.media.frame) {
 			try {
-				// Try to refresh the media library frame if it exists
-				wp.media.frame.content
-					.get()
-					.collection.props.set({ ignore: +new Date() })
+				// Only try this if we're in a context where it makes sense
+				if (typeof wp.media.frame.content.get === 'function') {
+					const content = wp.media.frame.content.get()
+					if (content && content.collection && content.collection.props) {
+						content.collection.props.set({ ignore: +new Date() })
+					}
+				}
 			} catch (e) {
 				console.log('Could not refresh media library:', e)
 			}
@@ -214,19 +241,71 @@
 	}
 
 	/**
+	 * Update fields specifically on post.php page
+	 */
+	function updatePostPageFields(metadata) {
+		console.log('Updating post page fields')
+
+		// Title field
+		const $titleField = $('#title')
+		if ($titleField.length) {
+			$titleField.val(metadata.title)
+			$titleField.trigger('change')
+			console.log('Updated post title field')
+		}
+
+		// Alt text field
+		const $altTextField = $('#attachment_alt')
+		if ($altTextField.length) {
+			$altTextField.val(metadata.alt_text)
+			$altTextField.trigger('change')
+			console.log('Updated post alt text field')
+		}
+
+		// Caption field
+		const $captionField = $('#attachment_caption')
+		if ($captionField.length) {
+			$captionField.val(metadata.caption)
+			$captionField.trigger('change')
+			console.log('Updated post caption field')
+		}
+	}
+
+	/**
 	 * Force update specific fields in all contexts
 	 */
 	function forceUpdateSpecificFields(metadata) {
-		// Force update Alternative Text fields
-		const altTextFields = [
-			'#attachment-details-alt-text',
-			'#attachment-details-two-column-alt-text',
-			'.setting[data-setting="alt"] textarea',
-			'.setting[data-setting="alt"] input',
-			'.compat-field-_wp_attachment_image_alt input',
-		]
+		// Specific selectors based on context
+		const selectors = isPostPage
+			? {
+					alt: ['#attachment_alt'],
+					title: ['#title'],
+					caption: ['#attachment_caption'],
+				}
+			: {
+					alt: [
+						'#attachment-details-alt-text',
+						'#attachment-details-two-column-alt-text',
+						'.setting[data-setting="alt"] textarea',
+						'.setting[data-setting="alt"] input',
+						'.compat-field-_wp_attachment_image_alt input',
+					],
+					title: [
+						'#attachment-details-title',
+						'#attachment-details-two-column-title',
+						'.setting[data-setting="title"] input',
+						'input[name="post_title"]',
+					],
+					caption: [
+						'#attachment-details-caption',
+						'#attachment-details-two-column-caption',
+						'.setting[data-setting="caption"] textarea',
+						'textarea[name="excerpt"]',
+					],
+				}
 
-		altTextFields.forEach(selector => {
+		// Force update alt text fields
+		selectors.alt.forEach(selector => {
 			const $field = $(selector)
 			if ($field.length) {
 				$field.val(metadata.alt_text)
@@ -235,15 +314,8 @@
 			}
 		})
 
-		// Force update Title fields
-		const titleFields = [
-			'#attachment-details-title',
-			'#attachment-details-two-column-title',
-			'.setting[data-setting="title"] input',
-			'input[name="post_title"]',
-		]
-
-		titleFields.forEach(selector => {
+		// Force update title fields
+		selectors.title.forEach(selector => {
 			const $field = $(selector)
 			if ($field.length) {
 				$field.val(metadata.title)
@@ -252,15 +324,8 @@
 			}
 		})
 
-		// Force update Caption fields
-		const captionFields = [
-			'#attachment-details-caption',
-			'#attachment-details-two-column-caption',
-			'.setting[data-setting="caption"] textarea',
-			'textarea[name="excerpt"]',
-		]
-
-		captionFields.forEach(selector => {
+		// Force update caption fields
+		selectors.caption.forEach(selector => {
 			const $field = $(selector)
 			if ($field.length) {
 				$field.val(metadata.caption)
@@ -269,18 +334,20 @@
 			}
 		})
 
-		// If we're in the media modal, also manually update the model data
-		if (wp && wp.media && wp.media.frame) {
+		// If we're in the media modal and not on post.php, update the model data
+		if (!isPostPage && wp && wp.media && wp.media.frame) {
 			try {
-				const selection = wp.media.frame.state().get('selection')
-				if (selection && selection.length) {
-					const attachment = selection.first()
-					if (attachment) {
-						// Update the model data directly
-						attachment.set('alt', metadata.alt_text)
-						attachment.set('title', metadata.title)
-						attachment.set('caption', metadata.caption)
-						console.log('Updated attachment model data')
+				if (typeof wp.media.frame.state === 'function') {
+					const selection = wp.media.frame.state().get('selection')
+					if (selection && selection.length) {
+						const attachment = selection.first()
+						if (attachment) {
+							// Update the model data directly
+							attachment.set('alt', metadata.alt_text)
+							attachment.set('title', metadata.title)
+							attachment.set('caption', metadata.caption)
+							console.log('Updated attachment model data')
+						}
 					}
 				}
 			} catch (e) {
@@ -364,33 +431,6 @@
 	}
 
 	/**
-	 * Update fields in media edit screen
-	 */
-	function updateMediaEditFields(imageId, metadata) {
-		// Media edit screen (post.php?post=X&action=edit)
-		if (
-			window.location.href.includes('post.php') &&
-			window.location.href.includes('action=edit')
-		) {
-			// Edit screen title
-			const $editTitle = $('#title')
-			if ($editTitle.length) {
-				$editTitle.val(metadata.title)
-				$editTitle.trigger('change')
-				console.log('Updated edit screen title field')
-			}
-
-			// Edit screen excerpt/caption
-			const $editCaption = $('#excerpt')
-			if ($editCaption.length) {
-				$editCaption.val(metadata.caption)
-				$editCaption.trigger('change')
-				console.log('Updated edit screen caption field')
-			}
-		}
-	}
-
-	/**
 	 * Update status indicators
 	 */
 	function updateStatusIndicators(imageId, metadata) {
@@ -433,10 +473,7 @@
 			console.log('Updated status indicators for image ID:', imageId)
 		}
 	}
-})(
-	// Code to handle the update
-	jQuery
-)(function ($) {
+})(jQuery)(function ($) {
 	'use strict'
 
 	function injectForVoyezIntoMediaModal() {

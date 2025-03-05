@@ -261,7 +261,7 @@
 		// Only create if it doesn't already exist
 		if ($('.forvoyez-credits-widget').length === 0) {
 			const widget = $(`
-            <div class="forvoyez-credits-widget fixed bottom-4 right-4 bg-white p-3 pb-2 rounded-lg shadow-lg border border-gray-200 z-50">
+            <div class="forvoyez-credits-widget fixed bottom-4 right-4 bg-white p-3 pb-2 rounded-lg shadow-lg border border-gray-200 z-30">
                 <div class="flex items-center space-x-2">
                     <div class="text-gray-700 font-medium">ForVoyez Credits:</div>
                     <span class="forvoyez-credit-count px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-gray-200 text-gray-600"><span class="animate-pulse">...</span></span>
@@ -644,7 +644,7 @@
 		}
 
 		const notification = document.createElement('div')
-		notification.className = `fixed bottom-4 right-4 p-4 rounded-lg shadow-lg transition-opacity duration-300 opacity-0 ${
+		notification.className = `fixed bottom-4 right-4 p-4 rounded-lg shadow-lg transition-opacity z-40 duration-300 opacity-0 ${
 			type === 'success'
 				? 'bg-green-500'
 				: type === 'error'
