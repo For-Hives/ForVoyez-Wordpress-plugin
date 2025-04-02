@@ -72,6 +72,9 @@ The AI can generate content in multiple languages. You can specify your preferre
 3. Results Example - Showcase of automatically generated alt text, titles, and captions for various image types.
 
 == Changelog ==
+= 1.1.32 =
+Add translations in other languages.
+
 = 1.1.30 =
 Improve quality of life features.
 
