@@ -216,10 +216,6 @@ msgstr "Falta título"
 msgid "Missing caption :"
 msgstr "Falta leyenda:"
 
-#: templates/admin-page.php:34
-msgid "Missing Caption"
-msgstr "Falta leyenda"
-
 #: templates/admin-page.php:42
 msgid "All complete :"
 msgstr "Todo completo:"
