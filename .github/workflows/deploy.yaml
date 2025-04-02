@@ -54,6 +54,26 @@ jobs:
           mkdir -p languages
           wp i18n make-pot . languages/auto-alt-text-for-images.pot --domain=auto-alt-text-for-images --allow-root
 
+      - name: Update PO files from POT
+        run: |
+          # Install gettext
+          sudo apt-get install -y gettext
+
+          # Find all PO files and update them from the POT file
+          for po_file in languages/*.po; do
+            echo "Updating $po_file from POT..."
+            msgmerge --update --no-fuzzy-matching --backup=none "$po_file" languages/auto-alt-text-for-images.pot
+          done
+
+      - name: Generate MO files from PO files
+        run: |
+          # Compile each PO file to MO
+          for po_file in languages/*.po; do
+            mo_file="${po_file%.po}.mo"
+            echo "Generating $mo_file..."
+            msgfmt -o "$mo_file" "$po_file"
+          done
+
       - name: Create ZIP archive
         run: composer run zip
 
