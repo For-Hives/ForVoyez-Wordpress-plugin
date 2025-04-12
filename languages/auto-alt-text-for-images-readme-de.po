@@ -1,0 +1,231 @@
+# Translation of Plugins - Auto Alt Text for Images - Stable Readme (latest release) in German
+# This file is distributed under the same license as the Plugins - Auto Alt Text for Images - Stable Readme (latest release) package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Plugins - Auto Alt Text for Images - Stable Readme (latest release)\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2024-09-21 20:45+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 3.5\n"
+
+#. Short description.
+msgid "Automatically generate SEO-optimized alt text, titles, and captions for your images using AI technology."
+msgstr "Generieren Sie automatisch SEO-optimierten Alt-Text, Titel und Bildunterschriften für Ihre Bilder mit KI-Technologie."
+
+#. Plugin name.
+msgid "Auto Alt Text for Images"
+msgstr "Automatischer Alt-Text für Bilder"
+
+#. Found in faq paragraph.
+msgid "The AI can generate content in multiple languages. You can specify your preferred language in the plugin settings."
+msgstr "Die KI kann Inhalte in mehreren Sprachen generieren. Sie können Ihre bevorzugte Sprache in den Plugin-Einstellungen angeben."
+
+#. Found in faq paragraph.
+msgid "You can select multiple images in your media library and use the \"Generate Alt Text\" option from the bulk actions dropdown to process them all at once."
+msgstr "Sie können mehrere Bilder in Ihrer Medienbibliothek auswählen und die Option \"Alt-Text generieren\" aus dem Dropdown-Menü für Massenaktionen verwenden, um alle auf einmal zu verarbeiten."
+
+#. Found in faq paragraph.
+msgid "No, the plugin processes images in the background and doesn't affect your website's front-end performance."
+msgstr "Nein, das Plugin verarbeitet Bilder im Hintergrund und beeinträchtigt nicht die Frontend-Leistung Ihrer Website."
+
+#. Found in faq paragraph.
+msgid "The plugin works with most common image formats supported by WordPress, including JPEG, PNG, GIF, and WebP."
+msgstr "Das Plugin funktioniert mit den gängigsten von WordPress unterstützten Bildformaten, einschließlich JPEG, PNG, GIF und WebP."
+
+#. Found in faq paragraph.
+msgid "While the plugin automatically generates alt text, you can always manually edit the generated text for each image if needed."
+msgstr "Während das Plugin automatisch Alt-Text generiert, können Sie den generierten Text für jedes Bild bei Bedarf manuell bearbeiten."
+
+#. Found in faq paragraph.
+msgid "Yes, you need a ForVoyez API key to use this plugin. You can obtain one by signing up at <a href=\"https://forvoyez.com\">https://forvoyez.com</a>."
+msgstr "Ja, Sie benötigen einen ForVoyez API-Schlüssel, um dieses Plugin zu nutzen. Sie können einen erhalten, indem Sie sich unter <a href=\"https://forvoyez.com\">https://forvoyez.com</a> registrieren."
+
+#. Found in faq header.
+msgid "Is the generated content multilingual?"
+msgstr "Ist der generierte Inhalt mehrsprachig?"
+
+#. Found in faq header.
+msgid "How does the bulk processing feature work?"
+msgstr "Wie funktioniert die Massenverarbeitungsfunktion?"
+
+#. Found in faq header.
+msgid "Will this plugin slow down my website?"
+msgstr "Wird dieses Plugin meine Website verlangsamen?"
+
+#. Found in faq header.
+msgid "Does this plugin work with all image formats?"
+msgstr "Funktioniert dieses Plugin mit allen Bildformaten?"
+
+#. Found in faq header.
+msgid "Can I customize the generated alt text?"
+msgstr "Kann ich den generierten Alt-Text anpassen?"
+
+#. Found in faq header.
+msgid "Do I need an API key to use this plugin?"
+msgstr "Benötige ich einen API-Schlüssel, um dieses Plugin zu nutzen?"
+
+#. Found in installation list item.
+msgid "Copy the API key and paste it in the plugin's settings page."
+msgstr "Kopieren Sie den API-Schlüssel und fügen Sie ihn in die Einstellungsseite des Plugins ein."
+
+#. Found in installation list item.
+msgid "Generate an API key in the API section of your dashboard."
+msgstr "Generieren Sie einen API-Schlüssel im API-Bereich Ihres Dashboards."
+
+#. Found in installation list item.
+msgid "Once logged in, navigate to your <a href=\"https://forvoyez.com/dashboard\">ForVoyez dashboard</a>."
+msgstr "Nach der Anmeldung navigieren Sie zu Ihrem <a href=\"https://forvoyez.com/dashboard\">ForVoyez Dashboard</a>."
+
+#. Found in installation list item.
+msgid "Visit the <a href=\"https://forvoyez.com/signup\">ForVoyez signup page</a> to create an account."
+msgstr "Besuchen Sie die <a href=\"https://forvoyez.com/signup\">ForVoyez Anmeldeseite</a>, um ein Konto zu erstellen."
+
+#. Found in installation list item.
+msgid "Enter your ForVoyez API key in the settings page."
+msgstr "Geben Sie Ihren ForVoyez API-Schlüssel auf der Einstellungsseite ein."
+
+#. Found in installation list item.
+msgid "Use the Settings -&gt; ForVoyez Auto Alt Text screen to configure the plugin."
+msgstr "Verwenden Sie den Bildschirm Einstellungen -&gt; ForVoyez Auto Alt-Text, um das Plugin zu konfigurieren."
+
+#. Found in installation list item.
+msgid "Activate the plugin through the 'Plugins' screen in WordPress."
+msgstr "Aktivieren Sie das Plugin über den Bildschirm 'Plugins' in WordPress."
+
+#. Found in installation list item.
+msgid "Upload the plugin files to the <code>/wp-content/plugins/auto-alt-text-for-images</code> directory, or install the plugin through the WordPress plugins screen directly."
+msgstr "Laden Sie die Plugin-Dateien in das Verzeichnis <code>/wp-content/plugins/auto-alt-text-for-images</code> hoch, oder installieren Sie das Plugin direkt über den WordPress-Plugins-Bildschirm."
+
+#. Found in installation header.
+msgid "Obtaining an API Key"
+msgstr "Einen API-Schlüssel erhalten"
+
+#. Found in description paragraph.
+msgid "ForVoyez processes the images you submit through this plugin to generate alt text and other metadata. This processing occurs on ForVoyez's servers and is subject to their data handling practices as outlined in their privacy policy."
+msgstr "ForVoyez verarbeitet die Bilder, die Sie über dieses Plugin einreichen, um Alt-Text und andere Metadaten zu generieren. Diese Verarbeitung erfolgt auf den Servern von ForVoyez und unterliegt deren Datenschutzpraktiken, wie in ihrer Datenschutzrichtlinie beschrieben."
+
+#. Found in description paragraph.
+msgid "Please review these documents to understand how your data is handled when using this plugin. It is important to be aware of these terms as they govern the use of the ForVoyez service which is integral to the functionality of this plugin."
+msgstr "Bitte lesen Sie diese Dokumente, um zu verstehen, wie Ihre Daten bei der Verwendung dieses Plugins verarbeitet werden. Es ist wichtig, sich dieser Bedingungen bewusst zu sein, da sie die Nutzung des ForVoyez-Dienstes regeln, der integraler Bestandteil der Funktionalität dieses Plugins ist."
+
+#. Found in description paragraph.
+msgid "By using this plugin, you agree to the following ForVoyez legal documents:"
+msgstr "Durch die Nutzung dieses Plugins stimmen Sie den folgenden ForVoyez-Rechtsdokumenten zu:"
+
+#. Found in description paragraph.
+msgid "ForVoyez API Service: https://forvoyez.com"
+msgstr "ForVoyez API-Dienst: https://forvoyez.com"
+
+#. Found in description paragraph.
+msgid "This plugin relies on the ForVoyez API service to generate alt text and metadata for images. When you use this plugin, image data is sent to ForVoyez servers for processing."
+msgstr "Dieses Plugin nutzt den ForVoyez API-Dienst, um Alt-Text und Metadaten für Bilder zu generieren. Wenn Sie dieses Plugin verwenden, werden Bilddaten zur Verarbeitung an ForVoyez-Server gesendet."
+
+#. Found in description paragraph.
+msgid "This plugin is proudly powered by <a href=\"https://forvoyez.com\">ForVoyez</a>, a leader in AI-driven content optimization solutions."
+msgstr "Dieses Plugin wird stolz betrieben von <a href=\"https://forvoyez.com\">ForVoyez</a>, einem führenden Anbieter von KI-gesteuerten Content-Optimierungslösungen."
+
+#. Found in description paragraph.
+msgid "For support, feature requests, or to report bugs, please visit our <a href=\"https://forvoyez.com/support\">support forum</a> or <a href=\"https://github.com/forvoyez/auto-alt-text-for-images\">GitHub repository</a>."
+msgstr "Für Support, Funktionsanfragen oder um Fehler zu melden, besuchen Sie bitte unser <a href=\"https://forvoyez.com/support\">Support-Forum</a> oder <a href=\"https://github.com/forvoyez/auto-alt-text-for-images\">GitHub-Repository</a>."
+
+#. Found in description paragraph.
+msgid "For more detailed documentation, please visit our <a href=\"https://doc.forvoyez.com\">official documentation</a>."
+msgstr "Für eine detailliertere Dokumentation besuchen Sie bitte unsere <a href=\"https://doc.forvoyez.com\">offizielle Dokumentation</a>."
+
+#. Found in description paragraph.
+msgid "Our AI-powered API makes it easy for developers and content creators to optimize images for SEO. Save time, boost SEO, and streamline your workflow with our powerful solution."
+msgstr "Unsere KI-gestützte API erleichtert es Entwicklern und Content-Erstellern, Bilder für SEO zu optimieren. Sparen Sie Zeit, verbessern Sie SEO und optimieren Sie Ihren Workflow mit unserer leistungsstarken Lösung."
+
+#. Found in description paragraph.
+msgid "ForVoyez Auto Alt Text for Images is a powerful WordPress plugin that leverages AI technology to automatically generate high-quality, SEO-friendly alt text, titles, and captions for images in your content. This plugin enhances your website's accessibility and search engine optimization effortlessly."
+msgstr "ForVoyez Auto Alt-Text für Bilder ist ein leistungsstarkes WordPress-Plugin, das KI-Technologie nutzt, um automatisch hochwertige, SEO-freundliche Alt-Texte, Titel und Bildunterschriften für Bilder in Ihrem Inhalt zu generieren. Dieses Plugin verbessert die Zugänglichkeit und Suchmaschinenoptimierung Ihrer Website mühelos."
+
+#. Found in description list item.
+msgid "Legal Notice: https://forvoyez.com/app/legals/legal-notice"
+msgstr "Rechtliche Hinweise: https://forvoyez.com/app/legals/legal-notice"
+
+#. Found in description list item.
+msgid "Privacy Policy: https://forvoyez.com/app/legals/privacy-policy"
+msgstr "Datenschutzrichtlinie: https://forvoyez.com/app/legals/privacy-policy"
+
+#. Found in description list item.
+msgid "Terms of Service: https://forvoyez.com/app/legals/terms"
+msgstr "Nutzungsbedingungen: https://forvoyez.com/app/legals/terms"
+
+#. Found in description list item.
+msgid "🧰 User-friendly WordPress admin interface"
+msgstr "🧰 Benutzerfreundliche WordPress-Admin-Oberfläche"
+
+#. Found in description list item.
+msgid "🌐 Multi-language support"
+msgstr "🌐 Mehrsprachige Unterstützung"
+
+#. Found in description list item.
+msgid "🎨 Customizable output formats"
+msgstr "🎨 Anpassbare Ausgabeformate"
+
+#. Found in description list item.
+msgid "🔄 Automatic processing for new uploads"
+msgstr "🔄 Automatische Verarbeitung für neue Uploads"
+
+#. Found in description list item.
+msgid "🖼️ Bulk processing for existing images"
+msgstr "🖼️ Massenverarbeitung für bestehende Bilder"
+
+#. Found in description list item.
+msgid "🤖 AI-powered alt text generation"
+msgstr "🤖 KI-gestützte Alt-Text-Generierung"
+
+#. Found in description header.
+msgid "External Services"
+msgstr "Externe Dienste"
+
+#. Found in description header.
+msgid "Additional Information"
+msgstr "Zusätzliche Informationen"
+
+#. Found in description header.
+msgid "Key Features"
+msgstr "Hauptfunktionen"
+
+#. Screenshot description.
+msgid "Results Example - Showcase of automatically generated alt text, titles, and captions for various image types."
+msgstr "Ergebnisbeispiel - Präsentation von automatisch generierten Alt-Texten, Titeln und Bildunterschriften für verschiedene Bildtypen."
+
+#. Screenshot description.
+msgid "Image Management Interface - Main dashboard for managing and analyzing your WordPress media library."
+msgstr "Bildverwaltungsschnittstelle - Hauptdashboard zur Verwaltung und Analyse Ihrer WordPress-Medienbibliothek."
+
+#. Screenshot description.
+msgid "API Configuration - Easy setup page for entering your ForVoyez API key."
+msgstr "API-Konfiguration - Einfache Einrichtungsseite zur Eingabe Ihres ForVoyez API-Schlüssels."
+
+#. Found in changelog list item.
+msgid "User-friendly admin interface"
+msgstr "Benutzerfreundliche Admin-Oberfläche"
+
+#. Found in changelog list item.
+msgid "Multi-language support"
+msgstr "Mehrsprachige Unterstützung"
+
+#. Found in changelog list item.
+msgid "Integration with WordPress media library"
+msgstr "Integration mit der WordPress-Medienbibliothek"
+
+#. Found in changelog list item.
+msgid "Bulk processing feature"
+msgstr "Massenverarbeitungsfunktion"
+
+#. Found in changelog list item.
+msgid "AI-powered generation of alt text, titles, and captions"
+msgstr "KI-gestützte Generierung von Alt-Texten, Titeln und Bildunterschriften"
+
+#. Found in changelog list item.
+msgid "Initial release"
+msgstr "Erste Veröffentlichung" 
