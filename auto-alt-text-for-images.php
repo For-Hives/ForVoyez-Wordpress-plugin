@@ -13,7 +13,7 @@
  * Plugin Name: Auto Alt Text for Images
  * Plugin URI:  https://doc.forvoyez.com/wordpress-plugin
  * Description: Automatically generate alt text and SEO metadata for images using ForVoyez API.
- * Version:     1.1.35
+ * Version:     1.1.36
  * Author:      ForVoyez
  * Author URI:  https://forvoyez.com
  * Text Domain: auto-alt-text-for-images
@@ -27,7 +27,7 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin constants
-define( 'FORVOYEZ_VERSION', '1.1.35' );
+define( 'FORVOYEZ_VERSION', '1.1.36' );
 define( 'FORVOYEZ_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'FORVOYEZ_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'FORVOYEZ_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
