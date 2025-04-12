@@ -10,9 +10,9 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Generieren Sie automatisch SEO-optimierten Alt-Text, Titel und Bildunterschriften für Ihre Bilder mit KI-Technologie.
 
-== Description ==
+== Beschreibung ==
 
-ForVoyez Auto Alt-Text für Bilder ist ein leistungsstarkes WordPress-Plugin, das KI-Technologie nutzt, um automatisch hochwertige, SEO-freundliche Alt-Texte, Titel und Bildunterschriften für Bilder in Ihrem Inhalt zu generieren. Dieses Plugin verbessert die Zugänglichkeit und Suchmaschinenoptimierung Ihrer Website mühelos.
+ForVoyez Automatischer Alt-Text für Bilder ist ein leistungsstarkes WordPress-Plugin, das KI-Technologie nutzt, um automatisch hochwertige, SEO-freundliche Alt-Texte, Titel und Bildunterschriften für Bilder in Ihrem Inhalt zu generieren. Dieses Plugin verbessert die Zugänglichkeit und Suchmaschinenoptimierung Ihrer Website mühelos.
 
 = Hauptfunktionen =
 
@@ -71,7 +71,7 @@ Die KI kann Inhalte in mehreren Sprachen generieren. Sie können Ihre bevorzugte
 2. Bildverwaltungsschnittstelle - Hauptdashboard zur Verwaltung und Analyse Ihrer WordPress-Medienbibliothek.
 3. Ergebnisbeispiel - Präsentation von automatisch generierten Alt-Texten, Titeln und Bildunterschriften für verschiedene Bildtypen.
 
-== Changelog ==
+== Änderungsprotokoll ==
 
 = 1.0.0 =
 * Erste Veröffentlichung
@@ -81,10 +81,10 @@ Die KI kann Inhalte in mehreren Sprachen generieren. Sie können Ihre bevorzugte
 * Mehrsprachige Unterstützung
 * Benutzerfreundliche Admin-Oberfläche
 
-== Upgrade Notice ==
+== Upgrade-Hinweis ==
 
 = 1.0.0 =
-Dies ist die erste Veröffentlichung von ForVoyez Auto Alt-Text für Bilder. Installieren Sie es jetzt, um die Optimierung Ihrer Bildmetadaten zu starten!
+Dies ist die erste Veröffentlichung von ForVoyez Automatischer Alt-Text für Bilder. Installieren Sie es jetzt, um die Optimierung Ihrer Bildmetadaten zu starten!
 
 == Zusätzliche Informationen ==
 
