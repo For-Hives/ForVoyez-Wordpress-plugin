@@ -1,96 +1,111 @@
-=== ForVoyez Texto Alt Automático para Imágenes ===
-Contributors: forvoyezteam, johndoe
-Tags: alt text, image optimization, accessibility, seo, ai
+=== Auto Alt Text for Images ===
+Contributors: cinquinandy
+Tags: seo, accessibility, images, alt text, metadata
 Requires at least: 5.0
-Tested up to: 6.4
+Tested up to: 6.6
 Stable tag: 1.0.0
+Requires PHP: 7.2
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Mejora el SEO de imágenes automáticamente con texto alternativo, títulos y leyendas generados por IA.
+Genera automáticamente texto alternativo, títulos y leyendas optimizados para SEO para tus imágenes utilizando tecnología de IA.
 
 == Descripción ==
 
-**ForVoyez Texto Alt Automático para Imágenes** utiliza tecnología avanzada de IA para generar automáticamente texto alternativo, títulos y leyendas de alta calidad y optimizados para SEO para tus imágenes de WordPress.
+ForVoyez Texto Alt Automático para Imágenes es un potente plugin de WordPress que utiliza tecnología de inteligencia artificial para generar automáticamente texto alternativo, títulos y leyendas de alta calidad y optimizados para SEO para las imágenes de tu contenido. Este plugin mejora sin esfuerzo la accesibilidad y la optimización para motores de búsqueda de tu sitio web.
 
-La falta de texto alternativo o un texto alternativo mal escrito puede perjudicar tu posicionamiento SEO y hacer que tu sitio sea menos accesible. Nuestro plugin resuelve este problema creando instantáneamente texto alternativo preciso y descriptivo que mejora el rendimiento SEO de tu sitio y el cumplimiento de la accesibilidad.
+= Características principales =
 
-### Características Principales
+* 🤖 Generación de texto alt mediante IA
+* 🖼️ Procesamiento por lotes para imágenes existentes
+* 🔄 Procesamiento automático para nuevas cargas
+* 🎨 Formatos de salida personalizables
+* 🌐 Soporte multilingüe
+* 🧰 Interfaz de administración de WordPress fácil de usar
 
-- **Generación Automática de Texto Alt**: Procesa automáticamente las nuevas cargas o genera texto alternativo para imágenes existentes
-- **Soporte Multilingüe**: Genera texto alternativo en múltiples idiomas, incluyendo inglés, español, francés, alemán y más
-- **Generación de Títulos y Leyendas**: Opcionalmente genera títulos y leyendas optimizados para SEO junto con el texto alternativo
-- **Procesamiento por Lotes**: Procesa múltiples imágenes a la vez con nuestra herramienta de procesamiento por lotes
-- **Análisis Inteligente de Imágenes**: IA avanzada que comprende el contenido y contexto de las imágenes
-- **Optimización SEO**: El texto generado sigue las mejores prácticas de SEO para máxima visibilidad en buscadores
-- **Cumplimiento de Accesibilidad**: Ayuda a cumplir con las directrices de accesibilidad WCAG
-
-### ¿Por qué usar ForVoyez Texto Alt Automático?
-
-- **Ahorra Tiempo**: Deja de escribir texto alternativo manualmente y concéntrate en crear contenido
-- **Mejora el SEO**: Ayuda a los motores de búsqueda a entender tus imágenes y posicionar tu contenido más alto
-- **Mejora la Accesibilidad**: Haz que tu sitio web sea más accesible para usuarios con discapacidades visuales
-- **Aumenta el Compromiso**: Mejores descripciones de imágenes pueden mejorar el compromiso del usuario y el tiempo en el sitio
-
-### Comenzando
-
-1. Instala y activa el plugin
-2. Obtén tu clave API de [ForVoyez.com](https://forvoyez.com/api-keys)
-3. Ingresa tu clave API en la configuración del plugin
-4. Configura tus preferencias (idioma, opciones de generación automática, etc.)
-5. Comienza a subir imágenes o procesa tu biblioteca de medios existente
-
-### Soporte
-
-Para soporte, solicitudes de funciones o informes de errores, visita nuestra [página de soporte](https://forvoyez.com/support) o contáctanos directamente en support@forvoyez.com.
+Nuestra API impulsada por IA facilita la optimización de imágenes para SEO para desarrolladores y creadores de contenido. Ahorra tiempo, mejora tu SEO y simplifica tu flujo de trabajo con nuestra potente solución.
 
 == Instalación ==
 
-1. Sube la carpeta `auto-alt-text-for-images` al directorio `/wp-content/plugins/`
-2. Activa el plugin a través del menú 'Plugins' en WordPress
-3. Ve a la página de configuración de ForVoyez Texto Alt Automático
-4. Ingresa tu clave API de ForVoyez (obtén una en [forvoyez.com/api-keys](https://forvoyez.com/api-keys))
-5. Configura tus ajustes y comienza a usar el plugin
+1. Sube los archivos del plugin al directorio `/wp-content/plugins/auto-alt-text-for-images`, o instala el plugin directamente desde la pantalla de plugins de WordPress.
+2. Activa el plugin a través de la pantalla 'Plugins' de WordPress.
+3. Utiliza la pantalla Ajustes -> ForVoyez Texto Alt Automático para configurar el plugin.
+4. Introduce tu clave API de ForVoyez en la página de configuración.
+
+= Obtención de una clave API =
+
+1. Visita la [página de registro de ForVoyez](https://forvoyez.com/signup) para crear una cuenta.
+2. Una vez iniciada sesión, navega a tu [panel de control de ForVoyez](https://forvoyez.com/dashboard).
+3. Genera una clave API en la sección API de tu panel de control.
+4. Copia la clave API y pégala en la página de configuración del plugin.
 
 == Preguntas Frecuentes ==
 
-= ¿Cómo obtengo una clave API? =
+= ¿Necesito una clave API para usar este plugin? =
 
-Visita [ForVoyez.com](https://forvoyez.com/api-keys) para crear una cuenta y obtener tu clave API. Hay planes gratuitos y de pago disponibles.
+Sí, necesitas una clave API de ForVoyez para usar este plugin. Puedes obtener una registrándote en [https://forvoyez.com](https://forvoyez.com).
+
+= ¿Puedo personalizar el texto alternativo generado? =
+
+Aunque el plugin genera automáticamente el texto alternativo, siempre puedes editar manualmente el texto generado para cada imagen si es necesario.
+
+= ¿Este plugin funciona con todos los formatos de imagen? =
+
+El plugin funciona con la mayoría de los formatos de imagen comunes compatibles con WordPress, incluyendo JPEG, PNG, GIF y WebP.
 
 = ¿Este plugin ralentizará mi sitio web? =
 
-No. La generación de texto alternativo ocurre en segundo plano cuando se suben imágenes o cuando activas manualmente el proceso. No afecta el rendimiento del front-end de tu sitio web.
+No, el plugin procesa las imágenes en segundo plano y no afecta al rendimiento del front-end de tu sitio web.
 
-= ¿Qué tan preciso es el texto alternativo generado? =
+= ¿Cómo funciona la característica de procesamiento por lotes? =
 
-Nuestra IA utiliza tecnología avanzada de reconocimiento de imágenes para generar descripciones altamente precisas. Sin embargo, recomendamos revisar el texto generado para imágenes críticas para asegurarte de que cumple con tus necesidades específicas.
+Puedes seleccionar múltiples imágenes en tu biblioteca de medios y usar la opción "Generar Texto Alt" del menú desplegable de acciones masivas para procesarlas todas a la vez.
 
-= ¿Puedo editar el texto alternativo generado? =
+= ¿El contenido generado es multilingüe? =
 
-Sí. El plugin genera el texto alternativo inicial, pero siempre puedes editarlo manualmente a través de la biblioteca de medios de WordPress o el editor de imágenes, como cualquier otro texto alternativo.
-
-= ¿Qué idiomas son compatibles? =
-
-Actualmente admitimos inglés, español, francés, alemán, italiano, portugués, holandés y varios otros idiomas. Puedes seleccionar tu idioma preferido en la configuración del plugin.
-
-= ¿Funciona con imágenes existentes? =
-
-Sí. Puedes procesar toda tu biblioteca de medios o seleccionar imágenes específicas para generar texto alternativo para contenido existente.
+La IA puede generar contenido en múltiples idiomas. Puedes especificar tu idioma preferido en la configuración del plugin.
 
 == Capturas de Pantalla ==
 
-1. Página de configuración del plugin
-2. Herramienta de procesamiento por lotes
-3. Ejemplo de texto alternativo generado
-4. Integración con la biblioteca de medios
+1. Configuración de la API - Página de configuración sencilla para introducir tu clave API de ForVoyez.
+2. Interfaz de gestión de imágenes - Panel principal para gestionar y analizar tu biblioteca de medios de WordPress.
+3. Ejemplo de resultados - Muestra de texto alternativo, títulos y leyendas generados automáticamente para varios tipos de imágenes.
 
 == Registro de Cambios ==
 
 = 1.0.0 =
 * Lanzamiento inicial
+* Generación mediante IA de texto alternativo, títulos y leyendas
+* Función de procesamiento por lotes
+* Integración con la biblioteca de medios de WordPress
+* Soporte multilingüe
+* Interfaz de administración fácil de usar
 
 == Aviso de Actualización ==
 
 = 1.0.0 =
-Lanzamiento inicial de ForVoyez Texto Alt Automático para Imágenes. ¡Comienza a optimizar el SEO de tus imágenes hoy! 
+Esta es la primera versión de ForVoyez Texto Alt Automático para Imágenes. ¡Instálalo ahora para empezar a optimizar los metadatos de tus imágenes!
+
+== Información Adicional ==
+
+Para una documentación más detallada, por favor visita nuestra [documentación oficial](https://doc.forvoyez.com).
+
+Para soporte, solicitudes de funciones o para reportar errores, visita nuestro [foro de soporte](https://forvoyez.com/support) o nuestro [repositorio de GitHub](https://github.com/forvoyez/auto-alt-text-for-images).
+
+Este plugin está orgullosamente impulsado por [ForVoyez](https://forvoyez.com), un líder en soluciones de optimización de contenido basadas en IA.
+
+== Servicios Externos ==
+
+Este plugin depende del servicio API de ForVoyez para generar texto alternativo y metadatos para imágenes. Cuando usas este plugin, los datos de imagen se envían a los servidores de ForVoyez para su procesamiento.
+
+Servicio API de ForVoyez: https://forvoyez.com
+
+Al usar este plugin, aceptas los siguientes documentos legales de ForVoyez:
+
+* Términos de Servicio: https://forvoyez.com/app/legals/terms
+* Política de Privacidad: https://forvoyez.com/app/legals/privacy-policy
+* Aviso Legal: https://forvoyez.com/app/legals/legal-notice
+
+Por favor, revisa estos documentos para entender cómo se manejan tus datos al usar este plugin. Es importante estar al tanto de estos términos ya que rigen el uso del servicio ForVoyez, que es parte integral de la funcionalidad de este plugin.
+
+ForVoyez procesa las imágenes que envías a través de este plugin para generar texto alternativo y otros metadatos. Este procesamiento ocurre en los servidores de ForVoyez y está sujeto a sus prácticas de manejo de datos como se describe en su política de privacidad. 
