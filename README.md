@@ -284,6 +284,13 @@ To run the tests, use the following command:
 - Run `composer run zip`
 
 
+To add a new language, simply run the command:
+`composer run add-language [language_code]`
+For example, to add Spanish:
+`composer run add-language es_ES`
+The created files will need to be translated either manually or using a translation editor like Poedit. Once translated, they must be compiled into MO files to be used by WordPress.
+
+
 ---
 
 Made with ❤️ by [ForVoyez](https://forvoyez.com)
