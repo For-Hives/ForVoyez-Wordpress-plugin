@@ -1,0 +1,281 @@
+# Copyright (C) 2023 forvoyez, cinquinandy
+# This file is distributed under the same license as the Auto Alt Text for Images plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Auto Alt Text for Images 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/auto-alt-text-for-images\n"
+"Last-Translator: ForVoyez Team <info@forvoyez.com>\n"
+"Language-Team: Русский <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2023-08-20T12:00:00+00:00\n"
+"PO-Revision-Date: 2023-08-20T12:00:00+00:00\n"
+"X-Generator: WP-CLI 2.8.1\n"
+"X-Domain: auto-alt-text-for-images\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+#. Plugin Name of the plugin
+msgid "ForVoyez Auto Alt Text for Images"
+msgstr "ForVoyez Автоматический Alt-текст для изображений"
+
+#. Plugin URI of the plugin
+msgid "https://forvoyez.com/auto-alt-text-plugin"
+msgstr "https://forvoyez.com/auto-alt-text-plugin"
+
+#. Description of the plugin
+msgid "Automatically generate SEO-optimized alt text, titles, and captions for your images using AI technology. Improve accessibility and boost search rankings."
+msgstr "Автоматически создавайте SEO-оптимизированный альтернативный текст, заголовки и подписи для ваших изображений с помощью технологии ИИ. Улучшите доступность и повысьте рейтинг в поисковых системах."
+
+#. Author of the plugin
+msgid "ForVoyez"
+msgstr "ForVoyez"
+
+#. Author URI of the plugin
+msgid "https://forvoyez.com"
+msgstr "https://forvoyez.com"
+
+#: readme.txt:1
+msgid "=== Auto Alt Text for Images - AI-powered Alt Tags Generator ==="
+msgstr "=== Auto Alt Text for Images - Генератор Alt-тегов на основе ИИ ==="
+
+#: readme.txt:3
+msgid "Contributors: forvoyez, cinquinandy"
+msgstr "Авторы: forvoyez, cinquinandy"
+
+#: readme.txt:4
+msgid "Tags: ai, artificial intelligence, alt text, image optimization, seo, accessibility, image alt tags, media library, wcag, screen reader"
+msgstr "Теги: ai, искусственный интеллект, альтернативный текст, оптимизация изображений, seo, доступность, alt-теги изображений, медиатека, wcag, скринридер"
+
+#: readme.txt:5
+msgid "Requires at least: 5.0"
+msgstr "Требуется как минимум: 5.0"
+
+#: readme.txt:6
+msgid "Tested up to: 6.5"
+msgstr "Протестировано до: 6.5"
+
+#: readme.txt:7
+msgid "Requires PHP: 7.4"
+msgstr "Требуется PHP: 7.4"
+
+#: readme.txt:8
+msgid "Stable tag: 1.0.0"
+msgstr "Стабильная версия: 1.0.0"
+
+#: readme.txt:9
+msgid "License: GPLv2 or later"
+msgstr "Лицензия: GPLv2 или более поздняя версия"
+
+#: readme.txt:10
+msgid "License URI: https://www.gnu.org/licenses/gpl-2.0.html"
+msgstr "URI лицензии: https://www.gnu.org/licenses/gpl-2.0.html"
+
+#: readme.txt:12
+msgid "Generate SEO-optimized alt text for your images automatically using AI. Improve accessibility and boost search rankings with smart image descriptions."
+msgstr "Автоматически создавайте SEO-оптимизированный альтернативный текст для ваших изображений с помощью ИИ. Улучшите доступность и повысьте рейтинг в поисковых системах с помощью умных описаний изображений."
+
+#: readme.txt:14
+msgid "== Description =="
+msgstr "== Описание =="
+
+#: readme.txt:16
+msgid "**Auto Alt Text for Images** is a powerful WordPress plugin that uses cutting-edge AI technology to automatically generate high-quality, SEO-optimized alt text for your images. By providing descriptive alt text for all your images, this plugin helps improve your website's accessibility for visually impaired users and boost your search engine rankings."
+msgstr "**Автоматический Alt-текст для изображений** — это мощный плагин WordPress, который использует передовую технологию искусственного интеллекта для автоматического создания качественного, SEO-оптимизированного альтернативного текста для ваших изображений. Предоставляя описательный альтернативный текст для всех ваших изображений, этот плагин помогает улучшить доступность вашего сайта для пользователей с нарушениями зрения и повысить ваши позиции в поисковых системах."
+
+#: readme.txt:18
+msgid "By adding descriptive alt text to your images, you're making your content more accessible to users with screen readers and improving your chances of ranking higher in image search results."
+msgstr "Добавляя описательный альтернативный текст к вашим изображениям, вы делаете свой контент более доступным для пользователей со скринридерами и повышаете свои шансы на более высокие позиции в результатах поиска изображений."
+
+#: readme.txt:20
+msgid "### Key Features"
+msgstr "### Ключевые особенности"
+
+#: readme.txt:22
+msgid "* **AI-Powered Analysis**: Our advanced AI analyzes your images to generate accurate, contextually relevant alt text."
+msgstr "* **Анализ на основе ИИ**: Наш продвинутый ИИ анализирует ваши изображения для создания точного, контекстуально релевантного альтернативного текста."
+
+#: readme.txt:23
+msgid "* **SEO Optimization**: Alt text is optimized for search engines to improve your image ranking in search results."
+msgstr "* **SEO-оптимизация**: Альтернативный текст оптимизирован для поисковых систем, чтобы улучшить ранжирование ваших изображений в результатах поиска."
+
+#: readme.txt:24
+msgid "* **Accessibility Compliance**: Helps make your website more accessible and compliant with WCAG guidelines."
+msgstr "* **Соответствие требованиям доступности**: Помогает сделать ваш веб-сайт более доступным и соответствующим рекомендациям WCAG."
+
+#: readme.txt:25
+msgid "* **Batch Processing**: Process all existing images in your media library with a single click."
+msgstr "* **Пакетная обработка**: Обработайте все существующие изображения в вашей медиатеке одним нажатием."
+
+#: readme.txt:26
+msgid "* **Automatic Processing**: Automatically generate alt text for new images as they are uploaded."
+msgstr "* **Автоматическая обработка**: Автоматически создавайте альтернативный текст для новых изображений при их загрузке."
+
+#: readme.txt:27
+msgid "* **Customizable Output**: Choose to generate only alt text or include titles and captions too."
+msgstr "* **Настраиваемый вывод**: Выберите генерацию только альтернативного текста или включите также заголовки и подписи."
+
+#: readme.txt:28
+msgid "* **Multilingual Support**: Generate alt text in multiple languages to support international audiences."
+msgstr "* **Многоязычная поддержка**: Создавайте альтернативный текст на нескольких языках для поддержки международной аудитории."
+
+#: readme.txt:29
+msgid "* **User-Friendly Interface**: Simple, intuitive settings panel for easy configuration."
+msgstr "* **Удобный интерфейс**: Простая, интуитивно понятная панель настроек для легкой конфигурации."
+
+#: readme.txt:31
+msgid "### Getting Started"
+msgstr "### Начало работы"
+
+#: readme.txt:33
+msgid "1. Install and activate the plugin."
+msgstr "1. Установите и активируйте плагин."
+
+#: readme.txt:34
+msgid "2. Go to **Settings > Auto Alt Text** to configure the plugin."
+msgstr "2. Перейдите в **Настройки > Авто Alt-текст** для настройки плагина."
+
+#: readme.txt:35
+msgid "3. Enter your ForVoyez API key. (Don't have one? [Get it here](https://forvoyez.com))"
+msgstr "3. Введите ваш API-ключ ForVoyez. (У вас его нет? [Получите здесь](https://forvoyez.com))"
+
+#: readme.txt:36
+msgid "4. Configure your preferences for language, output format, and other options."
+msgstr "4. Настройте ваши предпочтения для языка, формата вывода и других опций."
+
+#: readme.txt:37
+msgid "5. Use the 'Batch Processing' option to generate alt text for all existing images."
+msgstr "5. Используйте опцию 'Пакетная обработка' для создания альтернативного текста для всех существующих изображений."
+
+#: readme.txt:39
+msgid "### Technical Details"
+msgstr "### Технические детали"
+
+#: readme.txt:41
+msgid "The plugin securely processes your images through the ForVoyez API to generate accurate and relevant alt text. Your images are analyzed using advanced computer vision and natural language processing algorithms to create descriptions that are both informative for users and optimized for search engines."
+msgstr "Плагин безопасно обрабатывает ваши изображения через API ForVoyez для создания точного и релевантного альтернативного текста. Ваши изображения анализируются с использованием продвинутых алгоритмов компьютерного зрения и обработки естественного языка для создания описаний, которые информативны для пользователей и оптимизированы для поисковых систем."
+
+#: readme.txt:43
+msgid "== Installation =="
+msgstr "== Установка =="
+
+#: readme.txt:45
+msgid "1. Upload the plugin files to the `/wp-content/plugins/auto-alt-text-for-images` directory, or install the plugin through the WordPress plugins screen directly."
+msgstr "1. Загрузите файлы плагина в каталог `/wp-content/plugins/auto-alt-text-for-images` или установите плагин непосредственно через экран плагинов WordPress."
+
+#: readme.txt:46
+msgid "2. Activate the plugin through the 'Plugins' screen in WordPress."
+msgstr "2. Активируйте плагин через экран 'Плагины' в WordPress."
+
+#: readme.txt:47
+msgid "3. Go to **Settings > Auto Alt Text** to configure the plugin settings."
+msgstr "3. Перейдите в **Настройки > Авто Alt-текст** для настройки параметров плагина."
+
+#: readme.txt:48
+msgid "4. Enter your ForVoyez API key."
+msgstr "4. Введите ваш API-ключ ForVoyez."
+
+#: readme.txt:49
+msgid "5. Configure your preferences and save the settings."
+msgstr "5. Настройте ваши предпочтения и сохраните настройки."
+
+#: readme.txt:51
+msgid "== Frequently Asked Questions =="
+msgstr "== Часто задаваемые вопросы =="
+
+#: readme.txt:53
+msgid "= Why do I need an API key? ="
+msgstr "= Почему мне нужен API-ключ? ="
+
+#: readme.txt:55
+msgid "The API key is required to access the ForVoyez image analysis services that power the alt text generation. You can get an API key by signing up at [https://forvoyez.com](https://forvoyez.com)."
+msgstr "API-ключ необходим для доступа к сервисам анализа изображений ForVoyez, которые обеспечивают генерацию альтернативного текста. Вы можете получить API-ключ, зарегистрировавшись на сайте [https://forvoyez.com](https://forvoyez.com)."
+
+#: readme.txt:57
+msgid "= Can I customize the generated alt text? ="
+msgstr "= Могу ли я настроить сгенерированный альтернативный текст? ="
+
+#: readme.txt:59
+msgid "Yes, you can configure the language, maximum length, and optimization level for the generated alt text. Additionally, you can always manually edit the generated alt text after it's created."
+msgstr "Да, вы можете настроить язык, максимальную длину и уровень оптимизации для сгенерированного альтернативного текста. Кроме того, вы всегда можете вручную редактировать сгенерированный альтернативный текст после его создания."
+
+#: readme.txt:61
+msgid "= What image formats are supported? ="
+msgstr "= Какие форматы изображений поддерживаются? ="
+
+#: readme.txt:63
+msgid "The plugin supports all common image formats, including JPEG, PNG, GIF, WebP, and more. Any image format that WordPress supports can be processed by the plugin."
+msgstr "Плагин поддерживает все распространенные форматы изображений, включая JPEG, PNG, GIF, WebP и другие. Любой формат изображений, поддерживаемый WordPress, может быть обработан плагином."
+
+#: readme.txt:65
+msgid "= Will this plugin slow down my website? ="
+msgstr "= Замедлит ли этот плагин мой веб-сайт? ="
+
+#: readme.txt:67
+msgid "No, the alt text generation happens in the background and doesn't affect your website's front-end performance. When new images are uploaded, the alt text is generated during the upload process without impacting user experience."
+msgstr "Нет, генерация альтернативного текста происходит в фоновом режиме и не влияет на производительность интерфейса вашего веб-сайта. Когда загружаются новые изображения, альтернативный текст создается во время процесса загрузки без влияния на пользовательский опыт."
+
+#: readme.txt:69
+msgid "= How does the batch processing work? ="
+msgstr "= Как работает пакетная обработка? ="
+
+#: readme.txt:71
+msgid "The batch processing feature scans your media library and processes all images that don't already have alt text. Depending on the number of images, this process may take some time to complete."
+msgstr "Функция пакетной обработки сканирует вашу медиатеку и обрабатывает все изображения, которые еще не имеют альтернативного текста. В зависимости от количества изображений этот процесс может занять некоторое время."
+
+#: readme.txt:73
+msgid "= Does this plugin work with multilingual websites? ="
+msgstr "= Работает ли этот плагин с многоязычными веб-сайтами? ="
+
+#: readme.txt:75
+msgid "Yes, you can select the language for the generated alt text to match your website's language. The plugin supports multiple languages including English, Spanish, French, German, Italian, Portuguese, Russian, Chinese, Japanese, and Hindi."
+msgstr "Да, вы можете выбрать язык для сгенерированного альтернативного текста, соответствующий языку вашего веб-сайта. Плагин поддерживает несколько языков, включая английский, испанский, французский, немецкий, итальянский, португальский, русский, китайский, японский и хинди."
+
+#: readme.txt:77
+msgid "== Changelog =="
+msgstr "== Журнал изменений =="
+
+#: readme.txt:79
+msgid "= 1.0.0 ="
+msgstr "= 1.0.0 ="
+
+#: readme.txt:80
+msgid "* Initial release"
+msgstr "* Первый выпуск"
+
+#: readme.txt:82
+msgid "== Upgrade Notice =="
+msgstr "== Уведомление об обновлении =="
+
+#: readme.txt:84
+msgid "= 1.0.0 ="
+msgstr "= 1.0.0 ="
+
+#: readme.txt:85
+msgid "Initial release of the Auto Alt Text for Images plugin."
+msgstr "Первый выпуск плагина Автоматический Alt-текст для изображений."
+
+#: readme.txt:87
+msgid "== Support =="
+msgstr "== Поддержка =="
+
+#: readme.txt:89
+msgid "For support requests, please visit our [support forum](https://wordpress.org/support/plugin/auto-alt-text-for-images/) or contact us directly at [support@forvoyez.com](mailto:support@forvoyez.com)."
+msgstr "Для запросов поддержки, пожалуйста, посетите наш [форум поддержки](https://wordpress.org/support/plugin/auto-alt-text-for-images/) или свяжитесь с нами напрямую по адресу [support@forvoyez.com](mailto:support@forvoyez.com)."
+
+#: readme.txt:91
+msgid "== Privacy Policy =="
+msgstr "== Политика конфиденциальности =="
+
+#: readme.txt:93
+msgid "This plugin sends image data to the ForVoyez API service for processing. No personal data is collected or stored by the plugin itself. For more information about how your data is processed, please refer to the [ForVoyez Privacy Policy](https://forvoyez.com/privacy-policy/)."
+msgstr "Этот плагин отправляет данные изображений в сервис API ForVoyez для обработки. Сам плагин не собирает и не хранит персональные данные. Для получения дополнительной информации о том, как обрабатываются ваши данные, пожалуйста, обратитесь к [Политике конфиденциальности ForVoyez](https://forvoyez.com/privacy-policy/)."
+
+#: readme.txt:95
+msgid "== Additional Information =="
+msgstr "== Дополнительная информация =="
+
+#: readme.txt:97
+msgid "For more information about the Auto Alt Text for Images plugin, please visit our [official website](https://forvoyez.com/plugins/auto-alt-text-for-images)."
+msgstr "Для получения дополнительной информации о плагине Автоматический Alt-текст для изображений, пожалуйста, посетите наш [официальный веб-сайт](https://forvoyez.com/plugins/auto-alt-text-for-images)." 
