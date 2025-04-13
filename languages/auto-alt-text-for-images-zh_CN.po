@@ -1,0 +1,617 @@
+# Copyright (C) 2024 ForVoyez
+# This file is distributed under the same license as the Auto Alt Text for Images plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Auto Alt Text for Images 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/auto-alt-text-for-images\n"
+"POT-Creation-Date: 2024-08-01T10:19:11+00:00\n"
+"PO-Revision-Date: 2024-08-12 13:30+0200\n"
+"Last-Translator: Cinquin Andy <contact@andy-cinquin.fr>\n"
+"Language-Team: ForVoyez <contact@forvoyez.com>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.3\n"
+"X-Domain: auto-alt-text-for-images\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. Plugin Name of the plugin
+#: includes/class-forvoyez-admin.php:45 templates/admin-page.php:2
+msgid "Auto Alt Text for Images"
+msgstr "图像自动替代文本"
+
+#. Plugin URI of the plugin
+msgid "https://doc.forvoyez.com/wordpress-plugin"
+msgstr "https://doc.forvoyez.com/wordpress-plugin"
+
+#. Description of the plugin
+msgid "Automatically generate alt text and SEO metadata for images using ForVoyez API."
+msgstr "使用 ForVoyez API 自动为图像生成替代文本和 SEO 元数据。"
+
+#. Author of the plugin
+msgid "ForVoyez"
+msgstr "ForVoyez"
+
+#. Author URI of the plugin
+msgid "https://forvoyez.com"
+msgstr "https://forvoyez.com"
+
+#: includes/class-forvoyez-admin.php:46
+msgid "Auto Alt Text"
+msgstr "自动替代文本"
+
+#: includes/class-forvoyez-admin.php:138
+msgid "You do not have sufficient permissions to access this page."
+msgstr "您没有足够的权限访问此页面。"
+
+#: includes/class-forvoyez-admin.php:151
+msgid "Your ForVoyez API key is not configured. Please configure it to enable automatic alt text generation."
+msgstr "您的 ForVoyez API 密钥尚未配置。请配置它以启用自动替代文本生成。"
+
+#: includes/class-forvoyez-admin.php:260
+msgid "No images found matching the selected criteria."
+msgstr "未找到符合所选条件的图像。"
+
+#: includes/class-forvoyez-admin.php:337 includes/class-forvoyez-admin.php:465
+#: includes/class-forvoyez-admin.php:521 includes/class-forvoyez-admin.php:544
+#: includes/class-forvoyez-image-processor.php:238
+#: includes/class-forvoyez-settings.php:55
+msgid "Permission denied"
+msgstr "权限被拒绝"
+
+#: includes/class-forvoyez-admin.php:379
+msgid "&laquo; Previous"
+msgstr "&laquo; 上一页"
+
+#: includes/class-forvoyez-admin.php:393
+msgid "Next &raquo;"
+msgstr "下一页 &raquo;"
+
+#: includes/class-forvoyez-api-manager.php:59
+msgid "API key is not set"
+msgstr "API 密钥未设置"
+
+#: includes/class-forvoyez-api-manager.php:76
+msgid "API key is valid"
+msgstr "API 密钥有效"
+
+#: includes/class-forvoyez-api-manager.php:78
+msgid "Invalid API key"
+msgstr "无效的 API 密钥"
+
+#: includes/class-forvoyez-api-manager.php:92
+msgid "Image not found"
+msgstr "未找到图像"
+
+#: includes/class-forvoyez-api-manager.php:101
+msgid "Failed to read image file"
+msgstr "读取图像文件失败"
+
+#: includes/class-forvoyez-api-manager.php:144
+msgid "Failed to decode API response"
+msgstr "解码 API 响应失败"
+
+#: includes/class-forvoyez-api-manager.php:166
+#: includes/class-forvoyez-image-processor.php:93
+msgid "Analysis successful"
+msgstr "分析成功"
+
+#: includes/class-forvoyez-image-processor.php:51
+msgid "Invalid data"
+msgstr "无效数据"
+
+#: includes/class-forvoyez-image-processor.php:56
+msgid "Metadata updated successfully"
+msgstr "元数据更新成功"
+
+#: includes/class-forvoyez-image-processor.php:86
+#: includes/class-forvoyez-image-processor.php:192
+msgid "Invalid image ID"
+msgstr "无效的图像 ID"
+
+#: includes/class-forvoyez-image-processor.php:99
+#: includes/class-forvoyez-image-processor.php:222
+msgid "unknown_error"
+msgstr "未知错误"
+
+#: includes/class-forvoyez-image-processor.php:176
+msgid "No valid images selected"
+msgstr "未选择有效图像"
+
+#: includes/class-forvoyez-image-processor.php:180
+msgid "Processing started"
+msgstr "处理已开始"
+
+#: includes/class-forvoyez-image-processor.php:206
+msgid "No images provided"
+msgstr "未提供图像"
+
+#: includes/class-forvoyez-image-renderer.php:83
+msgid "Title:"
+msgstr "标题："
+
+#: includes/class-forvoyez-image-renderer.php:83
+#: includes/class-forvoyez-image-renderer.php:86
+#: includes/class-forvoyez-image-renderer.php:89
+msgid "Not set"
+msgstr "未设置"
+
+#: includes/class-forvoyez-image-renderer.php:86
+msgid "Alt Text:"
+msgstr "替代文本："
+
+#: includes/class-forvoyez-image-renderer.php:89
+msgid "Caption:"
+msgstr "说明："
+
+#: includes/class-forvoyez-image-renderer.php:122 templates/admin-page.php:44
+msgid "All Complete"
+msgstr "全部完成"
+
+#: includes/class-forvoyez-image-renderer.php:141
+msgid "Missing %s"
+msgstr "缺少 %s"
+
+#: includes/class-forvoyez-image-renderer.php:174
+msgid "Analyze"
+msgstr "分析"
+
+#: includes/class-forvoyez-image-renderer.php:175
+msgid "Details"
+msgstr "详情"
+
+#: includes/class-forvoyez-settings.php:61
+msgid "API key cannot be empty"
+msgstr "API 密钥不能为空"
+
+#: includes/class-forvoyez-settings.php:67
+msgid "API key saved successfully"
+msgstr "API 密钥保存成功"
+
+#: includes/forvoyez-helpers.php:117
+msgid "Invalid API key format. Please enter a valid ForVoyez JWT."
+msgstr "无效的 API 密钥格式。请输入有效的 ForVoyez JWT。"
+
+#: includes/forvoyez-helpers.php:136
+msgid "Invalid JWT format"
+msgstr "无效的 JWT 格式"
+
+#: includes/forvoyez-helpers.php:145
+msgid "Invalid JWT payload"
+msgstr "无效的 JWT 载荷"
+
+#: includes/forvoyez-helpers.php:150
+msgid "Invalid JWT issuer"
+msgstr "无效的 JWT 发行者"
+
+#: includes/forvoyez-helpers.php:155
+msgid "Invalid JWT audience"
+msgstr "无效的 JWT 受众"
+
+#: includes/forvoyez-helpers.php:160
+msgid "JWT has expired"
+msgstr "JWT 已过期"
+
+#: templates/admin-page.php:6
+msgid "Legend :"
+msgstr "图例："
+
+#: templates/admin-page.php:11
+msgid "Missing Alt Text :"
+msgstr "缺少替代文本："
+
+#: templates/admin-page.php:13
+msgid "Missing Alt Text"
+msgstr "缺少替代文本"
+
+#: templates/admin-page.php:21
+msgid "Missing title :"
+msgstr "缺少标题："
+
+#: templates/admin-page.php:23
+msgid "Missing Title"
+msgstr "缺少标题"
+
+#: templates/admin-page.php:32
+msgid "Missing caption :"
+msgstr "缺少说明："
+
+#: templates/admin-page.php:34
+msgid "Missing Caption"
+msgstr "缺少说明"
+
+#: templates/admin-page.php:42
+msgid "All complete :"
+msgstr "全部完成："
+
+#: templates/admin-page.php:60
+msgid "Items per page:"
+msgstr "每页项目数："
+
+#: templates/admin-page.php:66
+msgid "All"
+msgstr "全部"
+
+#: templates/admin-page.php:72
+msgid "Analyze all missing alt/caption/title images"
+msgstr "分析所有缺少替代文本/说明/标题的图像"
+
+#: templates/admin-page.php:75
+msgid "Analyze all missing alt images"
+msgstr "分析所有缺少替代文本的图像"
+
+#: templates/admin-page.php:78
+msgid "Analyze all images"
+msgstr "分析所有图像"
+
+#: templates/admin-page.php:91
+msgid "Select All"
+msgstr "全选"
+
+#: templates/admin-page.php:94
+msgid "Analyze Selected Images"
+msgstr "分析所选图像"
+
+#: templates/admin-page.php:118
+msgid "Confirm Analysis"
+msgstr "确认分析"
+
+#: templates/admin-page.php:122
+msgid "Confirm"
+msgstr "确认"
+
+#: templates/admin-page.php:125
+msgid "Cancel"
+msgstr "取消"
+
+#: templates/api-settings-modal.php:7
+msgid "ForVoyez API Settings"
+msgstr "ForVoyez API 设置"
+
+#: templates/api-settings-modal.php:8
+msgid "Enter your ForVoyez API key below:"
+msgstr "在下方输入您的 ForVoyez API 密钥："
+
+#: templates/api-settings-modal.php:11 templates/configuration-tab.php:35
+msgid "Toggle API key visibility"
+msgstr "切换 API 密钥可见性"
+
+#: templates/api-settings-modal.php:21 templates/configuration-tab.php:45
+msgid "Save API Key"
+msgstr "保存 API 密钥"
+
+#: templates/api-settings-modal.php:24
+msgid "Close"
+msgstr "关闭"
+
+#: templates/configuration-tab.php:9
+msgid "API Configuration"
+msgstr "API 配置"
+
+#: templates/configuration-tab.php:10
+msgid "Manage your ForVoyez API settings here"
+msgstr "在此管理您的 ForVoyez API 设置"
+
+#: templates/configuration-tab.php:14
+msgid "About ForVoyez API"
+msgstr "关于 ForVoyez API"
+
+#: templates/configuration-tab.php:16
+msgid "ForVoyez API provides powerful image analysis capabilities for your WordPress site. To use this plugin, you need to obtain an API key from ForVoyez."
+msgstr "ForVoyez API 为您的 WordPress 网站提供强大的图像分析功能。要使用此插件，您需要从 ForVoyez 获取 API 密钥。"
+
+#: templates/configuration-tab.php:19
+msgid "To get started:"
+msgstr "开始使用："
+
+#: templates/configuration-tab.php:22
+msgid "Visit the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez signup page</a> to create an account."
+msgstr "访问 <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez 注册页面</a> 创建账户。"
+
+#: templates/configuration-tab.php:23
+msgid "Once logged in, navigate to your <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez dashboard</a>."
+msgstr "登录后，导航到您的 <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez 仪表板</a>。"
+
+#: templates/configuration-tab.php:24
+msgid "Generate an API key in the API section of your dashboard."
+msgstr "在仪表板的 API 部分生成 API 密钥。"
+
+#: templates/configuration-tab.php:25
+msgid "Copy the API key and paste it in the field below."
+msgstr "复制 API 密钥并粘贴到下面的字段中。"
+
+#: templates/configuration-tab.php:28
+msgid "For more information, please refer to the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez API documentation</a>."
+msgstr "有关更多信息，请参阅 <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez API 文档</a>。"
+
+#: templates/configuration-tab.php:32
+msgid "API Key"
+msgstr "API 密钥"
+
+#: templates/configuration-tab.php:34
+msgid "Enter your API key"
+msgstr "输入您的 API 密钥"
+
+#: templates/dashboard-tab.php:4 templates/main-page.php:10
+msgid "Dashboard"
+msgstr "仪表板"
+
+#: templates/dashboard-tab.php:5
+msgid "Overview of your Auto Alt Text for Images"
+msgstr "您的图像自动替代文本概览"
+
+#: templates/dashboard-tab.php:10
+msgid "Total Images"
+msgstr "图像总数"
+
+#: templates/dashboard-tab.php:14
+msgid "Images Completed"
+msgstr "已完成图像"
+
+#: templates/dashboard-tab.php:18
+msgid "Images Without alt / caption"
+msgstr "没有替代文本/说明的图像"
+
+#: templates/dashboard-tab.php:27
+msgid "Pre-requisites"
+msgstr "先决条件"
+
+#: templates/dashboard-tab.php:28
+msgid "Make sure you have the following before you start:"
+msgstr "开始前，请确保您具备以下条件："
+
+#: templates/dashboard-tab.php:32
+msgid "Go to the 'Settings' tab"
+msgstr "转到"设置"选项卡"
+
+#: templates/dashboard-tab.php:33
+msgid "Enter your ForVoyez API key"
+msgstr "输入您的 ForVoyez API 密钥"
+
+#: templates/dashboard-tab.php:34
+msgid "Click on 'Save API Key'"
+msgstr "点击"保存 API 密钥""
+
+#: templates/dashboard-tab.php:40
+msgid "Quick Start"
+msgstr "快速入门"
+
+#: templates/dashboard-tab.php:41
+msgid "Follow these steps to generate alt text for your images:"
+msgstr "按照以下步骤为您的图像生成替代文本："
+
+#: templates/dashboard-tab.php:45
+msgid "Go to the 'Manage Images' tab"
+msgstr "转到"管理图像"选项卡"
+
+#: templates/dashboard-tab.php:46
+msgid "Select the images you want to process"
+msgstr "选择您要处理的图像"
+
+#: templates/dashboard-tab.php:47
+msgid "Click on 'Generate Alt Text' to start the process"
+msgstr "点击"生成替代文本"开始处理"
+
+#: templates/dashboard-tab.php:48
+msgid "Review and edit the generated alt text as needed"
+msgstr "根据需要查看和编辑生成的替代文本"
+
+#: templates/main-page.php:8
+msgid "Tabs"
+msgstr "选项卡"
+
+#: templates/main-page.php:13
+msgid "Manage Images"
+msgstr "管理图像"
+
+#: templates/main-page.php:16
+msgid "Configuration"
+msgstr "配置"
+
+msgid "Settings"
+msgstr "设置"
+
+msgid "API Key"
+msgstr "API 密钥"
+
+msgid "Enter your ForVoyez API key here"
+msgstr "在此输入您的 ForVoyez API 密钥"
+
+msgid "Save Settings"
+msgstr "保存设置"
+
+msgid "Settings saved successfully."
+msgstr "设置保存成功。"
+
+msgid "Error saving settings."
+msgstr "保存设置时出错。"
+
+msgid "Media Library"
+msgstr "媒体库"
+
+msgid "Process Images"
+msgstr "处理图像"
+
+msgid "Bulk Process"
+msgstr "批量处理"
+
+msgid "Process All Images"
+msgstr "处理所有图像"
+
+msgid "Processing..."
+msgstr "处理中..."
+
+msgid "Process Complete"
+msgstr "处理完成"
+
+msgid "Error Processing Images"
+msgstr "处理图像时出错"
+
+msgid "Generate Alt Text"
+msgstr "生成替代文本"
+
+msgid "Alt Text"
+msgstr "替代文本"
+
+msgid "Image Title"
+msgstr "图像标题"
+
+msgid "Image Caption"
+msgstr "图像说明"
+
+msgid "Original Alt Text"
+msgstr "原始替代文本"
+
+msgid "Generated Alt Text"
+msgstr "生成的替代文本"
+
+msgid "Apply"
+msgstr "应用"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "No images found."
+msgstr "未找到图像。"
+
+msgid "Please select images to process."
+msgstr "请选择要处理的图像。"
+
+msgid "Loading..."
+msgstr "加载中..."
+
+msgid "Success!"
+msgstr "成功！"
+
+msgid "Error!"
+msgstr "错误！"
+
+msgid "Alt text generated successfully."
+msgstr "替代文本生成成功。"
+
+msgid "Failed to generate alt text."
+msgstr "生成替代文本失败。"
+
+msgid "API Connection Error"
+msgstr "API 连接错误"
+
+msgid "Unable to connect to ForVoyez API. Please check your internet connection and try again."
+msgstr "无法连接到 ForVoyez API。请检查您的互联网连接并重试。"
+
+msgid "Account Error"
+msgstr "账户错误"
+
+msgid "There is a problem with your ForVoyez account. Please check your API key or contact support."
+msgstr "您的 ForVoyez 账户存在问题。请检查您的 API 密钥或联系支持。"
+
+msgid "Rate Limit Exceeded"
+msgstr "超出速率限制"
+
+msgid "You have exceeded your API rate limit. Please try again later or upgrade your plan."
+msgstr "您已超出 API 速率限制。请稍后重试或升级您的计划。"
+
+msgid "Language Settings"
+msgstr "语言设置"
+
+msgid "Default Language"
+msgstr "默认语言"
+
+msgid "Select the default language for generated alt text"
+msgstr "选择生成替代文本的默认语言"
+
+msgid "English"
+msgstr "英语"
+
+msgid "French"
+msgstr "法语"
+
+msgid "German"
+msgstr "德语"
+
+msgid "Spanish"
+msgstr "西班牙语"
+
+msgid "Italian"
+msgstr "意大利语"
+
+msgid "Portuguese"
+msgstr "葡萄牙语"
+
+msgid "Russian"
+msgstr "俄语"
+
+msgid "Japanese"
+msgstr "日语"
+
+msgid "Chinese"
+msgstr "中文"
+
+msgid "Hindi"
+msgstr "印地语"
+
+msgid "Arabic"
+msgstr "阿拉伯语"
+
+msgid "Advanced Settings"
+msgstr "高级设置"
+
+msgid "Auto-Process New Images"
+msgstr "自动处理新图像"
+
+msgid "Automatically generate alt text when new images are uploaded"
+msgstr "上传新图像时自动生成替代文本"
+
+msgid "Apply to Featured Images"
+msgstr "应用于特色图像"
+
+msgid "Generate alt text for featured images in posts and pages"
+msgstr "为文章和页面中的特色图像生成替代文本"
+
+msgid "Help & Support"
+msgstr "帮助与支持"
+
+msgid "Documentation"
+msgstr "文档"
+
+msgid "Visit our documentation for help with using Auto Alt Text for Images"
+msgstr "访问我们的文档，获取使用图像自动替代文本的帮助"
+
+msgid "Support"
+msgstr "支持"
+
+msgid "Need help? Contact our support team"
+msgstr "需要帮助？联系我们的支持团队"
+
+msgid "Get API Key"
+msgstr "获取 API 密钥"
+
+msgid "Don't have an API key? Sign up for a ForVoyez account"
+msgstr "没有 API 密钥？注册 ForVoyez 账户"
+
+msgid "Image Analysis Options"
+msgstr "图像分析选项"
+
+msgid "SEO Optimization Level"
+msgstr "SEO 优化级别"
+
+msgid "Low"
+msgstr "低"
+
+msgid "Medium"
+msgstr "中"
+
+msgid "High"
+msgstr "高"
+
+msgid "Description Length"
+msgstr "描述长度"
+
+msgid "Short"
+msgstr "短"
+
+msgid "Standard"
+msgstr "标准"
+
+msgid "Detailed"
+msgstr "详细" 
