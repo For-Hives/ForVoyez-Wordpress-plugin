@@ -185,19 +185,16 @@ msgstr "Detalles"
 
 #. translators: Button label for analyzing an image
 #: includes/class-forvoyez-image-renderer.php:307
-#, fuzzy
 msgid "Analyse"
 msgstr "Analizar"
 
 #: includes/class-forvoyez-settings.php:102
-#, fuzzy
 msgid "Context saved successfully"
-msgstr "Clave API guardada correctamente"
+msgstr "Contexto guardado correctamente"
 
 #: includes/class-forvoyez-settings.php:119
-#, fuzzy
 msgid "Language saved successfully"
-msgstr "Clave API guardada correctamente"
+msgstr "Idioma guardado correctamente"
 
 #: includes/class-forvoyez-settings.php:141
 msgid "API key cannot be empty"
@@ -406,6 +403,9 @@ msgid ""
 "for images. By using this plugin, you agree to the ForVoyez Terms of Service "
 "and Privacy Policy."
 msgstr ""
+"Este plugin utiliza el servicio API de ForVoyez para generar texto alternativo "
+"y metadatos para imágenes. Al usar este plugin, aceptas los Términos de Servicio "
+"y la Política de Privacidad de ForVoyez."
 
 #. translators: %1$s: URL to Terms of Service, %2$s: URL to Privacy Policy, %3$s: URL to Legal Notice
 #: templates/configuration-tab.php:176
@@ -416,40 +416,47 @@ msgid ""
 "Policy</a>, and <a href=\"%3$s\" target=\"_blank\" rel=\"noopener "
 "noreferrer\" class=\"underline\">Legal Notice</a>."
 msgstr ""
+"Por favor, revisa los <a href=\"%1$s\" target=\"_blank\" rel=\"noopener "
+"noreferrer\" class=\"underline\">Términos de Servicio</a>, la <a href=\"%2$s\" "
+"target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline\">Política de Privacidad</a> "
+"y el <a href=\"%3$s\" target=\"_blank\" rel=\"noopener "
+"noreferrer\" class=\"underline\">Aviso Legal</a>."
 
 #: templates/configuration-tab.php:201
 msgid "Additional Configuration (optional)"
-msgstr ""
+msgstr "Configuración adicional (opcional)"
 
 #: templates/configuration-tab.php:204
 msgid "Configure additional settings for image analysis"
-msgstr ""
+msgstr "Configura ajustes adicionales para el análisis de imágenes"
 
 #: templates/configuration-tab.php:210
 msgid "Context"
-msgstr ""
+msgstr "Contexto"
 
 #: templates/configuration-tab.php:215
 msgid "Enter context for image analysis"
-msgstr ""
+msgstr "Introduce el contexto para el análisis de imágenes"
 
 #: templates/configuration-tab.php:219
 msgid "Language"
-msgstr ""
+msgstr "Idioma"
 
 #: templates/configuration-tab.php:224
 msgid "Enter language for image analysis"
-msgstr ""
+msgstr "Introduce el idioma para el análisis de imágenes"
 
 #: templates/configuration-tab.php:235
 msgid ""
 "Enable automatic image analysis on upload (the analysis can take few seconds "
 "per image)"
 msgstr ""
+"Activar análisis automático de imágenes al subir (el análisis puede tardar unos "
+"segundos por imagen)"
 
 #: templates/configuration-tab.php:242
 msgid "Save Additional Settings"
-msgstr ""
+msgstr "Guardar ajustes adicionales"
 
 #: templates/dashboard-tab.php:11 templates/main-page.php:36
 msgid "Dashboard"
@@ -516,25 +523,24 @@ msgid "Review and edit the generated alt text as needed"
 msgstr "Revisa y edita el texto alternativo generado según sea necesario"
 
 #: templates/dashboard-tab.php:189
-#, fuzzy
 msgid "Automatic Image Analysis"
-msgstr "Confirmar Análisis"
+msgstr "Análisis automático de imágenes"
 
 #: templates/dashboard-tab.php:192
 msgid "ForVoyez can automatically analyze your images upon upload."
-msgstr ""
+msgstr "ForVoyez puede analizar automáticamente tus imágenes al subirlas."
 
 #: templates/dashboard-tab.php:199
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #: templates/dashboard-tab.php:203
 msgid "Enabled"
-msgstr ""
+msgstr "Activado"
 
 #: templates/dashboard-tab.php:204
 msgid "Disabled"
-msgstr ""
+msgstr "Desactivado"
 
 #: templates/dashboard-tab.php:209 templates/main-page.php:66
 msgid "Configuration"
@@ -542,7 +548,7 @@ msgstr "Configuración"
 
 #: templates/dashboard-tab.php:212
 msgid "You can enable or disable this feature in the Configuration tab."
-msgstr ""
+msgstr "Puedes activar o desactivar esta funcionalidad en la pestaña Configuración."
 
 #: templates/main-page.php:21
 msgid "Tabs"

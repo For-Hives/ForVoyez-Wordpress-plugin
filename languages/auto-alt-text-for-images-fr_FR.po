@@ -184,19 +184,16 @@ msgstr "Détails"
 
 #. translators: Button label for analyzing an image
 #: includes/class-forvoyez-image-renderer.php:307
-#, fuzzy
 msgid "Analyse"
 msgstr "Analyser"
 
 #: includes/class-forvoyez-settings.php:102
-#, fuzzy
 msgid "Context saved successfully"
-msgstr "Clé API enregistrée avec succès"
+msgstr "Contexte enregistré avec succès"
 
 #: includes/class-forvoyez-settings.php:119
-#, fuzzy
 msgid "Language saved successfully"
-msgstr "Clé API enregistrée avec succès"
+msgstr "Langue enregistrée avec succès"
 
 #: includes/class-forvoyez-settings.php:141
 msgid "API key cannot be empty"
@@ -403,6 +400,9 @@ msgid ""
 "for images. By using this plugin, you agree to the ForVoyez Terms of Service "
 "and Privacy Policy."
 msgstr ""
+"Ce plugin utilise le service API ForVoyez pour générer du texte alternatif "
+"et des métadonnées pour les images. En utilisant ce plugin, vous acceptez "
+"les Conditions d'utilisation et la Politique de confidentialité de ForVoyez."
 
 #. translators: %1$s: URL to Terms of Service, %2$s: URL to Privacy Policy, %3$s: URL to Legal Notice
 #: templates/configuration-tab.php:176
@@ -413,40 +413,47 @@ msgid ""
 "Policy</a>, and <a href=\"%3$s\" target=\"_blank\" rel=\"noopener "
 "noreferrer\" class=\"underline\">Legal Notice</a>."
 msgstr ""
+"Veuillez consulter les <a href=\"%1$s\" target=\"_blank\" rel=\"noopener "
+"noreferrer\" class=\"underline\">Conditions d'utilisation</a>, la <a href=\"%2$s\" "
+"target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline\">Politique de "
+"confidentialité</a>, et les <a href=\"%3$s\" target=\"_blank\" rel=\"noopener "
+"noreferrer\" class=\"underline\">Mentions légales</a>."
 
 #: templates/configuration-tab.php:201
 msgid "Additional Configuration (optional)"
-msgstr ""
+msgstr "Configuration supplémentaire (optionnel)"
 
 #: templates/configuration-tab.php:204
 msgid "Configure additional settings for image analysis"
-msgstr ""
+msgstr "Configurez des paramètres supplémentaires pour l'analyse d'images"
 
 #: templates/configuration-tab.php:210
 msgid "Context"
-msgstr ""
+msgstr "Contexte"
 
 #: templates/configuration-tab.php:215
 msgid "Enter context for image analysis"
-msgstr ""
+msgstr "Entrez le contexte pour l'analyse d'images"
 
 #: templates/configuration-tab.php:219
 msgid "Language"
-msgstr ""
+msgstr "Langue"
 
 #: templates/configuration-tab.php:224
 msgid "Enter language for image analysis"
-msgstr ""
+msgstr "Entrez la langue pour l'analyse d'images"
 
 #: templates/configuration-tab.php:235
 msgid ""
 "Enable automatic image analysis on upload (the analysis can take few seconds "
 "per image)"
 msgstr ""
+"Activer l'analyse automatique des images lors du téléversement (l'analyse peut "
+"prendre quelques secondes par image)"
 
 #: templates/configuration-tab.php:242
 msgid "Save Additional Settings"
-msgstr ""
+msgstr "Enregistrer les paramètres supplémentaires"
 
 #: templates/dashboard-tab.php:11 templates/main-page.php:36
 msgid "Dashboard"
@@ -513,25 +520,24 @@ msgid "Review and edit the generated alt text as needed"
 msgstr "Examinez et modifiez le texte alternatif généré si nécessaire"
 
 #: templates/dashboard-tab.php:189
-#, fuzzy
 msgid "Automatic Image Analysis"
-msgstr "Confirmer l'analyse"
+msgstr "Analyse automatique des images"
 
 #: templates/dashboard-tab.php:192
 msgid "ForVoyez can automatically analyze your images upon upload."
-msgstr ""
+msgstr "ForVoyez peut analyser automatiquement vos images lors du téléversement."
 
 #: templates/dashboard-tab.php:199
 msgid "Status"
-msgstr ""
+msgstr "Statut"
 
 #: templates/dashboard-tab.php:203
 msgid "Enabled"
-msgstr ""
+msgstr "Activé"
 
 #: templates/dashboard-tab.php:204
 msgid "Disabled"
-msgstr ""
+msgstr "Désactivé"
 
 #: templates/dashboard-tab.php:209 templates/main-page.php:66
 msgid "Configuration"
@@ -539,7 +545,7 @@ msgstr "Configuration"
 
 #: templates/dashboard-tab.php:212
 msgid "You can enable or disable this feature in the Configuration tab."
-msgstr ""
+msgstr "Vous pouvez activer ou désactiver cette fonctionnalité dans l'onglet Configuration."
 
 #: templates/main-page.php:21
 msgid "Tabs"
