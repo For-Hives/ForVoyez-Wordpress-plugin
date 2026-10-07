@@ -139,6 +139,12 @@ class Forvoyez_Image_Processor {
 			);
 		}
 
+		if ( !current_user_can( 'edit_post', $image_id ) ) {
+			wp_send_json_error(
+				esc_html__( 'Permission denied', 'auto-alt-text-for-images' ),
+			);
+		}
+
 		$this->update_image_meta( $image_id, $metadata );
 
 		wp_send_json_success(
@@ -150,11 +156,13 @@ class Forvoyez_Image_Processor {
 	}
 
 	private function update_image_meta( $image_id, $metadata ) {
+		// update_post_meta() and wp_update_post() unslash their input: slash the
+		// (already unslashed) values so backslashes are kept.
 		if ( isset( $metadata['alt_text'] ) ) {
 			update_post_meta(
 				$image_id,
 				'_wp_attachment_image_alt',
-				$metadata['alt_text'],
+				wp_slash( $metadata['alt_text'] ),
 			);
 		}
 
@@ -168,7 +176,7 @@ class Forvoyez_Image_Processor {
 
 		if ( !empty( $post_data ) ) {
 			$post_data['ID'] = $image_id;
-			wp_update_post( $post_data );
+			wp_update_post( wp_slash( $post_data ) );
 		}
 
 		update_post_meta( $image_id, '_forvoyez_analyzed', '1' );
@@ -191,6 +199,9 @@ class Forvoyez_Image_Processor {
 				esc_html__( 'Invalid image ID', 'auto-alt-text-for-images' ),
 			);
 		}
+
+		$this->ensure_user_can_edit_image_for_ajax( $image_id );
+		$this->ensure_api_key_for_ajax();
 
 		$result = $this->api_client->analyze_image( $image_id );
 
@@ -232,17 +243,17 @@ class Forvoyez_Image_Processor {
 
 		if (!$image_id || !wp_attachment_is_image($image_id)) {
 			wp_send_json_error([
-				'message' => __('Invalid image ID', 'auto-alt-text-for-images')
+				'message' => __('Invalid image ID', 'auto-alt-text-for-images'),
 			]);
 		}
 
-		// Perform analysis
+		$this->ensure_user_can_edit_image_for_ajax($image_id);
+		$this->ensure_api_key_for_ajax();
+
+		// Perform analysis (analyze_image() saves the non-empty metadata)
 		$result = $this->api_client->analyze_image($image_id);
 
 		if ($result['success']) {
-			// Update image metadata
-			$this->update_image_meta($image_id, $result['metadata']);
-
 			// Get updated image details for UI update
 			$image = get_post($image_id);
 			$alt_text = get_post_meta($image_id, '_wp_attachment_image_alt', true);
@@ -255,8 +266,8 @@ class Forvoyez_Image_Processor {
 					'id' => $image_id,
 					'title' => $image->post_title,
 					'alt_text' => $alt_text,
-					'caption' => $image->post_excerpt
-				]
+					'caption' => $image->post_excerpt,
+				],
 			];
 
 			// Trigger action for plugins/themes to hook into
@@ -266,7 +277,7 @@ class Forvoyez_Image_Processor {
 		} else {
 			wp_send_json_error([
 				'message' => $result['error']['message'],
-				'code' => isset($result['error']['code']) ? $result['error']['code'] : 'unknown_error'
+				'code' => isset($result['error']['code']) ? $result['error']['code'] : 'unknown_error',
 			]);
 		}
 	}
@@ -381,11 +392,14 @@ class Forvoyez_Image_Processor {
 			? absint( wp_unslash( $_POST['image_id'] ) )
 			: 0;
 
-		if ( !$image_id ) {
+		if ( !$image_id || !wp_attachment_is_image( $image_id ) ) {
 			wp_send_json_error(
 				esc_html__( 'Invalid image ID', 'auto-alt-text-for-images' ),
 			);
 		}
+
+		$this->ensure_user_can_edit_image_for_ajax( $image_id );
+		$this->ensure_api_key_for_ajax();
 
 		$result = $this->api_client->analyze_image( $image_id );
 
@@ -405,6 +419,8 @@ class Forvoyez_Image_Processor {
 			);
 		}
 
+		$this->ensure_api_key_for_ajax();
+
 		$results = $this->process_images( $image_ids );
 
 		wp_send_json_success( array( 'results' => $results ) );
@@ -413,6 +429,19 @@ class Forvoyez_Image_Processor {
 	private function process_images( $image_ids ) {
 		$results = array();
 		foreach ( $image_ids as $image_id ) {
+			// Only images the current user may edit are sent to the API.
+			$error = $this->get_image_access_error( $image_id );
+			if ( $error ) {
+				$results[] = array(
+					'id'       => $image_id,
+					'success'  => false,
+					'message'  => $error['message'],
+					'code'     => $error['code'],
+					'metadata' => null,
+				);
+				continue;
+			}
+
 			$result    = $this->api_client->analyze_image( $image_id );
 			$results[] = array(
 				'id'       => $image_id,
@@ -452,6 +481,65 @@ class Forvoyez_Image_Processor {
         }
     }
 
+	/**
+	 * Stop an AJAX request with a clear error when no API key is configured,
+	 * so the ForVoyez API is never called without credentials.
+	 */
+	private function ensure_api_key_for_ajax() {
+		if ( !$this->api_client->has_api_key() ) {
+			wp_send_json_error(
+				array(
+					'message' => forvoyez_get_missing_api_key_message(),
+					'code'    => 'missing_api_key',
+				)
+			);
+		}
+	}
+
+	/**
+	 * Why an attachment cannot be analyzed by the current user, if it cannot.
+	 *
+	 * The AJAX actions only require `upload_files`, so each attachment must
+	 * also be an image the user may edit (an Author cannot overwrite the
+	 * metadata of other users' images).
+	 *
+	 * @param int $image_id The attachment ID.
+	 * @return array{code: string, message: string}|null Null when allowed.
+	 */
+	private function get_image_access_error( $image_id ) {
+		if ( !$image_id || !wp_attachment_is_image( $image_id ) ) {
+			return array(
+				'code'    => 'invalid_image',
+				'message' => esc_html__( 'Invalid image ID', 'auto-alt-text-for-images' ),
+			);
+		}
+
+		if ( !current_user_can( 'edit_post', $image_id ) ) {
+			return array(
+				'code'    => 'permission_denied',
+				'message' => esc_html__( 'Permission denied', 'auto-alt-text-for-images' ),
+			);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Stop an AJAX request when the current user may not edit the image.
+	 *
+	 * @param int $image_id The attachment ID.
+	 */
+	private function ensure_user_can_edit_image_for_ajax( $image_id ) {
+		if ( !current_user_can( 'edit_post', $image_id ) ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Permission denied', 'auto-alt-text-for-images' ),
+					'code'    => 'permission_denied',
+				)
+			);
+		}
+	}
+
     /**
      * Analyze image on upload.
      *
@@ -463,13 +551,13 @@ class Forvoyez_Image_Processor {
             return;
         }
 
-        // Analyze the image using the ForVoyez API
-        $result = $this->api_client->analyze_image( $attachment_id );
-
-        if ( $result['success'] ) {
-            // Update the image metadata with the analysis results
-            $this->update_image_meta( $attachment_id, $result['metadata'] );
+        // Never call the API without an API key (an admin notice explains it)
+        if ( !$this->api_client->has_api_key() ) {
+            return;
         }
+
+        // Analyze the image; analyze_image() saves the non-empty metadata
+        $this->api_client->analyze_image( $attachment_id );
     }
 
 	/**
@@ -478,13 +566,18 @@ class Forvoyez_Image_Processor {
 	 * @param int $attachment_id The ID of the uploaded attachment.
 	 */
 	public function schedule_image_analysis($attachment_id) {
-	    // Check if automatic analysis is enabled
-	    if (!get_option('forvoyez_auto_analyze_enabled', false)) {
+	    // Check if automatic analysis is enabled (the option may hold 'false')
+	    if (!forvoyez_is_auto_analyze_enabled()) {
 	        return;
 	    }
 
 	    // Check if the uploaded file is an image
 	    if (!wp_attachment_is_image($attachment_id)) {
+	        return;
+	    }
+
+	    // Never schedule an API call without an API key (an admin notice explains it)
+	    if (!$this->api_client->has_api_key()) {
 	        return;
 	    }
 
@@ -498,13 +591,18 @@ class Forvoyez_Image_Processor {
 	 * @param int $attachment_id The ID of the image to analyze.
 	 */
 	public function cron_analyze_single_image($attachment_id) {
-	    // Analyze the image using the ForVoyez API
-	    $result = $this->api_client->analyze_image($attachment_id);
-
-	    if ($result['success']) {
-	        // Update the image metadata with the analysis results
-	        $this->update_image_meta($attachment_id, $result['metadata']);
+	    // Automatic analysis may have been turned off since the event was scheduled
+	    if (!forvoyez_is_auto_analyze_enabled()) {
+	        return;
 	    }
+
+	    // The key may have been removed since the event was scheduled
+	    if (!$this->api_client->has_api_key()) {
+	        return;
+	    }
+
+	    // Analyze the image; analyze_image() saves the non-empty metadata
+	    $this->api_client->analyze_image((int) $attachment_id);
 	}
 
 	/**
@@ -520,9 +618,11 @@ class Forvoyez_Image_Processor {
 
 		if (empty($image_ids)) {
 			wp_send_json_error([
-				'message' => __('No images provided', 'auto-alt-text-for-images')
+				'message' => __('No images provided', 'auto-alt-text-for-images'),
 			]);
 		}
+
+		$this->ensure_api_key_for_ajax();
 
 		// Process images in batches
 		$batch_size = 5;
@@ -538,9 +638,9 @@ class Forvoyez_Image_Processor {
 
 			foreach ($batch_results as $result) {
 				if ($result['success']) {
-					$success_count++;
+					++$success_count;
 				} else {
-					$error_count++;
+					++$error_count;
 				}
 				$results[] = $result;
 			}
@@ -554,7 +654,7 @@ class Forvoyez_Image_Processor {
 			'results' => $results,
 			'success_count' => $success_count,
 			'error_count' => $error_count,
-			'credits' => $credits
+			'credits' => $credits,
 		]);
 	}
 }

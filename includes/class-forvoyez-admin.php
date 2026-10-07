@@ -42,6 +42,10 @@ class Forvoyez_Admin {
 		]);
 		add_action('wp_ajax_forvoyez_get_credits', [$this, 'ajax_get_credits']);
 		add_action('admin_footer', [$this, 'maybe_show_low_credits_warning']);
+		add_action('admin_notices', [
+			$this,
+			'maybe_show_missing_api_key_notice',
+		]);
 	}
 
 	/**
@@ -78,22 +82,12 @@ class Forvoyez_Admin {
 			return;
 		}
 
-		// Enqueue Tailwind CSS from CDN
-		wp_enqueue_script(
-			'tailwindcss',
-			'https://cdn.tailwindcss.com',
+		// Enqueue the locally built Tailwind CSS (rebuild with `npm run build:css`)
+		wp_enqueue_style(
+			'forvoyez-admin-tailwind',
+			FORVOYEZ_PLUGIN_URL . 'assets/css/admin-tailwind.css',
 			[],
 			FORVOYEZ_VERSION,
-			false,
-		);
-
-		// Enqueue custom Tailwind config
-		wp_enqueue_script(
-			'forvoyez-tailwind-config',
-			FORVOYEZ_PLUGIN_URL . 'assets/js/tailwind-config.js',
-			['tailwindcss'],
-			FORVOYEZ_VERSION,
-			false,
 		);
 
 		// Enqueue custom Tailwind utilities
@@ -104,27 +98,11 @@ class Forvoyez_Admin {
 			FORVOYEZ_VERSION,
 		);
 
-		// Enqueue custom scripts
+		// Enqueue custom scripts (admin-script.js also handles the credits widget)
 		wp_enqueue_script(
 			'forvoyez-admin-script',
 			FORVOYEZ_PLUGIN_URL . 'assets/js/admin-script.js',
 			['jquery'],
-			FORVOYEZ_VERSION,
-			true,
-		);
-		wp_enqueue_script(
-			'forvoyez-api-settings',
-			FORVOYEZ_PLUGIN_URL . 'assets/js/api-settings.js',
-			['jquery'],
-			FORVOYEZ_VERSION,
-			true,
-		);
-
-		// Nouvel ajout: script de gestion des crédits
-		wp_enqueue_script(
-			'forvoyez-credits-manager',
-			FORVOYEZ_PLUGIN_URL . 'assets/js/credits-manager.js',
-			['jquery', 'forvoyez-admin-script'],
 			FORVOYEZ_VERSION,
 			true,
 		);
@@ -205,6 +183,50 @@ class Forvoyez_Admin {
 				) .
 				'</p>';
 		}
+	}
+
+	/**
+	 * Show an admin notice when no API key is configured.
+	 *
+	 * Displayed on the plugin page and on the media screens, where images
+	 * would otherwise be sent for analysis.
+	 */
+	public function maybe_show_missing_api_key_notice() {
+		if (
+			$this->api_manager->has_api_key() ||
+			!current_user_can('upload_files')
+		) {
+			return;
+		}
+
+		$screen = function_exists('get_current_screen')
+			? get_current_screen()
+			: null;
+		$screens = [
+			'toplevel_page_auto-alt-text-for-images',
+			'upload',
+			'media',
+			'attachment',
+		];
+		if (!$screen || !in_array($screen->id, $screens, true)) {
+			return;
+		}
+
+		$link = '';
+		if (current_user_can('manage_options')) {
+			$link = sprintf(
+				' <a href="%1$s">%2$s</a>',
+				esc_url(forvoyez_get_configuration_url()),
+				esc_html__('Configure the API key', 'auto-alt-text-for-images'),
+			);
+		}
+
+		printf(
+			'<div class="notice notice-warning forvoyez-missing-api-key-notice"><p><strong>%1$s</strong> %2$s%3$s</p></div>',
+			esc_html__('Auto Alt Text for Images:', 'auto-alt-text-for-images'),
+			esc_html(forvoyez_get_missing_api_key_message()),
+			$link, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above.
+		);
 	}
 
 	/**
@@ -712,6 +734,7 @@ class Forvoyez_Admin {
       	'auto-alt-text-for-images',
       ); ?></strong><br>
 						<?php echo sprintf(
+      	/* translators: %d: number of credits remaining */
       	esc_html__(
       		'You only have %d credits remaining. Please consider recharging to continue using the ForVoyez service.',
       		'auto-alt-text-for-images',
@@ -732,7 +755,7 @@ class Forvoyez_Admin {
 
 		if (!current_user_can('upload_files')) {
 			wp_send_json_error([
-				'message' => __('Permission denied', 'auto-alt-text-for-images')
+				'message' => __('Permission denied', 'auto-alt-text-for-images'),
 			], 403);
 			return;
 		}
@@ -756,7 +779,7 @@ class Forvoyez_Admin {
 				'status' => $status,
 				'renews_at' => $renews_at,
 				'has_low_credits' => $credits < 10,
-				'token_ok' => true
+				'token_ok' => true,
 			]);
 		} else {
 			wp_send_json_error([
@@ -764,7 +787,7 @@ class Forvoyez_Admin {
 				             __('Could not retrieve credit information', 'auto-alt-text-for-images'),
 				'token_ok' => false,
 				'credits' => 0,
-				'is_subscribed' => false
+				'is_subscribed' => false,
 			]);
 		}
 	}

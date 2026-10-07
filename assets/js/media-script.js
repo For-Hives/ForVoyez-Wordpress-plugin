@@ -16,7 +16,6 @@
 	// Detect current page context
 	const isPostPage = window.location.href.includes('post.php')
 	const isUploadPage = window.location.href.includes('upload.php')
-	const isMediaModal = false // Will be set to true if detected
 
 	// Initialize on document ready
 	$(document).ready(function () {

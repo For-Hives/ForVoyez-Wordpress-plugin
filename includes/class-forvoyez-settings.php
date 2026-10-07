@@ -172,7 +172,13 @@ class Forvoyez_Settings {
 	        return;
 	    }
 
-	    update_option( 'forvoyez_auto_analyze_enabled', $_POST['enabled'] );
+	    // jQuery posts the booleans as the strings "true" / "false"; "false" is a
+	    // truthy string, so store a normalized value (read it with
+	    // forvoyez_is_auto_analyze_enabled()).
+	    $enabled = isset( $_POST['enabled'] )
+	        && filter_var( wp_unslash( $_POST['enabled'] ), FILTER_VALIDATE_BOOLEAN );
+
+	    update_option( 'forvoyez_auto_analyze_enabled', $enabled ? 'true' : 'false' );
 
 	    wp_send_json_success( array( 'message' => 'Automatic image analysis toggled successfully' ) );
 	}
