@@ -41,9 +41,8 @@ elif [[ $WP_VERSION == 'nightly' || $WP_VERSION == 'trunk' ]]; then
     WP_TESTS_TAG="trunk"
 else
     # http serves a single offer, whereas https serves multiple. we only want one
-    download http://api.wordpress.org/core/version-check/1.7/ /tmp/wp-latest.json
-    grep '[0-9]+\.[0-9]+(\.[0-9]+)?' /tmp/wp-latest.json
-    LATEST_VERSION=$(grep -o '"version":"[^"]*' /tmp/wp-latest.json | sed 's/"version":"//')
+    download http://api.wordpress.org/core/version-check/1.7/ $TMPDIR/wp-latest.json
+    LATEST_VERSION=$(grep -o '"version":"[^"]*' $TMPDIR/wp-latest.json | head -n 1 | sed 's/"version":"//')
     if [[ -z "$LATEST_VERSION" ]]; then
         echo "Latest WordPress version could not be found"
         exit 1
@@ -53,9 +52,21 @@ fi
 
 echo "Using WordPress version: $WP_TESTS_TAG"
 
+# Split DB_HOST ("host", "host:port" or "host:/path/to/socket") for the mysql CLI
+DB_HOST_ONLY=${DB_HOST%%:*}
+DB_HOST_EXTRA=""
+if [[ "$DB_HOST" == *:* ]]; then
+    DB_SOCK_OR_PORT=${DB_HOST#*:}
+    if [[ "$DB_SOCK_OR_PORT" =~ ^[0-9]+$ ]]; then
+        DB_HOST_EXTRA="--port=$DB_SOCK_OR_PORT --protocol=tcp"
+    elif [ -n "$DB_SOCK_OR_PORT" ]; then
+        DB_HOST_EXTRA="--socket=$DB_SOCK_OR_PORT"
+    fi
+fi
+
 # Function to run MySQL commands
 run_mysql_command() {
-    sudo mysql --host="$DB_HOST" --user="root" --password="$MYSQL_ROOT_PASSWORD" -e "$1"
+    sudo mysql --host="$DB_HOST_ONLY" $DB_HOST_EXTRA --user="root" --password="$MYSQL_ROOT_PASSWORD" -e "$1"
 }
 
 # Function to reset database and user
@@ -104,8 +115,6 @@ install_wp() {
         tar --strip-components=1 -zxmf $TMPDIR/wordpress.tar.gz -C $WP_CORE_DIR
     fi
 
-    download https://raw.github.com/markoheijnen/wp-mysqli/master/db.php $WP_CORE_DIR/wp-content/db.php
-
     if [ ! -f "$WP_CORE_DIR/wp-includes/version.php" ]; then
         echo "WordPress installation failed."
         exit 1
@@ -129,7 +138,7 @@ install_test_suite() {
         svn co --quiet https://develop.svn.wordpress.org/${WP_TESTS_TAG}/tests/phpunit/data/ $WP_TESTS_DIR/data
     fi
 
-    if [ ! -f wp-tests-config.php ]; then
+    if [ ! -f "$WP_TESTS_DIR"/wp-tests-config.php ]; then
         download https://develop.svn.wordpress.org/${WP_TESTS_TAG}/wp-tests-config-sample.php "$WP_TESTS_DIR"/wp-tests-config.php
         # remove all forward slashes in the end
         WP_CORE_DIR=$(echo $WP_CORE_DIR | sed "s:/\+$::")
@@ -184,8 +193,12 @@ EOF
 # Main execution
 echo "Starting WordPress test environment setup..."
 
-# Reset database and user
-reset_db_and_user
+# Reset database and user (pass "true" as 6th argument to use an existing database)
+if [ "$SKIP_DB_CREATE" = "true" ]; then
+    echo "Skipping database creation."
+else
+    reset_db_and_user
+fi
 
 # Install WordPress
 install_wp

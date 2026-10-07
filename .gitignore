@@ -3,7 +3,6 @@ node_modules
 composer.lock
 vendor
 .phpunit.result.cache
-tests/assets
 .php-cs-fixer.cache
 
 large_files_output.txt
@@ -13,4 +12,3 @@ release
 .txt
 .xml
 .sh
-tests

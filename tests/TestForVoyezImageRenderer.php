@@ -159,7 +159,9 @@ class TestForVoyezImageRenderer extends WP_UnitTestCase
 	{
 		$class = new ReflectionClass($className);
 		$method = $class->getMethod($methodName);
-		$method->setAccessible(true);
+		if (PHP_VERSION_ID < 80100) {
+			$method->setAccessible(true); // No-op (deprecated) since PHP 8.1.
+		}
 
 		return $method->invokeArgs(null, $args);
 	}

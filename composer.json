@@ -4,8 +4,7 @@
 		"phpcbf": "./vendor/bin/phpcbf",
 		"php-cs-fixer": "php-cs-fixer fix --allow-risky=yes",
 		"lint": [
-			"@phpcs",
-			"@php-cs-fixer --dry-run --diff"
+			"@phpcs"
 		],
 		"fix": [
 			"@phpcbf",
@@ -16,7 +15,7 @@
 			"prettier --write ."
 		],
 		"install-wp-tests": "bash bin/install-wp-tests.sh wordpress_test wp_test_user 'votre_mot_de_passe_test' localhost latest",
-		"make-pot": "wp i18n make-pot . languages/auto-alt-text-for-images.pot --domain=auto-alt-text-for-images",
+		"make-pot": "wp i18n make-pot . languages/auto-alt-text-for-images.pot --domain=auto-alt-text-for-images --slug=auto-alt-text-for-images",
 		"add-language": "bash bin/add-language.sh",
 		"zip": [
 			"rm -rf release",

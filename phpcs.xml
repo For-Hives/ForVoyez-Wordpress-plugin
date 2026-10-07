@@ -11,7 +11,7 @@
     <arg name="colors"/>
     <arg name="extensions" value="php"/>
 
-    <config name="minimum_supported_wp_version" value="5.0"/>
+    <config name="minimum_wp_version" value="5.6"/>
 
     <!-- WordPress Core Rules -->
     <rule ref="WordPress-Core">
@@ -28,6 +28,25 @@
         <exclude name="WordPress.Arrays.ArrayDeclarationSpacing"/>
         <exclude name="WordPress.WhiteSpace.OperatorSpacing"/>
         <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine"/>
+
+        <!-- Layout is owned by Prettier (`npm run format`, .prettierrc.js with
+             @prettier/plugin-php): no spaces inside parentheses or brackets,
+             short arrays, no alignment, multi-line PHP blocks in templates.
+             These sniffs contradict its output, so they are not checked. -->
+        <exclude name="PEAR.Functions.FunctionCallSignature"/>
+        <exclude name="WordPress.WhiteSpace.ControlStructureSpacing"/>
+        <exclude name="WordPress.WhiteSpace.CastStructureSpacing"/>
+        <exclude name="WordPress.Arrays.MultipleStatementAlignment"/>
+        <exclude name="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
+        <exclude name="Generic.Formatting.MultipleStatementAlignment"/>
+        <exclude name="Generic.WhiteSpace.ArbitraryParenthesesSpacing"/>
+        <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+        <exclude name="Universal.WhiteSpace.PrecisionAlignment"/>
+        <exclude name="Universal.WhiteSpace.DisallowInlineTabs"/>
+        <exclude name="NormalizedArrays.Arrays.ArrayBraceSpacing"/>
+        <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing"/>
+        <exclude name="Squiz.ControlStructures.ControlSignature"/>
+        <exclude name="Squiz.PHP.EmbeddedPhp"/>
     </rule>
 
     <!-- Indentation Configuration -->
@@ -52,20 +71,15 @@
     <!-- Single quotes -->
     <rule ref="Squiz.Strings.DoubleQuoteUsage.NotRequired"/>
 
-    <!-- Trailing comma in multiline arrays -->
-    <rule ref="WordPress.Arrays.MultipleStatementAlignment">
-        <properties>
-            <property name="alignMultilineItems" value="!=100"/>
-        </properties>
-    </rule>
-
     <!-- Internationalization rules -->
     <rule ref="WordPress.WP.I18n">
         <properties>
-            <property name="text_domain" type="array" value="auto-alt-text-for-images"/>
+            <property name="text_domain" type="array">
+                <element value="auto-alt-text-for-images"/>
+            </property>
         </properties>
     </rule>
 
     <!-- PHP version -->
-    <config name="testVersion" value="8.2-"/>
+    <config name="testVersion" value="8.0-"/>
 </ruleset>
