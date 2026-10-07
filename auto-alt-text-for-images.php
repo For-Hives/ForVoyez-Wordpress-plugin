@@ -14,6 +14,8 @@
  * Plugin URI:  https://doc.forvoyez.com/wordpress-plugin
  * Description: Automatically generate alt text and SEO metadata for images using ForVoyez API.
  * Version:     1.1.40
+ * Requires at least: 5.6
+ * Requires PHP: 8.0
  * Author:      ForVoyez
  * Author URI:  https://forvoyez.com
  * Text Domain: auto-alt-text-for-images
@@ -179,9 +181,9 @@ function forvoyez_enqueue_media_scripts($hook) {
 					'success' => __('Analysis complete! Metadata updated.', 'auto-alt-text-for-images'),
 					'error' => __('Analysis failed. Please try again.', 'auto-alt-text-for-images'),
 					'lowCredits' => __('Warning: Low credits!', 'auto-alt-text-for-images'),
-					'noCredits' => __('Warning: No credits left!', 'auto-alt-text-for-images')
+					'noCredits' => __('Warning: No credits left!', 'auto-alt-text-for-images'),
 				),
-				'mediaPage' => $is_media_page
+				'mediaPage' => $is_media_page,
 			)
 		);
 
@@ -345,7 +347,7 @@ function forvoyez_handle_bulk_action($redirect_to, $doaction, $post_ids) {
 	$redirect_to = add_query_arg([
 		'forvoyez_bulk_analyze' => count($image_ids),
 		'forvoyez_bulk_nonce' => $nonce,
-		'forvoyez_image_ids' => implode(',', $image_ids)
+		'forvoyez_image_ids' => implode(',', $image_ids),
 	], $redirect_to);
 
 	return $redirect_to;
@@ -368,6 +370,7 @@ function forvoyez_admin_notices() {
 			<div class="notice notice-info">
 				<p>
 					<?php printf(
+						/* translators: %d: number of images */
 						_n(
 							'ForVoyez: Ready to analyze %d image.',
 							'ForVoyez: Ready to analyze %d images.',
@@ -510,6 +513,7 @@ function forvoyez_admin_notices() {
 			printf(
 				'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
 				sprintf(
+					/* translators: %d: number of images */
 					_n(
 						'ForVoyez: Successfully queued %d image for analysis.',
 						'ForVoyez: Successfully queued %d images for analysis.',
@@ -713,7 +717,7 @@ function forvoyez_get_bulk_images() {
 
 		wp_send_json_success([
 			'image_ids' => $image_ids,
-			'count' => count($image_ids)
+			'count' => count($image_ids),
 		]);
 	} else {
 		wp_send_json_error(['message' => 'No images found for analysis.']);
@@ -763,7 +767,7 @@ function forvoyez_bulk_analysis_notice() {
 	$warning = '';
 	if ($credits !== '?' && $credits < $count) {
 		$warning = '<div class="notice-warning" style="padding: 8px; margin-bottom: 10px; border-left: 4px solid #ffb900;">' .
-		           sprintf(__('Warning: This operation requires %d credits, but you only have %d credits available.', 'auto-alt-text-for-images'), $count, $credits) .
+		           sprintf(/* translators: 1: number of credits needed, 2: number of credits available */ __('Warning: This operation requires %1$d credits, but you only have %2$d credits available.', 'auto-alt-text-for-images'), $count, $credits) .
 		           '</div>';
 	}
 
@@ -773,6 +777,7 @@ function forvoyez_bulk_analysis_notice() {
         <p>
 			<?php
 			printf(
+				/* translators: %d: number of images */
 				_n(
 					'ForVoyez: Ready to analyze %d image.',
 					'ForVoyez: Ready to analyze %d images.',

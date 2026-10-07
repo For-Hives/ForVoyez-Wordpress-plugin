@@ -554,3 +554,23 @@ msgstr "Onglets"
 #: templates/main-page.php:51
 msgid "Manage Images"
 msgstr "Gérer les images"
+
+msgid "Auto Alt Text for Images:"
+msgstr "Alt Automatique pour vos images :"
+
+msgid "Configure the API key"
+msgstr "Configurer la clé API"
+
+msgid "Your ForVoyez API key is not configured. Add it in the Auto Alt Text configuration tab to generate alt text."
+msgstr "Votre clé API ForVoyez n'est pas configurée. Ajoutez-la dans l'onglet Configuration de Texte Alt Auto pour générer du texte alternatif."
+
+msgid "The ForVoyez API returned no alt text, title or caption. Nothing was changed."
+msgstr "L'API ForVoyez n'a renvoyé ni texte alternatif, ni titre, ni légende. Rien n'a été modifié."
+
+#, php-format
+msgid "Unexpected response from the ForVoyez API (HTTP %1$d): %2$s"
+msgstr "Réponse inattendue de l'API ForVoyez (HTTP %1$d) : %2$s"
+
+#, php-format
+msgid "The ForVoyez API request failed (HTTP %d)."
+msgstr "La requête à l'API ForVoyez a échoué (HTTP %d)."

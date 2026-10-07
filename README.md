@@ -2,8 +2,8 @@
 
 <img src="assets/logo.webp" width="50">
 
-[![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
-[![PHP](https://img.shields.io/badge/PHP-7.2%2B-purple.svg)](https://php.net/)
+[![WordPress](https://img.shields.io/badge/WordPress-5.6%2B-blue.svg)](https://wordpress.org/)
+[![PHP](https://img.shields.io/badge/PHP-8.0%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/License-GPL--2.0%2B-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
 _A powerful WordPress plugin for the [ForVoyez](https://forvoyez.com) platform that automatically generates SEO-optimized alt text for images._
@@ -34,8 +34,8 @@ ForVoyez Auto Alt Text for Images is a WordPress plugin that leverages AI techno
 
 ## Requirements
 
-- WordPress 5.0 or higher
-- PHP 8.2 or higher
+- WordPress 5.6 or higher
+- PHP 8.0 or higher
 - Composer
 - Node.js and npm
 
@@ -44,7 +44,7 @@ ForVoyez Auto Alt Text for Images is a WordPress plugin that leverages AI techno
 1. Download the plugin zip file or clone the repository:
 
    ```sh
-   git clone https://github.com/forvoyez/auto-alt-text-for-images.git
+   git clone https://github.com/For-Hives/ForVoyez-Wordpress-plugin.git auto-alt-text-for-images
    ```
 
 2. Navigate to the plugin directory:
@@ -66,6 +66,14 @@ ForVoyez Auto Alt Text for Images is a WordPress plugin that leverages AI techno
    ```
 
 5. Activate the plugin through the WordPress admin interface.
+
+### Admin page styles
+
+The admin page uses Tailwind CSS classes compiled into `assets/css/admin-tailwind.css` (committed, no CDN). After changing Tailwind classes in `templates/`, `includes/` or `assets/js/admin-script.js`, rebuild it:
+
+```sh
+npm run build:css
+```
 
 ## Configuration
 
@@ -184,7 +192,7 @@ To run the tests for this plugin, you'll need a MySQL/MariaDB database with a ro
 
 - MySQL or MariaDB installed
 - Composer
-- PHP 7.4 or higher
+- PHP 8.0 or higher
 
 ### Database Configuration
 
@@ -266,6 +274,13 @@ composer run install-wp-tests
 This command will install the WordPress test environment and run the plugin's unit tests.
 If you encounter any issues while running the tests, make sure the database connection information in the `bin/install-wp-tests.sh` file is correct.
 
+To use an existing database instead (for example a throwaway MariaDB container), pass `host:port` and `true` as the 6th argument to skip the database creation:
+
+```
+docker run -d --name wp-tests-db -e MARIADB_ROOT_PASSWORD=root -e MARIADB_DATABASE=wordpress_test -e MARIADB_USER=wp_test_user -e MARIADB_PASSWORD=votre_mot_de_passe_test -p 127.0.0.1:33069:3306 mariadb:11.8
+bash bin/install-wp-tests.sh wordpress_test wp_test_user votre_mot_de_passe_test 127.0.0.1:33069 latest true
+```
+
 ### Running the tests
 
 To run the tests, use the following command:
@@ -274,14 +289,20 @@ To run the tests, use the following command:
 ./vendor/bin/phpunit [file path].php
 ```
 
+If the test suite was installed outside the default temporary directory, point `WP_TESTS_DIR` at it (for example `WP_TESTS_DIR=/path/to/wordpress-tests-lib ./vendor/bin/phpunit`).
+
+The tests never call the real ForVoyez API: HTTP requests are intercepted with the `pre_http_request` filter (see `tests/TestForvoyezApiHttp.php`).
+
+GitHub Actions runs `php -l` and the PHPUnit suite on PHP 8.0, 8.2 and 8.4 against MariaDB on every push and pull request, and checks that `assets/css/admin-tailwind.css` is committed and up to date (`.github/workflows/tests.yml`).
+
 ### Add a new version 
-- Change auto-alt-text-for-images.php "FORVOYEZ_VERSION" constant to the new version number.
-- Change the version number in the plugin header. (in auto-alt-text-for-images.php)
-- Change the version number in the package.json file.
-- Change the version number in the readme.txt file.
-- Add the changes in upgrade notice in the readme.txt file.
-- Run `composer run make-pot`
-- Run `composer run zip`
+Versions are bumped and released by GitHub Actions; do not change the version numbers by hand.
+
+- Every push to `main` whose commit message does not contain `✨ Release version` runs `.github/workflows/version-bump.yml`: it reads the version from package.json, increments the patch number, writes it to package.json, the plugin header and `FORVOYEZ_VERSION` (auto-alt-text-for-images.php) and the readme.txt `Stable tag`, then commits `✨ Release version X.Y.Z ✨` and tags it.
+- That commit triggers `.github/workflows/deploy.yaml`, which builds the admin CSS, the translations and the zip, creates the GitHub release (with CHANGELOG.md as its body) and publishes to WordPress.org.
+- Before merging, write the changelog under the next version (current version + 1): CHANGELOG.md, the readme.txt `== Changelog ==` and, if needed, `== Upgrade Notice ==`.
+- Run `npm run build:css` if Tailwind classes changed and commit `assets/css/admin-tailwind.css`.
+- Run `composer run make-pot` if translatable strings changed.
 
 
 To add a new language, simply run the command:

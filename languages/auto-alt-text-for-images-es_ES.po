@@ -557,3 +557,23 @@ msgstr "Pestañas"
 #: templates/main-page.php:51
 msgid "Manage Images"
 msgstr "Gestionar imágenes"
+
+msgid "Auto Alt Text for Images:"
+msgstr "Texto Alt Automático para Imágenes:"
+
+msgid "Configure the API key"
+msgstr "Configurar la clave API"
+
+msgid "Your ForVoyez API key is not configured. Add it in the Auto Alt Text configuration tab to generate alt text."
+msgstr "Tu clave API de ForVoyez no está configurada. Añádela en la pestaña Configuración de Texto Alt Auto para generar texto alternativo."
+
+msgid "The ForVoyez API returned no alt text, title or caption. Nothing was changed."
+msgstr "La API de ForVoyez no devolvió texto alternativo, título ni leyenda. No se ha modificado nada."
+
+#, php-format
+msgid "Unexpected response from the ForVoyez API (HTTP %1$d): %2$s"
+msgstr "Respuesta inesperada de la API de ForVoyez (HTTP %1$d): %2$s"
+
+#, php-format
+msgid "The ForVoyez API request failed (HTTP %d)."
+msgstr "La solicitud a la API de ForVoyez ha fallado (HTTP %d)."

@@ -555,3 +555,23 @@ msgstr "Tabs"
 #: templates/main-page.php:51
 msgid "Manage Images"
 msgstr "Manage Images"
+
+msgid "Auto Alt Text for Images:"
+msgstr "Auto Alt Text for Images:"
+
+msgid "Configure the API key"
+msgstr "Configure the API key"
+
+msgid "Your ForVoyez API key is not configured. Add it in the Auto Alt Text configuration tab to generate alt text."
+msgstr "Your ForVoyez API key is not configured. Add it in the Auto Alt Text configuration tab to generate alt text."
+
+msgid "The ForVoyez API returned no alt text, title or caption. Nothing was changed."
+msgstr "The ForVoyez API returned no alt text, title or caption. Nothing was changed."
+
+#, php-format
+msgid "Unexpected response from the ForVoyez API (HTTP %1$d): %2$s"
+msgstr "Unexpected response from the ForVoyez API (HTTP %1$d): %2$s"
+
+#, php-format
+msgid "The ForVoyez API request failed (HTTP %d)."
+msgstr "The ForVoyez API request failed (HTTP %d)."

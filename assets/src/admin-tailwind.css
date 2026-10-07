@@ -1,0 +1,13 @@
+/*
+ * Source of assets/css/admin-tailwind.css, the styles of the plugin admin page.
+ * Rebuild after changing Tailwind classes in templates/, includes/ or the admin
+ * scripts: npm run build:css
+ *
+ * The base layer (preflight) is deliberately not wrapped in a cascade layer:
+ * the Tailwind Play CDN used before appended its <style> at the end of <head>,
+ * after the wp-admin stylesheets, so preflight already overrode the wp-admin
+ * element styles (headings, paragraph margins, list indentation).
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

@@ -34,8 +34,8 @@ Notre API alimentée par l'IA facilite l'optimisation des images pour le SEO pou
 
 = Obtention d'une clé API =
 
-1. Visitez la [page d'inscription ForVoyez](https://forvoyez.com/signup) pour créer un compte.
-2. Une fois connecté, accédez à votre [tableau de bord ForVoyez](https://forvoyez.com/dashboard).
+1. Visitez la [page d'inscription ForVoyez](https://forvoyez.com/sign-up) pour créer un compte.
+2. Une fois connecté, accédez à votre [tableau de bord ForVoyez](https://forvoyez.com/app).
 3. Générez une clé API dans la section API de votre tableau de bord.
 4. Copiez la clé API et collez-la dans la page des paramètres du plugin.
 
@@ -90,7 +90,7 @@ Ceci est la première version de ForVoyez Texte Alt Automatique pour Images. Ins
 
 Pour une documentation plus détaillée, veuillez consulter notre [documentation officielle](https://doc.forvoyez.com).
 
-Pour le support, les demandes de fonctionnalités ou pour signaler des bugs, veuillez visiter notre [forum de support](https://forvoyez.com/support) ou notre [dépôt GitHub](https://github.com/forvoyez/auto-alt-text-for-images).
+Pour le support, les demandes de fonctionnalités ou pour signaler des bugs, veuillez visiter notre [site web](https://forvoyez.com/contact) ou notre [dépôt GitHub](https://github.com/For-Hives/ForVoyez-Wordpress-plugin).
 
 Ce plugin est fièrement propulsé par [ForVoyez](https://forvoyez.com), un leader dans les solutions d'optimisation de contenu basées sur l'IA.
 
