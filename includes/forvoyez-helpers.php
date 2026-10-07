@@ -261,6 +261,48 @@ function forvoyez_verify_jwt($jwt) {
 }
 
 /**
+ * Message shown when no ForVoyez API key is configured.
+ *
+ * @since 1.1.41
+ * @return string Plain-text message (escape it on output).
+ */
+function forvoyez_get_missing_api_key_message() {
+	return __(
+		'Your ForVoyez API key is not configured. Add it in the Auto Alt Text configuration tab to generate alt text.',
+		'auto-alt-text-for-images',
+	);
+}
+
+/**
+ * Whether new uploads are analyzed automatically.
+ *
+ * The configuration toggle stores the string 'true' or 'false', and older
+ * versions stored whatever the AJAX request sent, so the string 'false' must
+ * read as disabled.
+ *
+ * @since 1.1.41
+ * @return bool
+ */
+function forvoyez_is_auto_analyze_enabled() {
+	return filter_var(
+		get_option('forvoyez_auto_analyze_enabled', false),
+		FILTER_VALIDATE_BOOLEAN,
+	);
+}
+
+/**
+ * URL of the plugin configuration tab.
+ *
+ * @since 1.1.41
+ * @return string
+ */
+function forvoyez_get_configuration_url() {
+	return admin_url(
+		'admin.php?page=auto-alt-text-for-images&tab=configuration',
+	);
+}
+
+/**
  * Get ForVoyez token information including remaining credits.
  *
  * @since 1.0.0
@@ -283,10 +325,7 @@ function forvoyez_get_token_info() {
 			'success' => false,
 			'error' => [
 				'code' => 'missing_api_key',
-				'message' => esc_html__(
-					'API key is not configured',
-					'auto-alt-text-for-images',
-				),
+				'message' => forvoyez_get_missing_api_key_message(),
 			],
 		];
 	}
