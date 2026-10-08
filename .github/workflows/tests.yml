@@ -81,6 +81,10 @@ jobs:
       - name: Run PHPUnit
         run: ./vendor/bin/phpunit
 
+      # uninstall.php loops over every site of a network: check it on multisite too.
+      - name: Run PHPUnit (multisite, uninstall)
+        run: WP_MULTISITE=1 ./vendor/bin/phpunit --filter TestForvoyezUninstall
+
   admin-css:
     name: Admin CSS is built and committed
     runs-on: ubuntu-latest
