@@ -7,6 +7,16 @@ on:
       - main
     paths-ignore:
       - '.github/workflows/**'
+  # Release main by hand (Actions > Version Bump > Run workflow), e.g. after a
+  # workflow-only change. To retry a failed deploy, run deploy.yaml by hand with
+  # the existing tag instead: running this workflow again releases a NEW version.
+  workflow_dispatch:
+
+# One release at a time. deploy.yaml must not use this group: a called workflow
+# waiting on its caller's group would block forever.
+concurrency:
+  group: plugin-release
+  cancel-in-progress: false
 
 jobs:
   version-bump:
@@ -14,13 +24,24 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: "!contains(github.event.head_commit.message, '✨ Release version')"
+    if: "github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '✨ Release version')"
+    outputs:
+      version: ${{ steps.bump_version.outputs.new_version }}
 
     steps:
-      - uses: actions/checkout@v4
+      # The built-in GITHUB_TOKEN (contents: write) pushes the release commit
+      # and tag, so no personal access token is needed. Its pushes start no
+      # other workflow, which is why the deploy job below calls deploy.yaml.
+      - uses: actions/checkout@v5
         with:
-          token: ${{ secrets.GH_TOKEN }}
           fetch-depth: 0
+
+      - name: Refuse to release twice
+        run: |
+          if git log -1 --format=%s | grep -q '✨ Release version'; then
+            echo "::error::main is already a release commit: nothing to release"
+            exit 1
+          fi
 
       - name: Read current version
         id: version
@@ -34,6 +55,10 @@ jobs:
           IFS='.' read -r -a version_parts <<< "${{ steps.version.outputs.current_version }}"
           new_patch=$((version_parts[2] + 1))
           NEW_VERSION="${version_parts[0]}.${version_parts[1]}.$new_patch"
+          if git rev-parse -q --verify "refs/tags/$NEW_VERSION" > /dev/null; then
+            echo "::error::tag $NEW_VERSION already exists"
+            exit 1
+          fi
           echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
 
       - name: Update version numbers
@@ -52,5 +77,18 @@ jobs:
           git pull origin main
           git add package.json auto-alt-text-for-images.php readme.txt
           git commit -m "✨ Release version $NEW_VERSION ✨"
-          git tag $NEW_VERSION
-          git push origin main && git push origin $NEW_VERSION
+          git tag "$NEW_VERSION"
+          # One atomic push: main and the tag are updated together or not at all.
+          git push --atomic origin HEAD:refs/heads/main "refs/tags/$NEW_VERSION"
+
+  deploy:
+    name: Deploy
+    needs: version-bump
+    permissions:
+      contents: write
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      version: ${{ needs.version-bump.outputs.version }}
+    secrets:
+      SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+      SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
