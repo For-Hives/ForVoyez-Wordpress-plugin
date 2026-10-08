@@ -18,6 +18,10 @@ All notable changes to this project will be documented in this file.
 - Requests carrying the API key no longer follow HTTP redirects, so the key is never sent to another host.
 - The admin page no longer loads the missing `api-settings.js` (404) nor `credits-manager.js` (JavaScript error, file removed); the credits widget is handled by `admin-script.js`.
 - The sign-up and dashboard links point to https://forvoyez.com/sign-up and https://forvoyez.com/app; the translated readmes link to https://forvoyez.com/contact and the For-Hives/ForVoyez-Wordpress-plugin repository.
+- The media-library bulk action ("Analyze with ForVoyez") now starts when a single image is selected: "Start Analysis" threw `$button.data(...).split is not a function` and sent nothing.
+- Deleting the plugin removes all its data: `uninstall.php` now also deletes the auto-analyze, context and language settings, every other `forvoyez_*` option and transient and the scheduled analyses, on every site of a multisite network. Alt texts, titles and captions are kept.
+- The media-library bulk notices and the low-credits warning escape their output (Plugin Check reported 27 `EscapeOutput` errors); a translation containing an apostrophe can no longer break their script.
+- French, German and Spanish translate every string again, including the 1.1.41 messages, and the compiled `.mo` files match the `.po` files (the new messages showed in English). The three `.po` files declare their plural forms.
 
 ### Changed
 
@@ -29,3 +33,4 @@ All notable changes to this project will be documented in this file.
 - The PHPUnit suite runs on GitHub Actions (PHP 8.0, 8.2 and 8.4, MariaDB) on every push and pull request, with HTTP calls to the ForVoyez API mocked through `pre_http_request`. A second job fails when `assets/css/admin-tailwind.css` is missing or out of date, and the deploy workflow rebuilds it.
 - `npm run lint` passes. PHPCS no longer checks the layout rules that contradict Prettier, which formats the PHP files; php-cs-fixer is no longer part of the lint (it reformats against Prettier). `npm ci` no longer runs `husky install`, which rewrote `core.hooksPath` although the repository has no hooks.
 - The deploy workflow uses `softprops/action-gh-release@v3` (v1 needed Node 16) and Node 22, and reads the commit message through an environment variable.
+- CI also runs the uninstall test on a multisite install. New tests cover the media-library bulk notice, output escaping and the translation files (every POT string translated, `.mo` in sync with `.po`).

@@ -83,6 +83,10 @@ The AI can generate content in multiple languages. You can specify your preferre
 * Fix: alt texts, titles and captions edited by hand keep their backslashes.
 * Fix: the API key is never sent along an HTTP redirect.
 * Fix: the sign-up and dashboard links point to the current ForVoyez pages.
+* Fix: the media-library bulk action now works when a single image is selected.
+* Fix: deleting the plugin removes all its settings, temporary data and scheduled analyses, on every site of a network. Alt texts, titles and captions are kept.
+* Fix: the media-library notices and the low-credits warning escape their output.
+* Fix: French, German and Spanish translations are complete again, including the new messages.
 * Change: the admin page styles are bundled with the plugin instead of being loaded from the Tailwind CSS CDN.
 * Change: requires PHP 8.0 and WordPress 5.6 or later. Tested up to WordPress 7.1.
 
