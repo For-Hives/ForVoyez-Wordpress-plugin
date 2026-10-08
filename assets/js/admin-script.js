@@ -631,7 +631,11 @@
 					? 'bg-red-500'
 					: 'bg-blue-500'
 		} text-white`
-		notification.textContent = message
+		// server messages come HTML-escaped (esc_html__): decode the entities so
+		// apostrophes show as text, then set them as text (never as HTML)
+		const decoder = document.createElement('textarea')
+		decoder.innerHTML = String(message ?? '')
+		notification.textContent = decoder.value
 
 		document.body.appendChild(notification)
 		currentNotification = notification

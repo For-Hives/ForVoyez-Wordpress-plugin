@@ -21,6 +21,8 @@ All notable changes to this project will be documented in this file.
 - The media-library bulk action ("Analyze with ForVoyez") now starts when a single image is selected: "Start Analysis" threw `$button.data(...).split is not a function` and sent nothing.
 - Deleting the plugin removes all its data: `uninstall.php` now also deletes the auto-analyze, context and language settings, every other `forvoyez_*` option and transient and the scheduled analyses, on every site of a multisite network. Alt texts, titles and captions are kept.
 - The media-library bulk notices and the low-credits warning escape their output (Plugin Check reported 27 `EscapeOutput` errors); a translation containing an apostrophe can no longer break their script.
+- Notifications decode the HTML entities of the server messages before showing them as text, so apostrophes and accents display correctly (French showed `&#039;`).
+- A JavaScript error on the Media Library screens (`media-script.js` chained two jQuery wrappers without a separator).
 - French, German and Spanish translate every string again, including the 1.1.41 messages, and the compiled `.mo` files match the `.po` files (the new messages showed in English). The three `.po` files declare their plural forms.
 
 ### Changed

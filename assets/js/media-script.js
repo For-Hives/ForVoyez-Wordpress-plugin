@@ -472,7 +472,8 @@
 			console.log('Updated status indicators for image ID:', imageId)
 		}
 	}
-})(jQuery)(function ($) {
+})(jQuery)
+;(function ($) {
 	'use strict'
 
 	function injectForVoyezIntoMediaModal() {

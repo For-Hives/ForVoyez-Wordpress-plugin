@@ -84,6 +84,8 @@ The AI can generate content in multiple languages. You can specify your preferre
 * Fix: the API key is never sent along an HTTP redirect.
 * Fix: the sign-up and dashboard links point to the current ForVoyez pages.
 * Fix: the media-library bulk action now works when a single image is selected.
+* Fix: notifications show apostrophes and accents instead of HTML entities (e.g. `&#039;` in French).
+* Fix: a JavaScript error on the Media Library screens (list and grid).
 * Fix: deleting the plugin removes all its settings, temporary data and scheduled analyses, on every site of a network. Alt texts, titles and captions are kept.
 * Fix: the media-library notices and the low-credits warning escape their output.
 * Fix: French, German and Spanish translations are complete again, including the new messages.
