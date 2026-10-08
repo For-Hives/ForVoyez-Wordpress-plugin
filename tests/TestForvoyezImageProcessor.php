@@ -19,7 +19,9 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase
 		$this->image_processor = new Forvoyez_Image_Processor();
 		$reflection = new ReflectionClass($this->image_processor);
 		$property = $reflection->getProperty('api_client');
-		$property->setAccessible(true);
+		if (PHP_VERSION_ID < 80100) {
+			$property->setAccessible(true); // No-op (deprecated) since PHP 8.1.
+		}
 		$property->setValue($this->image_processor, $this->mock_api_client);
 	}
 
@@ -40,7 +42,9 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase
 
 		$reflection = new ReflectionClass(Forvoyez_Image_Processor::class);
 		$method = $reflection->getMethod('sanitize_and_validate_metadata');
-		$method->setAccessible(true);
+		if (PHP_VERSION_ID < 80100) {
+			$method->setAccessible(true); // No-op (deprecated) since PHP 8.1.
+		}
 
 		$result = $method->invokeArgs($this->image_processor, [ $raw_metadata ]);
 
@@ -171,7 +175,16 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase
 
 	public function test_process_images()
 	{
-		$image_ids = [ 1, 2, 3 ];
+		// process_images() only sends images the current user may edit.
+		wp_set_current_user(self::factory()->user->create([ 'role' => 'administrator' ]));
+		$image_ids = [];
+		for ($i = 0; $i < 3; $i++) {
+			$image_ids[] = self::factory()->attachment->create_object([
+				'file' => __DIR__ . '/assets/test-image.webp',
+				'post_mime_type' => 'image/webp',
+				'post_title' => 'test-image',
+			]);
+		}
 
 		$this->mock_api_client
 			->expects($this->exactly(3))
@@ -214,6 +227,119 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase
 		);
 	}
 
+	public function test_schedule_image_analysis_without_api_key_does_not_schedule()
+	{
+		update_option('forvoyez_auto_analyze_enabled', true);
+		$this->mock_api_client->method('has_api_key')->willReturn(false);
+		$attachment_id = $this->factory->attachment->create_upload_object(
+			__DIR__ . '/assets/test-image.webp',
+			0,
+		);
+
+		$this->image_processor->schedule_image_analysis($attachment_id);
+
+		$this->assertFalse(
+			wp_next_scheduled('forvoyez_analyze_single_image', [ $attachment_id ]),
+			'No analysis should be scheduled without an API key',
+		);
+
+		wp_delete_attachment($attachment_id, true);
+		delete_option('forvoyez_auto_analyze_enabled');
+	}
+
+	public function test_schedule_image_analysis_with_api_key_schedules()
+	{
+		update_option('forvoyez_auto_analyze_enabled', true);
+		$this->mock_api_client->method('has_api_key')->willReturn(true);
+		$attachment_id = $this->factory->attachment->create_upload_object(
+			__DIR__ . '/assets/test-image.webp',
+			0,
+		);
+
+		$this->image_processor->schedule_image_analysis($attachment_id);
+
+		$this->assertNotFalse(
+			wp_next_scheduled('forvoyez_analyze_single_image', [ $attachment_id ]),
+			'An analysis should be scheduled when an API key is configured',
+		);
+
+		wp_clear_scheduled_hook('forvoyez_analyze_single_image', [ $attachment_id ]);
+		wp_delete_attachment($attachment_id, true);
+		delete_option('forvoyez_auto_analyze_enabled');
+	}
+
+	public function test_schedule_image_analysis_when_turned_off_does_not_schedule()
+	{
+		// The toggle used to store the AJAX string as is: 'false' is truthy.
+		update_option('forvoyez_auto_analyze_enabled', 'false');
+		$this->mock_api_client->method('has_api_key')->willReturn(true);
+		$attachment_id = $this->factory->attachment->create_upload_object(
+			__DIR__ . '/assets/test-image.webp',
+			0,
+		);
+
+		$this->image_processor->schedule_image_analysis($attachment_id);
+
+		$this->assertFalse(
+			wp_next_scheduled('forvoyez_analyze_single_image', [ $attachment_id ]),
+			'No analysis should be scheduled once automatic analysis is turned off',
+		);
+
+		wp_delete_attachment($attachment_id, true);
+		delete_option('forvoyez_auto_analyze_enabled');
+	}
+
+	public function test_cron_analyze_without_api_key_does_not_call_api()
+	{
+		update_option('forvoyez_auto_analyze_enabled', 'true');
+		$this->mock_api_client->method('has_api_key')->willReturn(false);
+		$this->mock_api_client->expects($this->never())->method('analyze_image');
+
+		$this->image_processor->cron_analyze_single_image(123);
+
+		delete_option('forvoyez_auto_analyze_enabled');
+	}
+
+	public function test_cron_analyze_when_turned_off_does_not_call_api()
+	{
+		update_option('forvoyez_auto_analyze_enabled', 'false');
+		$this->mock_api_client->method('has_api_key')->willReturn(true);
+		$this->mock_api_client->expects($this->never())->method('analyze_image');
+
+		$this->image_processor->cron_analyze_single_image(123);
+
+		delete_option('forvoyez_auto_analyze_enabled');
+	}
+
+	public function test_cron_analyze_with_api_key_calls_api_once()
+	{
+		update_option('forvoyez_auto_analyze_enabled', 'true');
+		$this->mock_api_client->method('has_api_key')->willReturn(true);
+		$this->mock_api_client
+			->expects($this->once())
+			->method('analyze_image')
+			->with(123)
+			->willReturn([ 'success' => true, 'message' => 'ok', 'metadata' => [] ]);
+
+		$this->image_processor->cron_analyze_single_image(123);
+
+		delete_option('forvoyez_auto_analyze_enabled');
+	}
+
+	public function test_analyze_image_on_upload_without_api_key_does_not_call_api()
+	{
+		$this->mock_api_client->method('has_api_key')->willReturn(false);
+		$this->mock_api_client->expects($this->never())->method('analyze_image');
+		$attachment_id = $this->factory->attachment->create_upload_object(
+			__DIR__ . '/assets/test-image.webp',
+			0,
+		);
+
+		$this->image_processor->analyze_image_on_upload($attachment_id);
+
+		wp_delete_attachment($attachment_id, true);
+	}
+
 	private function call_private_method(
 		$object,
 		$method_name,
@@ -221,7 +347,9 @@ class TestForvoyezImageProcessor extends WP_UnitTestCase
 	) {
 		$reflection = new ReflectionClass(get_class($object));
 		$method = $reflection->getMethod($method_name);
-		$method->setAccessible(true);
+		if (PHP_VERSION_ID < 80100) {
+			$method->setAccessible(true); // No-op (deprecated) since PHP 8.1.
+		}
 
 		return $method->invokeArgs($object, $parameters);
 	}

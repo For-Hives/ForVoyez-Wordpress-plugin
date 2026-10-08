@@ -14,6 +14,8 @@
  * Plugin URI:  https://doc.forvoyez.com/wordpress-plugin
  * Description: Automatically generate alt text and SEO metadata for images using ForVoyez API.
  * Version:     1.1.40
+ * Requires at least: 5.6
+ * Requires PHP: 8.0
  * Author:      ForVoyez
  * Author URI:  https://forvoyez.com
  * Text Domain: auto-alt-text-for-images
@@ -33,7 +35,7 @@ define( 'FORVOYEZ_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'FORVOYEZ_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
 // Include required files
-$required_files = array(
+$forvoyez_required_files = array(
 	'includes/forvoyez-helpers.php',
 	'includes/class-forvoyez-admin.php',
 	'includes/class-forvoyez-api-manager.php',
@@ -42,8 +44,8 @@ $required_files = array(
 	'includes/class-forvoyez-image-renderer.php',
 );
 
-foreach ( $required_files as $file ) {
-	require_once FORVOYEZ_PLUGIN_DIR . $file;
+foreach ( $forvoyez_required_files as $forvoyez_file ) {
+	require_once FORVOYEZ_PLUGIN_DIR . $forvoyez_file;
 }
 
 /**
@@ -179,9 +181,9 @@ function forvoyez_enqueue_media_scripts($hook) {
 					'success' => __('Analysis complete! Metadata updated.', 'auto-alt-text-for-images'),
 					'error' => __('Analysis failed. Please try again.', 'auto-alt-text-for-images'),
 					'lowCredits' => __('Warning: Low credits!', 'auto-alt-text-for-images'),
-					'noCredits' => __('Warning: No credits left!', 'auto-alt-text-for-images')
+					'noCredits' => __('Warning: No credits left!', 'auto-alt-text-for-images'),
 				),
-				'mediaPage' => $is_media_page
+				'mediaPage' => $is_media_page,
 			)
 		);
 
@@ -345,7 +347,7 @@ function forvoyez_handle_bulk_action($redirect_to, $doaction, $post_ids) {
 	$redirect_to = add_query_arg([
 		'forvoyez_bulk_analyze' => count($image_ids),
 		'forvoyez_bulk_nonce' => $nonce,
-		'forvoyez_image_ids' => implode(',', $image_ids)
+		'forvoyez_image_ids' => implode(',', $image_ids),
 	], $redirect_to);
 
 	return $redirect_to;
@@ -367,22 +369,25 @@ function forvoyez_admin_notices() {
 			?>
 			<div class="notice notice-info">
 				<p>
-					<?php printf(
-						_n(
-							'ForVoyez: Ready to analyze %d image.',
-							'ForVoyez: Ready to analyze %d images.',
-							$count,
-							'auto-alt-text-for-images'
-						),
-						$count
+					<?php echo esc_html(
+						sprintf(
+							/* translators: %d: number of images */
+							_n(
+								'ForVoyez: Ready to analyze %d image.',
+								'ForVoyez: Ready to analyze %d images.',
+								$count,
+								'auto-alt-text-for-images'
+							),
+							$count
+						)
 					); ?>
-					<button id="forvoyez-start-bulk-analysis" class="button button-primary" data-nonce="<?php echo wp_create_nonce('forvoyez_bulk_analyze_nonce'); ?>">
-						<?php _e('Start Analysis', 'auto-alt-text-for-images'); ?>
+					<button id="forvoyez-start-bulk-analysis" class="button button-primary" data-nonce="<?php echo esc_attr(wp_create_nonce('forvoyez_bulk_analyze_nonce')); ?>">
+						<?php esc_html_e('Start Analysis', 'auto-alt-text-for-images'); ?>
 					</button>
 				</p>
 				<div id="forvoyez-bulk-progress" style="display: none; margin-top: 10px;">
 					<div style="margin-bottom: 5px;">
-						<span id="forvoyez-bulk-progress-text">0 / <?php echo $count; ?> images processed</span>
+						<span id="forvoyez-bulk-progress-text">0 / <?php echo (int) $count; ?> images processed</span>
 					</div>
 					<div style="background-color: #f1f1f1; height: 20px; border-radius: 3px; overflow: hidden;">
 						<div id="forvoyez-bulk-progress-bar" style="background-color: #0073aa; height: 100%; width: 0%;"></div>
@@ -456,7 +461,7 @@ function forvoyez_admin_notices() {
                                     data: {
                                         action: 'forvoyez_process_image_batch',
                                         image_ids: batchIds,
-                                        nonce: '<?php echo wp_create_nonce('forvoyez_verify_ajax_request_nonce'); ?>'
+                                        nonce: '<?php echo esc_js(wp_create_nonce('forvoyez_verify_ajax_request_nonce')); ?>'
                                     },
                                     success: function(response) {
                                         if (response.success) {
@@ -509,14 +514,17 @@ function forvoyez_admin_notices() {
 			// Just show completion message
 			printf(
 				'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
-				sprintf(
-					_n(
-						'ForVoyez: Successfully queued %d image for analysis.',
-						'ForVoyez: Successfully queued %d images for analysis.',
-						$count,
-						'auto-alt-text-for-images'
-					),
-					$count
+				esc_html(
+					sprintf(
+						/* translators: %d: number of images */
+						_n(
+							'ForVoyez: Successfully queued %d image for analysis.',
+							'ForVoyez: Successfully queued %d images for analysis.',
+							$count,
+							'auto-alt-text-for-images'
+						),
+						$count
+					)
 				)
 			);
 		}
@@ -713,7 +721,7 @@ function forvoyez_get_bulk_images() {
 
 		wp_send_json_success([
 			'image_ids' => $image_ids,
-			'count' => count($image_ids)
+			'count' => count($image_ids),
 		]);
 	} else {
 		wp_send_json_error(['message' => 'No images found for analysis.']);
@@ -730,7 +738,7 @@ function forvoyez_bulk_analysis_notice() {
 	}
 
 	$count = intval($_GET['forvoyez_bulk_analyze']);
-	$nonce = sanitize_text_field($_GET['forvoyez_bulk_nonce']);
+	$nonce = sanitize_text_field(wp_unslash($_GET['forvoyez_bulk_nonce']));
 
 	// Verify nonce
 	if (!wp_verify_nonce($nonce, 'forvoyez_bulk_analyze_nonce')) {
@@ -739,7 +747,7 @@ function forvoyez_bulk_analysis_notice() {
 
 	// Get image IDs
 	$image_ids = isset($_GET['forvoyez_image_ids']) ?
-		explode(',', sanitize_text_field($_GET['forvoyez_image_ids'])) :
+		explode(',', sanitize_text_field(wp_unslash($_GET['forvoyez_image_ids']))) :
 		[];
 
 	if (empty($image_ids)) {
@@ -762,9 +770,7 @@ function forvoyez_bulk_analysis_notice() {
 	// Warning if not enough credits
 	$warning = '';
 	if ($credits !== '?' && $credits < $count) {
-		$warning = '<div class="notice-warning" style="padding: 8px; margin-bottom: 10px; border-left: 4px solid #ffb900;">' .
-		           sprintf(__('Warning: This operation requires %d credits, but you only have %d credits available.', 'auto-alt-text-for-images'), $count, $credits) .
-		           '</div>';
+		$warning = sprintf(/* translators: 1: number of credits needed, 2: number of credits available */ __('Warning: This operation requires %1$d credits, but you only have %2$d credits available.', 'auto-alt-text-for-images'), $count, $credits);
 	}
 
 	// Create the notice
@@ -772,34 +778,37 @@ function forvoyez_bulk_analysis_notice() {
     <div class="notice notice-info">
         <p>
 			<?php
-			printf(
-				_n(
-					'ForVoyez: Ready to analyze %d image.',
-					'ForVoyez: Ready to analyze %d images.',
-					$count,
-					'auto-alt-text-for-images'
-				),
-				$count
+			echo esc_html(
+				sprintf(
+					/* translators: %d: number of images */
+					_n(
+						'ForVoyez: Ready to analyze %d image.',
+						'ForVoyez: Ready to analyze %d images.',
+						$count,
+						'auto-alt-text-for-images'
+					),
+					$count
+				)
 			);
 			?>
             <span class="forvoyez-credits-info" style="margin-left: 10px;">
-                ForVoyez Credits: <span class="forvoyez-credit-count <?php echo $credit_class; ?>"><?php echo esc_html($credits); ?></span>
+                ForVoyez Credits: <span class="forvoyez-credit-count <?php echo esc_attr($credit_class); ?>"><?php echo esc_html($credits); ?></span>
             </span>
         </p>
-		<?php echo $warning; ?>
+		<?php if ($warning) : ?><div class="notice-warning" style="padding: 8px; margin-bottom: 10px; border-left: 4px solid #ffb900;"><?php echo esc_html($warning); ?></div><?php endif; ?>
         <div class="forvoyez-bulk-actions" style="margin: 10px 0;">
             <button id="forvoyez-start-bulk" class="button button-primary"
-                    data-nonce="<?php echo wp_create_nonce('forvoyez_verify_ajax_request_nonce'); ?>"
+                    data-nonce="<?php echo esc_attr(wp_create_nonce('forvoyez_verify_ajax_request_nonce')); ?>"
                     data-ids="<?php echo esc_attr(implode(',', $image_ids)); ?>">
-				<?php _e('Start Analysis', 'auto-alt-text-for-images'); ?>
+				<?php esc_html_e('Start Analysis', 'auto-alt-text-for-images'); ?>
             </button>
             <a href="<?php echo esc_url(remove_query_arg(['forvoyez_bulk_analyze', 'forvoyez_bulk_nonce', 'forvoyez_image_ids'])); ?>" class="button">
-				<?php _e('Cancel', 'auto-alt-text-for-images'); ?>
+				<?php esc_html_e('Cancel', 'auto-alt-text-for-images'); ?>
             </a>
         </div>
         <div id="forvoyez-bulk-progress" style="display: none; margin: 10px 0;">
             <div style="margin-bottom: 5px;">
-                <span id="forvoyez-progress-count">0 / <?php echo $count; ?></span>
+                <span id="forvoyez-progress-count">0 / <?php echo (int) $count; ?></span>
                 <span id="forvoyez-progress-status" style="margin-left: 10px;"></span>
             </div>
             <div style="height: 20px; background: #f1f1f1; border-radius: 4px; overflow: hidden;">
@@ -809,7 +818,7 @@ function forvoyez_bulk_analysis_notice() {
         <div id="forvoyez-bulk-results" style="display: none; margin-top: 10px;">
             <div id="forvoyez-results-summary"></div>
             <button id="forvoyez-close-notice" class="button" style="margin-top: 10px;">
-				<?php _e('Dismiss', 'auto-alt-text-for-images'); ?>
+				<?php esc_html_e('Dismiss', 'auto-alt-text-for-images'); ?>
             </button>
         </div>
     </div>
@@ -835,11 +844,13 @@ function forvoyez_bulk_analysis_notice() {
             // Handle bulk analysis
             $('#forvoyez-start-bulk').on('click', function() {
                 const $button = $(this);
-                const imageIds = $button.data('ids').split(',');
+                // Read the raw attribute: jQuery .data() turns a single id
+                // such as "11" into the Number 11, which has no split().
+                const imageIds = String($button.attr('data-ids') || '').split(',').filter(Boolean);
                 const nonce = $button.data('nonce');
 
                 // Disable button and show progress
-                $button.prop('disabled', true).text('<?php _e('Processing...', 'auto-alt-text-for-images'); ?>');
+                $button.prop('disabled', true).text('<?php echo esc_js(__('Processing...', 'auto-alt-text-for-images')); ?>');
                 $('#forvoyez-bulk-progress').show();
                 $('.forvoyez-bulk-actions').hide();
 
@@ -855,13 +866,13 @@ function forvoyez_bulk_analysis_notice() {
 
                     if (batch.length === 0) {
                         // All done
-                        $('#forvoyez-progress-status').text('<?php _e('Complete!', 'auto-alt-text-for-images'); ?>');
+                        $('#forvoyez-progress-status').text('<?php echo esc_js(__('Complete!', 'auto-alt-text-for-images')); ?>');
                         $('#forvoyez-bulk-results').show();
                         $('#forvoyez-results-summary').html(
                             `<div class="notice-success" style="padding: 8px; margin-bottom: 10px; border-left: 4px solid #46b450;">
-                            <?php _e('Analysis completed!', 'auto-alt-text-for-images'); ?>
-                            ${successCount} <?php _e('successful', 'auto-alt-text-for-images'); ?>,
-                            ${errorCount} <?php _e('failed', 'auto-alt-text-for-images'); ?>.
+                            <?php echo esc_js(__('Analysis completed!', 'auto-alt-text-for-images')); ?>
+                            ${successCount} <?php echo esc_js(__('successful', 'auto-alt-text-for-images')); ?>,
+                            ${errorCount} <?php echo esc_js(__('failed', 'auto-alt-text-for-images')); ?>.
                         </div>`
                         );
 
@@ -907,8 +918,8 @@ function forvoyez_bulk_analysis_notice() {
                             $('#forvoyez-progress-bar').css('width', percent + '%');
                             $('#forvoyez-progress-count').text(processedCount + ' / ' + imageIds.length);
                             $('#forvoyez-progress-status').text(
-                                successCount + ' <?php _e('successful', 'auto-alt-text-for-images'); ?>, ' +
-                                errorCount + ' <?php _e('failed', 'auto-alt-text-for-images'); ?>'
+                                successCount + ' <?php echo esc_js(__('successful', 'auto-alt-text-for-images')); ?>, ' +
+                                errorCount + ' <?php echo esc_js(__('failed', 'auto-alt-text-for-images')); ?>'
                             );
 
                             // Process next batch
@@ -924,8 +935,8 @@ function forvoyez_bulk_analysis_notice() {
                             $('#forvoyez-progress-bar').css('width', percent + '%');
                             $('#forvoyez-progress-count').text(processedCount + ' / ' + imageIds.length);
                             $('#forvoyez-progress-status').text(
-                                successCount + ' <?php _e('successful', 'auto-alt-text-for-images'); ?>, ' +
-                                errorCount + ' <?php _e('failed', 'auto-alt-text-for-images'); ?>'
+                                successCount + ' <?php echo esc_js(__('successful', 'auto-alt-text-for-images')); ?>, ' +
+                                errorCount + ' <?php echo esc_js(__('failed', 'auto-alt-text-for-images')); ?>'
                             );
 
                             // Process next batch

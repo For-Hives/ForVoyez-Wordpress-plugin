@@ -79,6 +79,33 @@ class TestForVoyezHelpers extends WP_UnitTestCase
 	}
 
 	/**
+	 * The configuration toggle stores 'true' / 'false': 'false' is disabled.
+	 */
+	public function test_forvoyez_is_auto_analyze_enabled()
+	{
+		delete_option('forvoyez_auto_analyze_enabled');
+		$this->assertFalse(forvoyez_is_auto_analyze_enabled(), 'Disabled by default');
+
+		foreach ([ 'true', '1', true ] as $value) {
+			update_option('forvoyez_auto_analyze_enabled', $value);
+			$this->assertTrue(
+				forvoyez_is_auto_analyze_enabled(),
+				var_export($value, true) . ' should read as enabled',
+			);
+		}
+
+		foreach ([ 'false', '0', '', false ] as $value) {
+			update_option('forvoyez_auto_analyze_enabled', $value);
+			$this->assertFalse(
+				forvoyez_is_auto_analyze_enabled(),
+				var_export($value, true) . ' should read as disabled',
+			);
+		}
+
+		delete_option('forvoyez_auto_analyze_enabled');
+	}
+
+	/**
 	 * Test forvoyez_sanitize_api_key function.
 	 */
 	public function test_forvoyez_sanitize_api_key()

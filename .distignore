@@ -22,3 +22,10 @@ phpcs.xml
 webpack.config.js
 .env.testing
 renovate.json
+assets/src/
+tailwind.config.js
+AGENTS.md
+docs/
+.github/
+.prettierignore
+endpoint.md

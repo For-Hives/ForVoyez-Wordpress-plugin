@@ -1,0 +1,116 @@
+# File: .github/workflows/tests.yml
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  phpunit:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # 8.0 is the minimum declared in the plugin header and readme.txt.
+        php: ['8.0', '8.2', '8.4']
+
+    services:
+      mariadb:
+        image: mariadb:11.8
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: wordpress_test
+          MARIADB_USER: wp_test_user
+          MARIADB_PASSWORD: wp_test_password
+        ports:
+          - 3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    env:
+      WP_TESTS_DIR: /tmp/wordpress-tests-lib
+      WP_CORE_DIR: /tmp/wordpress/
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mysqli, gd, openssl
+          tools: composer:v2
+          coverage: none
+
+      - name: Install Subversion (WordPress test suite checkout)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y subversion
+
+      - name: Lint PHP files (php -l)
+        run: |
+          find . -type f -name '*.php' \
+            -not -path './vendor/*' \
+            -not -path './node_modules/*' \
+            -print0 | xargs -0 -n1 php -l
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Install WordPress test suite
+        # The service container already created the database and user, so the
+        # 6th argument skips the database creation step.
+        run: |
+          bash bin/install-wp-tests.sh wordpress_test wp_test_user wp_test_password \
+            "127.0.0.1:${{ job.services.mariadb.ports['3306'] }}" latest true
+
+      - name: Run PHPUnit
+        run: ./vendor/bin/phpunit
+
+      # uninstall.php loops over every site of a network: check it on multisite too.
+      - name: Run PHPUnit (multisite, uninstall)
+        run: WP_MULTISITE=1 ./vendor/bin/phpunit --filter TestForvoyezUninstall
+
+  admin-css:
+    name: Admin CSS is built and committed
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      # The admin page loads assets/css/admin-tailwind.css instead of the
+      # Tailwind CDN: the committed file must exist and match the templates.
+      - name: Rebuild assets/css/admin-tailwind.css
+        run: npm run build:css
+
+      - name: Fail if the committed CSS is missing or out of date
+        run: |
+          if [ -n "$(git status --porcelain -- assets/css/admin-tailwind.css)" ]; then
+            git status --short -- assets/css/admin-tailwind.css
+            echo "::error file=assets/css/admin-tailwind.css::Run npm run build:css and commit assets/css/admin-tailwind.css"
+            exit 1
+          fi

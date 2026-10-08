@@ -34,8 +34,8 @@ Unsere KI-gestützte API erleichtert es Entwicklern und Content-Erstellern, Bild
 
 = Einen API-Schlüssel erhalten =
 
-1. Besuchen Sie die [ForVoyez Anmeldeseite](https://forvoyez.com/signup), um ein Konto zu erstellen.
-2. Nach der Anmeldung navigieren Sie zu Ihrem [ForVoyez Dashboard](https://forvoyez.com/dashboard).
+1. Besuchen Sie die [ForVoyez Anmeldeseite](https://forvoyez.com/sign-up), um ein Konto zu erstellen.
+2. Nach der Anmeldung navigieren Sie zu Ihrem [ForVoyez Dashboard](https://forvoyez.com/app).
 3. Generieren Sie einen API-Schlüssel im API-Bereich Ihres Dashboards.
 4. Kopieren Sie den API-Schlüssel und fügen Sie ihn in die Einstellungsseite des Plugins ein.
 
@@ -90,7 +90,7 @@ Dies ist die erste Veröffentlichung von ForVoyez Automatischer Alt-Text für Bi
 
 Für eine detailliertere Dokumentation besuchen Sie bitte unsere [offizielle Dokumentation](https://doc.forvoyez.com).
 
-Für Support, Funktionsanfragen oder um Fehler zu melden, besuchen Sie bitte unser [Support-Forum](https://forvoyez.com/support) oder unser [GitHub-Repository](https://github.com/forvoyez/auto-alt-text-for-images).
+Für Support, Funktionsanfragen oder um Fehler zu melden, besuchen Sie bitte unsere [Website](https://forvoyez.com/contact) oder unser [GitHub-Repository](https://github.com/For-Hives/ForVoyez-Wordpress-plugin).
 
 Dieses Plugin wird stolz betrieben von [ForVoyez](https://forvoyez.com), einem führenden Anbieter von KI-gesteuerten Content-Optimierungslösungen.
 

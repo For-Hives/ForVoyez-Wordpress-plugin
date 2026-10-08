@@ -1,10 +1,10 @@
 === Auto Alt Text for Images ===
 Contributors: cinquinandy
 Tags: seo, accessibility, images, alt text, metadata
-Requires at least: 5.0
-Tested up to: 6.8.3
+Requires at least: 5.6
+Tested up to: 7.1
 Stable tag: 1.1.40
-Requires PHP: 7.2
+Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,7 +35,7 @@ Our AI-powered API makes it easy for developers and content creators to optimize
 = Obtaining an API Key =
 
 1. Visit the [ForVoyez signup page](https://forvoyez.com/sign-up) to create an account.
-2. Once logged in, navigate to your [ForVoyez dashboard](https://forvoyez.com/app/dashboard).
+2. Once logged in, navigate to your [ForVoyez dashboard](https://forvoyez.com/app).
 3. Generate an API key in the API section of your dashboard.
 4. Copy the API key and paste it in the plugin's settings page.
 
@@ -72,6 +72,26 @@ The AI can generate content in multiple languages. You can specify your preferre
 3. Results Example - Showcase of automatically generated alt text, titles, and captions for various image types.
 
 == Changelog ==
+= 1.1.41 =
+* Fix: the generated alt text was saved empty (the API field `alternativeText` was read as `alt_text`) and replaced any existing alt text. Existing alt texts, titles and captions are never replaced by empty values anymore.
+* Fix: each request now sends an explicit output schema (title, alternativeText, caption).
+* Fix: no image is sent to the ForVoyez API while no API key is configured (manual, bulk, upload and scheduled analysis); an admin notice explains how to add the key.
+* Fix: API key verification now uses the ForVoyez /api/tokens endpoint.
+* Fix: error messages returned by the ForVoyez API are shown instead of a generic decoding error.
+* Fix: analysis only accepts images the current user can edit, and the generated alt text, title and caption are saved as plain text.
+* Fix: turning automatic analysis off now stops analyzing (and charging credits for) new uploads.
+* Fix: alt texts, titles and captions edited by hand keep their backslashes.
+* Fix: the API key is never sent along an HTTP redirect.
+* Fix: the sign-up and dashboard links point to the current ForVoyez pages.
+* Fix: the media-library bulk action now works when a single image is selected.
+* Fix: notifications show apostrophes and accents instead of HTML entities (e.g. `&#039;` in French).
+* Fix: a JavaScript error on the Media Library screens (list and grid).
+* Fix: deleting the plugin removes all its settings, temporary data and scheduled analyses, on every site of a network. Alt texts, titles and captions are kept.
+* Fix: the media-library notices and the low-credits warning escape their output.
+* Fix: French, German and Spanish translations are complete again, including the new messages.
+* Change: the admin page styles are bundled with the plugin instead of being loaded from the Tailwind CSS CDN.
+* Change: requires PHP 8.0 and WordPress 5.6 or later. Tested up to WordPress 7.1.
+
 = 1.1.33 =
 Add Español, Dutch, Portuguese, Italian, Indian, Chinese. and all the main language.
 
@@ -145,9 +165,18 @@ This is the first release of ForVoyez Auto Alt Text for Images. Install now to s
 * Multi-language support
 * User-friendly admin interface
 
+== Upgrade Notice ==
+
+= 1.1.41 =
+Fixes empty alt text being saved after an analysis (and replacing existing alt text). No API call is made without an API key. Requires PHP 8.0.
+
 == Additional Information ==
 
 For more detailed documentation, please visit our [official documentation](https://doc.forvoyez.com).
+
+= Source code =
+
+The admin stylesheet `assets/css/admin-tailwind.css` is compiled and minified with Tailwind CSS. Its uncompiled source (`assets/src/admin-tailwind.css`, `tailwind.config.js`) and the build command (`npm run build:css`) are in the public repository: [github.com/For-Hives/ForVoyez-Wordpress-plugin](https://github.com/For-Hives/ForVoyez-Wordpress-plugin).
 
 For support, feature requests, or to report bugs, please visit our [website](https://forvoyez.com/contact).
 

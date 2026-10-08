@@ -36,18 +36,30 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Get version from commit message
         id: get_version
+        # Passed through the environment, never expanded into the script.
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
-          VERSION=$(echo "${{ github.event.head_commit.message }}" | grep -oP '✨ Release version \K[0-9]+\.[0-9]+\.[0-9]+')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          VERSION=$(echo "$COMMIT_MESSAGE" | grep -oP '✨ Release version \K[0-9]+\.[0-9]+\.[0-9]+')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Install dependencies
         run: |
           composer install --no-dev --optimize-autoloader
           npm ci
+
+      # The admin page loads assets/css/admin-tailwind.css (no CDN). Rebuild it
+      # so the SVN copy below ships CSS that matches the templates. The zip
+      # only contains tracked files, so the file must also be committed.
+      - name: Build admin CSS
+        run: |
+          npm run build:css
+          test -s assets/css/admin-tailwind.css
+          git ls-files --error-unmatch assets/css/admin-tailwind.css
 
       - name: Generate POT file
         run: |
@@ -77,8 +89,9 @@ jobs:
       - name: Create ZIP archive
         run: composer run zip
 
+      # v1 ran on Node 16, which GitHub runners no longer provide; v3 runs on Node 24.
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           files: release/auto-alt-text-for-images.zip
           body_path: CHANGELOG.md
@@ -107,21 +120,21 @@ jobs:
           # Clean directories
           rm -rf trunk/* tags/$VERSION
           rm -rf assets/*
-          
+
           # Create necessary directories
           mkdir -p assets
           mkdir -p trunk/assets
           mkdir -p tags/$VERSION/assets
-          
+
           # Copy images to SVN assets directory (only images)
           cp -r ../assets/*.{jpg,jpeg,png,gif,svg,webp} assets/ 2>/dev/null || true
           svn add assets/* --force
-          
+
           # Copy CSS and JS to trunk/assets
           mkdir -p trunk/assets/css trunk/assets/js
           cp -r ../assets/css/* trunk/assets/css/ 2>/dev/null || true
           cp -r ../assets/js/* trunk/assets/js/ 2>/dev/null || true
-          
+
           # Copy other plugin files to trunk
           cp -r ../includes trunk/
           cp -r ../languages trunk/
@@ -130,14 +143,14 @@ jobs:
           cp ../README.md trunk/
           cp ../readme.txt trunk/
           cp ../uninstall.php trunk/
-          
+
           # Add all trunk files to SVN
           svn add trunk/* --force
-          
+
           # Create and populate version tag
           cp -r trunk/* tags/$VERSION/
           svn add tags/$VERSION --force
-          
+
           # Remove any deleted files
           svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@
 

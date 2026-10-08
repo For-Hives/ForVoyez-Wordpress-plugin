@@ -152,10 +152,7 @@ if (!defined('ABSPATH')) {
                     <?php esc_html_e('Status', 'auto-alt-text-for-images'); ?>
                 </dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    <?php echo get_option(
-                    	'forvoyez_auto_analyze_enabled',
-                    	false,
-                    )
+                    <?php echo forvoyez_is_auto_analyze_enabled()
                     	? esc_html__('Enabled', 'auto-alt-text-for-images')
                     	: esc_html__('Disabled', 'auto-alt-text-for-images'); ?>
                 </dd>

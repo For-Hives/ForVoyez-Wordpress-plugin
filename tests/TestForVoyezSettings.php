@@ -99,7 +99,9 @@ class TestForVoyezSettings extends WP_UnitTestCase
 	) {
 		$reflection = new \ReflectionClass(get_class($object));
 		$method = $reflection->getMethod($methodName);
-		$method->setAccessible(true);
+		if (PHP_VERSION_ID < 80100) {
+			$method->setAccessible(true); // No-op (deprecated) since PHP 8.1.
+		}
 
 		return $method->invokeArgs($object, $parameters);
 	}

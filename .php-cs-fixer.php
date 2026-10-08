@@ -5,7 +5,8 @@ $finder = PhpCsFixer\Finder::create()
 	->exclude('vendor')
 	->exclude('node_modules')
 	->exclude('public')
-	->exclude('assets');
+	->exclude('assets')
+	->exclude('tests');
 
 $config = new PhpCsFixer\Config();
 return $config
@@ -19,8 +20,9 @@ return $config
 		'method_chaining_indentation' => true,
 		'single_quote' => true,
 		'trailing_comma_in_multiline' => true,
-		'braces' => [
-			'position_after_functions_and_oop_constructs' => 'same',
+		'braces_position' => [
+			'functions_opening_brace' => 'same_line',
+			'classes_opening_brace' => 'same_line',
 		],
 		'indentation_type' => true,
 		'binary_operator_spaces' => [

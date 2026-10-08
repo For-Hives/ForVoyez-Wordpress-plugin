@@ -51,7 +51,9 @@ class TestForvoyezAdmin extends WP_UnitTestCase
 			Forvoyez_Admin::class,
 			'build_meta_query',
 		);
-		$method->setAccessible(true);
+		if (PHP_VERSION_ID < 80100) {
+			$method->setAccessible(true); // No-op (deprecated) since PHP 8.1.
+		}
 
 		$filters = [ 'alt', 'title' ];
 		$expected = [
@@ -74,7 +76,9 @@ class TestForvoyezAdmin extends WP_UnitTestCase
 	public function test_get_query_args()
 	{
 		$method = new ReflectionMethod(Forvoyez_Admin::class, 'get_query_args');
-		$method->setAccessible(true);
+		if (PHP_VERSION_ID < 80100) {
+			$method->setAccessible(true); // No-op (deprecated) since PHP 8.1.
+		}
 
 		$paged = 2;
 		$per_page = 10;
@@ -176,5 +180,88 @@ class TestForvoyezAdmin extends WP_UnitTestCase
 			$missing_alt_ids,
 			"Missing alt image should be in 'missing_alt' results",
 		);
+	}
+
+	public function test_missing_api_key_notice_is_shown_on_media_screens()
+	{
+		wp_set_current_user(self::factory()->user->create([ 'role' => 'administrator' ]));
+		set_current_screen('upload');
+		$this->api_manager_mock->method('has_api_key')->willReturn(false);
+
+		ob_start();
+		$this->forvoyez_admin->maybe_show_missing_api_key_notice();
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString('notice-warning', $output);
+		$this->assertStringContainsString(
+			esc_html(forvoyez_get_missing_api_key_message()),
+			$output,
+		);
+		$this->assertStringContainsString('tab=configuration', $output);
+
+		set_current_screen('front');
+	}
+
+	public function test_missing_api_key_notice_is_hidden_when_key_is_set()
+	{
+		wp_set_current_user(self::factory()->user->create([ 'role' => 'administrator' ]));
+		set_current_screen('upload');
+		$this->api_manager_mock->method('has_api_key')->willReturn(true);
+
+		ob_start();
+		$this->forvoyez_admin->maybe_show_missing_api_key_notice();
+		$output = ob_get_clean();
+
+		$this->assertSame('', $output);
+
+		set_current_screen('front');
+	}
+
+	public function test_missing_api_key_notice_is_hidden_on_unrelated_screens()
+	{
+		wp_set_current_user(self::factory()->user->create([ 'role' => 'administrator' ]));
+		set_current_screen('dashboard');
+		$this->api_manager_mock->method('has_api_key')->willReturn(false);
+
+		ob_start();
+		$this->forvoyez_admin->maybe_show_missing_api_key_notice();
+		$output = ob_get_clean();
+
+		$this->assertSame('', $output);
+
+		set_current_screen('front');
+	}
+
+	public function test_admin_assets_are_local()
+	{
+		$this->forvoyez_admin->enqueue_admin_scripts(
+			'toplevel_page_auto-alt-text-for-images',
+		);
+
+		$this->assertTrue(wp_style_is('forvoyez-admin-tailwind', 'enqueued'));
+		$this->assertFileExists(FORVOYEZ_PLUGIN_DIR . 'assets/css/admin-tailwind.css');
+
+		foreach ([ wp_scripts(), wp_styles() ] as $dependencies) {
+			foreach ($dependencies->queue as $handle) {
+				if (strpos($handle, 'forvoyez') !== 0) {
+					continue;
+				}
+				$src = $dependencies->registered[ $handle ]->src;
+				$this->assertStringStartsWith(
+					FORVOYEZ_PLUGIN_URL,
+					$src,
+					"Asset $handle must be served from the plugin",
+				);
+				$this->assertFileExists(
+					FORVOYEZ_PLUGIN_DIR . substr($src, strlen(FORVOYEZ_PLUGIN_URL)),
+					"Asset $handle must exist in the plugin",
+				);
+				$this->assertSame(
+					FORVOYEZ_VERSION,
+					$dependencies->registered[ $handle ]->ver,
+				);
+			}
+			$this->assertNotContains('tailwindcss', $dependencies->queue);
+		}
 	}
 }

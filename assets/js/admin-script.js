@@ -1,5 +1,3 @@
-/* global forvoyezData, jQuery */
-
 ;(function ($) {
 	'use strict'
 
@@ -167,27 +165,6 @@
 		// Initialize event listeners
 		initializeEventListeners()
 	})
-
-	/**
-	 * Initialize credit display elements with loading state
-	 */
-	function initCreditDisplay() {
-		// Initialize loading placeholders
-		$('.forvoyez-credit-count').each(function () {
-			if ($(this).text() === '' || $(this).text() === '0') {
-				$(this).html('<span class="animate-pulse">...</span>')
-				$(this).addClass('bg-gray-200 text-gray-600')
-			}
-		})
-
-		$('.forvoyez-credits-status').each(function () {
-			if ($(this).text() === '' || $(this).html() === '') {
-				$(this).html(
-					'<span class="inline-flex items-center text-gray-500"><span class="animate-pulse">Loading subscription status...</span></span>'
-				)
-			}
-		})
-	}
 
 	function initializeEventListeners() {
 		// Initial load
@@ -541,13 +518,16 @@
 								}
 							})
 						} else {
+							// Use the server error (e.g. missing_api_key) when there is one
+							const data = response.data
+							const message =
+								(data && data.message) ||
+								(typeof data === 'string' && data) ||
+								'Batch processing failed'
+							const code = (data && data.code) || 'batch_error'
 							batch.forEach(imageId => {
 								failedCount++
-								showErrorNotification(
-									'Batch processing failed',
-									'batch_error',
-									imageId
-								)
+								showErrorNotification(message, code, imageId)
 							})
 						}
 						updateProgress()
@@ -651,7 +631,11 @@
 					? 'bg-red-500'
 					: 'bg-blue-500'
 		} text-white`
-		notification.textContent = message
+		// server messages come HTML-escaped (esc_html__): decode the entities so
+		// apostrophes show as text, then set them as text (never as HTML)
+		const decoder = document.createElement('textarea')
+		decoder.innerHTML = String(message ?? '')
+		notification.textContent = decoder.value
 
 		document.body.appendChild(notification)
 		currentNotification = notification
