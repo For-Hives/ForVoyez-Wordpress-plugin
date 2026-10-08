@@ -24,7 +24,9 @@ jobs:
           code=$(curl -s -D headers.txt -o repo.json -w '%{http_code}' \
             -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/$REPO")
           echo "HTTP $code"
-          jq '{full_name, permissions}' repo.json || true
+          jq '{full_name, permissions, message, documentation_url}' repo.json || true
+          curl -s -o user.json -w 'GET /user HTTP %{http_code}\n' -H "Authorization: Bearer $GH_TOKEN" https://api.github.com/user
+          jq '{login, type, message}' user.json || true
           echo "Token expiration: $(grep -i '^github-authentication-token-expiration:' headers.txt | cut -d' ' -f2- | tr -d '\r' || true)"
           test "$code" = 200
           test "$(jq -r '.permissions.push' repo.json)" = true
