@@ -146,6 +146,13 @@ class Forvoyez_Settings {
 			);
 		}
 
+		// Only a ForVoyez key (a JWT) is saved: a password filled in by the
+		// browser or a truncated paste must not replace a working key.
+		$api_key = forvoyez_sanitize_api_key( $api_key );
+		if ( is_wp_error( $api_key ) ) {
+			wp_send_json_error( $api_key->get_error_message(), 400 );
+		}
+
 		$encrypted_api_key = $this->encrypt( $api_key );
 		update_option( 'forvoyez_encrypted_api_key', $encrypted_api_key );
 

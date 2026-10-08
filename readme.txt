@@ -72,6 +72,10 @@ The AI can generate content in multiple languages. You can specify your preferre
 3. Results Example - Showcase of automatically generated alt text, titles, and captions for various image types.
 
 == Changelog ==
+= 1.1.42 =
+* Fix: saving the API key now checks that it is a ForVoyez key, so a password filled in by the browser or a truncated paste can no longer replace a working key.
+* Fix: browsers and password managers no longer fill a saved password into the API key field.
+
 = 1.1.41 =
 * Fix: the generated alt text was saved empty (the API field `alternativeText` was read as `alt_text`) and replaced any existing alt text. Existing alt texts, titles and captions are never replaced by empty values anymore.
 * Fix: each request now sends an explicit output schema (title, alternativeText, caption).
@@ -166,6 +170,9 @@ This is the first release of ForVoyez Auto Alt Text for Images. Install now to s
 * User-friendly admin interface
 
 == Upgrade Notice ==
+
+= 1.1.42 =
+The API key field only accepts a ForVoyez key and is no longer filled with a saved password by the browser.
 
 = 1.1.41 =
 Fixes empty alt text being saved after an analysis (and replacing existing alt text). No API call is made without an API key. Requires PHP 8.0.

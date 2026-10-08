@@ -26,7 +26,7 @@ esc_html_e(
 ?>
         </p>
         <div class="relative">
-            <input type="password" class="forvoyez-api-key-input w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" name="forvoyez_api_key" value="
+            <input type="password" autocomplete="new-password" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" class="forvoyez-api-key-input w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" name="forvoyez_api_key" value="
             <?php
 	echo esc_attr(
 		$api_key,
