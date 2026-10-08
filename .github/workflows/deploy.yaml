@@ -9,17 +9,42 @@ on:
       - 'package.json'
       - 'auto-alt-text-for-images.php'
       - 'readme.txt'
+  # Called by version-bump.yml right after it pushed the release tag: pushes
+  # made with the built-in GITHUB_TOKEN do not trigger the push event above.
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version to release; its tag must already exist (e.g. 1.1.41)'
+        required: true
+        type: string
+    secrets:
+      SVN_USERNAME:
+        required: true
+      SVN_PASSWORD:
+        required: true
+  # (Re)deploy an existing release tag by hand, e.g. after a failed deploy.
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Existing release tag to (re)deploy, e.g. 1.1.41'
+        required: true
+        type: string
 
 jobs:
   build-and-deploy:
     name: Build and Deploy Plugin
     runs-on: ubuntu-latest
-    if: "contains(github.event.head_commit.message, '✨ Release version')"
+    permissions:
+      contents: write
+    if: ${{ inputs.version || contains(github.event.head_commit.message, '✨ Release version') }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
+          # With a version (called by version-bump.yml or run by hand), build
+          # that release tag; github.sha is the commit before the bump there.
+          ref: ${{ inputs.version && format('refs/tags/{0}', inputs.version) || github.sha }}
           fetch-depth: 0
 
       - name: Install SVN
@@ -38,13 +63,28 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Get version from commit message
+      - name: Get version
         id: get_version
         # Passed through the environment, never expanded into the script.
         env:
+          INPUT_VERSION: ${{ inputs.version }}
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
-          VERSION=$(echo "$COMMIT_MESSAGE" | grep -oP '✨ Release version \K[0-9]+\.[0-9]+\.[0-9]+')
+          if [ -n "$INPUT_VERSION" ]; then
+            VERSION="$INPUT_VERSION"
+          else
+            VERSION=$(echo "$COMMIT_MESSAGE" | grep -oP '✨ Release version \K[0-9]+\.[0-9]+\.[0-9]+')
+          fi
+          if ! echo "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "Invalid release version: '$VERSION'"
+            exit 1
+          fi
+          # The checked-out files must already carry exactly this version.
+          fail() { echo "::error::$1"; exit 1; }
+          grep -qxF "Stable tag: $VERSION" readme.txt || fail "readme.txt Stable tag is not $VERSION"
+          grep -qF "\"version\": \"$VERSION\"," package.json || fail "package.json version is not $VERSION"
+          grep -qxF " * Version:     $VERSION" auto-alt-text-for-images.php || fail "plugin header Version is not $VERSION"
+          grep -qxF "define( 'FORVOYEZ_VERSION', '$VERSION' );" auto-alt-text-for-images.php || fail "FORVOYEZ_VERSION is not $VERSION"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Install dependencies
@@ -64,7 +104,7 @@ jobs:
       - name: Generate POT file
         run: |
           mkdir -p languages
-          wp i18n make-pot . languages/auto-alt-text-for-images.pot --domain=auto-alt-text-for-images --allow-root
+          wp i18n make-pot . languages/auto-alt-text-for-images.pot --domain=auto-alt-text-for-images --slug=auto-alt-text-for-images --allow-root
 
       - name: Update PO files from POT
         run: |
@@ -88,17 +128,6 @@ jobs:
 
       - name: Create ZIP archive
         run: composer run zip
-
-      # v1 ran on Node 16, which GitHub runners no longer provide; v3 runs on Node 24.
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v3
-        with:
-          files: release/auto-alt-text-for-images.zip
-          body_path: CHANGELOG.md
-          name: ${{ steps.get_version.outputs.version }}
-          tag_name: ${{ steps.get_version.outputs.version }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout WordPress SVN repository
         env:
@@ -167,6 +196,20 @@ jobs:
             --no-auth-cache \
             --non-interactive \
             --trust-server-cert
+
+      # After the SVN commit, so a failed WordPress.org deploy does not leave a
+      # 'Latest' GitHub release that WordPress.org does not have.
+      # v1 ran on Node 16, which GitHub runners no longer provide; v3 runs on Node 24.
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: release/auto-alt-text-for-images.zip
+          body_path: CHANGELOG.md
+          name: ${{ steps.get_version.outputs.version }}
+          tag_name: ${{ steps.get_version.outputs.version }}
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Notify on success
         if: success()
