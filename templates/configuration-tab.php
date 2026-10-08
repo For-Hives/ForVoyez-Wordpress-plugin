@@ -119,7 +119,7 @@ echo wp_kses_post(
 ?>
                 </label>
                 <div class="mt-1 flex rounded-md shadow-sm">
-                    <input type="password" name="forvoyez_api_key" id="forvoyez-api-key"
+                    <input type="password" autocomplete="new-password" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" name="forvoyez_api_key" id="forvoyez-api-key"
                             class="forvoyez-api-key-input justify-start text-start flex min-w-0 block w-full px-3 py-2 rounded-none rounded-l-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm border-gray-300"
                             placeholder="
                             <?php

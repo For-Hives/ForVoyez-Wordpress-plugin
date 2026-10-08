@@ -136,6 +136,22 @@ class TestForvoyezAjax extends WP_Ajax_UnitTestCase
 		);
 	}
 
+	public function test_save_api_key_refuses_a_value_that_is_not_a_forvoyez_key()
+	{
+		$this->_setRole('administrator');
+		update_option('forvoyez_encrypted_api_key', 'previous-encrypted-key');
+
+		// e.g. a site password the browser filled into the API key field
+		$_POST['nonce'] = wp_create_nonce('forvoyez_save_api_key_nonce');
+		$_POST['api_key'] = 'aB3$xY9!qW7#zK2@mN5p';
+		$response = $this->call_ajax('forvoyez_save_api_key');
+
+		$this->assertFalse($response['success']);
+		$this->assertSame('Invalid API key format. Please enter a valid ForVoyez JWT.', $response['data']);
+		$this->assertSame('previous-encrypted-key', get_option('forvoyez_encrypted_api_key'), 'The saved key must not change');
+		$this->assertSame([], $this->forvoyez_requests);
+	}
+
 	public function test_verify_api_key_surfaces_the_json_error()
 	{
 		$this->_setRole('administrator');

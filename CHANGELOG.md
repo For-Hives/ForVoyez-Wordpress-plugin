@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.42
+
+### Fixed
+
+- Saving the API key from the plugin pages accepted any text: a password filled in by the browser (the field is a password input) or a truncated paste replaced the working key, and every analysis then failed with "Unauthorized, invalid token". The key is now checked (it must be a ForVoyez JWT) and an invalid value is refused with a clear message, keeping the saved key.
+- The API key inputs tell browsers and password managers not to fill in a saved password (`autocomplete="new-password"` and the 1Password, LastPass and Bitwarden ignore attributes).
+
 ## 1.1.41
 
 ### Fixed
