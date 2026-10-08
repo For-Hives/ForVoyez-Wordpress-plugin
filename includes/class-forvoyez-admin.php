@@ -733,13 +733,15 @@ class Forvoyez_Admin {
       	'ForVoyez - Low Credits Warning',
       	'auto-alt-text-for-images',
       ); ?></strong><br>
-						<?php echo sprintf(
-      	/* translators: %d: number of credits remaining */
-      	esc_html__(
-      		'You only have %d credits remaining. Please consider recharging to continue using the ForVoyez service.',
-      		'auto-alt-text-for-images',
+						<?php echo esc_html(
+      	sprintf(
+      		/* translators: %d: number of credits remaining */
+      		__(
+      			'You only have %d credits remaining. Please consider recharging to continue using the ForVoyez service.',
+      			'auto-alt-text-for-images',
+      		),
+      		$credits,
       	),
-      	$credits,
       ); ?>
 					</p>
 				</div>
