@@ -840,7 +840,9 @@ function forvoyez_bulk_analysis_notice() {
             // Handle bulk analysis
             $('#forvoyez-start-bulk').on('click', function() {
                 const $button = $(this);
-                const imageIds = $button.data('ids').split(',');
+                // Read the raw attribute: jQuery .data() turns a single id
+                // such as "11" into the Number 11, which has no split().
+                const imageIds = String($button.attr('data-ids') || '').split(',').filter(Boolean);
                 const nonce = $button.data('nonce');
 
                 // Disable button and show progress
