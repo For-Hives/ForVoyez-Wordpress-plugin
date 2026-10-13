@@ -246,14 +246,32 @@
                 <div class="mt-1 text-xs text-gray-500 forvoyez-credits-status">
                     <span class="animate-pulse">Loading subscription status...</span>
                 </div>
-                <div class="mt-1 text-xs text-red-600 forvoyez-credit-warning hidden">
-                    Low credits! Please <a href="https://forvoyez.com/app/plans" target="_blank" class="underline hover:text-red-800">recharge now</a>.
-                </div>
+                <div class="mt-1 text-xs text-red-600 forvoyez-credit-warning hidden"></div>
             </div>
         `)
 
 			$('body').append(widget)
 		}
+	}
+
+	/**
+	 * Low credits message of the credits widget.
+	 *
+	 * The recharge URL comes from PHP (forvoyezData.urls, built with
+	 * forvoyez_get_tracked_url). No referrer is sent, so the click does not
+	 * tell ForVoyez which site it comes from.
+	 */
+	function buildLowCreditsWarning() {
+		const urls = forvoyezData.urls || {}
+		const $link = $('<a>', {
+			href: urls.recharge,
+			target: '_blank',
+			rel: 'noopener noreferrer',
+			class: 'underline hover:text-red-800',
+			text: 'recharge now',
+		})
+
+		return $('<span>').append('Low credits! Please ', $link, '.')
 	}
 
 	function loadImages(page = currentPage) {
@@ -889,9 +907,8 @@
 		if (creditsInfo.credits < 10) {
 			$('.forvoyez-credit-warning')
 				.removeClass('hidden')
-				.html(
-					'Low credits! Please <a href="https://forvoyez.com/app/plans" target="_blank" class="underline hover:text-red-800">recharge now</a>.'
-				)
+				.empty()
+				.append(buildLowCreditsWarning())
 		} else {
 			$('.forvoyez-credit-warning').addClass('hidden')
 		}

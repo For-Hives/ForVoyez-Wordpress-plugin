@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.43
+
+### Changed
+
+- The links from the admin pages to forvoyez.com and doc.forvoyez.com go through the new `forvoyez_get_tracked_url()` helper, which adds fixed campaign parameters: `utm_source=wordpress-plugin`, `utm_medium=plugin`, `utm_campaign=<screen>` and `utm_content=<link>`. It covers the sign-up, dashboard and API documentation links of the Configuration tab (`configuration`) and the "recharge now" link of the credits widget (`credits-widget`). The values name the screen and the link, never the site, the user or the API key, and the helper leaves any other host untouched. The legal links, the Plugin URI and the Author URI are unchanged.
+- The "recharge now" URL is passed to `admin-script.js` with `wp_localize_script` (`forvoyezData.urls.recharge`) instead of being written twice in the script. The link now has `rel="noopener noreferrer"`, so the site address is no longer sent as referrer.
+- The readme.txt links shown on the WordPress.org page carry `utm_source=wordpress.org&utm_medium=readme&utm_campaign=listing&utm_content=<link>`, except the legal links, the service URL of the External Services section and the GitHub link.
+- Every request to the ForVoyez API (`POST /api/describe`, `GET /api/tokens`) sends the header `X-ForVoyez-Client: wordpress-plugin/<version>`. It only depends on the plugin version. The readme "External Services" section now lists what is sent and when.
+- No analytics script, pixel or extra request is added, and no translatable string changed.
+
+### Development
+
+- `tests/TestForvoyezPluginUtm.php` covers the helper, the Configuration tab links, the URL passed to the script, the readme links and the client header. README.md documents the campaign names ("Links to ForVoyez").
+
 ## 1.1.42
 
 ### Fixed

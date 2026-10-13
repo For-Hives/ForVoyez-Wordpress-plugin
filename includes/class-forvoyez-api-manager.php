@@ -427,6 +427,9 @@ class Forvoyez_API_Manager {
 	 * header to the new location, whatever its host or scheme. A 3xx answer is
 	 * reported as an error instead.
 	 *
+	 * X-ForVoyez-Client tells the API which client and version is calling. It
+	 * is the same on every site: plugin name and version, nothing else.
+	 *
 	 * @param string $api_key The API key sent as Bearer token.
 	 * @param int $timeout Request timeout in seconds.
 	 *
@@ -444,6 +447,7 @@ class Forvoyez_API_Manager {
 			'blocking' => true,
 			'headers' => [
 				'Authorization' => 'Bearer ' . $api_key,
+				'X-ForVoyez-Client' => 'wordpress-plugin/' . FORVOYEZ_VERSION,
 			],
 		];
 	}
