@@ -143,6 +143,16 @@ class Forvoyez_Admin {
 			'toggleAutoAnalyzeNonce' => wp_create_nonce(
 				'forvoyez_toggle_auto_analyze_nonce',
 			),
+			// Outbound links built in JavaScript (credits widget).
+			'urls' => [
+				'recharge' => esc_url_raw(
+					forvoyez_get_tracked_url(
+						'https://forvoyez.com/app/plans',
+						'credits-widget',
+						'recharge',
+					),
+				),
+			],
 		]);
 	}
 

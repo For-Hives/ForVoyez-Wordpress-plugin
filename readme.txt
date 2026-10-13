@@ -34,8 +34,8 @@ Our AI-powered API makes it easy for developers and content creators to optimize
 
 = Obtaining an API Key =
 
-1. Visit the [ForVoyez signup page](https://forvoyez.com/sign-up) to create an account.
-2. Once logged in, navigate to your [ForVoyez dashboard](https://forvoyez.com/app).
+1. Visit the [ForVoyez signup page](https://forvoyez.com/sign-up?utm_source=wordpress.org&utm_medium=readme&utm_campaign=listing&utm_content=signup) to create an account.
+2. Once logged in, navigate to your [ForVoyez dashboard](https://forvoyez.com/app?utm_source=wordpress.org&utm_medium=readme&utm_campaign=listing&utm_content=dashboard).
 3. Generate an API key in the API section of your dashboard.
 4. Copy the API key and paste it in the plugin's settings page.
 
@@ -43,7 +43,7 @@ Our AI-powered API makes it easy for developers and content creators to optimize
 
 = Do I need an API key to use this plugin? =
 
-Yes, you need a ForVoyez API key to use this plugin. You can obtain one by signing up at [https://forvoyez.com](https://forvoyez.com).
+Yes, you need a ForVoyez API key to use this plugin. You can obtain one by signing up at [https://forvoyez.com](https://forvoyez.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=listing&utm_content=homepage-faq).
 
 = Can I customize the generated alt text? =
 
@@ -72,6 +72,12 @@ The AI can generate content in multiple languages. You can specify your preferre
 3. Results Example - Showcase of automatically generated alt text, titles, and captions for various image types.
 
 == Changelog ==
+= 1.1.43 =
+* Change: the links to forvoyez.com and doc.forvoyez.com in the plugin pages and in this readme carry fixed campaign parameters (where the link is and which link it is), so ForVoyez can tell which links are used. They contain nothing about your site, your account or your API key. The legal links are unchanged.
+* Change: requests to the ForVoyez API send the plugin name and version in an `X-ForVoyez-Client` header (for example `wordpress-plugin/1.1.43`), the same on every site.
+* Change: the "recharge now" link of the credits widget no longer sends your site address as referrer.
+* Change: the External Services section of this readme lists what is sent to ForVoyez, and when.
+
 = 1.1.42 =
 * Fix: saving the API key now checks that it is a ForVoyez key, so a password filled in by the browser or a truncated paste can no longer replace a working key.
 * Fix: browsers and password managers no longer fill a saved password into the API key field.
@@ -171,6 +177,9 @@ This is the first release of ForVoyez Auto Alt Text for Images. Install now to s
 
 == Upgrade Notice ==
 
+= 1.1.43 =
+Links to forvoyez.com carry fixed campaign parameters and API requests send the plugin version. Nothing about your site, account or API key is added. See External Services.
+
 = 1.1.42 =
 The API key field only accepts a ForVoyez key and is no longer filled with a saved password by the browser.
 
@@ -179,21 +188,31 @@ Fixes empty alt text being saved after an analysis (and replacing existing alt t
 
 == Additional Information ==
 
-For more detailed documentation, please visit our [official documentation](https://doc.forvoyez.com).
+For more detailed documentation, please visit our [official documentation](https://doc.forvoyez.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=listing&utm_content=docs).
 
 = Source code =
 
 The admin stylesheet `assets/css/admin-tailwind.css` is compiled and minified with Tailwind CSS. Its uncompiled source (`assets/src/admin-tailwind.css`, `tailwind.config.js`) and the build command (`npm run build:css`) are in the public repository: [github.com/For-Hives/ForVoyez-Wordpress-plugin](https://github.com/For-Hives/ForVoyez-Wordpress-plugin).
 
-For support, feature requests, or to report bugs, please visit our [website](https://forvoyez.com/contact).
+For support, feature requests, or to report bugs, please visit our [website](https://forvoyez.com/contact?utm_source=wordpress.org&utm_medium=readme&utm_campaign=listing&utm_content=contact).
 
-This plugin is proudly powered by [ForVoyez](https://forvoyez.com).
+This plugin is proudly powered by [ForVoyez](https://forvoyez.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=listing&utm_content=homepage).
 
 == External Services ==
 
 This plugin relies on the ForVoyez API service to generate alt text and metadata for images. When you use this plugin, image data is sent to ForVoyez servers for processing.
 
 ForVoyez API Service: https://forvoyez.com
+
+What is sent, and when:
+
+* When an image is analyzed (from the plugin pages, from the media library or, if you enabled it, after an upload): the image file with its file name, the context and language saved in the plugin settings, the list of fields to generate (title, alt text, caption) and your API key.
+* When the plugin reads your remaining credits (on its pages and on the media screens) or checks your API key: your API key.
+* With each of these requests: the plugin name and version, in an `X-ForVoyez-Client` header (for example `wordpress-plugin/1.1.43`). It only depends on the plugin version: it is the same on every site.
+
+WordPress adds its usual `User-Agent` header (WordPress version and site address) to these requests, as it does for every request it sends. The plugin loads no remote script and contacts no other service.
+
+Except for the legal documents below, the links from the plugin pages to forvoyez.com and doc.forvoyez.com carry fixed campaign parameters that name the plugin, the screen and the link. They contain nothing about your site, your account or your API key, and nothing is sent unless you click a link.
 
 By using this plugin, you agree to the following ForVoyez legal documents:
 

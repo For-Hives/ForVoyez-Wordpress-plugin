@@ -141,6 +141,18 @@ BrowserSync will now monitor specified files and auto-reload your browser on cha
 └── ...
 ```
 
+### Links to ForVoyez
+
+Links from the admin pages to forvoyez.com or doc.forvoyez.com are built with `forvoyez_get_tracked_url( $url, $campaign, $content )` (`includes/forvoyez-helpers.php`). It adds `utm_source=wordpress-plugin`, `utm_medium=plugin`, `utm_campaign=<screen>` and `utm_content=<link>`.
+
+- `$campaign` names the screen. Used today: `configuration`, `credits-widget`. Reserved for future links: `low-credits-notice`, `missing-key-notice`, `dashboard-tab`, `plugins-screen`.
+- `$content` names the link: `signup`, `dashboard`, `api-docs`, `recharge`.
+- The values are fixed strings: never the site URL, a user or anything derived from the API key (WordPress.org guideline 7).
+- JavaScript reads its URLs from `forvoyezData.urls` (`wp_localize_script`) instead of hardcoding them.
+- The legal links, the `Plugin URI` and the `Author URI` stay untagged. The readme.txt links use `utm_source=wordpress.org&utm_medium=readme&utm_campaign=listing&utm_content=<link>`.
+
+Requests to the ForVoyez API send `X-ForVoyez-Client: wordpress-plugin/<version>` (`Forvoyez_API_Manager::get_request_args()`). Any data added to a request must be listed in the readme.txt "External Services" section.
+
 ## Debugging and Troubleshooting
 
 If you want to know what is going on, install and run the plugin.

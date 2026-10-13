@@ -303,6 +303,35 @@ function forvoyez_get_configuration_url() {
 }
 
 /**
+ * Add campaign parameters to a link to forvoyez.com or doc.forvoyez.com.
+ *
+ * The values are static: they name the plugin, the screen and the link,
+ * never the site, the user or the API key. Any other host is returned as is.
+ *
+ * @since 1.1.43
+ * @param string $url Link target.
+ * @param string $campaign Screen showing the link (configuration, credits-widget...).
+ * @param string $content Link name (signup, dashboard, api-docs, recharge...).
+ * @return string Unescaped URL (escape it on output).
+ */
+function forvoyez_get_tracked_url($url, $campaign, $content) {
+	$host = wp_parse_url($url, PHP_URL_HOST);
+	if (!in_array($host, ['forvoyez.com', 'doc.forvoyez.com'], true)) {
+		return $url;
+	}
+
+	return add_query_arg(
+		[
+			'utm_source' => 'wordpress-plugin',
+			'utm_medium' => 'plugin',
+			'utm_campaign' => sanitize_key($campaign),
+			'utm_content' => sanitize_key($content),
+		],
+		$url,
+	);
+}
+
+/**
  * Get ForVoyez token information including remaining credits.
  *
  * @since 1.0.0
