@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
 - `forvoyez_load_images` no longer crashes on `per_page=0` (division by zero), and it ignores `filters` values that are not a list.
 - The batch analysis actions no longer crash when `image_ids` is a single value instead of a list.
 - The credits request no longer raises a warning when a subscription has no plan.
-- The dashboard tab, the media screens and the media bulk action no longer raise a warning when the API answers without a user or a plan. Unknown credits show as `?`, with a neutral badge on the dashboard.
+- The dashboard tab, the media screens and the media bulk action no longer raise a warning when the API answers without a user or a plan. The media modal shows unknown credits as `?`; on the dashboard, the scripts still show them as a low balance of 0.
 
 ### Development
 
