@@ -891,17 +891,22 @@
 		}
 
 		// Update subscription status
-		if ($('.forvoyez-credits-status').length) {
-			let statusHtml = ''
+		$('.forvoyez-credits-status').each(function () {
+			const $status = $(this).empty()
 			if (creditsInfo.isSubscribed) {
-				statusHtml =
-					'<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>'
+				$status.append(
+					$('<span>', {
+						class:
+							'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800',
+						text: 'Active',
+					})
+				)
+				// The plan name comes from the API: text, never HTML
 				if (creditsInfo.planName) {
-					statusHtml += ' - ' + creditsInfo.planName
+					$status.append(document.createTextNode(' - ' + creditsInfo.planName))
 				}
 			}
-			$('.forvoyez-credits-status').html(statusHtml)
-		}
+		})
 
 		// Show/hide low credits warning
 		if (creditsInfo.credits < 10) {

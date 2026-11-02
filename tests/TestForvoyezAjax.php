@@ -402,6 +402,147 @@ class TestForvoyezAjax extends WP_Ajax_UnitTestCase
 	 * @param string $action The AJAX action.
 	 * @return array
 	 */
+	public function test_load_more_images_requires_the_upload_capability()
+	{
+		$attachment_id = $this->create_image();
+		wp_update_post([ 'ID' => $attachment_id, 'post_title' => 'Private holiday title' ]);
+
+		// The nonce is valid for this user: only the capability check can refuse.
+		$this->_setRole('subscriber');
+		$_POST['nonce'] = wp_create_nonce('forvoyez_load_more_images_nonce');
+		$denied = $this->call_ajax('forvoyez_load_more_images');
+
+		$this->assertFalse($denied['success']);
+		$this->assertStringNotContainsString('Private holiday title', $this->_last_response);
+
+		$this->_setRole('administrator');
+		$_POST['nonce'] = wp_create_nonce('forvoyez_load_more_images_nonce');
+		$allowed = $this->call_ajax('forvoyez_load_more_images');
+
+		$this->assertTrue($allowed['success']);
+		$this->assertStringContainsString('Private holiday title', $allowed['data']['html']);
+	}
+
+	public function test_load_images_with_a_per_page_of_zero_does_not_crash()
+	{
+		$this->_setRole('administrator');
+		$this->create_image();
+
+		$_POST['nonce'] = wp_create_nonce('forvoyez_load_images_nonce');
+		$_POST['per_page'] = '0';
+		$response = $this->call_ajax('forvoyez_load_images');
+
+		$this->assertTrue($response['success']);
+		$this->assertSame(1, $response['data']['per_page']);
+	}
+
+	public function test_load_images_ignores_filters_that_are_not_a_list()
+	{
+		$this->_setRole('administrator');
+
+		$_POST['nonce'] = wp_create_nonce('forvoyez_load_images_nonce');
+		$_POST['filters'] = 'alt';
+		$response = $this->call_ajax('forvoyez_load_images');
+
+		$this->assertTrue($response['success']);
+	}
+
+	/**
+	 * @dataProvider batch_actions
+	 */
+	public function test_batch_actions_accept_a_single_image_id_instead_of_a_list($action)
+	{
+		$this->_setRole('administrator');
+
+		$_POST['nonce'] = wp_create_nonce('forvoyez_verify_ajax_request_nonce');
+		$_POST['image_ids'] = '5';
+		$response = $this->call_ajax($action);
+
+		// Reaches the API key check instead of a TypeError in array_map().
+		$this->assertFalse($response['success']);
+		$this->assertSame('missing_api_key', $response['data']['code']);
+	}
+
+	public function batch_actions()
+	{
+		return [
+			'process_image_batch' => [ 'forvoyez_process_image_batch' ],
+			'bulk_analyze_media_images' => [ 'forvoyez_bulk_analyze_media_images' ],
+		];
+	}
+
+	public function test_get_credits_only_returns_plain_values_from_the_api()
+	{
+		$this->_setRole('administrator');
+		$this->save_api_key();
+
+		$this->fake_response(self::TOKENS_URL, 200, [
+			'user' => [ 'credits' => '<img src=x onerror=alert(1)>' ],
+			'subscription' => [
+				'isSubscribed' => true,
+				'plan' => [ 'name' => '<img src=x onerror=alert(2)>Pro <b>plan</b>' ],
+				'statusFormatted' => '<script>alert(3)</script>Active',
+				'renewsAt' => [ 'not' => 'a date' ],
+			],
+		]);
+		$_POST = [ 'nonce' => wp_create_nonce('forvoyez_verify_ajax_request_nonce') ];
+		$response = $this->call_ajax('forvoyez_get_credits');
+
+		$this->assertTrue($response['success']);
+		$this->assertSame(0, $response['data']['credits']);
+		$this->assertTrue($response['data']['is_subscribed']);
+		$this->assertSame('Pro plan', $response['data']['plan_name']);
+		$this->assertSame('Active', $response['data']['status']);
+		$this->assertSame('', $response['data']['renews_at']);
+	}
+
+	public function test_get_credits_keeps_normal_values()
+	{
+		$this->_setRole('administrator');
+		$this->save_api_key();
+
+		$this->fake_response(self::TOKENS_URL, 200, [
+			'user' => [ 'credits' => 42 ],
+			'subscription' => [
+				'isSubscribed' => true,
+				'plan' => [ 'name' => 'Growth' ],
+				'statusFormatted' => 'Active',
+				'renewsAt' => '2026-12-01T00:00:00.000Z',
+			],
+		]);
+		$_POST = [ 'nonce' => wp_create_nonce('forvoyez_verify_ajax_request_nonce') ];
+		$data = $this->call_ajax('forvoyez_get_credits')['data'];
+
+		$this->assertSame(42, $data['credits']);
+		$this->assertSame('Growth', $data['plan_name']);
+		$this->assertSame('2026-12-01T00:00:00.000Z', $data['renews_at']);
+		$this->assertFalse($data['has_low_credits']);
+	}
+
+	public function test_get_credits_survives_a_subscription_without_plan()
+	{
+		$this->_setRole('administrator');
+		$this->save_api_key();
+
+		$this->fake_response(self::TOKENS_URL, 200, [
+			'user' => [ 'credits' => 3 ],
+			'subscription' => [ 'isSubscribed' => true ],
+		]);
+		$_POST = [ 'nonce' => wp_create_nonce('forvoyez_verify_ajax_request_nonce') ];
+		$data = $this->call_ajax('forvoyez_get_credits')['data'];
+
+		$this->assertSame('', $data['plan_name']);
+		$this->assertTrue($data['has_low_credits']);
+	}
+
+	private function save_api_key()
+	{
+		$_POST['nonce'] = wp_create_nonce('forvoyez_save_api_key_nonce');
+		$_POST['api_key'] = 'saved.jwt.for-tests';
+		$this->assertTrue($this->call_ajax('forvoyez_save_api_key')['success']);
+		$_POST = [];
+	}
+
 	private function call_ajax($action)
 	{
 		$this->_last_response = '';

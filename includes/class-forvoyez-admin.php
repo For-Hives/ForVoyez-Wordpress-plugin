@@ -442,11 +442,13 @@ class Forvoyez_Admin {
 		$paged = isset($_POST['paged'])
 			? absint(wp_unslash($_POST['paged']))
 			: 1;
+		// At least 1: display_pagination() divides by this value.
 		$per_page = isset($_POST['per_page'])
-			? absint(wp_unslash($_POST['per_page']))
+			? max(1, absint(wp_unslash($_POST['per_page'])))
 			: 25;
+		// Sanitized value by value in parse_and_sanitize_filters().
 		$raw_filters = isset($_POST['filters'])
-			? wp_unslash($_POST['filters'])
+			? (array) wp_unslash($_POST['filters'])
 			: [];
 		$filters = $this->parse_and_sanitize_filters($raw_filters);
 
@@ -776,12 +778,16 @@ class Forvoyez_Admin {
 		$token_info = forvoyez_get_token_info();
 
 		if ($token_info['success']) {
-			// Récupérer les valeurs
-			$credits = $token_info['user']['credits'];
-			$is_subscribed = $token_info['subscription']['isSubscribed'] ?? false;
-			$plan_name = $is_subscribed ? $token_info['subscription']['plan']['name'] : '';
-			$status = $token_info['subscription']['statusFormatted'] ?? '';
-			$renews_at = $token_info['subscription']['renewsAt'] ?? '';
+			// The scripts write these values into the page: a number and plain
+			// text only, whatever the API answers.
+			$raw_credits = $token_info['user']['credits'] ?? 0;
+			$credits = is_numeric($raw_credits) ? (int) $raw_credits : 0;
+			$is_subscribed = !empty($token_info['subscription']['isSubscribed']);
+			$plan_name = $is_subscribed
+				? $this->api_value_to_text($token_info['subscription']['plan']['name'] ?? '')
+				: '';
+			$status = $this->api_value_to_text($token_info['subscription']['statusFormatted'] ?? '');
+			$renews_at = $this->api_value_to_text($token_info['subscription']['renewsAt'] ?? '');
 
 			// Renvoyer les données complètes
 			wp_send_json_success([
@@ -802,5 +808,15 @@ class Forvoyez_Admin {
 				'is_subscribed' => false,
 			]);
 		}
+	}
+
+	/**
+	 * Reduce a value returned by the ForVoyez API to plain text.
+	 *
+	 * @param mixed $value The value from the decoded API response.
+	 * @return string Plain text, or an empty string if the value is not scalar.
+	 */
+	private function api_value_to_text($value) {
+		return is_scalar($value) ? sanitize_text_field((string) $value) : '';
 	}
 }

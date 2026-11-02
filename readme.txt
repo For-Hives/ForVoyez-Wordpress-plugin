@@ -72,6 +72,11 @@ The AI can generate content in multiple languages. You can specify your preferre
 3. Results Example - Showcase of automatically generated alt text, titles, and captions for various image types.
 
 == Changelog ==
+= 1.1.44 =
+* Security: an image listing action now checks the user's permissions, not only the security token.
+* Security: values from translations and from the ForVoyez API can no longer run as code in the admin pages.
+* Fix: unexpected values sent to the image list and batch analysis actions no longer cause an error.
+
 = 1.1.43 =
 * Change: the links to forvoyez.com and doc.forvoyez.com in the plugin pages and in this readme carry fixed campaign parameters (where the link is and which link it is), so ForVoyez can tell which links are used. They contain nothing about your site, your account or your API key. The legal links are unchanged.
 * Change: requests to the ForVoyez API send the plugin name and version in an `X-ForVoyez-Client` header (for example `wordpress-plugin/1.1.43`), the same on every site.
@@ -176,6 +181,9 @@ This is the first release of ForVoyez Auto Alt Text for Images. Install now to s
 * User-friendly admin interface
 
 == Upgrade Notice ==
+
+= 1.1.44 =
+Security hardening of the admin pages. Recommended for all users.
 
 = 1.1.43 =
 Links to forvoyez.com carry fixed campaign parameters and API requests send the plugin version. Nothing about your site, account or API key is added. See External Services.

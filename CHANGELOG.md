@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.44
+
+### Security
+
+- `forvoyez_load_more_images` checked the nonce but not the capability: it now requires `upload_files`, like the other image actions.
+- The results summary of the media-library bulk action built its HTML in a JavaScript template literal with `esc_js()` strings. `esc_js()` does not protect `${ }` or backticks, so a translation containing them would run as JavaScript. The summary now uses JSON-encoded strings.
+- `forvoyez_get_credits` returns a number and plain text only, and the scripts write the plan name and analysis errors as text. A value from the API can no longer become HTML in the admin pages.
+
+### Fixed
+
+- `forvoyez_load_images` no longer crashes on `per_page=0` (division by zero), and it ignores `filters` values that are not a list.
+- The batch analysis actions no longer crash when `image_ids` is a single value instead of a list.
+- The credits request no longer raises a warning when a subscription has no plan.
+
 ## 1.1.43
 
 ### Changed

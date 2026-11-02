@@ -167,6 +167,52 @@ class TestForvoyezOutputEscaping extends WP_UnitTestCase
 		$this->assertStringContainsString('<span id="forvoyez-bulk-progress-text">0 / 3 images processed</span>', $ready);
 	}
 
+	public function test_bulk_results_summary_does_not_run_a_translation_as_javascript()
+	{
+		$this->store_api_key();
+		$this->translations['Analysis completed!'] = '${alert(1)}`';
+		$_GET = [
+			'forvoyez_bulk_analyze' => '3',
+			'forvoyez_bulk_nonce' => wp_create_nonce('forvoyez_bulk_analyze_nonce'),
+			'forvoyez_image_ids' => '7,8,9',
+		];
+
+		$html = $this->capture('forvoyez_bulk_analysis_notice');
+
+		$start = strpos($html, "$('#forvoyez-results-summary').html(");
+		$end = strpos($html, '// Update credit count', (int) $start);
+		$this->assertNotFalse($start);
+		$this->assertNotFalse($end);
+		$code = substr($html, $start, $end - $start);
+		$this->assertStringContainsString('"${alert(1)}`"', $code);
+
+		// Without its string literals, the code has no template literal left:
+		// esc_js() does not protect ${ } or backticks.
+		$without_strings = preg_replace('/\'(?:[^\'\\\\]|\\\\.)*\'|"(?:[^"\\\\]|\\\\.)*"/s', '""', $code);
+		$this->assertStringNotContainsString('`', $without_strings);
+		$this->assertStringNotContainsString('${', $without_strings);
+		$this->assertStringContainsString('successCount', $without_strings);
+		$this->assertStringContainsString('errorCount', $without_strings);
+	}
+
+	/**
+	 * @dataProvider api_values_in_scripts
+	 */
+	public function test_scripts_never_write_api_values_as_html($script, $pattern)
+	{
+		$code = file_get_contents(FORVOYEZ_PLUGIN_DIR . 'assets/js/' . $script);
+
+		$this->assertDoesNotMatchRegularExpression($pattern, $code);
+	}
+
+	public function api_values_in_scripts()
+	{
+		return [
+			'plan name in the credits widget' => [ 'admin-script.js', '/\+=\s*\' - \'\s*\+\s*creditsInfo\.planName/' ],
+			'analysis error in the media library' => [ 'media-script.js', '/\.html\(\s*\'[^\']*Error: \'\s*\+/' ],
+		];
+	}
+
 	public function test_low_credits_footer_escapes_the_message()
 	{
 		$this->store_api_key();

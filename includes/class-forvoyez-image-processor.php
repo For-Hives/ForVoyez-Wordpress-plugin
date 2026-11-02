@@ -285,6 +285,13 @@ class Forvoyez_Image_Processor {
 	public function load_more_images() {
 		check_ajax_referer( 'forvoyez_load_more_images_nonce', 'nonce' );
 
+		if ( !current_user_can( 'upload_files' ) ) {
+			wp_send_json_error(
+				esc_html__( 'Permission denied', 'auto-alt-text-for-images' ),
+				403,
+			);
+		}
+
 		$page     = isset( $_POST['paged'] ) ? intval( $_POST['paged'] ) : 1;
 		$per_page = isset( $_POST['per_page'] ) ? intval( $_POST['per_page'] ) : 21;
 
@@ -360,7 +367,7 @@ class Forvoyez_Image_Processor {
 		$this->verify_ajax_request( 'forvoyez_bulk_analyze_images' );
 
 		$image_ids = isset( $_POST['image_ids'] )
-			? array_map( 'absint', wp_unslash( $_POST['image_ids'] ) )
+			? array_map( 'absint', (array) wp_unslash( $_POST['image_ids'] ) )
 			: array();
 		$image_ids = array_filter( $image_ids, 'wp_attachment_is_image' );
 
@@ -410,7 +417,7 @@ class Forvoyez_Image_Processor {
 		$this->verify_ajax_request( 'forvoyez_verify_ajax_request_nonce' );
 
 		$image_ids = isset( $_POST['image_ids'] )
-			? array_map( 'absint', wp_unslash( $_POST['image_ids'] ) )
+			? array_map( 'absint', (array) wp_unslash( $_POST['image_ids'] ) )
 			: array();
 
 		if ( empty( $image_ids ) ) {
@@ -614,7 +621,7 @@ class Forvoyez_Image_Processor {
 		$this->verify_ajax_request('forvoyez_verify_ajax_request_nonce');
 
 		// Get image IDs
-		$image_ids = isset($_POST['image_ids']) ? array_map('absint', wp_unslash($_POST['image_ids'])) : [];
+		$image_ids = isset($_POST['image_ids']) ? array_map('absint', (array) wp_unslash($_POST['image_ids'])) : [];
 
 		if (empty($image_ids)) {
 			wp_send_json_error([

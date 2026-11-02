@@ -868,12 +868,14 @@ function forvoyez_bulk_analysis_notice() {
                         // All done
                         $('#forvoyez-progress-status').text('<?php echo esc_js(__('Complete!', 'auto-alt-text-for-images')); ?>');
                         $('#forvoyez-bulk-results').show();
+                        // String literals, not a template literal: esc_js() does not
+                        // protect ${ } or backticks in a translation.
                         $('#forvoyez-results-summary').html(
-                            `<div class="notice-success" style="padding: 8px; margin-bottom: 10px; border-left: 4px solid #46b450;">
-                            <?php echo esc_js(__('Analysis completed!', 'auto-alt-text-for-images')); ?>
-                            ${successCount} <?php echo esc_js(__('successful', 'auto-alt-text-for-images')); ?>,
-                            ${errorCount} <?php echo esc_js(__('failed', 'auto-alt-text-for-images')); ?>.
-                        </div>`
+                            '<div class="notice-success" style="padding: 8px; margin-bottom: 10px; border-left: 4px solid #46b450;">' +
+                            <?php echo wp_json_encode(esc_html__('Analysis completed!', 'auto-alt-text-for-images')); ?> + ' ' +
+                            successCount + ' ' + <?php echo wp_json_encode(esc_html__('successful', 'auto-alt-text-for-images')); ?> + ', ' +
+                            errorCount + ' ' + <?php echo wp_json_encode(esc_html__('failed', 'auto-alt-text-for-images')); ?> + '.' +
+                            '</div>'
                         );
 
                         // Update credit count
