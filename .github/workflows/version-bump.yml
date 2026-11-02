@@ -5,8 +5,15 @@ on:
   push:
     branches:
       - main
+    # Development tooling only: none of these files reaches wordpress.org, so
+    # changing them alone (Renovate, lockfile upkeep) must not publish a version.
+    # A push that also touches anything else still releases.
     paths-ignore:
       - '.github/workflows/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'composer.json'
+      - 'renovate.json'
   # Release main by hand (Actions > Version Bump > Run workflow), e.g. after a
   # workflow-only change. To retry a failed deploy, run deploy.yaml by hand with
   # the existing tag instead: running this workflow again releases a NEW version.
