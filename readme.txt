@@ -75,7 +75,10 @@ The AI can generate content in multiple languages. You can specify your preferre
 = 1.1.44 =
 * Security: an image listing action now checks the user's permissions, not only the security token.
 * Security: values from translations and from the ForVoyez API can no longer run as code in the admin pages.
+* Security: Authors no longer see the plan and renewal date of the site's ForVoyez subscription. They still see the credit count.
+* Security: an image repeated in a batch analysis request is analyzed and charged once, and a request is limited to 50 images.
 * Fix: unexpected values sent to the image list and batch analysis actions no longer cause an error.
+* Fix: an incomplete answer from the ForVoyez API no longer causes a PHP warning in the admin pages.
 
 = 1.1.43 =
 * Change: the links to forvoyez.com and doc.forvoyez.com in the plugin pages and in this readme carry fixed campaign parameters (where the link is and which link it is), so ForVoyez can tell which links are used. They contain nothing about your site, your account or your API key. The legal links are unchanged.

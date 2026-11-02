@@ -9,12 +9,19 @@ All notable changes to this project will be documented in this file.
 - `forvoyez_load_more_images` checked the nonce but not the capability: it now requires `upload_files`, like the other image actions.
 - The results summary of the media-library bulk action built its HTML in a JavaScript template literal with `esc_js()` strings. `esc_js()` does not protect `${ }` or backticks, so a translation containing them would run as JavaScript. The summary now uses JSON-encoded strings.
 - `forvoyez_get_credits` returns a number and plain text only, and the scripts write the plan name and analysis errors as text. A value from the API can no longer become HTML in the admin pages.
+- `forvoyez_get_credits` only returns the plan, status and renewal date to users who can `manage_options`. Other users with `upload_files` (Authors) still get the credit count shown on the media screens.
+- The batch analysis actions analyze a repeated `image_ids` value once, and refuse a request above 50 images (`too_many_images`) before any call to the API. Each analysis costs one credit of the site owner; the plugin screens send 5 or 7 images per request.
 
 ### Fixed
 
 - `forvoyez_load_images` no longer crashes on `per_page=0` (division by zero), and it ignores `filters` values that are not a list.
 - The batch analysis actions no longer crash when `image_ids` is a single value instead of a list.
 - The credits request no longer raises a warning when a subscription has no plan.
+- The dashboard tab, the media screens and the media bulk action no longer raise a warning when the API answers without a user or a plan. Unknown credits show as `?`, with a neutral badge on the dashboard.
+
+### Development
+
+- `tests/js/html-sinks.test.js` runs the real admin scripts against a fake jQuery and fails if a value from the API is written as HTML. PHPUnit starts it with Node, without any npm package.
 
 ## 1.1.43
 

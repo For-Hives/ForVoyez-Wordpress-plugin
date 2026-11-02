@@ -373,6 +373,8 @@ class TestForvoyezAjax extends WP_Ajax_UnitTestCase
 		add_action('wp_ajax_forvoyez_analyze_image', [ $image_processor, 'ajax_analyze_image' ]);
 		remove_all_actions('wp_ajax_forvoyez_process_image_batch');
 		add_action('wp_ajax_forvoyez_process_image_batch', [ $image_processor, 'process_image_batch' ]);
+		remove_all_actions('wp_ajax_forvoyez_bulk_analyze_media_images');
+		add_action('wp_ajax_forvoyez_bulk_analyze_media_images', [ $image_processor, 'bulk_analyze_media_images' ]);
 	}
 
 	/**
@@ -442,9 +444,23 @@ class TestForvoyezAjax extends WP_Ajax_UnitTestCase
 
 		$_POST['nonce'] = wp_create_nonce('forvoyez_load_images_nonce');
 		$_POST['filters'] = 'alt';
-		$response = $this->call_ajax('forvoyez_load_images');
+		[$response, $warnings] = $this->call_ajax_recording_warnings('forvoyez_load_images');
 
 		$this->assertTrue($response['success']);
+		$this->assertSame([], $warnings);
+	}
+
+	public function test_bulk_analyze_images_accepts_a_single_image_id_instead_of_a_list()
+	{
+		$this->_setRole('administrator');
+		$image_id = $this->create_image();
+
+		$_POST['nonce'] = wp_create_nonce('forvoyez_bulk_analyze_images');
+		$_POST['image_ids'] = (string) $image_id;
+		$response = $this->call_ajax('forvoyez_bulk_analyze_images');
+
+		$this->assertTrue($response['success']);
+		$this->assertSame([ $image_id ], $response['data']['image_ids']);
 	}
 
 	/**
@@ -519,6 +535,28 @@ class TestForvoyezAjax extends WP_Ajax_UnitTestCase
 		$this->assertFalse($data['has_low_credits']);
 	}
 
+	/**
+	 * A stored key that can no longer be decrypted (salts or site URL changed)
+	 * is reported as a missing key, not silently used.
+	 */
+	public function test_unreadable_stored_key_behaves_as_a_missing_key()
+	{
+		$this->_setRole('administrator');
+		update_option('forvoyez_encrypted_api_key', base64_encode('not-a-ciphertext::0123456789abcdef'));
+		$image_id = $this->create_image();
+
+		$this->assertSame('', ( new Forvoyez_Settings() )->get_api_key());
+
+		$_POST = [
+			'nonce' => wp_create_nonce('forvoyez_verify_ajax_request_nonce'),
+			'image_id' => $image_id,
+		];
+		$response = $this->call_ajax('forvoyez_analyze_image');
+
+		$this->assertSame('missing_api_key', $response['data']['code']);
+		$this->assertCount(0, $this->forvoyez_requests);
+	}
+
 	public function test_get_credits_survives_a_subscription_without_plan()
 	{
 		$this->_setRole('administrator');
@@ -529,10 +567,154 @@ class TestForvoyezAjax extends WP_Ajax_UnitTestCase
 			'subscription' => [ 'isSubscribed' => true ],
 		]);
 		$_POST = [ 'nonce' => wp_create_nonce('forvoyez_verify_ajax_request_nonce') ];
+		[$response, $warnings] = $this->call_ajax_recording_warnings('forvoyez_get_credits');
+
+		$this->assertSame('', $response['data']['plan_name']);
+		$this->assertTrue($response['data']['has_low_credits']);
+		$this->assertSame([], $warnings);
+	}
+
+	/**
+	 * An Author reaches this action from the media screens, which only need the
+	 * credit count: the subscription of the site owner stays private.
+	 */
+	public function test_get_credits_hides_the_subscription_from_users_who_cannot_manage_the_site()
+	{
+		$this->save_api_key_as_admin();
+		$this->_setRole('author');
+
+		$this->fake_response(self::TOKENS_URL, 200, [
+			'user' => [ 'credits' => 42 ],
+			'subscription' => [
+				'isSubscribed' => true,
+				'plan' => [ 'name' => 'Growth' ],
+				'statusFormatted' => 'Active',
+				'renewsAt' => '2026-12-01T00:00:00.000Z',
+			],
+		]);
+		$_POST = [ 'nonce' => wp_create_nonce('forvoyez_verify_ajax_request_nonce') ];
 		$data = $this->call_ajax('forvoyez_get_credits')['data'];
 
+		$this->assertSame(42, $data['credits']);
+		$this->assertFalse($data['is_subscribed']);
 		$this->assertSame('', $data['plan_name']);
-		$this->assertTrue($data['has_low_credits']);
+		$this->assertSame('', $data['status']);
+		$this->assertSame('', $data['renews_at']);
+	}
+
+	/**
+	 * @dataProvider batch_actions
+	 */
+	public function test_batch_actions_analyze_a_repeated_image_once($action)
+	{
+		$this->_setRole('author');
+		$image_id = $this->create_image([ 'post_author' => get_current_user_id() ]);
+		$this->use_image_processor_with_key('valid.jwt.for-tests');
+
+		$this->fake_response(self::DESCRIBE_URL, 200, [
+			'title' => 'Title',
+			'alternativeText' => 'Alt',
+			'caption' => 'Caption',
+		]);
+		$_POST = [
+			'nonce' => wp_create_nonce('forvoyez_verify_ajax_request_nonce'),
+			'image_ids' => array_fill(0, 300, (string) $image_id),
+		];
+		$response = $this->call_ajax($action);
+
+		$this->assertTrue($response['success']);
+		$this->assertCount(1, $response['data']['results']);
+		$this->assertCount(1, $this->requests_to(self::DESCRIBE_URL));
+	}
+
+	/**
+	 * @dataProvider batch_actions
+	 */
+	public function test_batch_actions_refuse_a_request_above_the_limit_before_any_api_call($action)
+	{
+		$this->_setRole('administrator');
+		$this->use_image_processor_with_key('valid.jwt.for-tests');
+
+		$_POST = [
+			'nonce' => wp_create_nonce('forvoyez_verify_ajax_request_nonce'),
+			'image_ids' => range(1, 51),
+		];
+		$response = $this->call_ajax($action);
+
+		$this->assertFalse($response['success']);
+		$this->assertSame('too_many_images', $response['data']['code']);
+		$this->assertCount(0, $this->requests_to(self::DESCRIBE_URL));
+	}
+
+	public function test_bulk_media_action_survives_a_token_answer_without_user()
+	{
+		$this->_setRole('administrator');
+		$this->save_api_key();
+		$image_id = $this->create_image();
+		$this->use_image_processor_with_key('valid.jwt.for-tests');
+
+		$this->fake_response(self::DESCRIBE_URL, 200, [
+			'title' => 'Title',
+			'alternativeText' => 'Alt',
+			'caption' => 'Caption',
+		]);
+		$this->fake_response(self::TOKENS_URL, 200, [ 'subscription' => [] ]);
+		$_POST = [
+			'nonce' => wp_create_nonce('forvoyez_verify_ajax_request_nonce'),
+			'image_ids' => [ $image_id ],
+		];
+		[$response, $warnings] = $this->call_ajax_recording_warnings('forvoyez_bulk_analyze_media_images');
+
+		$this->assertTrue($response['success']);
+		$this->assertNull($response['data']['credits']);
+		$this->assertSame([], $warnings);
+	}
+
+	private function save_api_key_as_admin()
+	{
+		$this->_setRole('administrator');
+		$this->save_api_key();
+	}
+
+	private function requests_to($url)
+	{
+		return array_filter(
+			$this->forvoyez_requests,
+			static function ($request) use ($url) {
+				return $request['url'] === $url;
+			},
+		);
+	}
+
+	/**
+	 * Run an AJAX action and return its response and PHP warnings.
+	 *
+	 * WP_Ajax_UnitTestCase takes E_WARNING out of error_reporting, so PHPUnit
+	 * does not see them. An error handler is called anyway. The header warnings
+	 * only come from the test output being already started.
+	 *
+	 * @return array{0: array, 1: string[]}
+	 */
+	private function call_ajax_recording_warnings($action)
+	{
+		$warnings = [];
+		set_error_handler(
+			static function ($level, $message) use (&$warnings) {
+				if (false === strpos($message, 'headers already sent')) {
+					$warnings[] = $message;
+				}
+				return true;
+			},
+			E_WARNING,
+		);
+
+		try {
+			$response = $this->call_ajax($action);
+		} finally {
+			restore_error_handler();
+		}
+
+		return [ $response, $warnings ];
 	}
 
 	private function save_api_key()

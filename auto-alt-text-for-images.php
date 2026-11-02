@@ -549,7 +549,7 @@ function forvoyez_add_analyze_button($form_fields, $post) {
 
 		// Get credit info
 		$token_info = forvoyez_get_token_info();
-		$credits = $token_info['success'] ? $token_info['user']['credits'] : '?';
+		$credits = $token_info['user']['credits'] ?? '?';
 
 		// Credit status class
 		$credit_class = 'credits-normal';
@@ -756,7 +756,7 @@ function forvoyez_bulk_analysis_notice() {
 
 	// Get token info for credits display
 	$token_info = forvoyez_get_token_info();
-	$credits = $token_info['success'] ? $token_info['user']['credits'] : '?';
+	$credits = $token_info['user']['credits'] ?? '?';
 	$credit_class = 'credits-normal';
 
 	if ($credits !== '?') {

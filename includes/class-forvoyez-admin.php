@@ -782,12 +782,17 @@ class Forvoyez_Admin {
 			// text only, whatever the API answers.
 			$raw_credits = $token_info['user']['credits'] ?? 0;
 			$credits = is_numeric($raw_credits) ? (int) $raw_credits : 0;
-			$is_subscribed = !empty($token_info['subscription']['isSubscribed']);
+			// The media screens only show the credit count: the subscription of the
+			// site owner stays on the plugin page, which requires manage_options.
+			$subscription = current_user_can('manage_options')
+				? ($token_info['subscription'] ?? [])
+				: [];
+			$is_subscribed = !empty($subscription['isSubscribed']);
 			$plan_name = $is_subscribed
-				? $this->api_value_to_text($token_info['subscription']['plan']['name'] ?? '')
+				? $this->api_value_to_text($subscription['plan']['name'] ?? '')
 				: '';
-			$status = $this->api_value_to_text($token_info['subscription']['statusFormatted'] ?? '');
-			$renews_at = $this->api_value_to_text($token_info['subscription']['renewsAt'] ?? '');
+			$status = $this->api_value_to_text($subscription['statusFormatted'] ?? '');
+			$renews_at = $this->api_value_to_text($subscription['renewsAt'] ?? '');
 
 			// Renvoyer les données complètes
 			wp_send_json_success([

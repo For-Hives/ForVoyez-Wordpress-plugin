@@ -4,12 +4,6 @@ if (!defined('ABSPATH')) {
 	exit('Direct access to this file is not allowed.');
 }
 
-$token_info = forvoyez_get_token_info();
-if ($token_info['success']):
-	$credits = $token_info['user']['credits']; ?>
-
-<?php
-endif;
 ?>
 
 <div class="wrap p-6 min-h-screen relative [&_button,a]:shadow-none [&_button,a]:outline-none">
