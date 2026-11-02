@@ -1,5 +1,22 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": ["config:base"],
-	"enabled": false
+	"platformAutomerge": false,
+	"lockFileMaintenance": {
+		"enabled": true,
+		"automerge": true,
+		"automergeType": "pr",
+		"automergeStrategy": "squash"
+	},
+	"packageRules": [
+		{
+			"description": "Everything in package.json and composer.json is development tooling, and neither file reaches wordpress.org, so version-bump.yml ignores them: these merges publish nothing. The Tests workflow rebuilds the admin CSS, so a Tailwind bump that would change shipped CSS fails and stays open. No required checks on main (the release job pushes straight to it), so Renovate itself waits for green checks: platformAutomerge is off.",
+			"matchManagers": ["npm"],
+			"matchUpdateTypes": ["minor", "patch"],
+			"matchCurrentVersion": "!/^0/",
+			"automerge": true,
+			"automergeType": "pr",
+			"automergeStrategy": "squash"
+		}
+	]
 }
