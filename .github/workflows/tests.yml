@@ -103,10 +103,10 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Run ESLint
-        run: npx eslint .
+        run: npm exec --no -- eslint .
 
       - name: Check formatting of the scripts
-        run: npx prettier --check assets/js
+        run: npm exec --no -- prettier --check assets/js
 
       # lint-staged runs Prettier and ESLint --fix through its own loader: it
       # must start with the versions forced by the overrides of package.json.
@@ -116,11 +116,11 @@ jobs:
           git config user.email ci@example.invalid
           printf 'const a = { b: 1 }\nconsole.log(a)\n' > assets/js/ci-lint-staged-check.js
           git add assets/js/ci-lint-staged-check.js
-          npx lint-staged
+          npm exec --no -- lint-staged
           git reset --hard --quiet
 
   php-standards:
-    name: PHP coding standards and PHP 8.0 compatibility
+    name: PHP coding standards and PHPCompatibility
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -145,7 +145,10 @@ jobs:
 
       # phpcs.xml sets testVersion but never loads PHPCompatibility: check the
       # minimum declared in the plugin header and readme.txt separately.
-      - name: Check PHP 8.0+ compatibility (PHPCompatibilityWP)
+      # PHPCompatibility 9.3.x has no sniff for PHP 8.x itself (removals and
+      # deprecations up to 7.4 only): PHP 8.0/8.2/8.4 support is proven by
+      # php -l and PHPUnit in the php-tests matrix.
+      - name: Check PHPCompatibilityWP (testVersion 8.0-, sniffs up to PHP 7.4)
         run: |
           ./vendor/bin/phpcs --standard=PHPCompatibilityWP --runtime-set testVersion 8.0- \
             --extensions=php --ignore='vendor/*,node_modules/*' -p .

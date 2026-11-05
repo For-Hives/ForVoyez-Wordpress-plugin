@@ -1,16 +1,19 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": ["config:recommended"],
-	"dependencyDashboard": true,
+	"extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
 	"minimumReleaseAge": "3 days",
 	"platformAutomerge": false,
 	"lockFileMaintenance": {
 		"enabled": true,
-		"automerge": true,
-		"automergeType": "pr",
-		"automergeStrategy": "squash"
+		"automerge": false,
+		"description": "Lockfile maintenance refreshes transitive npm packages that minimumReleaseAge does not hold back, and deploy.yaml runs npm run build:css in the job that holds the SVN secrets: review it by hand."
 	},
 	"packageRules": [
+		{
+			"description": "composer.lock is not tracked and composer.json only holds ^ ranges: with the default strategy Renovate proposes majors only and CI silently installs any new minor. Bump the range so each minor or patch of the PHP tooling goes through a pull request and the tests.",
+			"matchManagers": ["composer"],
+			"rangeStrategy": "bump"
+		},
 		{
 			"description": "package.json, package-lock.json and composer.json hold development tooling only and none reaches wordpress.org, so version-bump.yml ignores them: these merges publish nothing (the release-guard job of tests.yml fails a Renovate pull request that would). Tests runs PHPUnit on PHP 8.0/8.2/8.4, phpcs, PHPCompatibility, ESLint, Prettier, lint-staged, the admin CSS rebuild and the zip contents, so a broken update stays open. No required checks on main (the release job pushes straight to it), so Renovate itself waits for green checks: platformAutomerge is off.",
 			"matchManagers": ["npm", "composer"],

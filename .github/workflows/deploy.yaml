@@ -46,6 +46,10 @@ jobs:
           # that release tag; github.sha is the commit before the bump there.
           ref: ${{ inputs.version && format('refs/tags/{0}', inputs.version) || github.sha }}
           fetch-depth: 0
+          # npm run build:css executes dependency code in this job: do not leave
+          # the write token in .git/config. Nothing here pushes with git, and
+          # action-gh-release gets the token through env.
+          persist-credentials: false
 
       - name: Install SVN
         run: |
