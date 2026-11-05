@@ -190,7 +190,7 @@ if (!defined('ABSPATH')) {
             <h2 class="text-2xl font-bold mb-4 text-gray-800">
             <?php esc_html_e('Confirm Analysis', 'auto-alt-text-for-images'); ?>
             </h2>
-			<p id="forvoyez-confirm-message" class="mb-4 text-gray-600"></p>
+			<div id="forvoyez-confirm-message" class="mb-4 text-gray-600"></div>
 			<div class="mt-6 flex justify-end">
                 <button id="forvoyez-confirm-action" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
                     <?php esc_html_e('Confirm', 'auto-alt-text-for-images'); ?>

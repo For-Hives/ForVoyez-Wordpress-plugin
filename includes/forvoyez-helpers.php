@@ -364,3 +364,152 @@ function forvoyez_get_token_info() {
 
 	return $token_info;
 }
+
+/**
+ * Translate a plural string for the admin scripts.
+ *
+ * The scripts pick the form by count: index 0 for no item, 1 for one item
+ * and 2 for more. This matches the plural rules of every bundled language;
+ * a language with more than two plural forms gets its form for 2 above 1.
+ *
+ * @since 1.1.45
+ * @param array $nooped Plural strings registered with _n_noop().
+ * @return string[] The translated forms for 0, 1 and 2 items.
+ */
+function forvoyez_translate_plural_for_js($nooped) {
+	return [
+		translate_nooped_plural($nooped, 0, 'auto-alt-text-for-images'),
+		translate_nooped_plural($nooped, 1, 'auto-alt-text-for-images'),
+		translate_nooped_plural($nooped, 2, 'auto-alt-text-for-images'),
+	];
+}
+
+/**
+ * Translations of the strings written by the admin scripts.
+ *
+ * Each key is the English string used in assets/js (forvoyezI18n.t() and
+ * forvoyezI18n.n()), so a missing key shows the English text. The values are
+ * plain text: the scripts write them with .text() or textContent, never as
+ * HTML. TestForvoyezJsTranslations checks that every string of the scripts
+ * is listed here.
+ *
+ * @since 1.1.45
+ * @return array<string, string|string[]> English string => translation, or
+ *                                        singular => forms for 0, 1 and 2.
+ */
+function forvoyez_get_js_translations() {
+	$strings = [
+		'Active' => __('Active', 'auto-alt-text-for-images'),
+		'AJAX request failed' => __('AJAX request failed', 'auto-alt-text-for-images'),
+		/* translators: %s: error status returned by the browser, e.g. "timeout" */
+		'AJAX request failed: %s' => __('AJAX request failed: %s', 'auto-alt-text-for-images'),
+		'Alt text' => __('Alt text', 'auto-alt-text-for-images'),
+		'Alt Text Status' => __('Alt Text Status', 'auto-alt-text-for-images'),
+		'An error occurred. Please try again.' => __('An error occurred. Please try again.', 'auto-alt-text-for-images'),
+		/* translators: 1: number of images analyzed, 2: number of images that failed */
+		'Analysis complete. Successful: %1$d, Failed: %2$d' => __('Analysis complete. Successful: %1$d, Failed: %2$d', 'auto-alt-text-for-images'),
+		'Analysis complete! Metadata has been updated.' => __('Analysis complete! Metadata has been updated.', 'auto-alt-text-for-images'),
+		'Analyze with ForVoyez' => __('Analyze with ForVoyez', 'auto-alt-text-for-images'),
+		'Analyzing image...' => __('Analyzing image...', 'auto-alt-text-for-images'),
+		'Analyzing...' => __('Analyzing...', 'auto-alt-text-for-images'),
+		'API key saved successfully' => __('API key saved successfully', 'auto-alt-text-for-images'),
+		'Batch processing failed' => __('Batch processing failed', 'auto-alt-text-for-images'),
+		'Caption' => __('Caption', 'auto-alt-text-for-images'),
+		'Caption Status' => __('Caption Status', 'auto-alt-text-for-images'),
+		'Context saved successfully' => __('Context saved successfully', 'auto-alt-text-for-images'),
+		'Credits:' => __('Credits:', 'auto-alt-text-for-images'),
+		/* translators: %s: error message */
+		'Error: %s' => __('Error: %s', 'auto-alt-text-for-images'),
+		'Error: Failed to fetch image IDs' => __('Error: Failed to fetch image IDs', 'auto-alt-text-for-images'),
+		'Error loading data' => __('Error loading data', 'auto-alt-text-for-images'),
+		/* translators: 1: image ID, 2: error message */
+		'Error processing image %1$d: %2$s' => __('Error processing image %1$d: %2$s', 'auto-alt-text-for-images'),
+		'Failed to fetch the image count' => __('Failed to fetch the image count', 'auto-alt-text-for-images'),
+		'Failed to save API key' => __('Failed to save API key', 'auto-alt-text-for-images'),
+		/* translators: %s: error message */
+		'Failed to save API key: %s' => __('Failed to save API key: %s', 'auto-alt-text-for-images'),
+		'Failed to save context' => __('Failed to save context', 'auto-alt-text-for-images'),
+		/* translators: %s: error message */
+		'Failed to save context: %s' => __('Failed to save context: %s', 'auto-alt-text-for-images'),
+		'Failed to save language' => __('Failed to save language', 'auto-alt-text-for-images'),
+		/* translators: %s: error message */
+		'Failed to save language: %s' => __('Failed to save language: %s', 'auto-alt-text-for-images'),
+		'ForVoyez Analysis' => __('ForVoyez Analysis', 'auto-alt-text-for-images'),
+		'ForVoyez Credits:' => __('ForVoyez Credits:', 'auto-alt-text-for-images'),
+		'Generate optimized alt text, title, and caption with AI.' => __('Generate optimized alt text, title, and caption with AI.', 'auto-alt-text-for-images'),
+		'Has alt text' => __('Has alt text', 'auto-alt-text-for-images'),
+		'Has caption' => __('Has caption', 'auto-alt-text-for-images'),
+		'Has title' => __('Has title', 'auto-alt-text-for-images'),
+		'Language saved successfully' => __('Language saved successfully', 'auto-alt-text-for-images'),
+		'Loading subscription status...' => __('Loading subscription status...', 'auto-alt-text-for-images'),
+		/* translators: %s: "recharge now" link */
+		'Low credits! Please %s.' => __('Low credits! Please %s.', 'auto-alt-text-for-images'),
+		/* translators: %d: image ID */
+		'Metadata updated successfully for image %d' => __('Metadata updated successfully for image %d', 'auto-alt-text-for-images'),
+		'Missing alt text' => __('Missing alt text', 'auto-alt-text-for-images'),
+		'Missing caption' => __('Missing caption', 'auto-alt-text-for-images'),
+		'Missing title' => __('Missing title', 'auto-alt-text-for-images'),
+		'Not set' => __('Not set', 'auto-alt-text-for-images'),
+		'Please select at least one image to analyze' => __('Please select at least one image to analyze', 'auto-alt-text-for-images'),
+		/* translators: 1: progress in percent, 2: number of images analyzed, 3: number of images that failed */
+		'Processing: %1$d%% complete. Successful: %2$d, Failed: %3$d' => __('Processing: %1$d%% complete. Successful: %2$d, Failed: %3$d', 'auto-alt-text-for-images'),
+		/* translators: Link text, inside "Low credits! Please %s." */
+		'recharge now' => __('recharge now', 'auto-alt-text-for-images'),
+		'Title' => __('Title', 'auto-alt-text-for-images'),
+		'Title Status' => __('Title Status', 'auto-alt-text-for-images'),
+		'Unable to load credit information. Please refresh the page or check your API key configuration.' => __('Unable to load credit information. Please refresh the page or check your API key configuration.', 'auto-alt-text-for-images'),
+		'Unknown error' => __('Unknown error', 'auto-alt-text-for-images'),
+		'Unknown error occurred' => __('Unknown error occurred', 'auto-alt-text-for-images'),
+		/* translators: 1: number of credits left, 2: number of credits the analysis needs */
+		'Warning: You only have %1$d credits, but this operation requires %2$d credits.' => __('Warning: You only have %1$d credits, but this operation requires %2$d credits.', 'auto-alt-text-for-images'),
+	];
+
+	$plurals = [
+		/* translators: %d: number of images */
+		_n_noop('Are you sure you want to analyze %d image?', 'Are you sure you want to analyze all %d images?', 'auto-alt-text-for-images'),
+		/* translators: %d: number of images */
+		_n_noop('Are you sure you want to analyze %d image with missing alt text?', 'Are you sure you want to analyze %d images with missing alt text?', 'auto-alt-text-for-images'),
+		/* translators: %d: number of images */
+		_n_noop('Are you sure you want to analyze %d image with missing alt text, title, or caption?', 'Are you sure you want to analyze %d images with missing alt text, title, or caption?', 'auto-alt-text-for-images'),
+		/* translators: %d: number of images */
+		_n_noop('Are you sure you want to analyze %d selected image?', 'Are you sure you want to analyze %d selected images?', 'auto-alt-text-for-images'),
+		/* translators: %d: number of credits */
+		_n_noop('Cost: %d ForVoyez credit', 'Cost: %d ForVoyez credits', 'auto-alt-text-for-images'),
+		/* translators: 1: number of images shown, 2: number of images matching the filters */
+		_n_noop('Displaying %1$d of %2$d image', 'Displaying %1$d of %2$d images', 'auto-alt-text-for-images'),
+		/* translators: %d: number of images */
+		_n_noop('Starting analysis of %d image...', 'Starting analysis of %d images...', 'auto-alt-text-for-images'),
+		/* translators: %d: number of credits */
+		_n_noop('You currently have %d credit remaining.', 'You currently have %d credits remaining.', 'auto-alt-text-for-images'),
+	];
+
+	foreach ($plurals as $nooped) {
+		$strings[ $nooped['singular'] ] = forvoyez_translate_plural_for_js($nooped);
+	}
+
+	return $strings;
+}
+
+/**
+ * Register the script that translates the admin scripts.
+ *
+ * admin-script.js and media-script.js depend on it. Registered once, so the
+ * translations are printed once when both scripts load on the same page.
+ *
+ * @since 1.1.45
+ * @return void
+ */
+function forvoyez_register_i18n_script() {
+	if (wp_script_is('forvoyez-i18n', 'registered')) {
+		return;
+	}
+
+	wp_register_script(
+		'forvoyez-i18n',
+		FORVOYEZ_PLUGIN_URL . 'assets/js/i18n.js',
+		[],
+		FORVOYEZ_VERSION,
+		true,
+	);
+	wp_localize_script('forvoyez-i18n', 'forvoyezL10n', forvoyez_get_js_translations());
+}

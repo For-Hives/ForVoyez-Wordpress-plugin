@@ -19,6 +19,7 @@
  * Author:      ForVoyez
  * Author URI:  https://forvoyez.com
  * Text Domain: auto-alt-text-for-images
+ * Domain Path: /languages
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
@@ -160,10 +161,11 @@ function forvoyez_enqueue_media_scripts($hook) {
 
 	if ($is_media_page || wp_script_is('media-editor')) {
 		// Enqueue script
+		forvoyez_register_i18n_script();
 		wp_enqueue_script(
 			'forvoyez-media-script',
 			plugin_dir_url(__FILE__) . 'assets/js/media-script.js',
-			array('jquery', 'wp-backbone', 'media-editor', 'media-views'),
+			array('jquery', 'wp-backbone', 'media-editor', 'media-views', 'forvoyez-i18n'),
 			FORVOYEZ_VERSION,
 			true
 		);
@@ -176,13 +178,6 @@ function forvoyez_enqueue_media_scripts($hook) {
 				'ajaxurl' => admin_url('admin-ajax.php'),
 				'verifyAjaxRequestNonce' => wp_create_nonce('forvoyez_verify_ajax_request_nonce'),
 				'analyzeNonce' => wp_create_nonce('forvoyez_analyze_media_image_nonce'),
-				'messages' => array(
-					'analyzing' => __('Analyzing...', 'auto-alt-text-for-images'),
-					'success' => __('Analysis complete! Metadata updated.', 'auto-alt-text-for-images'),
-					'error' => __('Analysis failed. Please try again.', 'auto-alt-text-for-images'),
-					'lowCredits' => __('Warning: Low credits!', 'auto-alt-text-for-images'),
-					'noCredits' => __('Warning: No credits left!', 'auto-alt-text-for-images'),
-				),
 				'mediaPage' => $is_media_page,
 			)
 		);
@@ -297,17 +292,23 @@ function forvoyez_enqueue_media_scripts($hook) {
                                                 }
                                             }
                                             
-                                            // Create the analyze button and add it to the sidebar
-                                            var buttonHtml = \'<div class="forvoyez-analyze-container attachment-compat" style="padding: 0 16px 16px 16px;">\' +
-                                                \'<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">\' +
-                                                \'<h2 style="margin: 0; font-size: 12px; font-weight: bold;">ForVoyez Analysis</h2>\' +
-                                                \'<div style="font-size: 11px;">Credits: <span class="forvoyez-credit-count \' + creditClass + \'">\' + credits + \'</span></div>\' +
-                                                \'</div>\' +
-                                                \'<button type="button" class="button forvoyez-analyze-button" data-image-id="\' + attachment.id + \'">Analyze with ForVoyez</button>\' +
-                                                \'<div class="forvoyez-status" style="margin-top: 5px;"></div>\' +
-                                                \'</div>\';
-                                            
-                                            $(".media-sidebar").append(buttonHtml);
+                                            // Create the analyze button and add it to the sidebar.
+                                            // Translations are written as text (assets/js/i18n.js).
+                                            var t = window.forvoyezI18n.t;
+                                            var $header = $("<div>", { style: "display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;" }).append(
+                                                $("<h2>", { style: "margin: 0; font-size: 12px; font-weight: bold;", text: t("ForVoyez Analysis") }),
+                                                $("<div>", { style: "font-size: 11px;" }).append(
+                                                    document.createTextNode(t("Credits:") + " "),
+                                                    $("<span>", { "class": "forvoyez-credit-count " + creditClass, text: String(credits) })
+                                                )
+                                            );
+                                            var $section = $("<div>", { "class": "forvoyez-analyze-container attachment-compat", style: "padding: 0 16px 16px 16px;" }).append(
+                                                $header,
+                                                $("<button>", { type: "button", "class": "button forvoyez-analyze-button", "data-image-id": attachment.id, text: t("Analyze with ForVoyez") }),
+                                                $("<div>", { "class": "forvoyez-status", style: "margin-top: 5px;" })
+                                            );
+
+                                            $(".media-sidebar").append($section);
                                         }
                                     });
                                 }
@@ -355,182 +356,24 @@ function forvoyez_handle_bulk_action($redirect_to, $doaction, $post_ids) {
 add_filter('handle_bulk_actions-upload', 'forvoyez_handle_bulk_action', 10, 3);
 
 /**
- * Display admin notice after bulk action
+ * Status of one metadata field in the attachment details: icon and label.
+ *
+ * @param bool   $is_set  Whether the field is filled.
+ * @param string $label   Name of the field.
+ * @param string $has     Tooltip when the field is filled.
+ * @param string $missing Tooltip when the field is empty.
+ *
+ * @return string Escaped HTML.
  */
-function forvoyez_admin_notices() {
-	if (!empty($_REQUEST['forvoyez_bulk_analyze'])) {
-		$count = intval($_REQUEST['forvoyez_bulk_analyze']);
-
-		// Get transient
-		$image_ids = get_transient('forvoyez_bulk_analyze_images');
-
-		if ($image_ids) {
-			// Images ready to be processed, show notice with action button
-			?>
-			<div class="notice notice-info">
-				<p>
-					<?php echo esc_html(
-						sprintf(
-							/* translators: %d: number of images */
-							_n(
-								'ForVoyez: Ready to analyze %d image.',
-								'ForVoyez: Ready to analyze %d images.',
-								$count,
-								'auto-alt-text-for-images'
-							),
-							$count
-						)
-					); ?>
-					<button id="forvoyez-start-bulk-analysis" class="button button-primary" data-nonce="<?php echo esc_attr(wp_create_nonce('forvoyez_bulk_analyze_nonce')); ?>">
-						<?php esc_html_e('Start Analysis', 'auto-alt-text-for-images'); ?>
-					</button>
-				</p>
-				<div id="forvoyez-bulk-progress" style="display: none; margin-top: 10px;">
-					<div style="margin-bottom: 5px;">
-						<span id="forvoyez-bulk-progress-text">0 / <?php echo (int) $count; ?> images processed</span>
-					</div>
-					<div style="background-color: #f1f1f1; height: 20px; border-radius: 3px; overflow: hidden;">
-						<div id="forvoyez-bulk-progress-bar" style="background-color: #0073aa; height: 100%; width: 0%;"></div>
-					</div>
-				</div>
-			</div>
-			<script>
-                jQuery(document).ready(function($) {
-                    $('#forvoyez-start-bulk-analysis').on('click', function() {
-                        const $button = $(this);
-                        const $progress = $('#forvoyez-bulk-progress');
-                        const $progressBar = $('#forvoyez-bulk-progress-bar');
-                        const $progressText = $('#forvoyez-bulk-progress-text');
-
-                        // Disable button
-                        $button.prop('disabled', true).text('Processing...');
-
-                        // Show progress
-                        $progress.show();
-
-                        // Get image IDs
-                        $.ajax({
-                            url: ajaxurl,
-                            type: 'POST',
-                            data: {
-                                action: 'forvoyez_get_bulk_images',
-                                nonce: $button.data('nonce')
-                            },
-                            success: function(response) {
-                                if (response.success && response.data.image_ids) {
-                                    processBulkImages(response.data.image_ids);
-                                } else {
-                                    $button.text('Failed to retrieve images');
-                                    alert('Failed to retrieve images for analysis.');
-                                }
-                            },
-                            error: function() {
-                                $button.text('Error');
-                                alert('An error occurred while starting the analysis process.');
-                            }
-                        });
-
-                        // Process images in batches
-                        function processBulkImages(imageIds) {
-                            const batchSize = 5;
-                            const totalImages = imageIds.length;
-                            let processedCount = 0;
-                            let successCount = 0;
-                            let failCount = 0;
-
-                            function processBatch(startIndex) {
-                                const endIndex = Math.min(startIndex + batchSize, totalImages);
-                                const batchIds = imageIds.slice(startIndex, endIndex);
-
-                                if (batchIds.length === 0) {
-                                    // All done
-                                    $button.text('Complete!');
-                                    $progressText.text(successCount + ' successful, ' + failCount + ' failed');
-
-                                    // Reload the page after 2 seconds
-                                    setTimeout(function() {
-                                        window.location.href = window.location.href.replace(/&forvoyez_bulk_analyze=\d+/, '');
-                                    }, 2000);
-
-                                    return;
-                                }
-
-                                $.ajax({
-                                    url: ajaxurl,
-                                    type: 'POST',
-                                    data: {
-                                        action: 'forvoyez_process_image_batch',
-                                        image_ids: batchIds,
-                                        nonce: '<?php echo esc_js(wp_create_nonce('forvoyez_verify_ajax_request_nonce')); ?>'
-                                    },
-                                    success: function(response) {
-                                        if (response.success) {
-                                            // Count successes and failures
-                                            response.data.results.forEach(function(result) {
-                                                if (result.success) {
-                                                    successCount++;
-                                                } else {
-                                                    failCount++;
-                                                }
-                                            });
-                                        } else {
-                                            // Batch failed entirely
-                                            failCount += batchIds.length;
-                                        }
-
-                                        // Update progress
-                                        processedCount += batchIds.length;
-                                        const progressPercent = Math.round((processedCount / totalImages) * 100);
-                                        $progressBar.css('width', progressPercent + '%');
-                                        $progressText.text(processedCount + ' / ' + totalImages + ' images processed');
-
-                                        // Process next batch
-                                        processBatch(endIndex);
-                                    },
-                                    error: function() {
-                                        // Batch failed entirely
-                                        failCount += batchIds.length;
-
-                                        // Update progress
-                                        processedCount += batchIds.length;
-                                        const progressPercent = Math.round((processedCount / totalImages) * 100);
-                                        $progressBar.css('width', progressPercent + '%');
-                                        $progressText.text(processedCount + ' / ' + totalImages + ' images processed');
-
-                                        // Process next batch
-                                        processBatch(endIndex);
-                                    }
-                                });
-                            }
-
-                            // Start processing
-                            processBatch(0);
-                        }
-                    });
-                });
-			</script>
-			<?php
-		} else {
-			// Just show completion message
-			printf(
-				'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
-				esc_html(
-					sprintf(
-						/* translators: %d: number of images */
-						_n(
-							'ForVoyez: Successfully queued %d image for analysis.',
-							'ForVoyez: Successfully queued %d images for analysis.',
-							$count,
-							'auto-alt-text-for-images'
-						),
-						$count
-					)
-				)
-			);
-		}
-	}
+function forvoyez_metadata_status_html($is_set, $label, $has, $missing) {
+	return sprintf(
+		'<span class="dashicons %1$s" style="color: %2$s;" title="%3$s"></span> <span class="status-label">%4$s</span>',
+		$is_set ? 'dashicons-yes-alt' : 'dashicons-warning',
+		$is_set ? '#4CAF50' : '#FF9800',
+		esc_attr($is_set ? $has : $missing),
+		esc_html($label),
+	);
 }
-add_action('admin_notices', 'forvoyez_admin_notices');
 
 /**
  * Add an "Analyze with ForVoyez" button to the media library with integrated credit counter.
@@ -562,17 +405,24 @@ function forvoyez_add_analyze_button($form_fields, $post) {
 		}
 
 		// Generate status indicators with text labels
-		$alt_status = $has_alt_text
-			? '<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;" title="Has alt text"></span> <span class="status-label">Alt text</span>'
-			: '<span class="dashicons dashicons-warning" style="color: #FF9800;" title="Missing alt text"></span> <span class="status-label">Alt text</span>';
-
-		$title_status = $has_title
-			? '<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;" title="Has title"></span> <span class="status-label">Title</span>'
-			: '<span class="dashicons dashicons-warning" style="color: #FF9800;" title="Missing title"></span> <span class="status-label">Title</span>';
-
-		$caption_status = $has_caption
-			? '<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;" title="Has caption"></span> <span class="status-label">Caption</span>'
-			: '<span class="dashicons dashicons-warning" style="color: #FF9800;" title="Missing caption"></span> <span class="status-label">Caption</span>';
+		$alt_status = forvoyez_metadata_status_html(
+			$has_alt_text,
+			__('Alt text', 'auto-alt-text-for-images'),
+			__('Has alt text', 'auto-alt-text-for-images'),
+			__('Missing alt text', 'auto-alt-text-for-images'),
+		);
+		$title_status = forvoyez_metadata_status_html(
+			$has_title,
+			__('Title', 'auto-alt-text-for-images'),
+			__('Has title', 'auto-alt-text-for-images'),
+			__('Missing title', 'auto-alt-text-for-images'),
+		);
+		$caption_status = forvoyez_metadata_status_html(
+			$has_caption,
+			__('Caption', 'auto-alt-text-for-images'),
+			__('Has caption', 'auto-alt-text-for-images'),
+			__('Missing caption', 'auto-alt-text-for-images'),
+		);
 
 		$form_fields['forvoyez_analyze'] = array(
 			'label' => '',
@@ -681,20 +531,20 @@ function forvoyez_add_analyze_button($form_fields, $post) {
                 </style>
                 <div class="forvoyez-button-container">
                     <div class="forvoyez-row">
-                        <h4 style="margin: 0 0 8px 0;">Image Metadata Status:</h4>
+                        <h4 style="margin: 0 0 8px 0;">' . esc_html__('Image Metadata Status:', 'auto-alt-text-for-images') . '</h4>
                         <div class="forvoyez-metadata-item">
-                            ForVoyez Credits: <span class="forvoyez-credit-count ' . $credit_class . '">' . esc_html($credits) . '</span>
+                            ' . esc_html__('ForVoyez Credits:', 'auto-alt-text-for-images') . ' <span class="forvoyez-credit-count ' . esc_attr($credit_class) . '">' . esc_html($credits) . '</span>
                         </div>
                     </div>
                     <div class="forvoyez-metadata-status" data-image-id="' . esc_attr($post->ID) . '">
-                        <div class="forvoyez-metadata-item alt-status" title="Alt Text Status">' . $alt_status . '</div>
-                        <div class="forvoyez-metadata-item title-status" title="Title Status">' . $title_status . '</div>
-                        <div class="forvoyez-metadata-item caption-status" title="Caption Status">' . $caption_status . '</div>
+                        <div class="forvoyez-metadata-item alt-status" title="' . esc_attr__('Alt Text Status', 'auto-alt-text-for-images') . '">' . $alt_status . '</div>
+                        <div class="forvoyez-metadata-item title-status" title="' . esc_attr__('Title Status', 'auto-alt-text-for-images') . '">' . $title_status . '</div>
+                        <div class="forvoyez-metadata-item caption-status" title="' . esc_attr__('Caption Status', 'auto-alt-text-for-images') . '">' . $caption_status . '</div>
                     </div>
                     <div class="forvoyez-description">
-                        This tool uses AI to analyze your image and generate optimized metadata like alt text, title, and caption. Click the button below to automatically generate SEO-friendly metadata for this image.
+                        ' . esc_html__('This tool uses AI to analyze your image and generate optimized metadata like alt text, title, and caption. Click the button below to automatically generate SEO-friendly metadata for this image.', 'auto-alt-text-for-images') . '
                     </div>
-                    <button type="button" class="button forvoyez-analyze-button" data-image-id="' . esc_attr($post->ID) . '">Analyze with ForVoyez</button>
+                    <button type="button" class="button forvoyez-analyze-button" data-image-id="' . esc_attr($post->ID) . '">' . esc_html__('Analyze with ForVoyez', 'auto-alt-text-for-images') . '</button>
                     <div class="forvoyez-status"></div>
                 </div>
             ',
@@ -702,32 +552,6 @@ function forvoyez_add_analyze_button($form_fields, $post) {
 	}
 	return $form_fields;
 }
-
-/**
- * Get bulk images for processing
- */
-function forvoyez_get_bulk_images() {
-	check_ajax_referer('forvoyez_bulk_analyze_nonce', 'nonce');
-
-	if (!current_user_can('upload_files')) {
-		wp_send_json_error(['message' => 'Permission denied']);
-	}
-
-	$image_ids = get_transient('forvoyez_bulk_analyze_images');
-
-	if ($image_ids) {
-		// Clear the transient
-		delete_transient('forvoyez_bulk_analyze_images');
-
-		wp_send_json_success([
-			'image_ids' => $image_ids,
-			'count' => count($image_ids),
-		]);
-	} else {
-		wp_send_json_error(['message' => 'No images found for analysis.']);
-	}
-}
-add_action('wp_ajax_forvoyez_get_bulk_images', 'forvoyez_get_bulk_images');
 
 /**
  * Add to auto-alt-text-for-images.php - Add Bulk Analysis Notice and UI
@@ -792,7 +616,7 @@ function forvoyez_bulk_analysis_notice() {
 			);
 			?>
             <span class="forvoyez-credits-info" style="margin-left: 10px;">
-                ForVoyez Credits: <span class="forvoyez-credit-count <?php echo esc_attr($credit_class); ?>"><?php echo esc_html($credits); ?></span>
+                <?php esc_html_e('ForVoyez Credits:', 'auto-alt-text-for-images'); ?> <span class="forvoyez-credit-count <?php echo esc_attr($credit_class); ?>"><?php echo esc_html($credits); ?></span>
             </span>
         </p>
 		<?php if ($warning) : ?><div class="notice-warning" style="padding: 8px; margin-bottom: 10px; border-left: 4px solid #ffb900;"><?php echo esc_html($warning); ?></div><?php endif; ?>

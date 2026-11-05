@@ -189,7 +189,7 @@ class Forvoyez_Image_Processor {
 
 	public function ajax_analyze_image() {
 		if ( !current_user_can( 'upload_files' ) ) {
-			wp_send_json_error( 'Permission denied (cant upload)', 403 );
+			wp_send_json_error( esc_html__( 'Permission denied', 'auto-alt-text-for-images' ), 403 );
 			return;
 		}
 
@@ -509,12 +509,12 @@ class Forvoyez_Image_Processor {
 
 	private function verify_ajax_request( $action ) {
         if ( !check_ajax_referer( $action, 'nonce', false ) ) {
-            wp_send_json_error( 'Invalid nonce' );
+            wp_send_json_error( esc_html__( 'Invalid nonce', 'auto-alt-text-for-images' ) );
             exit;
         }
 
         if ( !current_user_can( 'upload_files' ) ) {
-            wp_send_json_error( 'Permission denied' );
+            wp_send_json_error( esc_html__( 'Permission denied', 'auto-alt-text-for-images' ) );
             exit;
         }
     }

@@ -99,10 +99,11 @@ class Forvoyez_Admin {
 		);
 
 		// Enqueue custom scripts (admin-script.js also handles the credits widget)
+		forvoyez_register_i18n_script();
 		wp_enqueue_script(
 			'forvoyez-admin-script',
 			FORVOYEZ_PLUGIN_URL . 'assets/js/admin-script.js',
-			['jquery'],
+			['jquery', 'forvoyez-i18n'],
 			FORVOYEZ_VERSION,
 			true,
 		);

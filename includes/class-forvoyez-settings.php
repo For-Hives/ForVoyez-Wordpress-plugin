@@ -170,12 +170,12 @@ class Forvoyez_Settings {
 	 */
 	public function ajax_toggle_auto_analyze() {
 	    if ( !check_ajax_referer( 'forvoyez_toggle_auto_analyze_nonce', 'nonce', false ) ) {
-	        wp_send_json_error( array( 'message' => 'Invalid nonce' ), 403 );
+	        wp_send_json_error( array( 'message' => esc_html__( 'Invalid nonce', 'auto-alt-text-for-images' ) ), 403 );
 	        return;
 	    }
 
 	    if ( !current_user_can( 'manage_options' ) ) {
-	        wp_send_json_error( array( 'message' => 'Permission denied' ), 403 );
+	        wp_send_json_error( array( 'message' => esc_html__( 'Permission denied', 'auto-alt-text-for-images' ) ), 403 );
 	        return;
 	    }
 
@@ -187,7 +187,7 @@ class Forvoyez_Settings {
 
 	    update_option( 'forvoyez_auto_analyze_enabled', $enabled ? 'true' : 'false' );
 
-	    wp_send_json_success( array( 'message' => 'Automatic image analysis toggled successfully' ) );
+	    wp_send_json_success( array( 'message' => esc_html__( 'Automatic image analysis toggled successfully', 'auto-alt-text-for-images' ) ) );
 	}
 
 	/**

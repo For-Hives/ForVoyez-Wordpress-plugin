@@ -1,6 +1,9 @@
 ;(function ($) {
 	'use strict'
 
+	// assets/js/i18n.js: strings are listed in forvoyez_get_js_translations().
+	const { format, n, t } = window.forvoyezI18n
+
 	let $configApiKeyInput
 	/**
 	 * Credit management functions for ForVoyez admin
@@ -87,7 +90,7 @@
 					// Revert the toggle state
 					$toggle.prop('checked', isEnabled)
 					// Show error message
-					showNotification('An error occurred. Please try again.', 'error')
+					showNotification(t('An error occurred. Please try again.'), 'error')
 				},
 				complete: function () {
 					$toggle.prop('disabled', false) // Re-enable the toggle
@@ -117,7 +120,10 @@
 				.get()
 
 			if (selectedImages.length === 0) {
-				showNotification('Please select at least one image to analyze', 'info')
+				showNotification(
+					t('Please select at least one image to analyze'),
+					'info'
+				)
 				return
 			}
 
@@ -153,11 +159,15 @@
 					if (response.success) {
 						confirmAndAnalyze(type, response.data.image_ids)
 					} else {
-						showNotification('Error: ' + response.data.message, 'error', 5000)
+						showNotification(
+							format(t('Error: %s'), response.data.message),
+							'error',
+							5000
+						)
 					}
 				},
 				error: function () {
-					showNotification('Error: Failed to fetch image IDs', 'error', 5000)
+					showNotification(t('Error: Failed to fetch image IDs'), 'error', 5000)
 				},
 			})
 		})
@@ -240,15 +250,19 @@
 			const widget = $(`
             <div class="forvoyez-credits-widget fixed bottom-4 right-4 bg-white p-3 pb-2 rounded-lg shadow-lg border border-gray-200 z-30">
                 <div class="flex items-center space-x-2">
-                    <div class="text-gray-700 font-medium">ForVoyez Credits:</div>
+                    <div class="forvoyez-credits-label text-gray-700 font-medium"></div>
                     <span class="forvoyez-credit-count px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-gray-200 text-gray-600"><span class="animate-pulse">...</span></span>
                 </div>
                 <div class="mt-1 text-xs text-gray-500 forvoyez-credits-status">
-                    <span class="animate-pulse">Loading subscription status...</span>
+                    <span class="forvoyez-credits-loading animate-pulse"></span>
                 </div>
                 <div class="mt-1 text-xs text-red-600 forvoyez-credit-warning hidden"></div>
             </div>
         `)
+			widget.find('.forvoyez-credits-label').text(t('ForVoyez Credits:'))
+			widget
+				.find('.forvoyez-credits-loading')
+				.text(t('Loading subscription status...'))
 
 			$('body').append(widget)
 		}
@@ -268,10 +282,16 @@
 			target: '_blank',
 			rel: 'noopener noreferrer',
 			class: 'underline hover:text-red-800',
-			text: 'recharge now',
+			text: t('recharge now'),
 		})
 
-		return $('<span>').append('Low credits! Please ', $link, '.')
+		// The link takes the place of %s; the text around it stays text.
+		const parts = t('Low credits! Please %s.').split('%s')
+		const $warning = $('<span>').append(document.createTextNode(parts[0]))
+		if (parts.length > 1) {
+			$warning.append($link, document.createTextNode(parts.slice(1).join('')))
+		}
+		return $warning
 	}
 
 	function loadImages(page = currentPage) {
@@ -293,11 +313,15 @@
 				$container.html(response.data.html)
 				$('#forvoyez-pagination').html(response.data.pagination_html)
 				$('#forvoyez-image-counter').text(
-					'Displaying ' +
-						response.data.displayed_images +
-						' of ' +
-						response.data.total_images +
-						' images'
+					format(
+						n(
+							'Displaying %1$d of %2$d image',
+							'Displaying %1$d of %2$d images',
+							Number(response.data.total_images)
+						),
+						response.data.displayed_images,
+						response.data.total_images
+					)
 				)
 				currentPage = response.data.current_page
 			}
@@ -341,14 +365,17 @@
 			},
 			success: function (response) {
 				if (response.success) {
-					showNotification('API key saved successfully', 'success')
+					showNotification(t('API key saved successfully'), 'success')
 					$configApiKeyInput.val(apiKey)
 				} else {
-					showNotification('Failed to save API key: ' + response.data, 'error')
+					showNotification(
+						format(t('Failed to save API key: %s'), response.data),
+						'error'
+					)
 				}
 			},
 			error: function () {
-				showNotification('Failed to save API key', 'error')
+				showNotification(t('Failed to save API key'), 'error')
 			},
 		})
 	}
@@ -367,13 +394,16 @@
 			},
 			success: function (response) {
 				if (response.success) {
-					showNotification('Context saved successfully', 'success')
+					showNotification(t('Context saved successfully'), 'success')
 				} else {
-					showNotification('Failed to save context: ' + response.data, 'error')
+					showNotification(
+						format(t('Failed to save context: %s'), response.data),
+						'error'
+					)
 				}
 			},
 			error: function () {
-				showNotification('Failed to save context', 'error')
+				showNotification(t('Failed to save context'), 'error')
 			},
 		})
 
@@ -387,13 +417,16 @@
 			},
 			success: function (response) {
 				if (response.success) {
-					showNotification('Language saved successfully', 'success')
+					showNotification(t('Language saved successfully'), 'success')
 				} else {
-					showNotification('Failed to save language: ' + response.data, 'error')
+					showNotification(
+						format(t('Failed to save language: %s'), response.data),
+						'error'
+					)
 				}
 			},
 			error: function () {
-				showNotification('Failed to save language', 'error')
+				showNotification(t('Failed to save language'), 'error')
 			},
 		})
 	}
@@ -445,7 +478,10 @@
 					if (response.success) {
 						if (isNotificationActivated) {
 							showNotification(
-								'Metadata updated successfully for image ' + imageId,
+								format(
+									t('Metadata updated successfully for image %d'),
+									imageId
+								),
 								'success'
 							)
 						}
@@ -457,7 +493,7 @@
 					} else {
 						let errorMessage = response.data
 							? response.data.message
-							: 'Unknown error occurred'
+							: t('Unknown error occurred')
 						let errorCode = response.data
 							? response.data.code || 'unknown_error'
 							: 'unknown_error'
@@ -470,7 +506,7 @@
 				error: function (jqXHR, textStatus) {
 					if (isNotificationActivated) {
 						showErrorNotification(
-							'AJAX request failed: ' + textStatus,
+							format(t('AJAX request failed: %s'), textStatus),
 							'ajax_error',
 							imageId
 						)
@@ -492,14 +528,30 @@
 		let failedCount = 0
 
 		showLoader()
-		showNotification(`Starting analysis of ${totalImages} images...`, 'info', 0)
+		showNotification(
+			format(
+				n(
+					'Starting analysis of %d image...',
+					'Starting analysis of %d images...',
+					totalImages
+				),
+				totalImages
+			),
+			'info',
+			0
+		)
 
 		function updateProgress() {
 			const progress = Math.round(
 				((processedCount + failedCount) / totalImages) * 100
 			)
 			showNotification(
-				`Processing: ${progress}% complete. Successful: ${processedCount}, Failed: ${failedCount}`,
+				format(
+					t('Processing: %1$d%% complete. Successful: %2$d, Failed: %3$d'),
+					progress,
+					processedCount,
+					failedCount
+				),
 				'info',
 				0
 			)
@@ -541,7 +593,7 @@
 							const message =
 								(data && data.message) ||
 								(typeof data === 'string' && data) ||
-								'Batch processing failed'
+								t('Batch processing failed')
 							const code = (data && data.code) || 'batch_error'
 							batch.forEach(imageId => {
 								failedCount++
@@ -556,7 +608,7 @@
 						batch.forEach(imageId => {
 							failedCount++
 							showErrorNotification(
-								'AJAX request failed',
+								t('AJAX request failed'),
 								'ajax_error',
 								imageId
 							)
@@ -577,7 +629,11 @@
 				await processBatch(batch)
 			}
 			showNotification(
-				`Analysis complete. Successful: ${processedCount}, Failed: ${failedCount}`,
+				format(
+					t('Analysis complete. Successful: %1$d, Failed: %2$d'),
+					processedCount,
+					failedCount
+				),
 				'success',
 				5000
 			)
@@ -625,9 +681,9 @@
 
 		// Update image details
 		let $details = $imageItem.find('.details-view')
-		$details.find('.title-content').text(metadata.title || 'Not set')
-		$details.find('.alt-content').text(metadata.alt_text || 'Not set')
-		$details.find('.caption-content').text(metadata.caption || 'Not set')
+		$details.find('.title-content').text(metadata.title || t('Not set'))
+		$details.find('.alt-content').text(metadata.alt_text || t('Not set'))
+		$details.find('.caption-content').text(metadata.caption || t('Not set'))
 
 		// Hide loader
 		$imageItem.find('.loader').addClass('hidden')
@@ -683,7 +739,11 @@
 	}
 
 	function showErrorNotification(message, code, imageId) {
-		let fullMessage = `Error processing image ${imageId}: ${message}`
+		let fullMessage = format(
+			t('Error processing image %1$d: %2$s'),
+			imageId,
+			message
+		)
 		let detailedMessage = `Error code: ${code}`
 
 		showNotification(fullMessage, 'error', 5000)
@@ -745,14 +805,18 @@
 						textStatus,
 						errorThrown
 					)
-					showNotification(`Failed to fetch ${type} image count`, 'error')
+					showNotification(t('Failed to fetch the image count'), 'error')
 				},
 			})
 		})
 	}
 
-	function showConfirmModal(message, onConfirm) {
-		$('#forvoyez-confirm-message').html(message)
+	/**
+	 * @param {jQuery[]} content Paragraphs of the message, built as text.
+	 * @param {Function} onConfirm Called when the user confirms.
+	 */
+	function showConfirmModal(content, onConfirm) {
+		$('#forvoyez-confirm-message').empty().append(content)
 		$('#forvoyez-confirm-modal').removeClass('hidden')
 
 		$('#forvoyez-confirm-action')
@@ -832,9 +896,18 @@
 			})
 
 			$('.forvoyez-credits-status').each(function () {
-				$(this).html(
-					'<span class="inline-flex items-center text-gray-500"><span class="animate-pulse">Loading subscription status...</span></span>'
-				)
+				$(this)
+					.empty()
+					.append(
+						$('<span>', {
+							class: 'inline-flex items-center text-gray-500',
+						}).append(
+							$('<span>', {
+								class: 'animate-pulse',
+								text: t('Loading subscription status...'),
+							})
+						)
+					)
 			})
 
 			$('.forvoyez-credit-warning').addClass('hidden')
@@ -853,15 +926,22 @@
 			})
 
 			$('.forvoyez-credits-status').each(function () {
-				$(this).html(
-					'<span class="inline-flex items-center text-red-500">Error loading data</span>'
-				)
+				$(this)
+					.empty()
+					.append(
+						$('<span>', {
+							class: 'inline-flex items-center text-red-500',
+							text: t('Error loading data'),
+						})
+					)
 			})
 
 			$('.forvoyez-credit-warning')
 				.removeClass('hidden')
-				.html(
-					'Unable to load credit information. Please refresh the page or check your API key configuration.'
+				.text(
+					t(
+						'Unable to load credit information. Please refresh the page or check your API key configuration.'
+					)
 				)
 			return
 		}
@@ -898,7 +978,7 @@
 					$('<span>', {
 						class:
 							'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800',
-						text: 'Active',
+						text: t('Active'),
 					})
 				)
 				// The plan name comes from the API: text, never HTML
@@ -919,145 +999,92 @@
 		}
 	}
 
+	/**
+	 * Question of the confirmation modal for an analysis of count images.
+	 */
+	function confirmQuestion(type, count) {
+		switch (type) {
+			case 'missing_all':
+				return n(
+					'Are you sure you want to analyze %d image with missing alt text, title, or caption?',
+					'Are you sure you want to analyze %d images with missing alt text, title, or caption?',
+					count
+				)
+			case 'missing_alt':
+				return n(
+					'Are you sure you want to analyze %d image with missing alt text?',
+					'Are you sure you want to analyze %d images with missing alt text?',
+					count
+				)
+			case 'all':
+				return n(
+					'Are you sure you want to analyze %d image?',
+					'Are you sure you want to analyze all %d images?',
+					count
+				)
+			default:
+				return n(
+					'Are you sure you want to analyze %d selected image?',
+					'Are you sure you want to analyze %d selected images?',
+					count
+				)
+		}
+	}
+
 	function confirmAndAnalyze(type, imageIds) {
 		const count = imageIds.length
-		let message, actionDescription
+		const credits = Number(creditsInfo.credits)
+		// Unknown before the credits request answers, or when it failed.
+		const knowsCredits =
+			!creditsInfo.isLoading &&
+			!creditsInfo.hasError &&
+			creditsInfo.credits !== null &&
+			creditsInfo.credits !== '' &&
+			Number.isFinite(credits)
 
-		// Définir le type d'action
-		switch (type) {
-			case 'selected':
-				actionDescription = `analyze ${count} selected image(s)`
-				break
-			case 'missing_all':
-				actionDescription = `analyze ${count} image(s) with missing alt text, title, or caption`
-				break
-			case 'missing_alt':
-				actionDescription = `analyze ${count} image(s) with missing alt text`
-				break
-			case 'all':
-				actionDescription = `analyze all ${count} image(s)`
-				break
-		}
+		const content = [
+			$('<p>').text(format(confirmQuestion(type, count), count)),
+			$('<p>', { class: 'mt-2 text-xs text-gray-500 italic' }).text(
+				format(
+					n('Cost: %d ForVoyez credit', 'Cost: %d ForVoyez credits', count),
+					count
+				)
+			),
+		]
 
-		if (creditsInfo.credits !== undefined) {
-			let creditsWarning = ''
-			if (count > creditsInfo.credits) {
-				creditsWarning = `<p class="mt-2 text-xs text-red-500 font-bold">Warning: You only have ${creditsInfo.credits} credits, but this operation requires ${count} credits.</p>`
+		if (knowsCredits) {
+			content.push(
+				$('<p>', { class: 'text-xs text-gray-500 italic' }).text(
+					format(
+						n(
+							'You currently have %d credit remaining.',
+							'You currently have %d credits remaining.',
+							credits
+						),
+						credits
+					)
+				)
+			)
+			if (count > credits) {
+				content.push(
+					$('<p>', { class: 'mt-2 text-xs text-red-500 font-bold' }).text(
+						format(
+							t(
+								'Warning: You only have %1$d credits, but this operation requires %2$d credits.'
+							),
+							credits,
+							count
+						)
+					)
+				)
 			}
-
-			message = `
-            <p>Are you sure you want to ${actionDescription}?</p>
-            <p class="mt-2 text-xs text-gray-500 italic">Cost: ${count} ForVoyez credit${count !== 1 ? 's' : ''}</p>
-            <p class="text-xs text-gray-500 italic">You currently have ${creditsInfo.credits} credit${creditsInfo.credits !== 1 ? 's' : ''} remaining.</p>
-            ${creditsWarning}
-        `
-
-			showConfirmModal(message, function () {
-				analyzeBulkImages(imageIds)
-			})
-			// Also refresh credits in case they're stale
-			refreshCredits()
-			return
 		}
 
-		// Get current token info
-		$.ajax({
-			url: forvoyezData.ajaxurl,
-			type: 'POST',
-			data: {
-				action: 'forvoyez_get_credits',
-				nonce: forvoyezData.verifyAjaxRequestNonce,
-			},
-			success: function (response) {
-				if (response.success) {
-					const credits = response.data.credits
-
-					switch (type) {
-						case 'selected':
-							actionDescription = `analyze ${count} selected image(s)`
-							break
-						case 'missing_all':
-							actionDescription = `analyze ${count} image(s) with missing alt text, title, or caption`
-							break
-						case 'missing_alt':
-							actionDescription = `analyze ${count} image(s) with missing alt text`
-							break
-						case 'all':
-							actionDescription = `analyze all ${count} image(s)`
-							break
-					}
-
-					let creditsWarning = ''
-					if (count > credits) {
-						creditsWarning = `<p class="mt-2 text-xs text-red-500 font-bold">Warning: You only have ${credits} credits, but this operation requires ${count} credits.</p>`
-					}
-
-					message = `
-					<p>Are you sure you want to ${actionDescription}?</p>
-					<p class="mt-2 text-xs text-gray-500 italic">Cost: ${count} ForVoyez credit${count !== 1 ? 's' : ''}</p>
-					<p class="text-xs text-gray-500 italic">You currently have ${credits} credit${credits !== 1 ? 's' : ''} remaining.</p>
-					${creditsWarning}
-					`
-
-					showConfirmModal(message, function () {
-						analyzeBulkImages(imageIds)
-					})
-				} else {
-					// Fallback to original confirmation if we can't get credits
-					let actionDescription
-					switch (type) {
-						case 'selected':
-							actionDescription = `analyze ${count} selected image(s)`
-							break
-						case 'missing_all':
-							actionDescription = `analyze ${count} image(s) with missing alt text, title, or caption`
-							break
-						case 'missing_alt':
-							actionDescription = `analyze ${count} image(s) with missing alt text`
-							break
-						case 'all':
-							actionDescription = `analyze all ${count} image(s)`
-							break
-					}
-
-					message = `
-					<p>Are you sure you want to ${actionDescription}?</p>
-					<p class="mt-2 text-xs text-gray-500 italic">Cost: ${count} ForVoyez credit${count !== 1 ? 's' : ''}</p>
-					`
-
-					showConfirmModal(message, function () {
-						analyzeBulkImages(imageIds)
-					})
-				}
-			},
-			error: function () {
-				// Fallback to original confirmation if error
-				let actionDescription
-				switch (type) {
-					case 'selected':
-						actionDescription = `analyze ${count} selected image(s)`
-						break
-					case 'missing_all':
-						actionDescription = `analyze ${count} image(s) with missing alt text, title, or caption`
-						break
-					case 'missing_alt':
-						actionDescription = `analyze ${count} image(s) with missing alt text`
-						break
-					case 'all':
-						actionDescription = `analyze all ${count} image(s)`
-						break
-				}
-
-				message = `
-				<p>Are you sure you want to ${actionDescription}?</p>
-				<p class="mt-2 text-xs text-gray-500 italic">Cost: ${count} ForVoyez credit${count !== 1 ? 's' : ''}</p>
-				`
-
-				showConfirmModal(message, function () {
-					analyzeBulkImages(imageIds)
-				})
-			},
+		showConfirmModal(content, function () {
+			analyzeBulkImages(imageIds)
 		})
+		// Also refresh credits in case they're stale
+		refreshCredits()
 	}
 
 	window.showNotification = showNotification

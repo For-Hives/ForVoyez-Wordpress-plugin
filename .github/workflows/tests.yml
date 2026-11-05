@@ -187,6 +187,7 @@ jobs:
           assets/css/tailwind-utilities.css
           assets/icon-256x256.png
           assets/js/admin-script.js
+          assets/js/i18n.js
           assets/js/media-script.js
           assets/logo.webp
           assets/screenshot-1.png
@@ -201,16 +202,11 @@ jobs:
           includes/forvoyez-helpers.php
           languages/auto-alt-text-for-images-de_DE.mo
           languages/auto-alt-text-for-images-de_DE.po
-          languages/auto-alt-text-for-images-en_US.mo
-          languages/auto-alt-text-for-images-en_US.po
           languages/auto-alt-text-for-images-es_ES.mo
           languages/auto-alt-text-for-images-es_ES.po
           languages/auto-alt-text-for-images-fr_FR.mo
           languages/auto-alt-text-for-images-fr_FR.po
           languages/auto-alt-text-for-images.pot
-          languages/readme-de_DE.txt
-          languages/readme-es_ES.txt
-          languages/readme-fr_FR.txt
           readme.txt
           templates/admin-page.php
           templates/api-settings-modal.php
@@ -226,6 +222,64 @@ jobs:
             echo "::error::The plugin zip differs from the expected list (- expected, + built)"
             exit 1
           fi
+
+  translations:
+    name: POT matches the code, translations complete
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: wp-cli
+          coverage: none
+
+      - name: Install gettext
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gettext
+
+      # Same command as deploy.yaml: a string added to the code without
+      # running `composer run make-pot` (and translating it) fails here,
+      # instead of reaching wordpress.org untranslated.
+      - name: Compare the committed POT with the strings of the code
+        run: |
+          wp i18n make-pot . "$RUNNER_TEMP/code.pot" --domain=auto-alt-text-for-images --slug=auto-alt-text-for-images
+          ids() {
+            msgcat --no-location --no-wrap --sort-output "$1" | grep -E '^(msgctxt|msgid|msgid_plural) '
+          }
+          if ! diff -u <(ids languages/auto-alt-text-for-images.pot) <(ids "$RUNNER_TEMP/code.pot"); then
+            echo "::error file=languages/auto-alt-text-for-images.pot::Out of date (- committed, + code): run composer run make-pot, msgmerge the .po files, translate and msgfmt"
+            exit 1
+          fi
+
+      - name: Every .po translates the POT, without fuzzy entries
+        run: |
+          status=0
+          for po in languages/*.po; do
+            msgfmt --check -o /dev/null "$po" || status=1
+            missing=$(msgcmp --use-untranslated "$po" languages/auto-alt-text-for-images.pot 2>&1 >/dev/null) || {
+              echo "::error file=$po::Strings of the POT missing from $po"; echo "$missing"; status=1; }
+            untranslated=$(msgattrib --untranslated --no-obsolete "$po" | grep -c '^msgid ' || true)
+            fuzzy=$(msgattrib --only-fuzzy --no-obsolete "$po" | grep -c '^msgid ' || true)
+            # msgattrib prints the header entry along with any match (and only then).
+            if [ "$untranslated" -gt 1 ]; then
+              echo "::error file=$po::$((untranslated - 1)) untranslated strings"
+              msgattrib --untranslated --no-obsolete "$po"
+              status=1
+            fi
+            if [ "$fuzzy" -gt 1 ]; then
+              echo "::error file=$po::$((fuzzy - 1)) fuzzy strings"
+              msgattrib --only-fuzzy --no-obsolete "$po"
+              status=1
+            fi
+          done
+          exit $status
 
   release-guard:
     name: Merging publishes no unexpected version

@@ -45,7 +45,11 @@ class TestForvoyezOutputEscaping extends WP_UnitTestCase
 		'Processing...' => 'L\'analyse <i>"en cours"</i>',
 		'Complete!' => '</script><script>alert(1)</script>',
 		'ForVoyez: Ready to analyze %d images.' => '<b>%d</b> images ready',
-		'ForVoyez: Successfully queued %d images for analysis.' => '<img src=x onerror=alert(1)> %d queued',
+		'Image Metadata Status:' => '<b>Status</b>',
+		'Alt Text Status' => '"><img src=x onerror=alert(1)>',
+		'Missing alt text' => '"><img src=x onerror=alert(2)>',
+		'Title' => '<i>Title</i>',
+		'This tool uses AI to analyze your image and generate optimized metadata like alt text, title, and caption. Click the button below to automatically generate SEO-friendly metadata for this image.' => '<u>AI</u>',
 		'Warning: This operation requires %1$d credits, but you only have %2$d credits available.' => '<u>Need %1$d, have %2$d</u>',
 		'You only have %d credits remaining. Please consider recharging to continue using the ForVoyez service.' => '<script>alert(%d)</script>',
 	];
@@ -166,21 +170,35 @@ class TestForvoyezOutputEscaping extends WP_UnitTestCase
 		$this->assertStringContainsString('<span class="forvoyez-credit-count credits-warning">15</span>', $html);
 	}
 
-	public function test_admin_notices_escape_translations()
+	/**
+	 * forvoyez_admin_notices() printed "Successfully queued N images" next to
+	 * the real bulk notice although nothing was queued, and its other branch
+	 * read a transient that nothing writes. It is gone: one notice remains.
+	 */
+	public function test_bulk_action_redirect_prints_a_single_notice()
 	{
-		$_REQUEST = [ 'forvoyez_bulk_analyze' => '3' ];
+		$this->assertFalse(function_exists('forvoyez_admin_notices'));
+		$this->assertFalse(function_exists('forvoyez_get_bulk_images'));
+		$this->assertFalse(has_action('wp_ajax_forvoyez_get_bulk_images'));
+		$this->assertSame(10, has_action('admin_notices', 'forvoyez_bulk_analysis_notice'));
+	}
 
-		$queued = $this->capture('forvoyez_admin_notices');
-		set_transient('forvoyez_bulk_analyze_images', [ 7, 8, 9 ]);
-		$ready = $this->capture('forvoyez_admin_notices');
+	public function test_analyze_button_escapes_translations()
+	{
+		$image_id = self::factory()->attachment->create_object([
+			'file' => 'photo.jpg',
+			'post_mime_type' => 'image/jpeg',
+		]);
 
-		$this->assertSame(
-			'<div class="notice notice-success is-dismissible"><p>&lt;img src=x onerror=alert(1)&gt; 3 queued</p></div>',
-			$queued,
-		);
-		$this->assert_no_raw_markup($ready);
-		$this->assertStringContainsString('&lt;b&gt;3&lt;/b&gt; images ready', $ready);
-		$this->assertStringContainsString('<span id="forvoyez-bulk-progress-text">0 / 3 images processed</span>', $ready);
+		$html = forvoyez_add_analyze_button([], get_post($image_id))['forvoyez_analyze']['html'];
+
+		$this->assert_no_raw_markup($html);
+		$this->assertStringNotContainsString('onerror=alert(1)>', $html);
+		$this->assertStringContainsString('&lt;b&gt;Status&lt;/b&gt;', $html);
+		$this->assertStringContainsString('title="&quot;&gt;&lt;img src=x onerror=alert(1)&gt;"', $html);
+		$this->assertStringContainsString('title="&quot;&gt;&lt;img src=x onerror=alert(2)&gt;"', $html);
+		$this->assertStringContainsString('<span class="status-label">&lt;i&gt;Title&lt;/i&gt;</span>', $html);
+		$this->assertStringContainsString('&lt;u&gt;AI&lt;/u&gt;', $html);
 	}
 
 	public function test_bulk_results_summary_does_not_run_a_translation_as_javascript()
