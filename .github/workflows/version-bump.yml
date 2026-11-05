@@ -42,7 +42,7 @@ jobs:
       # The built-in GITHUB_TOKEN (contents: write) pushes the release commit
       # and tag, so no personal access token is needed. Its pushes start no
       # other workflow, which is why the deploy job below calls deploy.yaml.
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 0
 
