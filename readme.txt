@@ -72,6 +72,12 @@ The AI can generate content in multiple languages. You can specify your preferre
 3. Results Example - Showcase of automatically generated alt text, titles, and captions for various image types.
 
 == Changelog ==
+= 1.1.45 =
+* Fix: the messages, confirmations, credit counter and analysis status shown by the plugin scripts are now translated (French, German and Spanish included) instead of always in English.
+* Fix: the ForVoyez fields of the media library and several error messages are now translatable.
+* Fix: the media-library bulk action no longer claims that images were queued for analysis before you start it.
+* Fix: the analysis confirmation no longer shows "null credits" while the credits are loading.
+
 = 1.1.44 =
 * Security: an image listing action now checks the user's permissions, not only the security token.
 * Security: values from translations and from the ForVoyez API can no longer run as code in the admin pages.

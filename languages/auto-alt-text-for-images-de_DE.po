@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Auto Alt Text for Images 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/auto-alt-text-for-"
 "images\n"
-"POT-Creation-Date: 2026-11-05T16:30:31+00:00\n"
+"POT-Creation-Date: 2026-11-05T16:44:20+00:00\n"
 "PO-Revision-Date: 2026-11-05 18:00+0100\n"
 "Last-Translator: Cinquin Andy <contact@andy-cinquin.fr>\n"
 "Language-Team: ForVoyez <contact@forvoyez.com>\n"
@@ -55,7 +55,9 @@ msgstr "Alt-Text"
 msgid "Has alt text"
 msgstr "Alt-Text vorhanden"
 
-#: auto-alt-text-for-images.php:412 includes/forvoyez-helpers.php:449
+#: auto-alt-text-for-images.php:412
+#: includes/class-forvoyez-image-renderer.php:232
+#: includes/forvoyez-helpers.php:449
 msgid "Missing alt text"
 msgstr "Alt-Text fehlt"
 
@@ -67,7 +69,9 @@ msgstr "Titel"
 msgid "Has title"
 msgstr "Titel vorhanden"
 
-#: auto-alt-text-for-images.php:418 includes/forvoyez-helpers.php:451
+#: auto-alt-text-for-images.php:418
+#: includes/class-forvoyez-image-renderer.php:233
+#: includes/forvoyez-helpers.php:451
 msgid "Missing title"
 msgstr "Titel fehlt"
 
@@ -79,7 +83,9 @@ msgstr "Bildunterschrift"
 msgid "Has caption"
 msgstr "Bildunterschrift vorhanden"
 
-#: auto-alt-text-for-images.php:424 includes/forvoyez-helpers.php:450
+#: auto-alt-text-for-images.php:424
+#: includes/class-forvoyez-image-renderer.php:234
+#: includes/forvoyez-helpers.php:450
 msgid "Missing caption"
 msgstr "Bildunterschrift fehlt"
 
@@ -344,11 +350,6 @@ msgstr "Bildunterschrift:"
 #: includes/class-forvoyez-image-renderer.php:213 templates/admin-page.php:82
 msgid "All Complete"
 msgstr "Alles vollständig"
-
-#. translators: %s: Metadata type (Alt, Title, or Caption)
-#: includes/class-forvoyez-image-renderer.php:234
-msgid "Missing %s"
-msgstr "%s fehlt"
 
 #: includes/class-forvoyez-image-renderer.php:274
 msgid "Analyze"

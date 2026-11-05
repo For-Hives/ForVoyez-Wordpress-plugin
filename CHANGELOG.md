@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.45
+
+### Fixed
+
+- All the texts of the admin scripts (`assets/js/admin-script.js`, `assets/js/media-script.js`) were in English whatever the site language: notifications, the analysis confirmation, the credits widget, the progress messages and the media-library analysis status. They now come from `forvoyezL10n` (`assets/js/i18n.js`), built in PHP with `__()` and `_n_noop()` (`forvoyez_get_js_translations()`), with plural forms per language and numbered placeholders, and the scripts write them as text, never as HTML.
+- The ForVoyez fields of the attachment details ("Image Metadata Status:", the status tooltips, the description, the button), the "ForVoyez Credits:" label of the bulk notice, the "Missing …" tooltips of the image list and several AJAX messages ("Invalid nonce", "Permission denied", "Automatic image analysis toggled successfully") are now translatable.
+- The confirmation of an analysis no longer shows "null credits" when the credits are not loaded yet: it then only shows the cost.
+- The media-library bulk action no longer shows "Successfully queued N images for analysis" next to the real notice: nothing was queued. The notice branch and the `forvoyez_get_bulk_images` AJAX action that read the `forvoyez_bulk_analyze_images` transient, which nothing writes, are removed.
+- French, German and Spanish translations of the 58 new strings, among them "Too many images in one request", which was missing from the POT. Six strings no code used any more are gone.
+
+### Changed
+
+- The plugin header declares `Domain Path: /languages`.
+- `languages/` no longer ships the `en_US` files (identical to the English source) nor the `readme-xx.txt` files, which WordPress.org does not read.
+
+### Development
+
+- A `translations` CI job fails when the committed POT differs from the strings of the code (`wp i18n make-pot`) or when a `.po` file has an untranslated, missing or fuzzy string.
+- `TestForvoyezJsTranslations` checks that every string of the scripts is listed in `forvoyez_get_js_translations()` under its English text, and `tests/js/html-sinks.test.js` that the scripts write translations containing markup as text.
+
 ## 1.1.44
 
 ### Security

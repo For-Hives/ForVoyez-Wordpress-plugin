@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Auto Alt Text for Images 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/auto-alt-text-for-"
 "images\n"
-"POT-Creation-Date: 2026-11-05T16:30:31+00:00\n"
+"POT-Creation-Date: 2026-11-05T16:44:20+00:00\n"
 "PO-Revision-Date: 2026-11-05 18:00+0100\n"
 "Last-Translator: Cinquin Andy <contact@andy-cinquin.fr>\n"
 "Language-Team: ForVoyez <contact@forvoyez.com>\n"
@@ -55,7 +55,9 @@ msgstr "Texte alternatif"
 msgid "Has alt text"
 msgstr "Texte alternatif renseigné"
 
-#: auto-alt-text-for-images.php:412 includes/forvoyez-helpers.php:449
+#: auto-alt-text-for-images.php:412
+#: includes/class-forvoyez-image-renderer.php:232
+#: includes/forvoyez-helpers.php:449
 msgid "Missing alt text"
 msgstr "Texte alternatif manquant"
 
@@ -67,7 +69,9 @@ msgstr "Titre"
 msgid "Has title"
 msgstr "Titre renseigné"
 
-#: auto-alt-text-for-images.php:418 includes/forvoyez-helpers.php:451
+#: auto-alt-text-for-images.php:418
+#: includes/class-forvoyez-image-renderer.php:233
+#: includes/forvoyez-helpers.php:451
 msgid "Missing title"
 msgstr "Titre manquant"
 
@@ -79,7 +83,9 @@ msgstr "Légende"
 msgid "Has caption"
 msgstr "Légende renseignée"
 
-#: auto-alt-text-for-images.php:424 includes/forvoyez-helpers.php:450
+#: auto-alt-text-for-images.php:424
+#: includes/class-forvoyez-image-renderer.php:234
+#: includes/forvoyez-helpers.php:450
 msgid "Missing caption"
 msgstr "Légende manquante"
 
@@ -344,11 +350,6 @@ msgstr "Légende :"
 #: includes/class-forvoyez-image-renderer.php:213 templates/admin-page.php:82
 msgid "All Complete"
 msgstr "Tout est complet"
-
-#. translators: %s: Metadata type (Alt, Title, or Caption)
-#: includes/class-forvoyez-image-renderer.php:234
-msgid "Missing %s"
-msgstr "%s manquant"
 
 #: includes/class-forvoyez-image-renderer.php:274
 msgid "Analyze"
@@ -866,7 +867,7 @@ msgstr "Tableau de bord"
 
 #: templates/dashboard-tab.php:13
 msgid "Overview of your Auto Alt Text for Images"
-msgstr "Aperçu du détail de vos metadata pour vos images"
+msgstr "Aperçu des métadonnées de vos images"
 
 #: templates/dashboard-tab.php:23
 msgid "Total Images"

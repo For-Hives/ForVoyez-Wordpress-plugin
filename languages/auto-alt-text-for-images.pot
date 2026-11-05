@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-05T16:30:31+00:00\n"
+"POT-Creation-Date: 2026-11-05T16:44:20+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: auto-alt-text-for-images\n"
@@ -53,6 +53,7 @@ msgid "Has alt text"
 msgstr ""
 
 #: auto-alt-text-for-images.php:412
+#: includes/class-forvoyez-image-renderer.php:232
 #: includes/forvoyez-helpers.php:449
 msgid "Missing alt text"
 msgstr ""
@@ -68,6 +69,7 @@ msgid "Has title"
 msgstr ""
 
 #: auto-alt-text-for-images.php:418
+#: includes/class-forvoyez-image-renderer.php:233
 #: includes/forvoyez-helpers.php:451
 msgid "Missing title"
 msgstr ""
@@ -83,6 +85,7 @@ msgid "Has caption"
 msgstr ""
 
 #: auto-alt-text-for-images.php:424
+#: includes/class-forvoyez-image-renderer.php:234
 #: includes/forvoyez-helpers.php:450
 msgid "Missing caption"
 msgstr ""
@@ -336,11 +339,6 @@ msgstr ""
 #: includes/class-forvoyez-image-renderer.php:213
 #: templates/admin-page.php:82
 msgid "All Complete"
-msgstr ""
-
-#. translators: %s: Metadata type (Alt, Title, or Caption)
-#: includes/class-forvoyez-image-renderer.php:234
-msgid "Missing %s"
 msgstr ""
 
 #: includes/class-forvoyez-image-renderer.php:274
