@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-05T16:44:20+00:00\n"
+"POT-Creation-Date: 2026-11-05T17:07:41+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: auto-alt-text-for-images\n"
@@ -95,7 +95,7 @@ msgid "Image Metadata Status:"
 msgstr ""
 
 #: auto-alt-text-for-images.php:536
-#: auto-alt-text-for-images.php:619
+#: auto-alt-text-for-images.php:628
 #: includes/forvoyez-helpers.php:438
 msgid "ForVoyez Credits:"
 msgstr ""
@@ -119,13 +119,24 @@ msgstr ""
 msgid "This tool uses AI to analyze your image and generate optimized metadata like alt text, title, and caption. Click the button below to automatically generate SEO-friendly metadata for this image."
 msgstr ""
 
-#. translators: 1: number of credits needed, 2: number of credits available
-#: auto-alt-text-for-images.php:597
-msgid "Warning: This operation requires %1$d credits, but you only have %2$d credits available."
-msgstr ""
+#. translators: %d: number of credits the analysis needs
+#: auto-alt-text-for-images.php:600
+#: includes/forvoyez-helpers.php:481
+msgid "Warning: This operation requires %d credit."
+msgid_plural "Warning: This operation requires %d credits."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of credits left
+#: auto-alt-text-for-images.php:604
+#: includes/forvoyez-helpers.php:485
+msgid "You only have %d credit left."
+msgid_plural "You only have %d credits left."
+msgstr[0] ""
+msgstr[1] ""
 
 #. translators: %d: number of images
-#: auto-alt-text-for-images.php:608
+#: auto-alt-text-for-images.php:617
 #: tests/TestForvoyezTranslations.php:140
 #: tests/TestForvoyezTranslations.php:141
 #: tests/TestForvoyezTranslations.php:144
@@ -135,41 +146,36 @@ msgid_plural "ForVoyez: Ready to analyze %d images."
 msgstr[0] ""
 msgstr[1] ""
 
-#: auto-alt-text-for-images.php:627
+#: auto-alt-text-for-images.php:636
 msgid "Start Analysis"
 msgstr ""
 
-#: auto-alt-text-for-images.php:630
+#: auto-alt-text-for-images.php:639
 #: templates/admin-page.php:199
 msgid "Cancel"
 msgstr ""
 
-#: auto-alt-text-for-images.php:645
+#: auto-alt-text-for-images.php:654
 msgid "Dismiss"
 msgstr ""
 
-#: auto-alt-text-for-images.php:677
+#: auto-alt-text-for-images.php:686
 msgid "Processing..."
 msgstr ""
 
-#: auto-alt-text-for-images.php:693
-msgid "Complete!"
-msgstr ""
-
-#: auto-alt-text-for-images.php:699
-msgid "Analysis completed!"
-msgstr ""
-
-#: auto-alt-text-for-images.php:700
-#: auto-alt-text-for-images.php:747
-#: auto-alt-text-for-images.php:764
-msgid "successful"
-msgstr ""
-
+#. translators: 1: number of images analyzed, 2: number of images that failed
 #: auto-alt-text-for-images.php:701
-#: auto-alt-text-for-images.php:748
-#: auto-alt-text-for-images.php:765
-msgid "failed"
+#: includes/forvoyez-helpers.php:410
+msgid "Analysis complete. Successful: %1$d, Failed: %2$d"
+msgstr ""
+
+#. translators: 1: number of images analyzed, 2: number of images that failed
+#: auto-alt-text-for-images.php:702
+msgid "Successful: %1$d, Failed: %2$d"
+msgstr ""
+
+#: auto-alt-text-for-images.php:710
+msgid "Complete!"
 msgstr ""
 
 #: includes/class-forvoyez-admin.php:57
@@ -424,11 +430,6 @@ msgstr ""
 msgid "An error occurred. Please try again."
 msgstr ""
 
-#. translators: 1: number of images analyzed, 2: number of images that failed
-#: includes/forvoyez-helpers.php:410
-msgid "Analysis complete. Successful: %1$d, Failed: %2$d"
-msgstr ""
-
 #: includes/forvoyez-helpers.php:411
 msgid "Analysis complete! Metadata has been updated."
 msgstr ""
@@ -510,7 +511,7 @@ msgstr ""
 msgid "Loading subscription status..."
 msgstr ""
 
-#. translators: %s: "recharge now" link
+#. translators: %s: "recharge now" link. Keep %s (or %1$s): the link goes there.
 #: includes/forvoyez-helpers.php:446
 msgid "Low credits! Please %s."
 msgstr ""
@@ -546,55 +547,50 @@ msgstr ""
 msgid "Unknown error occurred"
 msgstr ""
 
-#. translators: 1: number of credits left, 2: number of credits the analysis needs
-#: includes/forvoyez-helpers.php:464
-msgid "Warning: You only have %1$d credits, but this operation requires %2$d credits."
-msgstr ""
-
 #. translators: %d: number of images
-#: includes/forvoyez-helpers.php:469
+#: includes/forvoyez-helpers.php:467
 msgid "Are you sure you want to analyze %d image?"
 msgid_plural "Are you sure you want to analyze all %d images?"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of images
-#: includes/forvoyez-helpers.php:471
+#: includes/forvoyez-helpers.php:469
 msgid "Are you sure you want to analyze %d image with missing alt text?"
 msgid_plural "Are you sure you want to analyze %d images with missing alt text?"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of images
-#: includes/forvoyez-helpers.php:473
+#: includes/forvoyez-helpers.php:471
 msgid "Are you sure you want to analyze %d image with missing alt text, title, or caption?"
 msgid_plural "Are you sure you want to analyze %d images with missing alt text, title, or caption?"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of images
-#: includes/forvoyez-helpers.php:475
+#: includes/forvoyez-helpers.php:473
 msgid "Are you sure you want to analyze %d selected image?"
 msgid_plural "Are you sure you want to analyze %d selected images?"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of credits
-#: includes/forvoyez-helpers.php:477
+#: includes/forvoyez-helpers.php:475
 msgid "Cost: %d ForVoyez credit"
 msgid_plural "Cost: %d ForVoyez credits"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: 1: number of images shown, 2: number of images matching the filters
-#: includes/forvoyez-helpers.php:479
+#: includes/forvoyez-helpers.php:477
 msgid "Displaying %1$d of %2$d image"
 msgid_plural "Displaying %1$d of %2$d images"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of images
-#: includes/forvoyez-helpers.php:481
+#: includes/forvoyez-helpers.php:479
 msgid "Starting analysis of %d image..."
 msgid_plural "Starting analysis of %d images..."
 msgstr[0] ""

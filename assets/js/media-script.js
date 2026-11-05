@@ -93,7 +93,7 @@
 						// Show error message
 						showStatusError(
 							$statusArea,
-							response.data ? response.data.message : t('Unknown error')
+							(response.data && response.data.message) || t('Unknown error')
 						)
 					}
 				},

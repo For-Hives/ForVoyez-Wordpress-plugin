@@ -8,9 +8,13 @@ All notable changes to this project will be documented in this file.
 
 - All the texts of the admin scripts (`assets/js/admin-script.js`, `assets/js/media-script.js`) were in English whatever the site language: notifications, the analysis confirmation, the credits widget, the progress messages and the media-library analysis status. They now come from `forvoyezL10n` (`assets/js/i18n.js`), built in PHP with `__()` and `_n_noop()` (`forvoyez_get_js_translations()`), with plural forms per language and numbered placeholders, and the scripts write them as text, never as HTML.
 - The ForVoyez fields of the attachment details ("Image Metadata Status:", the status tooltips, the description, the button), the "ForVoyez Credits:" label of the bulk notice, the "Missing …" tooltips of the image list and several AJAX messages ("Invalid nonce", "Permission denied", "Automatic image analysis toggled successfully") are now translatable.
+- The "not enough credits" warnings (analysis confirmation and media-library bulk notice) said "1 credits" and could not be translated with a plural: they are now two sentences, "This operation requires %d credit(s)." and "You only have %d credit(s) left.", each with its own plural form.
+- The results and progress of the media-library bulk action were assembled from separate words ("successful", "failed") in a fixed order. They are now whole sentences with numbered placeholders ("Analysis complete. Successful: %1$d, Failed: %2$d"), JSON-encoded with `JSON_HEX_TAG` and written with `.text()` instead of `.html()`.
+- The media modal no longer shows "Error:" followed by nothing when the server answers an error without a message.
+- German: "Displaying %1$d of %2$d images" no longer conjugates the verb on the total. French, German and Spanish wording fixes ("Crédits faibles !", "Nur noch wenige Credits!", the Spanish attachment description).
 - The confirmation of an analysis no longer shows "null credits" when the credits are not loaded yet: it then only shows the cost.
 - The media-library bulk action no longer shows "Successfully queued N images for analysis" next to the real notice: nothing was queued. The notice branch and the `forvoyez_get_bulk_images` AJAX action that read the `forvoyez_bulk_analyze_images` transient, which nothing writes, are removed.
-- French, German and Spanish translations of the 58 new strings, among them "Too many images in one request", which was missing from the POT. Six strings no code used any more are gone.
+- French, German and Spanish translations of the new strings, among them "Too many images in one request", which was missing from the POT. The strings no code uses any more are gone.
 
 ### Changed
 
@@ -20,6 +24,7 @@ All notable changes to this project will be documented in this file.
 ### Development
 
 - A `translations` CI job fails when the committed POT differs from the strings of the code (`wp i18n make-pot`) or when a `.po` file has an untranslated, missing or fuzzy string.
+- The `translations` job also fails when a `.mo` file is not the compiled version of its `.po`.
 - `TestForvoyezJsTranslations` checks that every string of the scripts is listed in `forvoyez_get_js_translations()` under its English text, and `tests/js/html-sinks.test.js` that the scripts write translations containing markup as text.
 
 ## 1.1.44

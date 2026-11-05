@@ -76,6 +76,7 @@ The AI can generate content in multiple languages. You can specify your preferre
 * Fix: the messages, confirmations, credit counter and analysis status shown by the plugin scripts are now translated (French, German and Spanish included) instead of always in English.
 * Fix: the ForVoyez fields of the media library and several error messages are now translatable.
 * Fix: the media-library bulk action no longer claims that images were queued for analysis before you start it.
+* Fix: the warnings about missing credits and the results of the media-library bulk action use real plurals and whole sentences that translators can reorder.
 * Fix: the analysis confirmation no longer shows "null credits" while the credits are loading.
 
 = 1.1.44 =
@@ -190,6 +191,9 @@ This is the first release of ForVoyez Auto Alt Text for Images. Install now to s
 * User-friendly admin interface
 
 == Upgrade Notice ==
+
+= 1.1.45 =
+Translations of all plugin screens and messages, French, German and Spanish included.
 
 = 1.1.44 =
 Security hardening of the admin pages. Recommended for all users.

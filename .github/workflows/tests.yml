@@ -278,6 +278,12 @@ jobs:
               msgattrib --only-fuzzy --no-obsolete "$po"
               status=1
             fi
+            # The .mo is what WordPress loads: it must be the compiled .po.
+            mo="${po%.po}.mo"
+            if ! cmp -s <(msgunfmt "$mo") <(msgfmt -o - "$po" | msgunfmt); then
+              echo "::error file=$mo::Out of date: run msgfmt -o $mo $po"
+              status=1
+            fi
           done
           exit $status
 

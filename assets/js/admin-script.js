@@ -285,8 +285,8 @@
 			text: t('recharge now'),
 		})
 
-		// The link takes the place of %s; the text around it stays text.
-		const parts = t('Low credits! Please %s.').split('%s')
+		// The link takes the place of %s (or %1$s); the text around it stays text.
+		const parts = t('Low credits! Please %s.').split(/%(?:1\$)?s/)
 		const $warning = $('<span>').append(document.createTextNode(parts[0]))
 		if (parts.length > 1) {
 			$warning.append($link, document.createTextNode(parts.slice(1).join('')))
@@ -1069,12 +1069,22 @@
 				content.push(
 					$('<p>', { class: 'mt-2 text-xs text-red-500 font-bold' }).text(
 						format(
-							t(
-								'Warning: You only have %1$d credits, but this operation requires %2$d credits.'
+							n(
+								'Warning: This operation requires %d credit.',
+								'Warning: This operation requires %d credits.',
+								count
 							),
-							credits,
 							count
-						)
+						) +
+							' ' +
+							format(
+								n(
+									'You only have %d credit left.',
+									'You only have %d credits left.',
+									credits
+								),
+								credits
+							)
 					)
 				)
 			}

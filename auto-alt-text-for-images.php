@@ -594,7 +594,16 @@ function forvoyez_bulk_analysis_notice() {
 	// Warning if not enough credits
 	$warning = '';
 	if ($credits !== '?' && $credits < $count) {
-		$warning = sprintf(/* translators: 1: number of credits needed, 2: number of credits available */ __('Warning: This operation requires %1$d credits, but you only have %2$d credits available.', 'auto-alt-text-for-images'), $count, $credits);
+		// Two sentences, each with its own plural: the counts differ.
+		$warning = sprintf(
+			/* translators: %d: number of credits the analysis needs */
+			_n('Warning: This operation requires %d credit.', 'Warning: This operation requires %d credits.', $count, 'auto-alt-text-for-images'),
+			$count
+		) . ' ' . sprintf(
+			/* translators: %d: number of credits left */
+			_n('You only have %d credit left.', 'You only have %d credits left.', (int) $credits, 'auto-alt-text-for-images'),
+			(int) $credits
+		);
 	}
 
 	// Create the notice
@@ -684,6 +693,14 @@ function forvoyez_bulk_analysis_notice() {
                 let successCount = 0;
                 let errorCount = 0;
 
+                // Whole sentences, so translators can reorder the counts.
+                // Written with .text(): a translation is never HTML.
+                function withCounts(text) {
+                    return text.replace('%1$d', successCount).replace('%2$d', errorCount);
+                }
+                const summaryText = <?php echo wp_json_encode(/* translators: 1: number of images analyzed, 2: number of images that failed */ __('Analysis complete. Successful: %1$d, Failed: %2$d', 'auto-alt-text-for-images'), JSON_HEX_TAG | JSON_HEX_AMP); ?>;
+                const progressText = <?php echo wp_json_encode(/* translators: 1: number of images analyzed, 2: number of images that failed */ __('Successful: %1$d, Failed: %2$d', 'auto-alt-text-for-images'), JSON_HEX_TAG | JSON_HEX_AMP); ?>;
+
                 function processBatch(startIndex) {
                     const endIndex = Math.min(startIndex + batchSize, imageIds.length);
                     const batch = imageIds.slice(startIndex, endIndex);
@@ -692,14 +709,12 @@ function forvoyez_bulk_analysis_notice() {
                         // All done
                         $('#forvoyez-progress-status').text('<?php echo esc_js(__('Complete!', 'auto-alt-text-for-images')); ?>');
                         $('#forvoyez-bulk-results').show();
-                        // String literals, not a template literal: esc_js() does not
-                        // protect ${ } or backticks in a translation.
-                        $('#forvoyez-results-summary').html(
-                            '<div class="notice-success" style="padding: 8px; margin-bottom: 10px; border-left: 4px solid #46b450;">' +
-                            <?php echo wp_json_encode(esc_html__('Analysis completed!', 'auto-alt-text-for-images')); ?> + ' ' +
-                            successCount + ' ' + <?php echo wp_json_encode(esc_html__('successful', 'auto-alt-text-for-images')); ?> + ', ' +
-                            errorCount + ' ' + <?php echo wp_json_encode(esc_html__('failed', 'auto-alt-text-for-images')); ?> + '.' +
-                            '</div>'
+                        $('#forvoyez-results-summary').empty().append(
+                            $('<div>', {
+                                'class': 'notice-success',
+                                style: 'padding: 8px; margin-bottom: 10px; border-left: 4px solid #46b450;',
+                                text: withCounts(summaryText)
+                            })
                         );
 
                         // Update credit count
@@ -743,10 +758,7 @@ function forvoyez_bulk_analysis_notice() {
                             const percent = Math.round((processedCount / imageIds.length) * 100);
                             $('#forvoyez-progress-bar').css('width', percent + '%');
                             $('#forvoyez-progress-count').text(processedCount + ' / ' + imageIds.length);
-                            $('#forvoyez-progress-status').text(
-                                successCount + ' <?php echo esc_js(__('successful', 'auto-alt-text-for-images')); ?>, ' +
-                                errorCount + ' <?php echo esc_js(__('failed', 'auto-alt-text-for-images')); ?>'
-                            );
+                            $('#forvoyez-progress-status').text(withCounts(progressText));
 
                             // Process next batch
                             processBatch(endIndex);
@@ -760,10 +772,7 @@ function forvoyez_bulk_analysis_notice() {
                             const percent = Math.round((processedCount / imageIds.length) * 100);
                             $('#forvoyez-progress-bar').css('width', percent + '%');
                             $('#forvoyez-progress-count').text(processedCount + ' / ' + imageIds.length);
-                            $('#forvoyez-progress-status').text(
-                                successCount + ' <?php echo esc_js(__('successful', 'auto-alt-text-for-images')); ?>, ' +
-                                errorCount + ' <?php echo esc_js(__('failed', 'auto-alt-text-for-images')); ?>'
-                            );
+                            $('#forvoyez-progress-status').text(withCounts(progressText));
 
                             // Process next batch
                             processBatch(endIndex);

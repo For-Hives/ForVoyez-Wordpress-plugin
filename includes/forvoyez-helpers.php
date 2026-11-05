@@ -442,7 +442,7 @@ function forvoyez_get_js_translations() {
 		'Has title' => __('Has title', 'auto-alt-text-for-images'),
 		'Language saved successfully' => __('Language saved successfully', 'auto-alt-text-for-images'),
 		'Loading subscription status...' => __('Loading subscription status...', 'auto-alt-text-for-images'),
-		/* translators: %s: "recharge now" link */
+		/* translators: %s: "recharge now" link. Keep %s (or %1$s): the link goes there. */
 		'Low credits! Please %s.' => __('Low credits! Please %s.', 'auto-alt-text-for-images'),
 		/* translators: %d: image ID */
 		'Metadata updated successfully for image %d' => __('Metadata updated successfully for image %d', 'auto-alt-text-for-images'),
@@ -460,8 +460,6 @@ function forvoyez_get_js_translations() {
 		'Unable to load credit information. Please refresh the page or check your API key configuration.' => __('Unable to load credit information. Please refresh the page or check your API key configuration.', 'auto-alt-text-for-images'),
 		'Unknown error' => __('Unknown error', 'auto-alt-text-for-images'),
 		'Unknown error occurred' => __('Unknown error occurred', 'auto-alt-text-for-images'),
-		/* translators: 1: number of credits left, 2: number of credits the analysis needs */
-		'Warning: You only have %1$d credits, but this operation requires %2$d credits.' => __('Warning: You only have %1$d credits, but this operation requires %2$d credits.', 'auto-alt-text-for-images'),
 	];
 
 	$plurals = [
@@ -479,8 +477,12 @@ function forvoyez_get_js_translations() {
 		_n_noop('Displaying %1$d of %2$d image', 'Displaying %1$d of %2$d images', 'auto-alt-text-for-images'),
 		/* translators: %d: number of images */
 		_n_noop('Starting analysis of %d image...', 'Starting analysis of %d images...', 'auto-alt-text-for-images'),
+		/* translators: %d: number of credits the analysis needs */
+		_n_noop('Warning: This operation requires %d credit.', 'Warning: This operation requires %d credits.', 'auto-alt-text-for-images'),
 		/* translators: %d: number of credits */
 		_n_noop('You currently have %d credit remaining.', 'You currently have %d credits remaining.', 'auto-alt-text-for-images'),
+		/* translators: %d: number of credits left */
+		_n_noop('You only have %d credit left.', 'You only have %d credits left.', 'auto-alt-text-for-images'),
 	];
 
 	foreach ($plurals as $nooped) {
