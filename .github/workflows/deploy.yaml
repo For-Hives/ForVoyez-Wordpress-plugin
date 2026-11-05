@@ -46,6 +46,10 @@ jobs:
           # that release tag; github.sha is the commit before the bump there.
           ref: ${{ inputs.version && format('refs/tags/{0}', inputs.version) || github.sha }}
           fetch-depth: 0
+          # npm run build:css executes dependency code in this job: do not leave
+          # the write token in .git/config. Nothing here pushes with git, and
+          # action-gh-release gets the token through env.
+          persist-credentials: false
 
       - name: Install SVN
         run: |
@@ -90,7 +94,7 @@ jobs:
       - name: Install dependencies
         run: |
           composer install --no-dev --optimize-autoloader
-          npm ci
+          npm ci --ignore-scripts
 
       # The admin page loads assets/css/admin-tailwind.css (no CDN). Rebuild it
       # so the SVN copy below ships CSS that matches the templates. The zip

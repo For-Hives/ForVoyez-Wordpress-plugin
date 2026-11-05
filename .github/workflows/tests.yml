@@ -85,6 +85,201 @@ jobs:
       - name: Run PHPUnit (multisite, uninstall)
         run: WP_MULTISITE=1 ./vendor/bin/phpunit --filter TestForvoyezUninstall
 
+  js-tooling:
+    name: ESLint, Prettier and lint-staged
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install npm dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Run ESLint
+        run: npm exec --no -- eslint .
+
+      - name: Check formatting of the scripts
+        run: npm exec --no -- prettier --check assets/js
+
+      # lint-staged runs Prettier and ESLint --fix through its own loader: it
+      # must start with the versions forced by the overrides of package.json.
+      - name: Run lint-staged on an indexed file
+        run: |
+          git config user.name ci
+          git config user.email ci@example.invalid
+          printf 'const a = { b: 1 }\nconsole.log(a)\n' > assets/js/ci-lint-staged-check.js
+          git add assets/js/ci-lint-staged-check.js
+          npm exec --no -- lint-staged
+          git reset --hard --quiet
+
+  php-standards:
+    name: PHP coding standards and PHPCompatibility
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      # phpcs.xml (WordPress-Core, i18n text domain). A wpcs or phpcs bump
+      # that breaks the ruleset fails here instead of on a developer machine.
+      - name: Run PHP_CodeSniffer (phpcs.xml)
+        run: composer run phpcs
+
+      # phpcs.xml sets testVersion but never loads PHPCompatibility: check the
+      # minimum declared in the plugin header and readme.txt separately.
+      # PHPCompatibility 9.3.x has no sniff for PHP 8.x itself (removals and
+      # deprecations up to 7.4 only): PHP 8.0/8.2/8.4 support is proven by
+      # php -l and PHPUnit in the php-tests matrix.
+      - name: Check PHPCompatibilityWP (testVersion 8.0-, sniffs up to PHP 7.4)
+        run: |
+          ./vendor/bin/phpcs --standard=PHPCompatibilityWP --runtime-set testVersion 8.0- \
+            --extensions=php --ignore='vendor/*,node_modules/*' -p .
+
+  package:
+    name: Plugin zip contains exactly the shipped files
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+          coverage: none
+
+      # Same command as deploy.yaml (git ls-files minus .distignore).
+      - name: Build release/auto-alt-text-for-images.zip
+        run: composer run zip
+
+      # Adding or removing a shipped file is a deliberate change: update this
+      # list in the same pull request. A dependency update never ships a file.
+      - name: Compare the zip with the expected file list
+        run: |
+          cat > "$RUNNER_TEMP/expected.txt" <<'LIST'
+          CHANGELOG.md
+          README.md
+          assets/banner-1544x500.png
+          assets/banner-772x250.png
+          assets/css/admin-style.css
+          assets/css/admin-tailwind.css
+          assets/css/tailwind-utilities.css
+          assets/icon-256x256.png
+          assets/js/admin-script.js
+          assets/js/media-script.js
+          assets/logo.webp
+          assets/screenshot-1.png
+          assets/screenshot-2.png
+          assets/screenshot-3.png
+          auto-alt-text-for-images.php
+          includes/class-forvoyez-admin.php
+          includes/class-forvoyez-api-manager.php
+          includes/class-forvoyez-image-processor.php
+          includes/class-forvoyez-image-renderer.php
+          includes/class-forvoyez-settings.php
+          includes/forvoyez-helpers.php
+          languages/auto-alt-text-for-images-de_DE.mo
+          languages/auto-alt-text-for-images-de_DE.po
+          languages/auto-alt-text-for-images-en_US.mo
+          languages/auto-alt-text-for-images-en_US.po
+          languages/auto-alt-text-for-images-es_ES.mo
+          languages/auto-alt-text-for-images-es_ES.po
+          languages/auto-alt-text-for-images-fr_FR.mo
+          languages/auto-alt-text-for-images-fr_FR.po
+          languages/auto-alt-text-for-images.pot
+          languages/readme-de_DE.txt
+          languages/readme-es_ES.txt
+          languages/readme-fr_FR.txt
+          readme.txt
+          templates/admin-page.php
+          templates/api-settings-modal.php
+          templates/configuration-tab.php
+          templates/dashboard-tab.php
+          templates/main-page.php
+          uninstall.php
+          LIST
+          sed -i 's/^ *//' "$RUNNER_TEMP/expected.txt"
+          unzip -Z1 release/auto-alt-text-for-images.zip | LC_ALL=C sort > "$RUNNER_TEMP/actual.txt"
+          LC_ALL=C sort -o "$RUNNER_TEMP/expected.txt" "$RUNNER_TEMP/expected.txt"
+          if ! diff -u "$RUNNER_TEMP/expected.txt" "$RUNNER_TEMP/actual.txt"; then
+            echo "::error::The plugin zip differs from the expected list (- expected, + built)"
+            exit 1
+          fi
+
+  release-guard:
+    name: Merging publishes no unexpected version
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      # Version Bump publishes on wordpress.org when a push to main changes a
+      # file outside its paths-ignore. Renovate merges on its own, so its pull
+      # requests must stay inside that list; other pull requests only get a
+      # notice. The patterns are read from version-bump.yml (one source).
+      - name: Check the changed files against version-bump.yml paths-ignore
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          patterns=$(awk '
+            /^ *paths-ignore:/ { inside = 1; next }
+            inside && /^ *- / { gsub(/^ *- *|'\''|"/, ""); print; next }
+            inside { exit }
+          ' .github/workflows/version-bump.yml)
+          if [ -z "$patterns" ]; then
+            echo "::error::No paths-ignore found in version-bump.yml"
+            exit 1
+          fi
+          releasing=""
+          while IFS= read -r file; do
+            [ -n "$file" ] || continue
+            ignored=no
+            while IFS= read -r pattern; do
+              # In a case pattern * also matches /, like ** in GitHub filters.
+              # shellcheck disable=SC2254
+              case "$file" in $pattern) ignored=yes; break ;; esac
+            done <<< "$patterns"
+            [ "$ignored" = yes ] || releasing="$releasing$file"$'\n'
+          done < <(git diff --name-only "$BASE_SHA...$HEAD_SHA")
+          if [ -z "$releasing" ]; then
+            echo "Merging this pull request publishes nothing on wordpress.org."
+            exit 0
+          fi
+          printf 'Files that start Version Bump on merge:\n%s' "$releasing"
+          if [ "$PR_AUTHOR" = 'renovate[bot]' ]; then
+            echo "::error::This Renovate update would publish a new plugin version on merge"
+            exit 1
+          fi
+          echo "::notice::Merging this pull request publishes a new plugin version on wordpress.org"
+
   admin-css:
     name: Admin CSS is built and committed
     runs-on: ubuntu-latest
@@ -100,7 +295,7 @@ jobs:
           node-version: '22'
 
       - name: Install npm dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       # The admin page loads assets/css/admin-tailwind.css instead of the
       # Tailwind CDN: the committed file must exist and match the templates.
