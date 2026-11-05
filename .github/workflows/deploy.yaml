@@ -90,7 +90,7 @@ jobs:
       - name: Install dependencies
         run: |
           composer install --no-dev --optimize-autoloader
-          npm ci
+          npm ci --ignore-scripts
 
       # The admin page loads assets/css/admin-tailwind.css (no CDN). Rebuild it
       # so the SVN copy below ships CSS that matches the templates. The zip

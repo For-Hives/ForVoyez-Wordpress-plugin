@@ -8,11 +8,14 @@ on:
     # Development tooling only: none of these files reaches wordpress.org, so
     # changing them alone (Renovate, lockfile upkeep) must not publish a version.
     # A push that also touches anything else still releases.
+    # tests.yml (release-guard) reads this list: Renovate pull requests must
+    # only touch these files, so that its automatic merges publish nothing.
     paths-ignore:
-      - '.github/workflows/**'
+      - '.github/**'
       - 'package.json'
       - 'package-lock.json'
       - 'composer.json'
+      - 'composer.lock'
       - 'renovate.json'
   # Release main by hand (Actions > Version Bump > Run workflow), e.g. after a
   # workflow-only change. To retry a failed deploy, run deploy.yaml by hand with
