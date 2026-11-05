@@ -1034,9 +1034,9 @@
 	function confirmAndAnalyze(type, imageIds) {
 		const count = imageIds.length
 		const credits = Number(creditsInfo.credits)
-		// Unknown before the credits request answers, or when it failed.
+		// Unknown before the first credits answer, or when the last one failed.
+		// A refresh in progress keeps the last known count.
 		const knowsCredits =
-			!creditsInfo.isLoading &&
 			!creditsInfo.hasError &&
 			creditsInfo.credits !== null &&
 			creditsInfo.credits !== '' &&
