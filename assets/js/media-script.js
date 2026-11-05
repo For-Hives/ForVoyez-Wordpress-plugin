@@ -5,6 +5,9 @@
 ;(function ($) {
 	'use strict'
 
+	// assets/js/i18n.js: strings are listed in forvoyez_get_js_translations().
+	const { format, t } = window.forvoyezI18n
+
 	// Credit management variables
 	let creditsInfo = {
 		credits: null,
@@ -37,9 +40,16 @@
 			console.log('Analyze button clicked for image ID:', imageId)
 
 			// Disable button and show loading state
-			$button.prop('disabled', true).text('Analyzing...').addClass('opacity-50')
+			$button
+				.prop('disabled', true)
+				.text(t('Analyzing...'))
+				.addClass('opacity-50')
 			$statusArea
-				.html('<span class="forvoyez-spinner"></span> Analyzing image...')
+				.empty()
+				.append(
+					'<span class="forvoyez-spinner"></span>',
+					document.createTextNode(' ' + t('Analyzing image...'))
+				)
 				.addClass('loading')
 				.removeClass('success error')
 
@@ -58,7 +68,7 @@
 					// Re-enable button
 					$button
 						.prop('disabled', false)
-						.text('Analyze with ForVoyez')
+						.text(t('Analyze with ForVoyez'))
 						.removeClass('opacity-50')
 
 					if (response.success) {
@@ -67,8 +77,12 @@
 
 						// Show success message
 						$statusArea
-							.html(
-								'<span class="dashicons dashicons-yes"></span> Analysis complete! Metadata has been updated.'
+							.empty()
+							.append(
+								'<span class="dashicons dashicons-yes"></span>',
+								document.createTextNode(
+									' ' + t('Analysis complete! Metadata has been updated.')
+								)
 							)
 							.addClass('success')
 							.removeClass('loading error')
@@ -79,7 +93,7 @@
 						// Show error message
 						showStatusError(
 							$statusArea,
-							response.data ? response.data.message : 'Unknown error'
+							(response.data && response.data.message) || t('Unknown error')
 						)
 					}
 				},
@@ -89,7 +103,7 @@
 					// Re-enable button
 					$button
 						.prop('disabled', false)
-						.text('Analyze with ForVoyez')
+						.text(t('Analyze with ForVoyez'))
 						.removeClass('opacity-50')
 
 					// Show error message
@@ -121,7 +135,7 @@
 			.empty()
 			.append(
 				'<span class="dashicons dashicons-warning"></span>',
-				document.createTextNode(' Error: ' + decoder.value)
+				document.createTextNode(' ' + format(t('Error: %s'), decoder.value))
 			)
 			.addClass('error')
 			.removeClass('loading success')
@@ -450,42 +464,21 @@
 		)
 
 		if ($statusContainer.length) {
-			// Alt text status
-			if (metadata.alt_text) {
-				$statusContainer
-					.find('.alt-status')
-					.html(
-						'<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;"></span> <span class="status-label">Alt text</span>'
+			// Only the analyzed fields change: a missing one keeps its warning.
+			;['alt', 'title', 'caption'].forEach(field => {
+				const value = field === 'alt' ? metadata.alt_text : metadata[field]
+				if (value) {
+					setMetadataStatus(
+						$statusContainer.find(`.${field}-status`),
+						field,
+						true
 					)
-					.attr('title', 'Has alt text')
-			}
-
-			// Title status
-			if (metadata.title) {
-				$statusContainer
-					.find('.title-status')
-					.html(
-						'<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;"></span> <span class="status-label">Title</span>'
-					)
-					.attr('title', 'Has title')
-			}
-
-			// Caption status
-			if (metadata.caption) {
-				$statusContainer
-					.find('.caption-status')
-					.html(
-						'<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;"></span> <span class="status-label">Caption</span>'
-					)
-					.attr('title', 'Has caption')
-			}
+				}
+			})
 
 			console.log('Updated status indicators for image ID:', imageId)
 		}
 	}
-})(jQuery)
-;(function ($) {
-	'use strict'
 
 	function injectForVoyezIntoMediaModal() {
 		if (!wp || !wp.media || !wp.media.frame) return
@@ -530,38 +523,104 @@
 		}
 	}
 
+	/**
+	 * Texts of the status of one metadata field (alt, title or caption).
+	 */
+	function metadataStatusTexts(field) {
+		switch (field) {
+			case 'alt':
+				return {
+					has: t('Has alt text'),
+					label: t('Alt text'),
+					missing: t('Missing alt text'),
+					status: t('Alt Text Status'),
+				}
+			case 'title':
+				return {
+					has: t('Has title'),
+					label: t('Title'),
+					missing: t('Missing title'),
+					status: t('Title Status'),
+				}
+			default:
+				return {
+					has: t('Has caption'),
+					label: t('Caption'),
+					missing: t('Missing caption'),
+					status: t('Caption Status'),
+				}
+		}
+	}
+
+	/**
+	 * Show whether a metadata field is filled: icon, label and tooltip.
+	 */
+	function setMetadataStatus($item, field, isSet) {
+		const texts = metadataStatusTexts(field)
+		$item
+			.empty()
+			.append(
+				$('<span>', {
+					class: isSet
+						? 'dashicons dashicons-yes-alt'
+						: 'dashicons dashicons-warning',
+					style: isSet ? 'color: #4CAF50;' : 'color: #FF9800;',
+				}),
+				document.createTextNode(' '),
+				$('<span>', { class: 'status-label', text: texts.label })
+			)
+			.attr('title', isSet ? texts.has : texts.missing)
+	}
+
+	/**
+	 * The ForVoyez section of the attachment details: status, button, result.
+	 */
+	function buildForVoyezSection(imageId, sectionClass, $heading) {
+		const $status = $('<div>', {
+			class: 'forvoyez-metadata-status',
+			'data-image-id': imageId,
+		})
+		;['alt', 'title', 'caption'].forEach(field => {
+			const $item = $('<div>', {
+				class: `forvoyez-metadata-item ${field}-status`,
+			})
+			setMetadataStatus($item, field, true)
+			$item.attr('title', metadataStatusTexts(field).status)
+			$status.append($item)
+		})
+
+		return $('<div>', { class: sectionClass }).append(
+			$heading.text(t('ForVoyez Analysis')),
+			$status,
+			$('<div>', {
+				class: 'forvoyez-description',
+				text: t('Generate optimized alt text, title, and caption with AI.'),
+			}),
+			$('<button>', {
+				type: 'button',
+				class: 'button forvoyez-analyze-button',
+				'data-image-id': imageId,
+				text: t('Analyze with ForVoyez'),
+			}),
+			$('<div>', { class: 'forvoyez-status' })
+		)
+	}
+
 	function insertForVoyezButtonInDetail($container) {
 		if ($container.find('.forvoyez-analyze-button').length) return
 
 		var imageId = $container.find('.attachment-details').data('id')
 		if (!imageId) return
 
-		var $forVoyezSection = $(`
-            <div class="attachment-forvoyez-section setting">
-                <span class="name">ForVoyez Analysis</span>
-                <div class="forvoyez-metadata-status" data-image-id="${imageId}">
-                    <div class="forvoyez-metadata-item alt-status" title="Alt Text Status">
-                        <span class="dashicons dashicons-yes-alt" style="color: #4CAF50;"></span> 
-                        <span class="status-label">Alt text</span>
-                    </div>
-                    <div class="forvoyez-metadata-item title-status" title="Title Status">
-                        <span class="dashicons dashicons-yes-alt" style="color: #4CAF50;"></span> 
-                        <span class="status-label">Title</span>
-                    </div>
-                    <div class="forvoyez-metadata-item caption-status" title="Caption Status">
-                        <span class="dashicons dashicons-yes-alt" style="color: #4CAF50;"></span> 
-                        <span class="status-label">Caption</span>
-                    </div>
-                </div>
-                <div class="forvoyez-description">
-                    Generate optimized alt text, title, and caption with AI.
-                </div>
-                <button type="button" class="button forvoyez-analyze-button" data-image-id="${imageId}">Analyze with ForVoyez</button>
-                <div class="forvoyez-status"></div>
-            </div>
-        `)
-
-		$container.find('.attachment-details').append($forVoyezSection)
+		$container
+			.find('.attachment-details')
+			.append(
+				buildForVoyezSection(
+					imageId,
+					'attachment-forvoyez-section setting',
+					$('<span>', { class: 'name' })
+				)
+			)
 
 		updateStatusIconsForAttachment(imageId)
 	}
@@ -571,32 +630,13 @@
 
 		var imageId = attachment.id
 
-		var $forVoyezSection = $(`
-            <div class="attachment-forvoyez-section attachment-info">
-                <h3>ForVoyez Analysis</h3>
-                <div class="forvoyez-metadata-status" data-image-id="${imageId}">
-                    <div class="forvoyez-metadata-item alt-status" title="Alt Text Status">
-                        <span class="dashicons dashicons-yes-alt" style="color: #4CAF50;"></span> 
-                        <span class="status-label">Alt text</span>
-                    </div>
-                    <div class="forvoyez-metadata-item title-status" title="Title Status">
-                        <span class="dashicons dashicons-yes-alt" style="color: #4CAF50;"></span> 
-                        <span class="status-label">Title</span>
-                    </div>
-                    <div class="forvoyez-metadata-item caption-status" title="Caption Status">
-                        <span class="dashicons dashicons-yes-alt" style="color: #4CAF50;"></span> 
-                        <span class="status-label">Caption</span>
-                    </div>
-                </div>
-                <div class="forvoyez-description">
-                    Generate optimized alt text, title, and caption with AI.
-                </div>
-                <button type="button" class="button forvoyez-analyze-button" data-image-id="${imageId}">Analyze with ForVoyez</button>
-                <div class="forvoyez-status"></div>
-            </div>
-        `)
-
-		$('.media-sidebar').append($forVoyezSection)
+		$('.media-sidebar').append(
+			buildForVoyezSection(
+				imageId,
+				'attachment-forvoyez-section attachment-info',
+				$('<h3>')
+			)
+		)
 
 		updateStatusIconsForAttachment(imageId)
 	}
@@ -611,60 +651,21 @@
 			)
 			if (!$container.length) return
 
-			var alt = attachment.get('alt') || ''
-			var title = attachment.get('title') || ''
-			var caption = attachment.get('caption') || ''
-
-			// Alt text status
-			if (alt) {
-				$container
-					.find('.alt-status')
-					.html(
-						'<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;"></span> <span class="status-label">Alt text</span>'
-					)
-					.attr('title', 'Has alt text')
-			} else {
-				$container
-					.find('.alt-status')
-					.html(
-						'<span class="dashicons dashicons-warning" style="color: #FF9800;"></span> <span class="status-label">Alt text</span>'
-					)
-					.attr('title', 'Missing alt text')
-			}
-
-			// Title status
-			if (title) {
-				$container
-					.find('.title-status')
-					.html(
-						'<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;"></span> <span class="status-label">Title</span>'
-					)
-					.attr('title', 'Has title')
-			} else {
-				$container
-					.find('.title-status')
-					.html(
-						'<span class="dashicons dashicons-warning" style="color: #FF9800;"></span> <span class="status-label">Title</span>'
-					)
-					.attr('title', 'Missing title')
-			}
-
-			// Caption status
-			if (caption) {
-				$container
-					.find('.caption-status')
-					.html(
-						'<span class="dashicons dashicons-yes-alt" style="color: #4CAF50;"></span> <span class="status-label">Caption</span>'
-					)
-					.attr('title', 'Has caption')
-			} else {
-				$container
-					.find('.caption-status')
-					.html(
-						'<span class="dashicons dashicons-warning" style="color: #FF9800;"></span> <span class="status-label">Caption</span>'
-					)
-					.attr('title', 'Missing caption')
-			}
+			setMetadataStatus(
+				$container.find('.alt-status'),
+				'alt',
+				!!attachment.get('alt')
+			)
+			setMetadataStatus(
+				$container.find('.title-status'),
+				'title',
+				!!attachment.get('title')
+			)
+			setMetadataStatus(
+				$container.find('.caption-status'),
+				'caption',
+				!!attachment.get('caption')
+			)
 		})
 	}
 

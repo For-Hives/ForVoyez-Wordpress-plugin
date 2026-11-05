@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: Auto Alt Text for Images 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/auto-alt-text-for-"
 "images\n"
-"POT-Creation-Date: 2026-10-08T00:43:59+00:00\n"
-"PO-Revision-Date: 2026-10-08 00:46+0000\n"
+"POT-Creation-Date: 2026-11-05T17:07:41+00:00\n"
+"PO-Revision-Date: 2026-11-05 18:00+0100\n"
 "Last-Translator: Cinquin Andy <contact@andy-cinquin.fr>\n"
 "Language-Team: ForVoyez <contact@forvoyez.com>\n"
 "Language: es_ES\n"
@@ -14,22 +14,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.3\n"
 "X-Domain: auto-alt-text-for-images\n"
+"X-Generator: Poedit 3.4.3\n"
 
 #. Plugin Name of the plugin
-#: auto-alt-text-for-images.php includes/class-forvoyez-admin.php:56
-#: templates/admin-page.php:17
+#: includes/class-forvoyez-admin.php:56 templates/admin-page.php:11
 msgid "Auto Alt Text for Images"
 msgstr "Texto Alt Automático para Imágenes"
 
 #. Plugin URI of the plugin
-#: auto-alt-text-for-images.php
 msgid "https://doc.forvoyez.com/wordpress-plugin"
 msgstr "https://doc.forvoyez.com/wordpress-plugin"
 
 #. Description of the plugin
-#: auto-alt-text-for-images.php
 msgid ""
 "Automatically generate alt text and SEO metadata for images using ForVoyez "
 "API."
@@ -38,108 +35,155 @@ msgstr ""
 "utilizando la API de ForVoyez."
 
 #. Author of the plugin
-#: auto-alt-text-for-images.php
 msgid "ForVoyez"
 msgstr "ForVoyez"
 
 #. Author URI of the plugin
-#: auto-alt-text-for-images.php
 msgid "https://forvoyez.com"
 msgstr "https://forvoyez.com"
 
-#: auto-alt-text-for-images.php:180
-msgid "Analyzing..."
-msgstr "Analizando..."
-
-#: auto-alt-text-for-images.php:181
-msgid "Analysis complete! Metadata updated."
-msgstr "¡Análisis completado! Metadatos actualizados."
-
-#: auto-alt-text-for-images.php:182
-msgid "Analysis failed. Please try again."
-msgstr "El análisis ha fallado. Inténtalo de nuevo."
-
-#: auto-alt-text-for-images.php:183
-msgid "Warning: Low credits!"
-msgstr "Advertencia: ¡quedan pocos créditos!"
-
-#: auto-alt-text-for-images.php:184
-msgid "Warning: No credits left!"
-msgstr "Advertencia: ¡no quedan créditos!"
-
-#: auto-alt-text-for-images.php:327
+#: auto-alt-text-for-images.php:328 auto-alt-text-for-images.php:547
+#: includes/forvoyez-helpers.php:412
 msgid "Analyze with ForVoyez"
 msgstr "Analizar con ForVoyez"
 
+#: auto-alt-text-for-images.php:410 includes/forvoyez-helpers.php:406
+msgid "Alt text"
+msgstr "Texto Alt"
+
+#: auto-alt-text-for-images.php:411 includes/forvoyez-helpers.php:440
+msgid "Has alt text"
+msgstr "Tiene texto Alt"
+
+#: auto-alt-text-for-images.php:412
+#: includes/class-forvoyez-image-renderer.php:232
+#: includes/forvoyez-helpers.php:449
+msgid "Missing alt text"
+msgstr "Falta el texto Alt"
+
+#: auto-alt-text-for-images.php:416 includes/forvoyez-helpers.php:458
+msgid "Title"
+msgstr "Título"
+
+#: auto-alt-text-for-images.php:417 includes/forvoyez-helpers.php:442
+msgid "Has title"
+msgstr "Tiene título"
+
+#: auto-alt-text-for-images.php:418
+#: includes/class-forvoyez-image-renderer.php:233
+#: includes/forvoyez-helpers.php:451
+msgid "Missing title"
+msgstr "Falta el título"
+
+#: auto-alt-text-for-images.php:422 includes/forvoyez-helpers.php:417
+msgid "Caption"
+msgstr "Leyenda"
+
+#: auto-alt-text-for-images.php:423 includes/forvoyez-helpers.php:441
+msgid "Has caption"
+msgstr "Tiene leyenda"
+
+#: auto-alt-text-for-images.php:424
+#: includes/class-forvoyez-image-renderer.php:234
+#: includes/forvoyez-helpers.php:450
+msgid "Missing caption"
+msgstr "Falta la leyenda"
+
+#: auto-alt-text-for-images.php:534
+msgid "Image Metadata Status:"
+msgstr "Estado de los metadatos de la imagen:"
+
+#: auto-alt-text-for-images.php:536 auto-alt-text-for-images.php:628
+#: includes/forvoyez-helpers.php:438
+msgid "ForVoyez Credits:"
+msgstr "Créditos de ForVoyez:"
+
+#: auto-alt-text-for-images.php:540 includes/forvoyez-helpers.php:407
+msgid "Alt Text Status"
+msgstr "Estado del texto Alt"
+
+#: auto-alt-text-for-images.php:541 includes/forvoyez-helpers.php:459
+msgid "Title Status"
+msgstr "Estado del título"
+
+#: auto-alt-text-for-images.php:542 includes/forvoyez-helpers.php:418
+msgid "Caption Status"
+msgstr "Estado de la leyenda"
+
+#: auto-alt-text-for-images.php:545
+msgid ""
+"This tool uses AI to analyze your image and generate optimized metadata like "
+"alt text, title, and caption. Click the button below to automatically "
+"generate SEO-friendly metadata for this image."
+msgstr ""
+"Esta herramienta usa IA para analizar tu imagen y generar metadatos "
+"optimizados como el texto Alt, el título y la leyenda. Haz clic en el botón "
+"de abajo para generar automáticamente metadatos aptos para SEO en esta "
+"imagen."
+
+#. translators: %d: number of credits the analysis needs
+#: auto-alt-text-for-images.php:600 includes/forvoyez-helpers.php:481
+msgid "Warning: This operation requires %d credit."
+msgid_plural "Warning: This operation requires %d credits."
+msgstr[0] "Advertencia: esta operación requiere %d crédito."
+msgstr[1] "Advertencia: esta operación requiere %d créditos."
+
+#. translators: %d: number of credits left
+#: auto-alt-text-for-images.php:604 includes/forvoyez-helpers.php:485
+msgid "You only have %d credit left."
+msgid_plural "You only have %d credits left."
+msgstr[0] "Solo te queda %d crédito."
+msgstr[1] "Solo te quedan %d créditos."
+
 #. translators: %d: number of images
-#: auto-alt-text-for-images.php:375 auto-alt-text-for-images.php:784
-#, php-format
+#: auto-alt-text-for-images.php:617 tests/TestForvoyezTranslations.php:140
+#: tests/TestForvoyezTranslations.php:141
+#: tests/TestForvoyezTranslations.php:144
+#: tests/TestForvoyezTranslations.php:145
 msgid "ForVoyez: Ready to analyze %d image."
 msgid_plural "ForVoyez: Ready to analyze %d images."
 msgstr[0] "ForVoyez: listo para analizar %d imagen."
 msgstr[1] "ForVoyez: listo para analizar %d imágenes."
 
-#: auto-alt-text-for-images.php:385 auto-alt-text-for-images.php:803
+#: auto-alt-text-for-images.php:636
 msgid "Start Analysis"
 msgstr "Iniciar análisis"
 
-#. translators: %d: number of images
-#: auto-alt-text-for-images.php:520
-#, php-format
-msgid "ForVoyez: Successfully queued %d image for analysis."
-msgid_plural "ForVoyez: Successfully queued %d images for analysis."
-msgstr[0] "ForVoyez: %d imagen añadida a la cola de análisis."
-msgstr[1] "ForVoyez: %d imágenes añadidas a la cola de análisis."
-
-#. translators: 1: number of credits needed, 2: number of credits available
-#: auto-alt-text-for-images.php:773
-#, php-format
-msgid ""
-"Warning: This operation requires %1$d credits, but you only have %2$d "
-"credits available."
-msgstr ""
-"Advertencia: esta operación requiere %1$d créditos, pero solo tienes %2$d "
-"créditos disponibles."
-
-#: auto-alt-text-for-images.php:806 templates/admin-page.php:205
+#: auto-alt-text-for-images.php:639 templates/admin-page.php:199
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: auto-alt-text-for-images.php:821
+#: auto-alt-text-for-images.php:654
 msgid "Dismiss"
 msgstr "Cerrar"
 
-#: auto-alt-text-for-images.php:853
+#: auto-alt-text-for-images.php:686
 msgid "Processing..."
 msgstr "Procesando..."
 
-#: auto-alt-text-for-images.php:869
+#. translators: 1: number of images analyzed, 2: number of images that failed
+#: auto-alt-text-for-images.php:701 includes/forvoyez-helpers.php:410
+msgid "Analysis complete. Successful: %1$d, Failed: %2$d"
+msgstr "Análisis completado. Correctas: %1$d, con errores: %2$d"
+
+#. translators: 1: number of images analyzed, 2: number of images that failed
+#: auto-alt-text-for-images.php:702
+msgid "Successful: %1$d, Failed: %2$d"
+msgstr "Correctas: %1$d, con errores: %2$d"
+
+#: auto-alt-text-for-images.php:710
 msgid "Complete!"
 msgstr "¡Completado!"
-
-#: auto-alt-text-for-images.php:873
-msgid "Analysis completed!"
-msgstr "¡Análisis completado!"
-
-#: auto-alt-text-for-images.php:874 auto-alt-text-for-images.php:921
-#: auto-alt-text-for-images.php:938
-msgid "successful"
-msgstr "con éxito"
-
-#: auto-alt-text-for-images.php:875 auto-alt-text-for-images.php:922
-#: auto-alt-text-for-images.php:939
-msgid "failed"
-msgstr "con errores"
 
 #: includes/class-forvoyez-admin.php:57
 msgid "Auto Alt Text"
 msgstr "Texto Alt Auto"
 
-#: includes/class-forvoyez-admin.php:155
+#: includes/class-forvoyez-admin.php:166
 msgid "You do not have sufficient permissions to access this page."
 msgstr "No tienes permisos suficientes para acceder a esta página."
 
-#: includes/class-forvoyez-admin.php:180
+#: includes/class-forvoyez-admin.php:191
 msgid ""
 "Your ForVoyez API key is not configured. Please configure it to enable "
 "automatic alt text generation."
@@ -147,46 +191,49 @@ msgstr ""
 "Tu clave API de ForVoyez no está configurada. Por favor, configúrala para "
 "activar la generación automática de texto alternativo."
 
-#: includes/class-forvoyez-admin.php:220
+#: includes/class-forvoyez-admin.php:231
 msgid "Configure the API key"
 msgstr "Configurar la clave API"
 
-#: includes/class-forvoyez-admin.php:226
+#: includes/class-forvoyez-admin.php:237
 msgid "Auto Alt Text for Images:"
 msgstr "Texto Alt Automático para Imágenes:"
 
-#: includes/class-forvoyez-admin.php:341
+#: includes/class-forvoyez-admin.php:352
 msgid "No images found matching the selected criteria."
 msgstr ""
 "No se encontraron imágenes que coincidan con los criterios seleccionados."
 
-#: includes/class-forvoyez-admin.php:427 includes/class-forvoyez-admin.php:587
-#: includes/class-forvoyez-admin.php:671 includes/class-forvoyez-admin.php:698
-#: includes/class-forvoyez-admin.php:760
-#: includes/class-forvoyez-image-processor.php:144
-#: includes/class-forvoyez-image-processor.php:520
-#: includes/class-forvoyez-image-processor.php:536
+#: includes/class-forvoyez-admin.php:438 includes/class-forvoyez-admin.php:600
+#: includes/class-forvoyez-admin.php:684 includes/class-forvoyez-admin.php:711
+#: includes/class-forvoyez-admin.php:773
+#: includes/class-forvoyez-image-processor.php:149
+#: includes/class-forvoyez-image-processor.php:192
+#: includes/class-forvoyez-image-processor.php:295
+#: includes/class-forvoyez-image-processor.php:517
+#: includes/class-forvoyez-image-processor.php:558
+#: includes/class-forvoyez-image-processor.php:574
 #: includes/class-forvoyez-settings.php:96
 #: includes/class-forvoyez-settings.php:113
 #: includes/class-forvoyez-settings.php:130
+#: includes/class-forvoyez-settings.php:178
 msgid "Permission denied"
 msgstr "Permiso denegado"
 
-#: includes/class-forvoyez-admin.php:488
+#: includes/class-forvoyez-admin.php:501
 msgid "&laquo; Previous"
 msgstr "&laquo; Anterior"
 
-#: includes/class-forvoyez-admin.php:508
+#: includes/class-forvoyez-admin.php:521
 msgid "Next &raquo;"
 msgstr "Siguiente &raquo;"
 
-#: includes/class-forvoyez-admin.php:732
+#: includes/class-forvoyez-admin.php:745
 msgid "ForVoyez - Low Credits Warning"
 msgstr "ForVoyez - Aviso de pocos créditos"
 
 #. translators: %d: number of credits remaining
-#: includes/class-forvoyez-admin.php:739
-#, php-format
+#: includes/class-forvoyez-admin.php:752
 msgid ""
 "You only have %d credits remaining. Please consider recharging to continue "
 "using the ForVoyez service."
@@ -194,7 +241,7 @@ msgstr ""
 "Solo te quedan %d créditos. Considera recargar para seguir usando el "
 "servicio de ForVoyez."
 
-#: includes/class-forvoyez-admin.php:789
+#: includes/class-forvoyez-admin.php:811
 msgid "Could not retrieve credit information"
 msgstr "No se pudo obtener la información de créditos"
 
@@ -222,55 +269,62 @@ msgstr ""
 "ha modificado nada."
 
 #: includes/class-forvoyez-api-manager.php:283
-#: includes/class-forvoyez-image-processor.php:211
-#: includes/class-forvoyez-image-processor.php:263
+#: includes/class-forvoyez-image-processor.php:216
+#: includes/class-forvoyez-image-processor.php:268
 msgid "Analysis successful"
 msgstr "Análisis exitoso"
 
 #. translators: 1: HTTP status code, 2: raw response body (truncated).
-#: includes/class-forvoyez-api-manager.php:483
-#, php-format
+#: includes/class-forvoyez-api-manager.php:487
 msgid "Unexpected response from the ForVoyez API (HTTP %1$d): %2$s"
 msgstr "Respuesta inesperada de la API de ForVoyez (HTTP %1$d): %2$s"
 
 #. translators: %d: HTTP status code.
-#: includes/class-forvoyez-api-manager.php:494
-#, php-format
+#: includes/class-forvoyez-api-manager.php:498
 msgid "The ForVoyez API request failed (HTTP %d)."
 msgstr "La solicitud a la API de ForVoyez ha fallado (HTTP %d)."
 
-#: includes/class-forvoyez-image-processor.php:138
+#: includes/class-forvoyez-image-processor.php:143
 msgid "Invalid data"
 msgstr "Datos inválidos"
 
-#: includes/class-forvoyez-image-processor.php:151
+#: includes/class-forvoyez-image-processor.php:156
 msgid "Metadata updated successfully"
 msgstr "Metadatos actualizados correctamente"
 
-#: includes/class-forvoyez-image-processor.php:199
-#: includes/class-forvoyez-image-processor.php:246
-#: includes/class-forvoyez-image-processor.php:397
-#: includes/class-forvoyez-image-processor.php:513
+#: includes/class-forvoyez-image-processor.php:204
+#: includes/class-forvoyez-image-processor.php:251
+#: includes/class-forvoyez-image-processor.php:408
+#: includes/class-forvoyez-image-processor.php:551
 msgid "Invalid image ID"
 msgstr "ID de imagen inválido"
 
-#: includes/class-forvoyez-image-processor.php:225
-#: includes/class-forvoyez-image-processor.php:455
+#: includes/class-forvoyez-image-processor.php:230
+#: includes/class-forvoyez-image-processor.php:464
 msgid "unknown_error"
 msgstr "error_desconocido"
 
-#: includes/class-forvoyez-image-processor.php:369
+#: includes/class-forvoyez-image-processor.php:380
 msgid "No valid images selected"
 msgstr "No hay imágenes válidas seleccionadas"
 
-#: includes/class-forvoyez-image-processor.php:378
+#: includes/class-forvoyez-image-processor.php:389
 msgid "Processing started"
 msgstr "Procesamiento iniciado"
 
-#: includes/class-forvoyez-image-processor.php:418
-#: includes/class-forvoyez-image-processor.php:621
+#: includes/class-forvoyez-image-processor.php:427
+#: includes/class-forvoyez-image-processor.php:659
 msgid "No images provided"
 msgstr "No se proporcionaron imágenes"
+
+#: includes/class-forvoyez-image-processor.php:501
+msgid "Too many images in one request"
+msgstr "Demasiadas imágenes en una sola solicitud"
+
+#: includes/class-forvoyez-image-processor.php:512
+#: includes/class-forvoyez-settings.php:173
+msgid "Invalid nonce"
+msgstr "Token de seguridad no válido"
 
 #. translators: Image title
 #: includes/class-forvoyez-image-renderer.php:117
@@ -281,6 +335,7 @@ msgstr "Título:"
 #: includes/class-forvoyez-image-renderer.php:122
 #: includes/class-forvoyez-image-renderer.php:133
 #: includes/class-forvoyez-image-renderer.php:148
+#: includes/forvoyez-helpers.php:452
 msgid "Not set"
 msgstr "No establecido"
 
@@ -294,15 +349,9 @@ msgstr "Texto Alt:"
 msgid "Caption:"
 msgstr "Leyenda:"
 
-#: includes/class-forvoyez-image-renderer.php:213 templates/admin-page.php:88
+#: includes/class-forvoyez-image-renderer.php:213 templates/admin-page.php:82
 msgid "All Complete"
 msgstr "Todo Completo"
-
-#. translators: %s: Metadata type (Alt, Title, or Caption)
-#: includes/class-forvoyez-image-renderer.php:234
-#, php-format
-msgid "Missing %s"
-msgstr "%s faltante"
 
 #: includes/class-forvoyez-image-renderer.php:274
 msgid "Analyze"
@@ -319,11 +368,11 @@ msgstr "Detalles"
 msgid "Analyse"
 msgstr "Analizar"
 
-#: includes/class-forvoyez-settings.php:102
+#: includes/class-forvoyez-settings.php:102 includes/forvoyez-helpers.php:419
 msgid "Context saved successfully"
 msgstr "Contexto guardado correctamente"
 
-#: includes/class-forvoyez-settings.php:119
+#: includes/class-forvoyez-settings.php:119 includes/forvoyez-helpers.php:443
 msgid "Language saved successfully"
 msgstr "Idioma guardado correctamente"
 
@@ -331,9 +380,13 @@ msgstr "Idioma guardado correctamente"
 msgid "API key cannot be empty"
 msgstr "La clave API no puede estar vacía"
 
-#: includes/class-forvoyez-settings.php:153
+#: includes/class-forvoyez-settings.php:160 includes/forvoyez-helpers.php:415
 msgid "API key saved successfully"
 msgstr "Clave API guardada correctamente"
+
+#: includes/class-forvoyez-settings.php:190
+msgid "Automatic image analysis toggled successfully"
+msgstr "Análisis automático de imágenes cambiado correctamente"
 
 #: includes/forvoyez-helpers.php:195
 msgid "Invalid API key format. Please enter a valid ForVoyez JWT."
@@ -369,71 +422,272 @@ msgstr ""
 "Tu clave API de ForVoyez no está configurada. Añádela en la pestaña "
 "Configuración de Texto Alt Auto para generar texto alternativo."
 
-#: templates/admin-page.php:22
+#: includes/forvoyez-helpers.php:402
+msgid "Active"
+msgstr "Activo"
+
+#: includes/forvoyez-helpers.php:403
+msgid "AJAX request failed"
+msgstr "La solicitud AJAX ha fallado"
+
+#. translators: %s: error status returned by the browser, e.g. "timeout"
+#: includes/forvoyez-helpers.php:405
+msgid "AJAX request failed: %s"
+msgstr "La solicitud AJAX ha fallado: %s"
+
+#: includes/forvoyez-helpers.php:408
+msgid "An error occurred. Please try again."
+msgstr "Se ha producido un error. Inténtalo de nuevo."
+
+#: includes/forvoyez-helpers.php:411
+msgid "Analysis complete! Metadata has been updated."
+msgstr "¡Análisis completado! Los metadatos se han actualizado."
+
+#: includes/forvoyez-helpers.php:413
+msgid "Analyzing image..."
+msgstr "Analizando la imagen..."
+
+#: includes/forvoyez-helpers.php:414
+msgid "Analyzing..."
+msgstr "Analizando..."
+
+#: includes/forvoyez-helpers.php:416
+msgid "Batch processing failed"
+msgstr "El procesamiento del lote ha fallado"
+
+#: includes/forvoyez-helpers.php:420
+msgid "Credits:"
+msgstr "Créditos:"
+
+#. translators: %s: error message
+#: includes/forvoyez-helpers.php:422
+msgid "Error: %s"
+msgstr "Error: %s"
+
+#: includes/forvoyez-helpers.php:423
+msgid "Error: Failed to fetch image IDs"
+msgstr "Error: no se han podido obtener los ID de las imágenes"
+
+#: includes/forvoyez-helpers.php:424
+msgid "Error loading data"
+msgstr "Error al cargar los datos"
+
+#. translators: 1: image ID, 2: error message
+#: includes/forvoyez-helpers.php:426
+msgid "Error processing image %1$d: %2$s"
+msgstr "Error al procesar la imagen %1$d: %2$s"
+
+#: includes/forvoyez-helpers.php:427
+msgid "Failed to fetch the image count"
+msgstr "No se ha podido obtener el número de imágenes"
+
+#: includes/forvoyez-helpers.php:428
+msgid "Failed to save API key"
+msgstr "No se ha podido guardar la clave API"
+
+#. translators: %s: error message
+#: includes/forvoyez-helpers.php:430
+msgid "Failed to save API key: %s"
+msgstr "No se ha podido guardar la clave API: %s"
+
+#: includes/forvoyez-helpers.php:431
+msgid "Failed to save context"
+msgstr "No se ha podido guardar el contexto"
+
+#. translators: %s: error message
+#: includes/forvoyez-helpers.php:433
+msgid "Failed to save context: %s"
+msgstr "No se ha podido guardar el contexto: %s"
+
+#: includes/forvoyez-helpers.php:434
+msgid "Failed to save language"
+msgstr "No se ha podido guardar el idioma"
+
+#. translators: %s: error message
+#: includes/forvoyez-helpers.php:436
+msgid "Failed to save language: %s"
+msgstr "No se ha podido guardar el idioma: %s"
+
+#: includes/forvoyez-helpers.php:437
+msgid "ForVoyez Analysis"
+msgstr "Análisis de ForVoyez"
+
+#: includes/forvoyez-helpers.php:439
+msgid "Generate optimized alt text, title, and caption with AI."
+msgstr "Genera con IA un texto Alt, un título y una leyenda optimizados."
+
+#: includes/forvoyez-helpers.php:444
+msgid "Loading subscription status..."
+msgstr "Cargando el estado de la suscripción..."
+
+#. translators: %s: "recharge now" link. Keep %s (or %1$s): the link goes there.
+#: includes/forvoyez-helpers.php:446
+msgid "Low credits! Please %s."
+msgstr "¡Quedan pocos créditos! Por favor, %s."
+
+#. translators: %d: image ID
+#: includes/forvoyez-helpers.php:448
+msgid "Metadata updated successfully for image %d"
+msgstr "Metadatos de la imagen %d actualizados correctamente"
+
+#: includes/forvoyez-helpers.php:453
+msgid "Please select at least one image to analyze"
+msgstr "Selecciona al menos una imagen para analizar"
+
+#. translators: 1: progress in percent, 2: number of images analyzed, 3: number of images that failed
+#: includes/forvoyez-helpers.php:455
+msgid "Processing: %1$d%% complete. Successful: %2$d, Failed: %3$d"
+msgstr "Procesando: %1$d %% completado. Correctos: %2$d, con errores: %3$d"
+
+#. translators: Link text, inside "Low credits! Please %s."
+#: includes/forvoyez-helpers.php:457
+msgid "recharge now"
+msgstr "recarga ahora"
+
+#: includes/forvoyez-helpers.php:460
+msgid ""
+"Unable to load credit information. Please refresh the page or check your API "
+"key configuration."
+msgstr ""
+"No se ha podido cargar la información de créditos. Actualiza la página o "
+"revisa la configuración de tu clave API."
+
+#: includes/forvoyez-helpers.php:461
+msgid "Unknown error"
+msgstr "Error desconocido"
+
+#: includes/forvoyez-helpers.php:462
+msgid "Unknown error occurred"
+msgstr "Se ha producido un error desconocido"
+
+#. translators: %d: number of images
+#: includes/forvoyez-helpers.php:467
+msgid "Are you sure you want to analyze %d image?"
+msgid_plural "Are you sure you want to analyze all %d images?"
+msgstr[0] "¿Seguro que quieres analizar %d imagen?"
+msgstr[1] "¿Seguro que quieres analizar las %d imágenes?"
+
+#. translators: %d: number of images
+#: includes/forvoyez-helpers.php:469
+msgid "Are you sure you want to analyze %d image with missing alt text?"
+msgid_plural ""
+"Are you sure you want to analyze %d images with missing alt text?"
+msgstr[0] "¿Seguro que quieres analizar %d imagen sin texto Alt?"
+msgstr[1] "¿Seguro que quieres analizar %d imágenes sin texto Alt?"
+
+#. translators: %d: number of images
+#: includes/forvoyez-helpers.php:471
+msgid ""
+"Are you sure you want to analyze %d image with missing alt text, title, or "
+"caption?"
+msgid_plural ""
+"Are you sure you want to analyze %d images with missing alt text, title, or "
+"caption?"
+msgstr[0] ""
+"¿Seguro que quieres analizar %d imagen sin texto Alt, título o leyenda?"
+msgstr[1] ""
+"¿Seguro que quieres analizar %d imágenes sin texto Alt, título o leyenda?"
+
+#. translators: %d: number of images
+#: includes/forvoyez-helpers.php:473
+msgid "Are you sure you want to analyze %d selected image?"
+msgid_plural "Are you sure you want to analyze %d selected images?"
+msgstr[0] "¿Seguro que quieres analizar %d imagen seleccionada?"
+msgstr[1] "¿Seguro que quieres analizar %d imágenes seleccionadas?"
+
+#. translators: %d: number of credits
+#: includes/forvoyez-helpers.php:475
+msgid "Cost: %d ForVoyez credit"
+msgid_plural "Cost: %d ForVoyez credits"
+msgstr[0] "Coste: %d crédito de ForVoyez"
+msgstr[1] "Coste: %d créditos de ForVoyez"
+
+#. translators: 1: number of images shown, 2: number of images matching the filters
+#: includes/forvoyez-helpers.php:477
+msgid "Displaying %1$d of %2$d image"
+msgid_plural "Displaying %1$d of %2$d images"
+msgstr[0] "Mostrando %1$d de %2$d imagen"
+msgstr[1] "Mostrando %1$d de %2$d imágenes"
+
+#. translators: %d: number of images
+#: includes/forvoyez-helpers.php:479
+msgid "Starting analysis of %d image..."
+msgid_plural "Starting analysis of %d images..."
+msgstr[0] "Iniciando el análisis de %d imagen..."
+msgstr[1] "Iniciando el análisis de %d imágenes..."
+
+#. translators: %d: number of credits
+#: includes/forvoyez-helpers.php:483
+msgid "You currently have %d credit remaining."
+msgid_plural "You currently have %d credits remaining."
+msgstr[0] "Actualmente te queda %d crédito."
+msgstr[1] "Actualmente te quedan %d créditos."
+
+#: templates/admin-page.php:16
 msgid "Legend :"
 msgstr "Leyenda :"
 
-#: templates/admin-page.php:27
+#: templates/admin-page.php:21
 msgid "Missing Alt Text :"
 msgstr "Texto Alt faltante :"
 
-#: templates/admin-page.php:33
+#: templates/admin-page.php:27
 msgid "Missing Alt Text"
 msgstr "Texto Alt faltante"
 
-#: templates/admin-page.php:45
+#: templates/admin-page.php:39
 msgid "Missing title :"
 msgstr "Título faltante :"
 
-#: templates/admin-page.php:51
+#: templates/admin-page.php:45
 msgid "Missing Title"
 msgstr "Título faltante"
 
-#: templates/admin-page.php:64
+#: templates/admin-page.php:58
 msgid "Missing caption :"
 msgstr "Leyenda faltante :"
 
-#: templates/admin-page.php:70
+#: templates/admin-page.php:64
 msgid "Missing Caption"
 msgstr "Leyenda faltante"
 
-#: templates/admin-page.php:82
+#: templates/admin-page.php:76
 msgid "All complete :"
 msgstr "Todo completo :"
 
-#: templates/admin-page.php:109
+#: templates/admin-page.php:103
 msgid "Items per page:"
 msgstr "Elementos por página:"
 
-#: templates/admin-page.php:120
+#: templates/admin-page.php:114
 msgid "All"
 msgstr "Todos"
 
-#: templates/admin-page.php:130
+#: templates/admin-page.php:124
 msgid "Analyze all missing alt/caption/title images"
 msgstr "Analizar todas las imágenes con alt/leyenda/título faltante"
 
-#: templates/admin-page.php:137
+#: templates/admin-page.php:131
 msgid "Analyze all missing alt images"
 msgstr "Analizar todas las imágenes con alt faltante"
 
-#: templates/admin-page.php:144
+#: templates/admin-page.php:138
 msgid "Analyze all images"
 msgstr "Analizar todas las imágenes"
 
-#: templates/admin-page.php:162
+#: templates/admin-page.php:156
 msgid "Select All"
 msgstr "Seleccionar Todo"
 
-#: templates/admin-page.php:169
+#: templates/admin-page.php:163
 msgid "Analyze Selected Images"
 msgstr "Analizar Imágenes Seleccionadas"
 
-#: templates/admin-page.php:197
+#: templates/admin-page.php:191
 msgid "Confirm Analysis"
 msgstr "Confirmar Análisis"
 
-#: templates/admin-page.php:202
+#: templates/admin-page.php:196
 msgid "Confirm"
 msgstr "Confirmar"
 
@@ -485,7 +739,6 @@ msgstr "Para empezar:"
 
 #. translators: %s: URL of the ForVoyez signup page
 #: templates/configuration-tab.php:66
-#, php-format
 msgid ""
 "Visit the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" "
 "class=\"text-blue-600 hover:underline\">ForVoyez signup page</a> to create "
@@ -497,7 +750,6 @@ msgstr ""
 
 #. translators: %s: URL of the ForVoyez dashboard
 #: templates/configuration-tab.php:77
-#, php-format
 msgid ""
 "Once logged in, navigate to your <a href=\"%s\" target=\"_blank\" "
 "rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez "
@@ -517,7 +769,6 @@ msgstr "Copia la clave API y pégala en el campo de abajo."
 
 #. translators: %s: URL of the ForVoyez API documentation
 #: templates/configuration-tab.php:105
-#, php-format
 msgid ""
 "For more information, please refer to the <a href=\"%s\" target=\"_blank\" "
 "rel=\"noopener noreferrer\" class=\"text-blue-600 hover:underline\">ForVoyez "
@@ -547,7 +798,6 @@ msgstr ""
 
 #. translators: %1$s: URL to Terms of Service, %2$s: URL to Privacy Policy, %3$s: URL to Legal Notice
 #: templates/configuration-tab.php:176
-#, php-format
 msgid ""
 "Please review the <a href=\"%1$s\" target=\"_blank\" rel=\"noopener "
 "noreferrer\" class=\"underline\">Terms of Service</a>, <a href=\"%2$s\" "
@@ -699,15 +949,15 @@ msgstr "Créditos de ForVoyez"
 msgid "Your current ForVoyez credit balance and subscription status"
 msgstr "Tu saldo actual de créditos de ForVoyez y el estado de tu suscripción"
 
-#: templates/dashboard-tab.php:204
+#: templates/dashboard-tab.php:199
 msgid "Remaining Credits"
 msgstr "Créditos restantes"
 
-#: templates/dashboard-tab.php:264
+#: templates/dashboard-tab.php:261
 msgid "Unable to retrieve token information"
 msgstr "No se pudo obtener la información del token"
 
-#: templates/dashboard-tab.php:274
+#: templates/dashboard-tab.php:271
 msgid ""
 "Could not retrieve credit information. Please check your API key "
 "configuration."

@@ -228,12 +228,12 @@ class Forvoyez_Image_Renderer {
 	 * @return void
 	 */
 	private static function render_metadata_icon( $type, $value, $path ) {
-		$type_label   = ucfirst( $type );
-		$missing_text = sprintf(
-			/* translators: %s: Metadata type (Alt, Title, or Caption) */
-			esc_html__( 'Missing %s', 'auto-alt-text-for-images' ),
-			$type_label
+		$missing_texts = array(
+			'alt'     => __( 'Missing alt text', 'auto-alt-text-for-images' ),
+			'title'   => __( 'Missing title', 'auto-alt-text-for-images' ),
+			'caption' => __( 'Missing caption', 'auto-alt-text-for-images' ),
 		);
+		$missing_text  = $missing_texts[ $type ] ?? '';
 		?>
         <span class="bg-red-500 text-white rounded-full p-1 <?php echo empty( $value ) ? '' : 'hidden'; ?> <?php echo esc_attr( $type ); ?>-missing" title="<?php echo esc_attr( $missing_text ); ?>">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
