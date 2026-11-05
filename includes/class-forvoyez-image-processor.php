@@ -12,6 +12,11 @@ defined( 'ABSPATH' ) || exit( 'Direct access to this file is not allowed.' );
 
 class Forvoyez_Image_Processor {
 
+	/**
+	 * Most images analyzed by one AJAX request, far above what the screens send.
+	 */
+	private const MAX_IMAGES_PER_REQUEST = 50;
+
 	private $api_client;
 
 	public function __construct() {
@@ -285,6 +290,13 @@ class Forvoyez_Image_Processor {
 	public function load_more_images() {
 		check_ajax_referer( 'forvoyez_load_more_images_nonce', 'nonce' );
 
+		if ( !current_user_can( 'upload_files' ) ) {
+			wp_send_json_error(
+				esc_html__( 'Permission denied', 'auto-alt-text-for-images' ),
+				403,
+			);
+		}
+
 		$page     = isset( $_POST['paged'] ) ? intval( $_POST['paged'] ) : 1;
 		$per_page = isset( $_POST['per_page'] ) ? intval( $_POST['per_page'] ) : 21;
 
@@ -359,10 +371,9 @@ class Forvoyez_Image_Processor {
 	public function bulk_analyze_images() {
 		$this->verify_ajax_request( 'forvoyez_bulk_analyze_images' );
 
-		$image_ids = isset( $_POST['image_ids'] )
-			? array_map( 'absint', wp_unslash( $_POST['image_ids'] ) )
-			: array();
-		$image_ids = array_filter( $image_ids, 'wp_attachment_is_image' );
+		$image_ids = array_values(
+			array_filter( $this->get_requested_image_ids(), 'wp_attachment_is_image' )
+		);
 
 		if ( empty( $image_ids ) ) {
 			wp_send_json_error(
@@ -409,9 +420,7 @@ class Forvoyez_Image_Processor {
 	public function process_image_batch() {
 		$this->verify_ajax_request( 'forvoyez_verify_ajax_request_nonce' );
 
-		$image_ids = isset( $_POST['image_ids'] )
-			? array_map( 'absint', wp_unslash( $_POST['image_ids'] ) )
-			: array();
+		$image_ids = $this->get_requested_image_ids();
 
 		if ( empty( $image_ids ) ) {
 			wp_send_json_error(
@@ -469,6 +478,35 @@ class Forvoyez_Image_Processor {
      * @param string $action The action name.
 	 * @throws WP_Error If the request is invalid or user doesn't have permission.
 	 */
+	/**
+	 * Read the image IDs of a verified AJAX request.
+	 *
+	 * Each ID costs one credit of the site owner: a repeated ID is analyzed once,
+	 * and a request above the limit stops here, before any call to the API. The
+	 * plugin screens send 5 or 7 images per request.
+	 *
+	 * @return int[] The unique image IDs.
+	 */
+	private function get_requested_image_ids() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- the callers run verify_ajax_request() first.
+		$image_ids = isset( $_POST['image_ids'] )
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- see above.
+			? array_map( 'absint', (array) wp_unslash( $_POST['image_ids'] ) )
+			: array();
+		$image_ids = array_values( array_unique( $image_ids ) );
+
+		if ( count( $image_ids ) > self::MAX_IMAGES_PER_REQUEST ) {
+			wp_send_json_error(
+				array(
+					'message' => esc_html__( 'Too many images in one request', 'auto-alt-text-for-images' ),
+					'code'    => 'too_many_images',
+				)
+			);
+		}
+
+		return $image_ids;
+	}
+
 	private function verify_ajax_request( $action ) {
         if ( !check_ajax_referer( $action, 'nonce', false ) ) {
             wp_send_json_error( 'Invalid nonce' );
@@ -614,7 +652,7 @@ class Forvoyez_Image_Processor {
 		$this->verify_ajax_request('forvoyez_verify_ajax_request_nonce');
 
 		// Get image IDs
-		$image_ids = isset($_POST['image_ids']) ? array_map('absint', wp_unslash($_POST['image_ids'])) : [];
+		$image_ids = $this->get_requested_image_ids();
 
 		if (empty($image_ids)) {
 			wp_send_json_error([
@@ -648,7 +686,7 @@ class Forvoyez_Image_Processor {
 
 		// Get updated credit information
 		$token_info = forvoyez_get_token_info();
-		$credits = isset($token_info['success']) && $token_info['success'] ? $token_info['user']['credits'] : null;
+		$credits = $token_info['user']['credits'] ?? null;
 
 		wp_send_json_success([
 			'results' => $results,

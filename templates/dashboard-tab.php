@@ -191,12 +191,7 @@ if (!defined('ABSPATH')) {
 			$token_info = forvoyez_get_token_info();
 			if ($token_info['success']):
 
-				$credits = $token_info['user']['credits'];
-				$is_subscribed =
-					$token_info['subscription']['isSubscribed'] ?? false;
-				$plan_name = $is_subscribed
-					? $token_info['subscription']['plan']['name']
-					: '';
+				$credits = $token_info['user']['credits'] ?? '?';
 				?>
                 <dl class="sm:divide-y sm:divide-gray-200">
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -208,11 +203,13 @@ if (!defined('ABSPATH')) {
                         </dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                         <span class="forvoyez-credit-count px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                            <?php echo $credits > 20
+                            <?php echo !is_numeric($credits)
+	                        ? 'bg-gray-200 text-gray-600'
+	                        : ($credits > 20
 	                        ? 'bg-green-100 text-green-800'
 	                        : ($credits > 5
 		                        ? 'bg-yellow-100 text-yellow-800'
-		                        : 'bg-red-100 text-red-800'); ?>">
+		                        : 'bg-red-100 text-red-800')); ?>">
                             <?php echo esc_html($credits); ?>
                         </span>
                         </dd>

@@ -21,6 +21,20 @@ class TestForvoyezOutputEscaping extends WP_UnitTestCase
 	private $credits = 2;
 
 	/**
+	 * Whole fake /api/tokens answer, when a test needs another shape.
+	 *
+	 * @var array|null
+	 */
+	private $token_answer = null;
+
+	/**
+	 * Number of fake /api/tokens requests.
+	 *
+	 * @var int
+	 */
+	private $token_requests = 0;
+
+	/**
 	 * Fake translations: msgid => translation.
 	 *
 	 * @var array<string, string>
@@ -74,9 +88,11 @@ class TestForvoyezOutputEscaping extends WP_UnitTestCase
 			return new WP_Error('http_request_blocked', 'Unexpected HTTP request in tests: ' . $url);
 		}
 
+		++$this->token_requests;
+
 		return [
 			'headers' => [ 'content-type' => 'application/json' ],
-			'body' => wp_json_encode([ 'user' => [ 'credits' => $this->credits ], 'subscription' => null ]),
+			'body' => wp_json_encode($this->token_answer ?? [ 'user' => [ 'credits' => $this->credits ], 'subscription' => null ]),
 			'response' => [ 'code' => 200, 'message' => 'OK' ],
 			'cookies' => [],
 			'filename' => null,
@@ -165,6 +181,126 @@ class TestForvoyezOutputEscaping extends WP_UnitTestCase
 		$this->assert_no_raw_markup($ready);
 		$this->assertStringContainsString('&lt;b&gt;3&lt;/b&gt; images ready', $ready);
 		$this->assertStringContainsString('<span id="forvoyez-bulk-progress-text">0 / 3 images processed</span>', $ready);
+	}
+
+	public function test_bulk_results_summary_does_not_run_a_translation_as_javascript()
+	{
+		$this->store_api_key();
+		$this->translations['Analysis completed!'] = '${alert(1)}`';
+		$_GET = [
+			'forvoyez_bulk_analyze' => '3',
+			'forvoyez_bulk_nonce' => wp_create_nonce('forvoyez_bulk_analyze_nonce'),
+			'forvoyez_image_ids' => '7,8,9',
+		];
+
+		$html = $this->capture('forvoyez_bulk_analysis_notice');
+
+		$start = strpos($html, "$('#forvoyez-results-summary').html(");
+		$end = strpos($html, '// Update credit count', (int) $start);
+		$this->assertNotFalse($start);
+		$this->assertNotFalse($end);
+		$code = substr($html, $start, $end - $start);
+		$this->assertStringContainsString('"${alert(1)}`"', $code);
+
+		// Without its string literals, the code has no template literal left:
+		// esc_js() does not protect ${ } or backticks.
+		$without_strings = preg_replace('/\'(?:[^\'\\\\]|\\\\.)*\'|"(?:[^"\\\\]|\\\\.)*"/s', '""', $code);
+		$this->assertStringNotContainsString('`', $without_strings);
+		$this->assertStringNotContainsString('${', $without_strings);
+		$this->assertStringContainsString('successCount', $without_strings);
+		$this->assertStringContainsString('errorCount', $without_strings);
+	}
+
+	/**
+	 * @dataProvider token_answers_with_missing_keys
+	 */
+	public function test_dashboard_tab_survives_a_token_answer_with_missing_keys($answer)
+	{
+		$this->store_api_key();
+		$this->token_answer = $answer;
+
+		// PHPUnit turns the "Undefined array key" warning into an error.
+		$html = $this->render_dashboard_tab();
+
+		$this->assertStringContainsString('forvoyez-credit-count', $html);
+	}
+
+	public function token_answers_with_missing_keys()
+	{
+		return [
+			'subscription without plan' => [ [ 'user' => [ 'credits' => 3 ], 'subscription' => [ 'isSubscribed' => true ] ] ],
+			'no user' => [ [ 'subscription' => [ 'isSubscribed' => false ] ] ],
+		];
+	}
+
+	public function test_dashboard_tab_shows_a_neutral_badge_when_the_credits_are_unknown()
+	{
+		$this->store_api_key();
+		$this->token_answer = [ 'subscription' => [] ];
+
+		$html = $this->render_dashboard_tab();
+
+		$this->assertMatchesRegularExpression('/forvoyez-credit-count[^"]*bg-gray-200 text-gray-600">\s*\?\s*</', $html);
+	}
+
+	public function test_admin_page_does_not_ask_the_api_for_credits_it_does_not_use()
+	{
+		$this->store_api_key();
+		$this->token_answer = [ 'subscription' => [] ];
+
+		$html = $this->capture(static function () {
+			include FORVOYEZ_PLUGIN_DIR . 'templates/admin-page.php';
+		});
+
+		$this->assertStringContainsString('Auto Alt Text for Images', $html);
+		$this->assertSame(0, $this->token_requests);
+	}
+
+	public function test_analyze_button_survives_a_token_answer_without_user()
+	{
+		$this->store_api_key();
+		$this->token_answer = [ 'subscription' => [] ];
+		$image_id = self::factory()->attachment->create_object([
+			'file' => 'photo.jpg',
+			'post_mime_type' => 'image/jpeg',
+		]);
+
+		$fields = forvoyez_add_analyze_button([], get_post($image_id));
+
+		$this->assertStringContainsString('>?<', $fields['forvoyez_analyze']['html']);
+	}
+
+	public function test_bulk_notice_survives_a_token_answer_without_user()
+	{
+		$this->store_api_key();
+		$this->token_answer = [ 'subscription' => [] ];
+		$_GET = [
+			'forvoyez_bulk_analyze' => '3',
+			'forvoyez_bulk_nonce' => wp_create_nonce('forvoyez_bulk_analyze_nonce'),
+			'forvoyez_image_ids' => '7,8,9',
+		];
+
+		$html = $this->capture('forvoyez_bulk_analysis_notice');
+
+		$this->assertStringContainsString('forvoyez-start-bulk', $html);
+	}
+
+	/**
+	 * The dashboard tab is included from a Forvoyez_Admin method and uses $this.
+	 */
+	private function render_dashboard_tab(): string
+	{
+		$admin = new Forvoyez_Admin($this->createMock(Forvoyez_API_Manager::class));
+
+		return $this->capture(
+			Closure::bind(
+				function () {
+					include FORVOYEZ_PLUGIN_DIR . 'templates/dashboard-tab.php';
+				},
+				$admin,
+				Forvoyez_Admin::class,
+			),
+		);
 	}
 
 	public function test_low_credits_footer_escapes_the_message()

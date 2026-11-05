@@ -77,13 +77,10 @@
 						refreshCredits()
 					} else {
 						// Show error message
-						$statusArea
-							.html(
-								'<span class="dashicons dashicons-warning"></span> Error: ' +
-									(response.data ? response.data.message : 'Unknown error')
-							)
-							.addClass('error')
-							.removeClass('loading success')
+						showStatusError(
+							$statusArea,
+							response.data ? response.data.message : 'Unknown error'
+						)
 					}
 				},
 				error: function (xhr, status, error) {
@@ -96,13 +93,7 @@
 						.removeClass('opacity-50')
 
 					// Show error message
-					$statusArea
-						.html(
-							'<span class="dashicons dashicons-warning"></span> Error: ' +
-								error
-						)
-						.addClass('error')
-						.removeClass('loading success')
+					showStatusError($statusArea, error)
 				},
 			})
 		})
@@ -115,6 +106,26 @@
 			})
 		}
 	})
+
+	/**
+	 * Show an analysis error in a status area.
+	 *
+	 * Server messages come HTML-escaped (esc_html__): decode the entities so
+	 * apostrophes show as text, then set them as text (never as HTML).
+	 */
+	function showStatusError($statusArea, message) {
+		const decoder = document.createElement('textarea')
+		decoder.innerHTML = String(message ?? '')
+
+		$statusArea
+			.empty()
+			.append(
+				'<span class="dashicons dashicons-warning"></span>',
+				document.createTextNode(' Error: ' + decoder.value)
+			)
+			.addClass('error')
+			.removeClass('loading success')
+	}
 
 	/**
 	 * Refresh credits from server
