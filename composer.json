@@ -29,7 +29,7 @@
 		"friendsofphp/php-cs-fixer": "^3.95.27",
 		"phpcompatibility/phpcompatibility-wp": "^2.1.8",
 		"wp-coding-standards/wpcs": "^3.0",
-		"phpcsstandards/phpcsutils": "^1.0",
+		"phpcsstandards/phpcsutils": "^1.2.3",
 		"phpunit/phpunit": "^7.5 || ^8.5 || ^9.5",
 		"yoast/phpunit-polyfills": "^2.0.5",
 		"phpcsstandards/phpcsextra": "^1.5.1"
