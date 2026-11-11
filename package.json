@@ -43,7 +43,7 @@
 		"node": "20 || >=22"
 	},
 	"overrides": {
-		"flat-cache": "^4.0.1",
+		"flat-cache": "^6.0.0",
 		"minimatch": "^11.0.1",
 		"yaml": "^2.8.3"
 	}
