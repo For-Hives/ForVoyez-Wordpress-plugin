@@ -7,7 +7,7 @@ bin/
 .gitignore
 .distignore
 .editorconfig
-.eslintrc.js
+eslint.config.js
 .prettierrc.js
 .php-cs-fixer.php
 .php-cs-fixer.cache
