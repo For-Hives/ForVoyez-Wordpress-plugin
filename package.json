@@ -31,7 +31,7 @@
 		"@prettier/plugin-php": "^0.26.0",
 		"eslint": "8.57.1",
 		"eslint-config-prettier": "10.1.8",
-		"eslint-plugin-perfectionist": "2.11.0",
+		"eslint-plugin-perfectionist": "5.14.0",
 		"eslint-plugin-prettier": "5.5.7",
 		"husky": "9.1.7",
 		"lint-staged": "15.5.2",
