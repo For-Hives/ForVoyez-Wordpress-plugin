@@ -10,6 +10,9 @@ on:
     # A push that also touches anything else still releases.
     # tests.yml (release-guard) reads this list: Renovate pull requests must
     # only touch these files, so that its automatic merges publish nothing.
+    # No comment inside the list: release-guard stops reading at the first
+    # line that is not an entry. The ESLint configs and .distignore never ship
+    # (the zip check verifies the archive holds exactly the shipped files).
     paths-ignore:
       - '.github/**'
       - 'package.json'
@@ -17,6 +20,9 @@ on:
       - 'composer.json'
       - 'composer.lock'
       - 'renovate.json'
+      - 'eslint.config.js'
+      - '.eslintrc.js'
+      - '.distignore'
   # Release main by hand (Actions > Version Bump > Run workflow), e.g. after a
   # workflow-only change. To retry a failed deploy, run deploy.yaml by hand with
   # the existing tag instead: running this workflow again releases a NEW version.
