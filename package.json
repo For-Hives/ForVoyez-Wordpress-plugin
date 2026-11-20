@@ -28,11 +28,13 @@
 		"*.css": "prettier --write"
 	},
 	"devDependencies": {
+		"@eslint/js": "^10.0.1",
 		"@prettier/plugin-php": "^0.22.2",
 		"eslint": "10.15.0",
 		"eslint-config-prettier": "9.1.2",
 		"eslint-plugin-perfectionist": "2.11.0",
 		"eslint-plugin-prettier": "5.5.7",
+		"globals": "^16.5.0",
 		"husky": "9.1.7",
 		"lint-staged": "15.5.2",
 		"prettier": "^3.3.3",
