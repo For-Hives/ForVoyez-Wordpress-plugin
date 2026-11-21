@@ -34,7 +34,7 @@
 		"eslint-config-prettier": "10.1.8",
 		"eslint-plugin-perfectionist": "5.14.0",
 		"eslint-plugin-prettier": "5.5.7",
-		"globals": "^16.5.0",
+		"globals": "^17.0.0",
 		"husky": "9.1.7",
 		"lint-staged": "17.6.1",
 		"prettier": "^3.3.3",
