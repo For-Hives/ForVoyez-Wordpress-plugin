@@ -26,7 +26,7 @@ jobs:
 
     services:
       mariadb:
-        image: mariadb:11.8
+        image: mariadb:13.0
         env:
           MARIADB_ROOT_PASSWORD: root
           MARIADB_DATABASE: wordpress_test
